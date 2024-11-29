@@ -1,11 +1,11 @@
-import { GridSpotModel, MoveModel } from "../../../../Background/Models";
-import EmptyBlock from "../../../Components/EmptyBlock";
-import EmptySelectedBlock from "../../../Components/EmptySelectedBlock";
-import EmptyValidBlock from "../../../Components/EmptyValidBlock";
-import WhiteLetterBlock from "../../../Components/WhiteLetterBlock";
-import YellowLetterBlock from "../../../Components/YellowLetterBlock";
+import { GridSpotModel, MoveModel } from "../../../Background/Models";
+import EmptyBlock from "../EmptyBlock";
+import EmptySelectedBlock from "../EmptySelectedBlock";
+import EmptyValidBlock from "../EmptyValidBlock";
+import WhiteLetterBlock from "../WhiteLetterBlock";
+import YellowLetterBlock from "../YellowLetterBlock";
 
-interface CasualGameBlockProps {
+interface GameBlockProps {
     block: GridSpotModel
     availableBlocks: string[];
     wordCheckComplete: boolean;
@@ -18,7 +18,7 @@ interface CasualGameBlockProps {
 
 }
 
-export default function CasualGameBlock({
+export default function GameBlock({
     // index,
     // row,
     block,
@@ -30,7 +30,7 @@ export default function CasualGameBlock({
     yourTurn,
     blockDimension,
     lastMove
-}: CasualGameBlockProps) {
+}: GameBlockProps) {
     
 
 

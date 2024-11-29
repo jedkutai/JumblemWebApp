@@ -31,8 +31,8 @@ export function useStandardGameManager(user: UserModel, game: GameModel) {
     const unsubscribe = onSnapshot(movesQuery, async (snapshot) => {
       const fetchedMoves = snapshot.docs.map((doc) => doc.data() as MoveModel);
       if (fetchedMoves) {
-
-        await actions(fetchedMoves);
+        setMoves(fetchedMoves);
+        // await actions(fetchedMoves);
       }
 
     });
@@ -41,21 +41,21 @@ export function useStandardGameManager(user: UserModel, game: GameModel) {
 
   }, []);
 
-
-
-
-  const actions = async (fetchedMoves: MoveModel[]) => {
-    if (fetchedMoves.length > movesMade) {
-      const fetchedMovesLength = fetchedMoves.length;
-      const movesDictUpdate = Object.fromEntries(fetchedMoves.map((move) => [move.coordinates, move]));
-
-      setMoves(fetchedMoves);
-      setMovesMade(fetchedMovesLength);
-      setMovesCopy(fetchedMoves);
+  const actions = (fetchedMoves: MoveModel[]) => {
+    const fetchedMovesCopy = fetchedMoves;
+    const movesDictUpdate = Object.fromEntries(fetchedMovesCopy.map((move) => [move.coordinates, move]));
+    const fetchedMovesCopyLength = fetchedMovesCopy.length;
+    if (fetchedMovesCopyLength > movesMade) {
+      setMoves(fetchedMovesCopy);
+      // setMovesMade(fetchedMovesCopyLength);
+      setMovesMade((prevMovesMade) => {
+        return fetchedMovesCopyLength;
+    });
+      setMovesCopy(fetchedMovesCopy);
       setMovesDict(movesDictUpdate);
 
-      if (fetchedMoves.length > 0) {
-        if (fetchedMoves[fetchedMoves.length - 1].userId === user.id) {
+      if (fetchedMovesCopy.length > 0) {
+        if (fetchedMovesCopy[fetchedMovesCopy.length - 1].userId === user.id) {
           setYourTurn(false);
         } else {
           setYourTurn(true);
@@ -64,16 +64,17 @@ export function useStandardGameManager(user: UserModel, game: GameModel) {
         setYourTurn(game.playerOneId == user.id);
       }
 
-      const [yourTime, opponentTime] = ClockFunctions.getTimeRemainingForBothPlayers(user.id, fetchedMoves);
+      const [yourTime, opponentTime] = ClockFunctions.getTimeRemainingForBothPlayers(user.id, fetchedMovesCopy);
       setYourTimeRemaining(yourTime);
       setOpponentTimeRemaining(opponentTime);
-    } else if ((fetchedMoves.length < movesMade) && !checkGameOver) {
+    } else if ((fetchedMovesCopy.length < movesMade) && !checkGameOver) {
       setCheckGameOver(true);
-    } else if (fetchedMoves.length == 0) {
+    } else if (fetchedMovesCopy.length == 0) {
       setYourTurn(game.playerOneId == user.id);
     }
 
   }
+
 
   return {
     moves,

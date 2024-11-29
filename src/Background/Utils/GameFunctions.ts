@@ -65,6 +65,9 @@ export class GameFunctions {
       }
     }
 
+    if (result.length === 0) {
+      result = ["3,3"];
+    }
     return [...new Set(result)];
   }
 
@@ -88,30 +91,30 @@ export class GameFunctions {
     let consecutiveLetters = "";
     let consecutiveCoordinates: string[] = [];
     let currentCoordinates: string | null = finalMove.coordinates;
-  
+
     while (currentCoordinates) {
       const move = moves[currentCoordinates];
       if (!move) break;
-  
+
       consecutiveLetters = move.letter + consecutiveLetters;
       consecutiveCoordinates.unshift(currentCoordinates);
       currentCoordinates = (GridFunctions[direction1] as (coordinates: string) => string | null)(currentCoordinates);
     }
-  
+
     currentCoordinates = (GridFunctions[direction2] as (coordinates: string) => string | null)(finalMove.coordinates);
-  
+
     while (currentCoordinates) {
       const move = moves[currentCoordinates];
       if (!move) break;
-  
+
       consecutiveLetters += move.letter;
       consecutiveCoordinates.push(currentCoordinates);
       currentCoordinates = (GridFunctions[direction2] as (coordinates: string) => string | null)(currentCoordinates);
     }
-  
+
     return [consecutiveLetters.toLowerCase(), consecutiveCoordinates];
   }
-  
+
 
   static getWordsToCheck(finalMove: MoveModel, moves: Record<string, MoveModel>): [string, string[]][] {
     const directions: [keyof typeof GridFunctions, keyof typeof GridFunctions][] = [
@@ -159,6 +162,8 @@ export class GameFunctions {
     moves: Record<string, MoveModel>
   ): Promise<[WordModel, string[]][]> {
     const wordsToCheck = this.getWordsToCheck(finalMove, moves);
+
+    console.log(`Words to Check: ${wordsToCheck.length}`);
     const wordDict: Record<string, string[]> = {};
     const wordBank: string[] = [];
 
@@ -171,7 +176,11 @@ export class GameFunctions {
       }
     }
 
+    console.log(`Word Bank: ${wordBank.length}`);
+
     const validWords: WordModel[] = await WordService.checkWords(wordBank);
+
+    console.log(`Valid Words: ${validWords.length}`);
     return validWords.map((word) => [word, wordDict[word.word]]);
   }
 }

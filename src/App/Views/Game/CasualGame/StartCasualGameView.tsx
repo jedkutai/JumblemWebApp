@@ -42,7 +42,6 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
 
 
     const onAppearActions = async () => {
-        console.log("find match on appear");
         if (gameModeState !== CasualGameModeState.findingMatch) {
             setStopSearching(false);
             setGameModeState(CasualGameModeState.findingMatch);
@@ -95,7 +94,6 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
     }
 
     const tickerActions = async () => {
-        console.log("Find match ticker");
         if (!stopSearching) {
             if (game) {
                 const timeout = setTimeout(async () => {

@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { useStandardGameManager } from "../../../../Background/Managers/StandardGameManager";
-import { GameModel, UserModel, WordModel } from "../../../../Background/Models";
+import { GameModel, MoveModel, UserModel, WordModel } from "../../../../Background/Models";
 import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
 import { CasualGameService } from "../../../../Background/Service";
 import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
 import { View, VSpacer, VStack } from "../../../../ReactSwiftly";
-import CasualGameGrid from "./CasualGameGrid";
+import GameGrid from "../../../Components/Game/GameGrid";
 import CasualGameHeader from "./CasualGameHeader";
 import { Button } from "@mui/material";
 import HomeView from "../../Body/HomeView";
+import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
 
 interface PlayCasualGameViewProps {
     passedUser: UserModel;
@@ -19,12 +20,13 @@ interface PlayCasualGameViewProps {
 export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasualGameViewProps) {
     const {
         moves,
-        movesCopy,
-        movesDict,
-        yourTurn,
-        yourTimeRemaining,
-        opponentTimeRemaining,
-        checkGameOver,
+        // movesCopy,
+        // movesDict,
+        // movesMade,
+        // yourTurn,
+        // yourTimeRemaining,
+        // opponentTimeRemaining,
+        // checkGameOver,
     } = useStandardGameManager(passedUser, passedGame);
 
     const [user, setUser] = useState<UserModel>(passedUser);
@@ -42,10 +44,33 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
     const [view, setView] = useState<"HomeView" | "PlayCasualGameView">("PlayCasualGameView");
     const { width, height } = useWindowSize();
 
+    const [movesCopy, setMovesCopy] = useState<MoveModel[]>([]);
+    const [movesDict, setMovesDict] = useState<Record<string, MoveModel>>({});
+    const [yourTurn, setYourTurn] = useState(false);
+    const [yourTimeRemaining, setYourTimeRemaining] = useState(180);
+    const [opponentTimeRemaining, setOpponentTimeRemaining] = useState(180);
+    const [checkGameOver, setCheckGameOver] = useState(false);
+    const [movesMade, setMovesMade] = useState(0);
+
     useEffect(() => {
         setMatchAbortedTicker(!matchAbortedTicker);
         setTickCount(tickCount + 1);
+        console.log(`Your turn: ${game.playerOneId == user.id}`);
+        setYourTurn(game.playerOneId == user.id);
     }, []);
+
+    useEffect(() => {
+        if (moves.length > movesMade) {
+            setMovesCopy(moves);
+        } else if (movesMade === 0) {
+            setYourTurn(game.playerOneId == user.id);
+        } else {
+            // game over stuff
+            setCheckGameOver(true);
+        }
+    }, [moves])
+
+
 
     useEffect(() => {
         if (tickCount < 20 && !gameOver) {
@@ -92,6 +117,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
     }, [checkGameOver]);
 
     useEffect(() => {
+        gameManagerFunction()
         wordCheckFunction();
     }, [movesCopy]);
 
@@ -148,31 +174,55 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
 
     }, [userTimeExpired]);
 
-    async function wordCheckFunction(): Promise<void> {
-        setWordCheckComplete(false);
-        try {
-            const lastMove = movesCopy.at(movesCopy.length -1);
-            if (lastMove) {
-                const wordResults = await GameFunctions.checkWords(lastMove, movesDict);
-                let winningSpots: Set<string> = new Set();
+    function gameManagerFunction() {
+        if (movesCopy.length > 0) {
+            const movesDictUpdate = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
+            setMovesDict(movesDictUpdate);
+            setMovesMade(Math.max(movesCopy.length, movesMade));
 
-                for (const [word, coordinates] of wordResults) {
-                    winningSpots = new Set(...winningSpots, ...coordinates);
-                    winningWords.push(word);
-                }
-                setWinningGridSpots([...winningSpots]);
+            const [yourTime, opponentTime] = ClockFunctions.getTimeRemainingForBothPlayers(user.id, movesCopy);
+            setYourTimeRemaining(yourTime);
+            setOpponentTimeRemaining(opponentTime);
 
-                if (winningWords.length !== 0) {
-                    let wordArray = winningWords.map(item => item.word);
-                    await CasualGameService.setGameWinner(game, lastMove.userId, wordArray, winningGridSpots);
-                    await CasualGameService.moveFinishedGame(game);
-                    setGameOver(true);
-                }
-                setWordCheckComplete(true);
+            if (movesCopy[movesCopy.length - 1].userId === user.id) {
+                setYourTurn(false);
+            } else {
+                setYourTurn(true);
             }
-        } catch (e) {
-            console.error("Error during word check function.", e);
+        } else if (movesMade == 0) {
+            setYourTurn(game.playerOneId == user.id);
+        } else {
+            setCheckGameOver(true);
         }
+    }
+
+    async function wordCheckFunction(): Promise<void> {
+
+            try {
+                const lastMove = movesCopy.at(movesCopy.length - 1);
+                if (lastMove) {
+                    setWordCheckComplete(false);
+                    const wordResults = await GameFunctions.checkWords(lastMove, movesDict);
+                    console.log(`Word Results: ${wordResults.length}`);
+                    let winningSpots: Set<string> = new Set();
+
+                    for (const [word, coordinates] of wordResults) {
+                        winningSpots = new Set(...winningSpots, ...coordinates);
+                        winningWords.push(word);
+                    }
+                    setWinningGridSpots([...winningSpots]);
+
+                    if (winningWords.length !== 0) {
+                        let wordArray = winningWords.map(item => item.word);
+                        await CasualGameService.setGameWinner(game, lastMove.userId, wordArray, winningGridSpots);
+                        await CasualGameService.moveFinishedGame(game);
+                        setGameOver(true);
+                    }
+                    setWordCheckComplete(true);
+                }
+            } catch (e) {
+                console.error("Error during word check function.", e);
+            }
 
         if (!gameOver) {
             if (movesCopy.length >= 49) {
@@ -192,7 +242,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
 
     if (view === "HomeView") {
         return (
-            <HomeView user={user}/>
+            <HomeView user={user} />
         )
     }
 
@@ -201,7 +251,10 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
             <View>
                 <VStack>
                     <p>Game Over</p>
-
+                    <p>Moves: {moves.length}</p>
+                    <p>Moves Copy: {movesCopy.length}</p>
+                    <p>Moves Made: {movesMade}</p>
+                    <p>Winning words: {winningWords.length}</p>
                     <Button onClick={() => setView("HomeView")}>
                         Home
                     </Button>
@@ -213,6 +266,9 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
             <View>
                 <VStack width={`${width}px`} height={`${height}px`}>
                     <VSpacer />
+
+                    
+                    
 
                     <CasualGameHeader
                         userTimeExpired={userTimeExpired}
@@ -229,9 +285,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
 
                     />
 
-                    <VSpacer />
-
-                    <CasualGameGrid
+                    <GameGrid
                         user={user}
                         game={game}
                         gameOver={gameOver}

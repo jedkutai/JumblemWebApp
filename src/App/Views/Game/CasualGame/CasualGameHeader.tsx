@@ -36,12 +36,10 @@ export default function CasualGameHeader({
     const [clock, setClock] = useState(0);
 
     useEffect(() => {
-        console.log("Appeared and started tick");
         setTick(!tick);
     }, []);
 
     useEffect(() => {
-        console.log("New turn.");
         setClock(0);
     }, [yourTurn]);
 
