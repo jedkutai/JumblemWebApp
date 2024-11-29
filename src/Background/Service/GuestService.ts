@@ -1,0 +1,195 @@
+import {
+    getFirestore,
+    collection,
+    doc,
+    query,
+    where,
+    orderBy,
+    limit,
+    getDocs,
+    getDoc,
+    setDoc,
+    updateDoc,
+    deleteDoc,
+    Timestamp,
+  } from "firebase/firestore";
+  import { getAuth, signInAnonymously } from "firebase/auth";
+  import { UserModel } from "../Models/UserModel";
+  import { GameModel } from "../Models/GameModel";
+  import { MoveModel } from "../Models/MoveModel";
+  
+  export class GuestService {
+    static async anonymousAccountCreation(): Promise<UserModel | null> {
+      const auth = getAuth();
+  
+      try {
+        const result = await signInAnonymously(auth);
+        const uid = result.user.uid;
+  
+        const user: UserModel = {
+          id: `GUEST${uid}`,
+          email: "",
+          username: "guest",
+          usernameDisplayed: "Guest",
+          standardRating: 1500,
+          timestamp: Timestamp.now()
+        };
+  
+        return user;
+      } catch (error: any) {
+        console.error("Error during anonymous account creation:", error.message);
+        return null;
+      }
+    }
+  
+    static async findGame(user: UserModel): Promise<GameModel | null> {
+      const db = getFirestore();
+  
+      const gameQuery = query(
+        collection(db, "newGames"),
+        where("gameMode", "==", "casual"),
+        where("matchFound", "==", false),
+        where("playerOneId", "!=", user.id),
+        orderBy("timestamp", "asc"),
+        limit(1)
+      );
+  
+      const snapshot = await getDocs(gameQuery);
+      const games = snapshot.docs.map((doc) => doc.data() as GameModel);
+  
+      if (games.length === 0) return null;
+  
+      const selectedGame = games[0];
+      await updateDoc(doc(db, "newGames", selectedGame.id), { matchFound: true });
+  
+      const updatedGame: GameModel = {
+        ...selectedGame,
+        playerTwoId: user.id,
+        playerTwoRating: user.standardRating,
+        matchFound: true,
+      };
+  
+      await GuestService.getGameUpdate(updatedGame);
+      return updatedGame;
+    }
+  
+    static async createGame(user: UserModel): Promise<GameModel | null> {
+      const db = getFirestore();
+      const gameRef = doc(collection(db, "newGames"));
+      const newGame: GameModel = {
+        id: gameRef.id,
+        gameMode: "casual",
+        playerOneId: user.id,
+        playerOneRating: user.standardRating,
+        timestamp: Timestamp.now(),
+        matchFound: false
+      };
+  
+      await setDoc(gameRef, newGame);
+      return newGame;
+    }
+  
+    static async getGameUpdate(game: GameModel): Promise<GameModel> {
+      const db = getFirestore();
+      const snapshot = await getDoc(doc(db, "newGames", game.id));
+  
+      if (!snapshot.exists()) {
+        throw new Error(`Game with ID ${game.id} not found.`);
+      }
+  
+      return snapshot.data() as GameModel;
+    }
+  
+    static async destroyGame(game: GameModel): Promise<void> {
+      const db = getFirestore();
+  
+      const movesRef = collection(db, `newGames/${game.id}/moves`);
+      const movesSnapshot = await getDocs(movesRef);
+  
+      const deleteMovesPromises = movesSnapshot.docs.map((move) => deleteDoc(doc(movesRef, move.id)));
+      await Promise.all(deleteMovesPromises);
+  
+      await deleteDoc(doc(db, "newGames", game.id));
+    }
+  
+    static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string): Promise<void> {
+      const db = getFirestore();
+      const moveRef = doc(collection(db, `newGames/${game.id}/moves`));
+  
+      const newMove: MoveModel = {
+        id: moveRef.id,
+        gameId: game.id,
+        userId: user.id,
+        coordinates,
+        letter,
+        timestamp: Timestamp.now()
+      };
+  
+      await setDoc(moveRef, newMove);
+    }
+  
+    static async getFinalMove(game: GameModel): Promise<MoveModel | null> {
+      const db = getFirestore();
+      const movesQuery = query(
+        collection(db, `newGames/${game.id}/moves`),
+        orderBy("createdAt", "desc"),
+        limit(1)
+      );
+  
+      const snapshot = await getDocs(movesQuery);
+      if (snapshot.empty) return null;
+  
+      return snapshot.docs[0].data() as MoveModel;
+    }
+  
+    static async setGameWinner(
+      game: GameModel,
+      result: string,
+      winningWords: string[],
+      winningCoordinates: string[]
+    ): Promise<void> {
+      const db = getFirestore();
+      const gameRef = doc(db, "newGames", game.id);
+  
+      const updates: any = { winner: result };
+      if (winningCoordinates.length > 0) updates.winningCoordinates = winningCoordinates;
+      if (winningWords.length > 0) updates.winningWords = winningWords;
+  
+      await updateDoc(gameRef, updates);
+    }
+  
+    static async moveFinishedGame(game: GameModel): Promise<void> {
+      const db = getFirestore();
+  
+      const gameSnapshot = await getDoc(doc(db, "newGames", game.id));
+      if (!gameSnapshot.exists()) {
+        throw new Error(`Game with ID ${game.id} not found.`);
+      }
+      const finishedGame = gameSnapshot.data() as GameModel;
+  
+      const finishedGameRef = doc(collection(db, "finishedGames"), game.id);
+      await setDoc(finishedGameRef, finishedGame);
+  
+      const movesRef = collection(db, `newGames/${game.id}/moves`);
+      const movesSnapshot = await getDocs(movesRef);
+  
+      const movePromises = movesSnapshot.docs.map((move) =>
+        setDoc(doc(collection(db, `finishedGames/${game.id}/moves`), move.id), move.data())
+      );
+      await Promise.all(movePromises);
+  
+      await GuestService.destroyGame(game);
+    }
+  
+    static async fetchFinalGame(game: GameModel): Promise<GameModel> {
+      const db = getFirestore();
+      const snapshot = await getDoc(doc(db, "finishedGames", game.id));
+  
+      if (!snapshot.exists()) {
+        throw new Error(`Game with ID ${game.id} not found.`);
+      }
+  
+      return snapshot.data() as GameModel;
+    }
+  }
+  

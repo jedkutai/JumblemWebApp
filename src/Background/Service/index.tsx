@@ -1,0 +1,10 @@
+export { AuthService } from "./AuthService";
+export { CasualGameService } from "./CasualGameService";
+export { FetchService } from "./FetchService";
+export { GameService } from "./GameService";
+export { GuestService } from "./GuestService";
+export { PrivateGameService } from "./PrivateGameService";
+export { RatedGameService } from "./RatedGameService";
+export { SearchService } from "./SearchService";
+export { UserService } from "./UserService";
+export { WordService } from "./WordService";

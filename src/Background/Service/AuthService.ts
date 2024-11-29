@@ -1,0 +1,133 @@
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, deleteUser, sendSignInLinkToEmail, User } from "firebase/auth";
+import { getFirestore, doc, setDoc, deleteDoc, Timestamp } from "firebase/firestore";
+import { UserModel } from "../Models/UserModel";
+import { FetchService } from "./FetchService";
+import { PublicUsernameModel } from "../Models/PublicUsernameModel";
+
+export class AuthService {
+  static async uploadUserData(uid: string, email: string): Promise<void> {
+    const db = getFirestore();
+    const user: UserModel = {
+      id: uid,
+      email: email.toLowerCase(),
+      standardRating: 1500,
+      timestamp: Timestamp.now()
+    };
+    try {
+      await setDoc(doc(db, "users", uid), user);
+    } catch (error) {
+      console.error("Failed to upload user data:", error);
+    }
+  }
+
+  static async setUsername(user: UserModel, newUsername: string): Promise<void> {
+    const db = getFirestore();
+    const updatedUser = {
+      ...user,
+      username: newUsername.toLowerCase(),
+      usernameDisplayed: newUsername,
+    };
+  
+    const publicUsername: PublicUsernameModel = {
+      id: user.id,
+      userNameLowercased: newUsername.toLowerCase(),
+      timestamp: Timestamp.now(),
+    };
+  
+    try {
+      // Update the user's information in the `users` collection
+      await setDoc(doc(db, 'users', user.id), updatedUser);
+  
+      // Add the username to the `publicUsernames` collection
+      await setDoc(doc(db, 'publicUsernames', user.id), publicUsername);
+  
+      console.log('Username successfully set.');
+    } catch (error) {
+      console.error('Failed to set username:', error);
+    }
+  }
+
+  static async createAccount(email: string, password: string): Promise<string> {
+    const auth = getAuth();
+    try {
+      const result = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = result.user.uid;
+  
+      await this.uploadUserData(uid, email.toLowerCase());
+      return uid;
+    } catch (error: any) {
+      console.error("Error creating account:", error);
+      // Throw the error so it can be handled by the calling function
+      throw error;
+    }
+  }
+  
+
+  static isUserEmailVerified(): boolean {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (!user) return false;
+    console.log("Verified:", user.emailVerified);
+    return user.emailVerified;
+  }
+
+
+  static async login(email: string, password: string): Promise<UserModel | null> {
+    console.log("AuthService.login called with email:", email);
+    const auth = getAuth();
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      const uid = result.user.uid;
+      const user = await FetchService.fetchUserByUid(uid);
+      return user;
+    } catch (error) {
+      console.error("Error during login:", error);
+      return null;
+    }
+  }
+
+  static async automaticLogin(): Promise<UserModel | null> {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+      try {
+        const loggedInUser = await FetchService.fetchUserByUid(user.uid);
+        return loggedInUser;
+      } catch (error) {
+        console.error("Error fetching logged-in user:", error);
+        return null;
+      }
+    }
+
+    return null;
+  }
+
+  static async signOut(): Promise<void> {
+    const auth = getAuth();
+    await auth.signOut();
+  }
+
+  static async resetPassword(email: string): Promise<void> {
+    const auth = getAuth();
+    await sendPasswordResetEmail(auth, email);
+  }
+
+  static async deleteAccount(): Promise<void> {
+    const auth = getAuth();
+    const db = getFirestore();
+
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        const userDoc = doc(db, "users", user.uid);
+        const publicUsernameDoc = doc(db, "publicUsernames", user.uid);
+        await deleteDoc(userDoc);
+        await deleteDoc(publicUsernameDoc);
+        await deleteUser(user);
+      }
+    } catch (error) {
+      console.error("Failed to delete account:", error);
+    }
+  }
+}
