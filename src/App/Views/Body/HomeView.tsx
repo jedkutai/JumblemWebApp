@@ -9,41 +9,48 @@ import AppOpenView from "../AppOpen/AppOpenView";
 import JumblemLogoSimple from "../../../assets/jumblem_logo_simple.png";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import StartCasualGameView from "../Game/CasualGame/StartCasualGameView";
+import StartRatedGameView from "../Game/RatedGame/StartRatedGameView";
 
 interface HomeViewProps {
-    user: UserModel;
+    passedUser: UserModel;
 }
 
 export default function HomeView({
-    user,
+    passedUser,
 }: HomeViewProps) {
-    const [view, setView] = useState<"AppOpenView" | "Home" | "StartCasualGame">("Home");
-    const [currentUser, setCurrentUser] = useState<UserModel>(user);
-    const [isMissingUsername, setIsMissingUsername] = useState(!user.username);
+    const [view, setView] = useState<"AppOpenView" | "Home" | "StartCasualGame" | "StartRatedGame">("Home");
+    const [user, setUser] = useState<UserModel>(passedUser);
+    const [isMissingUsername, setIsMissingUsername] = useState(!passedUser.username);
     const [newUsername, setNewUsername] = useState("");
     const [isCheckingUsername, setIsCheckingUsername] = useState(false);
     const [isUsernameAvailable, setIsUsernameAvailable] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { minDimension } = useWindowSize();
+    const [loadingUser, setLoadingUser] = useState(true);
 
     useEffect(() => {
+        setLoadingUser(true);
         const firstMove = async () => {
             try {
                 const updatedUser = await FetchService.fetchUserByUid(user.id)
-                setCurrentUser(updatedUser);
+                setUser(updatedUser);
             } catch {
 
             }
         }
 
         firstMove();
+    }, []);
 
-        if (!currentUser.username) {
+    useEffect(() => {
+        if (!user.username) {
             setIsMissingUsername(true);
         } else {
             // refresh user
         }
-    }, [currentUser]);
+        setLoadingUser(false);
+    }, [user]);
+
 
     const handleLogout = async () => {
         const auth = getAuth();
@@ -65,7 +72,7 @@ export default function HomeView({
             margin: "10px",
             flex: 1,
             backgroundColor: "rgb(227, 218, 195)",
-            color: "black",
+            color: loadingUser ? "gray" : "black",
             fontWeight: 600,
         },
         logo: {
@@ -117,7 +124,9 @@ export default function HomeView({
         case "AppOpenView":
             return (<AppOpenView />);
         case "StartCasualGame":
-            return (<StartCasualGameView passedUser={user}/>)
+            return (<StartCasualGameView passedUser={user} />)
+        case "StartRatedGame":
+            return (<StartRatedGameView passedUser={user} />)
     }
 
     return (
@@ -127,10 +136,10 @@ export default function HomeView({
                 <Box style={styles.section}>
                     <Typography style={styles.sectionTitle}>VERSUS</Typography>
                     <Box style={styles.buttonContainer}>
-                        <Button variant="contained" style={styles.button} onClick={() => setView("StartCasualGame")}>
+                        <Button variant="contained" style={styles.button} onClick={() => setView(loadingUser ? "Home" : "StartCasualGame")}>
                             CASUAL
                         </Button>
-                        <Button variant="contained" style={styles.button}>
+                        <Button variant="contained" style={styles.button} onClick={() => setView(loadingUser ? "Home" : "StartRatedGame")}>
                             RATED
                         </Button>
                     </Box>

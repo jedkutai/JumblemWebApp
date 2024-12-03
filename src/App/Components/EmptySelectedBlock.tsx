@@ -4,7 +4,7 @@ interface EmptySelectedBlockProps {
     setSelectedBlock: (selectedBlock: string) => void;
 }
 
-export default function EmptySelectedBlock({blockDimension, setSelectedBlock}: EmptySelectedBlockProps) {
+export function EmptySelectedBlock({blockDimension, setSelectedBlock}: EmptySelectedBlockProps) {
     // const style = {
     //     width: `${blockDimension}px`,
     //     height: `${blockDimension}px`,

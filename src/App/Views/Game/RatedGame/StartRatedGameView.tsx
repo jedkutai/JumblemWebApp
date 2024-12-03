@@ -3,23 +3,23 @@ import { GameModel, UserModel } from "../../../../Background/Models";
 import { View, VStack } from "../../../../ReactSwiftly";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import HomeView from "../../Body/HomeView";
-import { CasualGameService, FetchService } from "../../../../Background/Service";
-import PlayCasualGameView from "./PlayCasualGameView";
+import { RatedGameService, FetchService } from "../../../../Background/Service";
+import PlayRatedGameView from "./PlayRatedGameView";
 
-interface StartCasualGameViewProps {
+interface StartRatedGameViewProps {
     passedUser: UserModel
 }
 
-enum CasualGameModeState {
+enum RatedGameModeState {
     findingMatch,
     matchFound,
     error
 }
 
-export default function StartCasualGameView({ passedUser }: StartCasualGameViewProps) {
-    const [view, setView] = useState<"StartCasualGameView" | "HomeView">("StartCasualGameView");
+export default function StartRatedGameView({ passedUser }: StartRatedGameViewProps) {
+    const [view, setView] = useState<"StartRatedGameView" | "HomeView">("StartRatedGameView");
     const [user, setUser] = useState<UserModel>(passedUser);
-    const [gameModeState, setGameModeState] = useState<CasualGameModeState>(CasualGameModeState.findingMatch);
+    const [gameModeState, setGameModeState] = useState<RatedGameModeState>(RatedGameModeState.findingMatch);
     const [game, setGame] = useState<GameModel | null>(null);
     const [hostOfMatch, setHostOfMatch] = useState(false);
     const [stopSearching, setStopSearching] = useState(false);
@@ -42,21 +42,21 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
 
 
     const onAppearActions = async () => {
-        if (gameModeState !== CasualGameModeState.findingMatch) {
+        if (gameModeState !== RatedGameModeState.findingMatch) {
             setStopSearching(false);
-            setGameModeState(CasualGameModeState.findingMatch);
+            setGameModeState(RatedGameModeState.findingMatch);
         }
         try {
             const updatedUser = await FetchService.fetchUserByUid(user.id);
             setUser(updatedUser);
 
-            const loadedGame = await CasualGameService.findGame(user);
+            const loadedGame = await RatedGameService.findGame(user);
             setGame(loadedGame);
             if (loadedGame) {
-                const gameUpdate = await CasualGameService.getGameUpdate(loadedGame);
+                const gameUpdate = await RatedGameService.getGameUpdate(loadedGame);
                 if (gameUpdate.playerTwoId) {
                     if (gameUpdate.playerTwoId === user.id) {
-                        setGameModeState(CasualGameModeState.matchFound);
+                        setGameModeState(RatedGameModeState.matchFound);
                         setStopSearching(true);
                     } else {
                         setGame(null);
@@ -65,7 +65,7 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
                     setGame(null);
                 }
             } else {
-                const createdGame = await CasualGameService.createGame(user);
+                const createdGame = await RatedGameService.createGame(user);
                 setGame(createdGame);
                 setHostOfMatch(true);
                 setTicker(!ticker);
@@ -73,7 +73,7 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
         } catch (error) {
             setStopSearching(true);
             console.error("Error finding a match", error);
-            setGameModeState(CasualGameModeState.error);
+            setGameModeState(RatedGameModeState.error);
             wipeGame();
         }
     }
@@ -83,7 +83,7 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
         if (hostOfMatch) {
             if (game) {
                 try {
-                    await CasualGameService.destroyGame(game);
+                    await RatedGameService.destroyGame(game);
                     setGame(null);
                     setHostOfMatch(false);
                 } catch {
@@ -98,10 +98,10 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
             if (game) {
                 const timeout = setTimeout(async () => {
                     try {
-                        const gameUpdate = await CasualGameService.getGameUpdate(game);
+                        const gameUpdate = await RatedGameService.getGameUpdate(game);
                         if (gameUpdate.matchFound && gameUpdate.playerTwoId !== undefined) {
                             setGame(gameUpdate);
-                            setGameModeState(CasualGameModeState.matchFound);
+                            setGameModeState(RatedGameModeState.matchFound);
                             setStopSearching(true);
                         } else {
                             setTicker(!ticker);
@@ -110,7 +110,7 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
                     } catch (error) {
                         setStopSearching(true);
                         console.error("Error with ticker action", error);
-                        setGameModeState(CasualGameModeState.error);
+                        setGameModeState(RatedGameModeState.error);
                     }
                 }, 1000);
 
@@ -129,8 +129,8 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
         return <HomeView passedUser={user} />
     }
 
-    if (gameModeState === CasualGameModeState.matchFound && game) {
-        return <PlayCasualGameView passedUser={user} passedGame={game} />;
+    if (gameModeState === RatedGameModeState.matchFound && game) {
+        return <PlayRatedGameView passedUser={user} passedGame={game} />;
     }
 
     return (
@@ -140,7 +140,7 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
                     Jumblem
                 </Typography>
 
-                {gameModeState === CasualGameModeState.findingMatch && (
+                {gameModeState === RatedGameModeState.findingMatch && (
                     <>
                         <p>Finding Match...</p>
                         <CircularProgress />
@@ -148,7 +148,7 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
                 )}
 
 
-                {gameModeState === CasualGameModeState.error && (
+                {gameModeState === RatedGameModeState.error && (
                     <>
                         <p>There was an error when finding a match.</p>
                         <Button

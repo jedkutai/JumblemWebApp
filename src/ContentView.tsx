@@ -49,7 +49,7 @@ export default function ContentView() {
     return (
         <>
             {pageState === ContentViewPageState.loading && <AppLoadingView/>}
-            {pageState === ContentViewPageState.loaded && user && <HomeView user={user} />}
+            {pageState === ContentViewPageState.loaded && user && <HomeView passedUser={user} />}
             {pageState === ContentViewPageState.loaded && !user && <AppOpenView/>}
         </>
     );

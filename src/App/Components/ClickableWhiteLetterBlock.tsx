@@ -4,7 +4,7 @@ interface ClickableWhiteLetterBlockProps {
     action: () => void;
 }
 
-export default function ClickableWhiteLetterBlock({
+export function ClickableWhiteLetterBlock({
     letter,
     blockDimension,
     action

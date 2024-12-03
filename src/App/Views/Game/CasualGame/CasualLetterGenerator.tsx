@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { GameModel, MoveModel, UserModel } from "../../../Background/Models";
-import { useWindowSize } from "../../../Background/Utils/useWindowSize";
-import { HStack } from "../../../ReactSwiftly";
-import LetterGeneratorBlock from "./LetterGeneratorBlock";
-import { GameFunctions } from "../../../Background/Utils/GameFunctions";
+import { GameModel, MoveModel, UserModel } from "../../../../Background/Models";
+import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
+import { HStack } from "../../../../ReactSwiftly";
+import CasualLetterGeneratorBlock from "./CasualLetterGeneratorBlock";
+import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
 
-interface LetterGeneratorProps {
+interface CasualLetterGeneratorProps {
     user: UserModel;
     game: GameModel;
     letters: string[];
@@ -18,7 +18,7 @@ interface LetterGeneratorProps {
     blockDimension: number;
 }
 
-export default function LetterGenerator({
+export default function CasualLetterGenerator({
     user,
     game,
     letters,
@@ -29,7 +29,7 @@ export default function LetterGenerator({
     setSelectedBlock,
     yourTurn,
     blockDimension
-}: LetterGeneratorProps) {
+}: CasualLetterGeneratorProps) {
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
     const upperBound = 650;
@@ -46,7 +46,7 @@ export default function LetterGenerator({
             width={`${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px`}
         >
             {letters.map((letter, index) => (
-                <LetterGeneratorBlock
+                <CasualLetterGeneratorBlock
                     key={index}
                     user={user}
                     game={game}

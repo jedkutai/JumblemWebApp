@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { GameModel, GridSpotModel, MoveModel, UserModel } from "../../../Background/Models";
-import { useWindowSize } from "../../../Background/Utils/useWindowSize";
-import { GameFunctions } from "../../../Background/Utils/GameFunctions";
-import { VSpacer, VStack } from "../../../ReactSwiftly";
-import GameRow from "./GameRow";
-import { GridSpot } from "../../../Background/Extends/GridSpot";
-import LetterGenerator from "./LetterGenerator";
+import { GameModel, GridSpotModel, MoveModel, UserModel } from "../../../../Background/Models";
+import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
+import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
+import { VStack } from "../../../../ReactSwiftly";
+import CasualGameRow from "./CasualGameRow";
+import { GridSpot } from "../../../../Background/Extends/GridSpot";
+import CasualLetterGenerator from "./CasualLetterGenerator";
 
 
-interface GameGridProps {
+interface CasualGameGridProps {
     user: UserModel;
     game: GameModel;
     gameOver: boolean;
@@ -17,25 +17,21 @@ interface GameGridProps {
     movesDict: Record<string, MoveModel>;
     yourTurn: boolean;
     lastMove: MoveModel | undefined;
-    movesCopy: MoveModel[]
-
+    movesCopy: MoveModel[];
 }
 
-export default function GameGrid({
+export default function CasualCasualGameGrid({
     user,
     game,
-    gameOver,
     wordCheckComplete,
-    matchAbortedTime,
     movesDict,
     yourTurn,
     lastMove,
-    movesCopy
-}: GameGridProps) {
+}: CasualGameGridProps) {
     const { minDimension } = useWindowSize();
-    const [grid, setGrid] = useState<GridSpotModel[][]>(GridSpot.grid);
+    const [grid] = useState<GridSpotModel[][]>(GridSpot.grid);
     const [letters, setLetters] = useState<string[]>([]);
-    const [canSelect, setCanSelect] = useState(false);
+    // const [canSelect, setCanSelect] = useState(false);
     const [availableBlocks, setAvailableBlocks] = useState(["3,3"]);
     const [selectedBlock, setSelectedBlock] = useState("");
     const dimensionDivider = 9 * 1.75;
@@ -47,7 +43,7 @@ export default function GameGrid({
 
 
     return (
-        <VStack maxHeight={`${(Math.max(minDimension, upperBound) * 8 / dimensionDivider) + 200}px`}>
+        <VStack maxHeight={`${(Math.max(minDimension, upperBound) * 8 / dimensionDivider) + 200}px`} spacing="10px">
             <VStack
                 spacing="0px"
                 backgroundColor="rgb(255, 255, 255, 0.25)"
@@ -56,7 +52,7 @@ export default function GameGrid({
                 cornerRadius="5px"
             >
                 {grid.map((row, index) => (
-                    <GameRow
+                    <CasualGameRow
                         key={index}
                         row={row}
                         availableBlocks={availableBlocks}
@@ -72,9 +68,9 @@ export default function GameGrid({
 
             </VStack>
             
-            <VSpacer />
+            {/* <VSpacer /> */}
 
-            <LetterGenerator
+            <CasualLetterGenerator
                 user={user}
                 game={game}
                 letters={letters}

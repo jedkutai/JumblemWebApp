@@ -3,7 +3,7 @@ interface DimLetterBlockProps {
     blockDimension: number;
 }
 
-export default function DimLetterBlock({letter, blockDimension}: DimLetterBlockProps) {
+export function DimLetterBlock({letter, blockDimension}: DimLetterBlockProps) {
     const style = {
         width: `${blockDimension}px`,
         height: `${blockDimension}px`,

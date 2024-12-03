@@ -1,8 +1,8 @@
-import { GridSpotModel, MoveModel } from "../../../Background/Models";
-import { HStack } from "../../../ReactSwiftly";
-import GameBlock from "./GameBlock";
+import { GridSpotModel, MoveModel } from "../../../../Background/Models";
+import { HStack } from "../../../../ReactSwiftly";
+import RatedGameBlock from "./RatedGameBlock";
 
-interface GameRowProps {
+interface RatedGameRowProps {
     row: GridSpotModel[];
     availableBlocks: string[];
     wordCheckComplete: boolean;
@@ -15,7 +15,7 @@ interface GameRowProps {
 }
 
 
-export default function GameRow({
+export default function RatedGameRow({
     row,
     availableBlocks,
     wordCheckComplete,
@@ -25,12 +25,12 @@ export default function GameRow({
     yourTurn,
     blockDimension,
     lastMove
-}: GameRowProps) {
+}: RatedGameRowProps) {
 
     return (
         <HStack spacing="0px">
             {row.map((block, index) => (
-                <GameBlock
+                <RatedGameBlock
                     key={index}
                     block={block}
                     availableBlocks={availableBlocks}

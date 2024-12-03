@@ -4,7 +4,7 @@ interface YellowLetterBlockProps {
     blockDimension: number;
 }
 
-export default function YellowLetterBlock({letter, blockDimension}: YellowLetterBlockProps) {
+export function YellowLetterBlock({letter, blockDimension}: YellowLetterBlockProps) {
 
     const style = {
         width: `${blockDimension}px`,

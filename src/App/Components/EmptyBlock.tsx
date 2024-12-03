@@ -3,7 +3,7 @@ interface EmptyBlockProps {
     blockDimension: number
 }
 
-export default function EmptyBlock({blockDimension}: EmptyBlockProps) {
+export function EmptyBlock({blockDimension}: EmptyBlockProps) {
 
     const style = {
         width: `${blockDimension}px`,

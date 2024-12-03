@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { UserModel, GameModel } from "../../../Background/Models";
-import DimLetterBlock from "../DimLetterBlock";
-import ClickableWhiteLetterBlock from "../ClickableWhiteLetterBlock";
-import { CasualGameService } from "../../../Background/Service";
-import { GameFunctions } from "../../../Background/Utils/GameFunctions";
+import { UserModel, GameModel } from "../../../../Background/Models";
+import { RatedGameService } from "../../../../Background/Service";
+import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
+import { DimLetterBlock, ClickableWhiteLetterBlock } from "../../../Components";
 
-interface LetterGeneratorBlockProps {
+interface RatedLetterGeneratorBlockProps {
     user: UserModel;
     game: GameModel;
     letters: string[];
@@ -19,7 +18,7 @@ interface LetterGeneratorBlockProps {
     setSelectedBlock: (selectedBlock: string) => void;
 }
 
-export default function LetterGeneratorBlock({
+export default function RatedLetterGeneratorBlock({
     user,
     game,
     letters,
@@ -31,7 +30,7 @@ export default function LetterGeneratorBlock({
     selectedBlock,
     setSelectedBlock,
     letter
-}: LetterGeneratorBlockProps) {
+}: RatedLetterGeneratorBlockProps) {
     const [canSelect, setCanSelect] = useState(true);
 
 
@@ -40,7 +39,7 @@ export default function LetterGeneratorBlock({
         if (yourTurn && wordCheckComplete) {
             setCanSelect(false);
             try {
-                await CasualGameService.makeMove(user, game, selectedBlock, letter);
+                await RatedGameService.makeMove(user, game, selectedBlock, letter);
                 letters.splice(removeIndex, 1);
 
                 const newLetters = GameFunctions.getLetters(1);

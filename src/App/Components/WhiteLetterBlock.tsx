@@ -5,7 +5,7 @@ interface WhiteLetterBlockProps {
     highlight?: boolean;
 }
 
-export default function WhiteLetterBlock({letter, blockDimension, highlight}: WhiteLetterBlockProps) {
+export function WhiteLetterBlock({letter, blockDimension, highlight}: WhiteLetterBlockProps) {
     const style = {
         width: `${blockDimension}px`,
         height: `${blockDimension}px`,

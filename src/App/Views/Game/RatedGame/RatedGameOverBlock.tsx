@@ -1,14 +1,13 @@
-import { MoveModel } from "../../../Background/Models";
-import EmptyBlock from "../EmptyBlock";
-import WhiteLetterBlock from "../WhiteLetterBlock";
+import { MoveModel } from "../../../../Background/Models";
+import { WhiteLetterBlock, EmptyBlock } from "../../../Components";
 
-interface GameOverBlockProps {
+interface RatedGameOverBlockProps {
     move: MoveModel | undefined;
     partOfWord: boolean;
     blockDimension: number;
 }
 
-export default function GameOverBlock({ move, partOfWord, blockDimension }: GameOverBlockProps) {
+export default function RatedGameOverBlock({ move, partOfWord, blockDimension }: RatedGameOverBlockProps) {
 
 
     return (

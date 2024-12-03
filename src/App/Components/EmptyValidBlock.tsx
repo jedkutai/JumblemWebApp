@@ -6,7 +6,7 @@ interface EmptyValidBlockProps {
     setSelectedBlock: (selectedBlock: string) => void;
 }
 
-export default function EmptyValidBlock({blockDimension, setSelectedBlock, blockId}: EmptyValidBlockProps) {
+export function EmptyValidBlock({blockDimension, setSelectedBlock, blockId}: EmptyValidBlockProps) {
     const style = {
         width: `${blockDimension}px`,
         height: `${blockDimension}px`,

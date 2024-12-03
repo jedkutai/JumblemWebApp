@@ -3,9 +3,9 @@ import { useState, useEffect } from "react";
 import { UserModelGuest } from "../../../../Background/Extends/UserModelGuest";
 import { UserModel } from "../../../../Background/Models";
 import { FetchService } from "../../../../Background/Service";
-import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
 import { Text, VStack } from "../../../../ReactSwiftly";
-import { DisplayTime } from "../../../Components/DisplayTime";
+import { DisplayTime } from "../../../Components";
+import { DisplayFunctions } from "../../../../Background/Utils/DisplayFunctions";
 
 
 interface CasualPlayerHeaderProps {
@@ -21,7 +21,6 @@ export default function CasualPlayerHeaderProps({
 
 }: CasualPlayerHeaderProps) {
     const [player, setPlayer]= useState<UserModel | undefined>(undefined);
-    const { minDimension } = useWindowSize();
     useEffect(() => {
         const getPlayer = async(): Promise<void> => {
             if (playerId !== undefined) {
@@ -44,7 +43,7 @@ export default function CasualPlayerHeaderProps({
         <VStack>
             {player !== undefined ? (
                 <VStack minWidth={`${150}px`} minHeight={`${75}px`} maxWidth={`${150}px`} maxHeight={`${75}px`} border={highlight ? "3px solid white" : "3px solid black"} cornerRadius="20px">
-                    <Text text={player.username ?? "N/A"}/>
+                    <Text text={DisplayFunctions.displayUsername(player.usernameDisplayed)}/>
                     <DisplayTime timeRemaining={timeRemaining}/>
                 </VStack>
 

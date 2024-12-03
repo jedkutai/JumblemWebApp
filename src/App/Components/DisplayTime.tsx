@@ -26,6 +26,8 @@ export const DisplayTime: React.FC<DisplayTimeProps> = ({ timeRemaining }) => {
       style={{
         color: "black",
         fontWeight: "bold",
+        padding: "0px",
+        margin: "0px"
       }}
     >
       {formatTime()}

@@ -1,25 +1,25 @@
-import { GridSpotModel, MoveModel } from "../../../Background/Models";
-import { HStack } from "../../../ReactSwiftly";
-import GameOverBlock from "./GameOverBlock";
+import { GridSpotModel, MoveModel } from "../../../../Background/Models";
+import { HStack } from "../../../../ReactSwiftly";
+import RatedGameOverBlock from "./RatedGameOverBlock";
 
-interface GameOverRowProps {
+interface RatedGameOverRowProps {
     row: GridSpotModel[];
     movesDict: Record<string, MoveModel>;
     winningGridSpots: string[];
     blockDimension: number;
 }
 
-export default function GameOverRow({
+export default function RatedGameOverRow({
     row,
     movesDict, 
     winningGridSpots,
     blockDimension
-}: GameOverRowProps) {
+}: RatedGameOverRowProps) {
 
     return (
         <HStack spacing="0px">
             {row.map((spot, index) => (
-                <GameOverBlock 
+                <RatedGameOverBlock 
                 key={index}
                 move={movesDict[spot.id]} 
                 partOfWord={winningGridSpots.includes(spot.id)} 

@@ -2,24 +2,24 @@ import { useEffect, useState } from "react";
 import { useStandardGameManager } from "../../../../Background/Managers/StandardGameManager";
 import { GameModel, MoveModel, UserModel, WordModel } from "../../../../Background/Models";
 import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
-import { CasualGameService } from "../../../../Background/Service";
+import { RatedGameService } from "../../../../Background/Service";
 import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
 import { View, VSpacer, VStack } from "../../../../ReactSwiftly";
-import CasualCasualGameGrid from "./CasualGameGrid";
-import CasualGameHeader from "./CasualGameHeader";
+import RatedRatedGameGrid from "./RatedGameGrid";
+import RatedGameHeader from "./RatedGameHeader";
 import { Button } from "@mui/material";
 import HomeView from "../../Body/HomeView";
 import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
-import CasualGameOverGrid from "./CasualGameOverGrid";
+import RatedGameOverGrid from "./RatedGameOverGrid";
 import JumblemLogoSimple from "../../../../assets/jumblem_logo_simple.png";
 
-interface PlayCasualGameViewProps {
+interface PlayRatedGameViewProps {
     passedUser: UserModel;
     passedGame: GameModel;
 
 }
 
-export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasualGameViewProps) {
+export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedGameViewProps) {
     const {
         moves,
     } = useStandardGameManager(passedUser, passedGame);
@@ -35,7 +35,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
     const [matchAbortedTime, setMatchAbortedTime] = useState(10);
     const [wordCheckComplete, setWordCheckComplete] = useState(true);
     const [winningGridSpots, setWinningGridSpots] = useState<string[]>([]);
-    const [view, setView] = useState<"HomeView" | "PlayCasualGameView">("PlayCasualGameView");
+    const [view, setView] = useState<"HomeView" | "PlayRatedGameView">("PlayRatedGameView");
     const { width, height, minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
     const upperBound = 650;
@@ -73,7 +73,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
             const timeout = setTimeout(async () => {
                 setTickCount(tickCount + 1);
                 try {
-                    const _ = await CasualGameService.getGameUpdate(game);
+                    const _ = await RatedGameService.getGameUpdate(game);
                 } catch {
                     setGameOver(true);
                 }
@@ -93,8 +93,8 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
 
                 if (matchAbortedTime === 0) {
                     try {
-                        await CasualGameService.setGameWinner(game, "aborted", [], []);
-                        await CasualGameService.moveFinishedGame(game);
+                        await RatedGameService.setGameWinner(game, "aborted", [], []);
+                        await RatedGameService.moveFinishedGame(game);
                     } catch {
                         // continue
                     }
@@ -121,11 +121,11 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
         const fetchLastMove = async (): Promise<void> => {
             if (checkOpponentTimeExpired && !gameOver) {
                 try {
-                    let lastMove = await CasualGameService.getFinalMove(game);
+                    let lastMove = await RatedGameService.getFinalMove(game);
                     if (lastMove !== null) {
                         if (lastMove.userId === user.id) {
-                            await CasualGameService.setGameWinner(game, user.id, [], []);
-                            await CasualGameService.moveFinishedGame(game);
+                            await RatedGameService.setGameWinner(game, user.id, [], []);
+                            await RatedGameService.moveFinishedGame(game);
                             setGameOver(true);
                         }
                     }
@@ -153,8 +153,8 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
 
                 if (winnerId) {
                     try {
-                        await CasualGameService.setGameWinner(game, winnerId, [], []);
-                        await CasualGameService.moveFinishedGame(game);
+                        await RatedGameService.setGameWinner(game, winnerId, [], []);
+                        await RatedGameService.moveFinishedGame(game);
                         setGameOver(true);
                     } catch {
 
@@ -219,8 +219,8 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
 
                 if (updatedWinningWords.length !== 0) {
                     let wordArray = updatedWinningWords.map((item) => item.word);
-                    await CasualGameService.setGameWinner(game, lastMove.userId, wordArray, [...winningSpots]);
-                    await CasualGameService.moveFinishedGame(game);
+                    await RatedGameService.setGameWinner(game, lastMove.userId, wordArray, [...winningSpots]);
+                    await RatedGameService.moveFinishedGame(game);
                     setGameOver(true);
                 }
                 setWordCheckComplete(true);
@@ -233,8 +233,8 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
             if (movesCopy.length >= 49) {
                 if (winningWords.length === 0) { // Use derived or passed variable here
                     try {
-                        await CasualGameService.setGameWinner(game, "draw", [], []);
-                        await CasualGameService.moveFinishedGame(game);
+                        await RatedGameService.setGameWinner(game, "draw", [], []);
+                        await RatedGameService.moveFinishedGame(game);
                         setGameOver(true);
                     } catch {
                         console.error("Error during draw handling");
@@ -256,7 +256,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                 <VStack>
                 <img src={JumblemLogoSimple} alt="Jumblem Logo" style={style} />
 
-                    <CasualGameHeader
+                    <RatedGameHeader
                         userTimeExpired={userTimeExpired}
                         setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
                         checkOpponentTimeExpired={checkOpponentTimeExpired}
@@ -270,7 +270,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                         gameOver={gameOver}
                     />
 
-                    <CasualGameOverGrid
+                    <RatedGameOverGrid
                         user={user}
                         game={game}
                         movesDict={movesDict}
@@ -292,7 +292,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                     {/* <VSpacer /> */}
                     <img src={JumblemLogoSimple} alt="Jumblem Logo" style={style} />
 
-                    <CasualGameHeader
+                    <RatedGameHeader
                         userTimeExpired={userTimeExpired}
                         setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
                         checkOpponentTimeExpired={checkOpponentTimeExpired}
@@ -306,7 +306,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                         gameOver={gameOver}
                     />
 
-                    <CasualCasualGameGrid
+                    <RatedRatedGameGrid
                         user={user}
                         game={game}
                         gameOver={gameOver}
