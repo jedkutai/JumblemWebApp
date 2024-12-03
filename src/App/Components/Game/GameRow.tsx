@@ -12,7 +12,6 @@ interface GameRowProps {
     yourTurn: boolean;
     blockDimension: number;
     lastMove: MoveModel | undefined;
-
 }
 
 

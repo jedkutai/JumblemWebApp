@@ -15,13 +15,10 @@ interface CasualGameHeaderProps {
     yourTurn: boolean,
     firstMoveMade: boolean,
     gameOver: boolean,
-    
 }
 
 export default function CasualGameHeader({
-    userTimeExpired, 
     setUserTimeExpired,
-    checkOpponentTimeExpired, 
     setCheckOpponentTimeExpired,
     userId, 
     opponentId, 
@@ -29,11 +26,12 @@ export default function CasualGameHeader({
     opponentTimeRemaining, 
     yourTurn, 
     firstMoveMade,
-    gameOver
+    gameOver,
 }: CasualGameHeaderProps) {
 
     const [tick, setTick] = useState(false);
     const [clock, setClock] = useState(0);
+    const [anchorTime, setAnchorTime] = useState(Date.now());
 
     useEffect(() => {
         setTick(!tick);
@@ -41,6 +39,7 @@ export default function CasualGameHeader({
 
     useEffect(() => {
         setClock(0);
+        setAnchorTime(Date.now());
     }, [yourTurn]);
 
     useEffect(() => {
@@ -48,16 +47,21 @@ export default function CasualGameHeader({
         if (!gameOver) {
             const timeout = setTimeout(async() => {
                 if (firstMoveMade) {
-                    setClock(clock + 1);
+
+                    const elapsedSeconds = Math.floor((Date.now() - anchorTime) / 1000);
+                    setClock(elapsedSeconds);
                 }
+
+                if (yourTurn && userTimeRemaining - clock <= 0) {
+                    setUserTimeExpired(true);
+                } else if (!yourTurn && opponentTimeRemaining - clock <= 0) {
+                    setCheckOpponentTimeExpired(true);
+                }
+
                 setTick(!tick);
             }, 1000);
 
-            if (yourTurn && userTimeRemaining - clock <= 0) {
-                setUserTimeExpired(true);
-            } else if (!yourTurn && opponentTimeRemaining - clock <= 0) {
-                setCheckOpponentTimeExpired(true);
-            }
+
 
             return () => clearTimeout(timeout);
         }

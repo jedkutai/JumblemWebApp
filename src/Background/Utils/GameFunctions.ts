@@ -81,7 +81,7 @@ export class GameFunctions {
       `${r},${c + 1}`, // Right
     ];
   }
-
+ 
   static checkDirection(
     finalMove: MoveModel,
     moves: Record<string, MoveModel>,
@@ -134,36 +134,61 @@ export class GameFunctions {
     return words;
   }
 
-  static chopString(consecutive: [string, string[]]): [string, string[]][] {
+  // static chopString(consecutive: [string, string[]]): [string, string[]][] {
+  //   const potentialWords: [string, string[]][] = [];
+  //   const wordLen = consecutive[0].length;
+  //   const ranges = [4, 5, 6, 7]; // Desired lengths of substrings
+
+  //   for (const length of ranges) {
+  //     if (wordLen >= length) {
+  //       for (let i = 0; i <= wordLen - length; i++) {
+  //         const sub = consecutive[0].substring(i, i + length);
+  //         const reversedSub = sub.split("").reverse().join("");
+
+  //         const subCoordinates = consecutive[1].slice(i, i + length);
+  //         const reversedSubCoordinates = [...subCoordinates].reverse();
+
+  //         potentialWords.push([sub, subCoordinates]);
+  //         potentialWords.push([reversedSub, reversedSubCoordinates]);
+  //       }
+  //     }
+  //   }
+
+  //   return potentialWords;
+  // }
+static chopString(consecutive: [string, string[]]): [string, string[]][] {
     const potentialWords: [string, string[]][] = [];
     const wordLen = consecutive[0].length;
-    const ranges = [4, 5, 6, 7]; // Desired lengths of substrings
+
+    // Ensure input is valid
+    if (!consecutive[0] || !consecutive[1] || consecutive[0].length === 0 || consecutive[1].length === 0) {
+        return [];
+    }
+
+    const ranges = [4, 5, 6, 7].filter((length) => length <= wordLen); // Filter ranges to valid lengths
 
     for (const length of ranges) {
-      if (wordLen >= length) {
         for (let i = 0; i <= wordLen - length; i++) {
-          const sub = consecutive[0].substring(i, i + length);
-          const reversedSub = sub.split("").reverse().join("");
+            const sub = consecutive[0].substring(i, i + length);
+            const reversedSub = sub.split("").reverse().join("");
 
-          const subCoordinates = consecutive[1].slice(i, i + length);
-          const reversedSubCoordinates = [...subCoordinates].reverse();
+            const subCoordinates = consecutive[1].slice(i, i + length);
+            const reversedSubCoordinates = [...subCoordinates].reverse();
 
-          potentialWords.push([sub, subCoordinates]);
-          potentialWords.push([reversedSub, reversedSubCoordinates]);
+
+            potentialWords.push([sub, subCoordinates]);
+            potentialWords.push([reversedSub, reversedSubCoordinates]);
         }
-      }
     }
 
     return potentialWords;
-  }
+}
 
   static async checkWords(
     finalMove: MoveModel,
     moves: Record<string, MoveModel>
   ): Promise<[WordModel, string[]][]> {
     const wordsToCheck = this.getWordsToCheck(finalMove, moves);
-
-    console.log(`Words to Check: ${wordsToCheck.length}`);
     const wordDict: Record<string, string[]> = {};
     const wordBank: string[] = [];
 
@@ -176,11 +201,9 @@ export class GameFunctions {
       }
     }
 
-    console.log(`Word Bank: ${wordBank.length}`);
 
     const validWords: WordModel[] = await WordService.checkWords(wordBank);
 
-    console.log(`Valid Words: ${validWords.length}`);
     return validWords.map((word) => [word, wordDict[word.word]]);
   }
 }
