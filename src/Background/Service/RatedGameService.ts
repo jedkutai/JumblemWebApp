@@ -29,7 +29,7 @@ import {
       const maximumRating = user.standardRating + 200 + Math.floor(windowBonus);
   
       // Query for a suitable game
-      const gameQuery = query(
+      const queryRef = query(
         collection(db, "newGames"),
         where("gameMode", "==", "standard"),
         where("matchFound", "==", false),
@@ -40,28 +40,30 @@ import {
         limit(1)
       );
   
-      const snapshot = await getDocs(gameQuery);
-      const games = snapshot.docs.map((doc) => doc.data() as GameModel);
+      const snapshot = await getDocs(queryRef);
+      const snapshotGames = snapshot.docs.map((doc) => doc.data() as GameModel);
   
-      if (games.length === 0) {
-        return null;
+      if (snapshotGames.length > 0) {
+        const selectedGame = snapshotGames[0];
+        const gameRef = doc(db, "newGames", selectedGame.id);
+        await updateDoc(gameRef, { matchFound: true });
+  
+        let newGame = selectedGame;
+        newGame.playerTwoId = user.id;
+        newGame.playerTwoRating = user.standardRating;
+        newGame.matchFound = true;
+  
+        const updatedGame = await this.getGameUpdate(selectedGame);
+  
+        if (updatedGame.matchFound && !updatedGame.playerTwoId) {
+          const encodedGame = { ...newGame };
+          await setDoc(gameRef, encodedGame);
+        }
+  
+        return selectedGame;
       }
   
-      const selectedGame = games[0];
-  
-      // Update the selected game
-      await updateDoc(doc(db, "newGames", selectedGame.id), { matchFound: true });
-  
-      // Update game details with player two's info
-      const updatedGame: GameModel = {
-        ...selectedGame,
-        playerTwoId: user.id,
-        playerTwoRating: user.standardRating,
-        matchFound: true,
-      };
-  
-      await RatedGameService.getGameUpdate(updatedGame); // Ensure match integrity
-      return updatedGame;
+      return null;
     }
   
     static async createGame(user: UserModel): Promise<GameModel | null> {
@@ -167,8 +169,8 @@ import {
         const playerOne = await FetchService.fetchUserByUid(game.playerOneId);
         const playerTwo = await FetchService.fetchUserByUid(game.playerTwoId);
   
-        playerOne.standardRating = Math.max(playerOne.standardRating + playerOneChange, 400);
-        playerTwo.standardRating = Math.max(playerTwo.standardRating + playerTwoChange, 400);
+        playerOne.standardRating = Math.max(game.playerOneRating + playerOneChange, 400);
+        playerTwo.standardRating = Math.max(game.playerTwoRatingChange ?? 0 + playerTwoChange, 400);
   
         await updateDoc(doc(db, "users", playerOne.id), { standardRating: playerOne.standardRating });
         await updateDoc(doc(db, "users", playerTwo.id), { standardRating: playerTwo.standardRating });

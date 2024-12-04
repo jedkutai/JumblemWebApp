@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { UserModelGuest } from "../../../../Background/Extends/UserModelGuest";
 import { UserModel } from "../../../../Background/Models";
 import { FetchService } from "../../../../Background/Service";
-import { VStack } from "../../../../ReactSwiftly";
+import { HStack, VStack } from "../../../../ReactSwiftly";
 import { DisplayTime } from "../../../Components";
 import { DisplayFunctions } from "../../../../Background/Utils/DisplayFunctions";
 
@@ -12,12 +12,14 @@ interface RatedPlayerHeaderProps {
     playerId: string | undefined,
     timeRemaining: number,
     highlight: boolean,
+    ratingChange?: number
 }
 
 export default function RatedPlayerHeaderProps({
     playerId,
     timeRemaining,
-    highlight
+    highlight,
+    ratingChange
 
 }: RatedPlayerHeaderProps) {
     const [player, setPlayer] = useState<UserModel | undefined>(undefined);
@@ -43,7 +45,7 @@ export default function RatedPlayerHeaderProps({
         <VStack>
             {player !== undefined ? (
                 <VStack spacing="0px" minWidth={`${150}px`} minHeight={`${100}px`} maxWidth={`${150}px`} maxHeight={`${100}px`} border={highlight ? "3px solid white" : "3px solid black"} cornerRadius="20px">
-                    
+
 
                     <Typography
                         variant="h6"
@@ -54,14 +56,46 @@ export default function RatedPlayerHeaderProps({
                             margin: "0px"
                         }}
                     >{DisplayFunctions.displayUsername(player.usernameDisplayed)}</Typography>
-                    <Typography
-                        variant="h6"
-                        style={{
-                            color: "black",
-                            padding: "0px",
-                            margin: "0px"
-                        }}
-                    >{`${player.standardRating}`}</Typography>
+                    <HStack>
+                        <Typography
+                            variant="h6"
+                            style={{
+                                color: "black",
+                                padding: "0px",
+                                margin: "0px"
+                            }}
+                        >{`${player.standardRating}`}</Typography>
+                        {ratingChange && ratingChange > 0 && (
+                            <Typography
+                                variant="h6"
+                                style={{
+                                    color: "green",
+                                    padding: "0px",
+                                    margin: "0px"
+                                }}
+                            >{`+${ratingChange}`}</Typography>
+                        )}
+                        {ratingChange && ratingChange == 0 && (
+                            <Typography
+                                variant="h6"
+                                style={{
+                                    color: "black",
+                                    padding: "0px",
+                                    margin: "0px"
+                                }}
+                            >{`+${ratingChange}`}</Typography>
+                        )}
+                        {ratingChange && ratingChange < 0 && (
+                            <Typography
+                                variant="h6"
+                                style={{
+                                    color: "red",
+                                    padding: "0px",
+                                    margin: "0px"
+                                }}
+                            >{`${ratingChange}`}</Typography>
+                        )}
+                    </HStack>
                     <DisplayTime timeRemaining={timeRemaining} />
                 </VStack>
 

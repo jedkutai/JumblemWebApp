@@ -24,7 +24,6 @@ export default function CasualLetterGenerator({
     letters,
     setLetters,
     wordCheckComplete,
-    moves,
     selectedBlock,
     setSelectedBlock,
     yourTurn,

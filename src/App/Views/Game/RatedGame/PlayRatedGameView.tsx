@@ -25,7 +25,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
     } = useStandardGameManager(passedUser, passedGame);
 
     const [user] = useState<UserModel>(passedUser);
-    const [game] = useState<GameModel>(passedGame);
+    const [game, setGame] = useState<GameModel>(passedGame);
     const [gameOver, setGameOver] = useState(false);
     const [winningWords, setWinningWords] = useState<WordModel[]>([]);
     const [userTimeExpired, setUserTimeExpired] = useState(false);
@@ -268,11 +268,14 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
                         yourTurn={yourTurn}
                         firstMoveMade={movesCopy.length !== 0}
                         gameOver={gameOver}
+                        userRatingChange={user.id === game.playerOneId ? game.playerOneRatingChange : game.playerTwoRatingChange}
+                        opponentRatingChange={user.id !== game.playerOneId ? game.playerOneRatingChange : game.playerTwoRatingChange}
                     />
 
                     <RatedGameOverGrid
                         user={user}
                         game={game}
+                        setGame={setGame}
                         movesDict={movesDict}
                         winningWords={winningWords}
                         winningGridSpots={winningGridSpots}
@@ -304,6 +307,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
                         yourTurn={yourTurn}
                         firstMoveMade={movesCopy.length !== 0}
                         gameOver={gameOver}
+                        
                     />
 
                     <RatedRatedGameGrid

@@ -15,6 +15,8 @@ interface RatedGameHeaderProps {
     yourTurn: boolean,
     firstMoveMade: boolean,
     gameOver: boolean,
+    userRatingChange?: number,
+    opponentRatingChange?: number,
 }
 
 export default function RatedGameHeader({
@@ -27,6 +29,8 @@ export default function RatedGameHeader({
     yourTurn, 
     firstMoveMade,
     gameOver,
+    userRatingChange,
+    opponentRatingChange,
 }: RatedGameHeaderProps) {
 
     const [tick, setTick] = useState(false);
@@ -47,7 +51,6 @@ export default function RatedGameHeader({
         if (!gameOver) {
             const timeout = setTimeout(async() => {
                 if (firstMoveMade) {
-
                     const elapsedSeconds = Math.floor((Date.now() - anchorTime) / 1000);
                     setClock(elapsedSeconds);
                 }
@@ -76,13 +79,14 @@ export default function RatedGameHeader({
                     playerId={userId}
                     timeRemaining={yourTurn ? userTimeRemaining - clock : userTimeRemaining}
                     highlight={yourTurn}
-
+                    ratingChange={userRatingChange}
                 />
                 <HSpacer/>
                 <RatedPlayerHeader
                     playerId={opponentId}
                     timeRemaining={!yourTurn ? opponentTimeRemaining - clock : opponentTimeRemaining}
                     highlight={!yourTurn}
+                    ratingChange={opponentRatingChange}
                 />
                 <HSpacer/>
             </HStack>

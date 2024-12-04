@@ -10,6 +10,7 @@ import { ColoredWord } from "../../../Components";
 interface RatedGameOverGridProps {
     user: UserModel;
     game: GameModel;
+    setGame: (game: GameModel) => void;
     movesDict: Record<string, MoveModel>;
     winningWords: WordModel[];
     winningGridSpots: string[];
@@ -19,22 +20,23 @@ interface RatedGameOverGridProps {
 export default function RatedGameOverGrid({
     user,
     game,
+    setGame,
     movesDict,
     winningWords,
     winningGridSpots,
 }: RatedGameOverGridProps) {
-    const [finalGame, setFinalGame] = useState<GameModel | undefined>(undefined);
+    // const [game, setFinalGame] = useState<GameModel | undefined>(undefined);
     const [grid] = useState<GridSpotModel[][]>(GridSpot.grid);
 
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
     const upperBound = 650;
-    // finalGame stuff to show the result (win loss draw ect)
+    // game stuff to show the result (win loss draw ect)
     useEffect(() => {
         const fetchFinalGame = async () => {
             try {
                 const fetchedGame = await RatedGameService.fetchFinalGame(game);
-                setFinalGame(fetchedGame);
+                setGame(fetchedGame);
             } catch {
 
             }
@@ -65,16 +67,16 @@ export default function RatedGameOverGrid({
                 </VStack>
 
 
-                {finalGame && finalGame.winner == "draw" && (
+                {game && game.winner == "draw" && (
                     <h2>Draw!</h2>
                 )}
-                {finalGame && finalGame.winner == "aborted" && (
+                {game && game.winner == "aborted" && (
                     <h2>Game aborted!</h2>
                 )}
-                {finalGame && finalGame.winner == user.id && (
+                {game && game.winner == user.id && (
                     <h2>You win!</h2>
                 )}
-                {finalGame && finalGame.winner != "draw" && finalGame.winner != "aborted" && finalGame.winner != user.id && (
+                {game && game.winner != "draw" && game.winner != "aborted" && game.winner != user.id && (
                     <h2>You lose!</h2>
                 )}
 
