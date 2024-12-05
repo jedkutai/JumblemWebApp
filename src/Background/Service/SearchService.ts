@@ -22,7 +22,6 @@ export class SearchService {
       // Sort results alphabetically by username
       return searchResults.sort((a, b) => (a.username || "\uf8ff").localeCompare(b.username || "\uf8ff"));
     } catch (error) {
-      console.error("Error searching database:", error);
       throw error;
     }
   }

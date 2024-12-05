@@ -1,29 +1,28 @@
 import { useEffect, useState } from "react";
 import { GameModel, UserModel } from "../../../../Background/Models";
-import { View, VStack } from "../../../../ReactSwiftly";
 import { Button, CircularProgress, Typography } from "@mui/material";
+import { View, VStack } from "../../../../ReactSwiftly";
 import HomeView from "../../Body/HomeView";
-import { RatedGameService, FetchService } from "../../../../Background/Service";
-import PlayRatedGameView from "./PlayRatedGameView";
+import { FetchService, PrivateGameService } from "../../../../Background/Service";
+import PlayPrivateGameView from "./PlayPrivateGameView";
 
-interface StartRatedGameViewProps {
+interface StartPrivateGameViewProps {
     passedUser: UserModel
 }
 
-enum RatedGameModeState {
+enum PrivateGameModeState {
     findingMatch,
     matchFound,
     error
 }
 
-export default function StartRatedGameView({ passedUser }: StartRatedGameViewProps) {
-    const [view, setView] = useState<"StartRatedGameView" | "HomeView">("StartRatedGameView");
+export default function StartPrivateGameView({ passedUser }: StartPrivateGameViewProps) {
+    const [view, setView] = useState<"StartPrivateGameView" | "HomeView">("StartPrivateGameView");
     const [user, setUser] = useState<UserModel>(passedUser);
-    const [gameModeState, setGameModeState] = useState<RatedGameModeState>(RatedGameModeState.findingMatch);
+    const [gameModeState, setGameModeState] = useState<PrivateGameModeState>(PrivateGameModeState.findingMatch);
     const [game, setGame] = useState<GameModel | null>(null);
     const [hostOfMatch, setHostOfMatch] = useState(false);
     const [stopSearching, setStopSearching] = useState(false);
-    const [takingLongToFindMatch, setTakingLongToFindMatch] = useState(false);
     const [ticker, setTicker] = useState(false);
     const [tickCount, setTickCount] = useState(0);
 
@@ -40,39 +39,18 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
         setView("HomeView");
     }
 
-
     const onAppearActions = async () => {
-        if (gameModeState !== RatedGameModeState.findingMatch) {
-            setStopSearching(false);
-            setGameModeState(RatedGameModeState.findingMatch);
-        }
         try {
             const updatedUser = await FetchService.fetchUserByUid(user.id);
             setUser(updatedUser);
 
-            const loadedGame = await RatedGameService.findGame(user);
-            setGame(loadedGame);
-            if (loadedGame) {
-                const gameUpdate = await RatedGameService.getGameUpdate(loadedGame);
-                if (gameUpdate.playerTwoId) {
-                    if (gameUpdate.playerTwoId === user.id) {
-                        setGameModeState(RatedGameModeState.matchFound);
-                        setStopSearching(true);
-                    } else {
-                        setGame(null);
-                    }
-                } else {
-                    setGame(null);
-                }
-            } else {
-                const createdGame = await RatedGameService.createGame(user);
-                setGame(createdGame);
-                setHostOfMatch(true);
-                setTicker(!ticker);
-            }
+            const createdGame = await PrivateGameService.createGame(user);
+            setGame(createdGame);
+            setHostOfMatch(true);
+            setTicker(!ticker);
         } catch (error) {
             setStopSearching(true);
-            setGameModeState(RatedGameModeState.error);
+            setGameModeState(PrivateGameModeState.error);
             wipeGame();
         }
     }
@@ -82,7 +60,7 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
         if (hostOfMatch) {
             if (game) {
                 try {
-                    await RatedGameService.destroyGame(game);
+                    await PrivateGameService.destroyGame(game);
                     setGame(null);
                     setHostOfMatch(false);
                 } catch {
@@ -97,10 +75,10 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
             if (game) {
                 const timeout = setTimeout(async () => {
                     try {
-                        const gameUpdate = await RatedGameService.getGameUpdate(game);
+                        const gameUpdate = await PrivateGameService.getGameUpdate(game);
                         if (gameUpdate.matchFound && gameUpdate.playerTwoId !== undefined) {
                             setGame(gameUpdate);
-                            setGameModeState(RatedGameModeState.matchFound);
+                            setGameModeState(PrivateGameModeState.matchFound);
                             setStopSearching(true);
                         } else {
                             setTicker(!ticker);
@@ -108,27 +86,33 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
                         }
                     } catch (error) {
                         setStopSearching(true);
-                        setGameModeState(RatedGameModeState.error);
+                        setGameModeState(PrivateGameModeState.error);
                     }
                 }, 1000);
 
                 return () => clearTimeout(timeout);
             }
 
-            if (tickCount > 10 && !takingLongToFindMatch) {
-                setTakingLongToFindMatch(true);
-            }
         } else {
             wipeGame();
         }
     }
 
+    const handleCopy = async (game: GameModel) => {
+        try {
+            await navigator.clipboard.writeText(game.id);
+            alert("Text copied to clipboard!");
+        } catch (error) {
+            alert("Failed to copy text. Please try again.");
+        }
+    };
+
     if (view === "HomeView") {
         return <HomeView passedUser={user} />
     }
 
-    if (gameModeState === RatedGameModeState.matchFound && game) {
-        return <PlayRatedGameView passedUser={user} passedGame={game} />;
+    if (gameModeState === PrivateGameModeState.matchFound && game) {
+        return <PlayPrivateGameView passedUser={user} passedGame={game} />;
     }
 
     return (
@@ -138,15 +122,15 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
                     Jumblem
                 </Typography>
 
-                {gameModeState === RatedGameModeState.findingMatch && (
+                {gameModeState === PrivateGameModeState.findingMatch && (
                     <>
-                        <p>Finding Rated Match...</p>
+                        <p>Finding Private Match...</p>
                         <CircularProgress />
                     </>
                 )}
 
 
-                {gameModeState === RatedGameModeState.error && (
+                {gameModeState === PrivateGameModeState.error && (
                     <>
                         <p>There was an error when finding a match.</p>
                         <Button
@@ -161,6 +145,16 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
                     </>
                 )}
 
+                {game && (
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleCopy(game)}
+                        style={{ marginTop: "10px" }}
+                    >
+                        Copy Code
+                    </Button>
+                )}
 
                 <Button
                     variant="outlined"
@@ -173,5 +167,4 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
             </VStack>
         </View>
     );
-
 }

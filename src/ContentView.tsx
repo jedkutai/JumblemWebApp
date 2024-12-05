@@ -28,7 +28,6 @@ export default function ContentView() {
                 setPageState(ContentViewPageState.loaded); // Delay the loading state
               }, 1000); // 1-second delay
             } catch (error) {
-              console.error('Failed to fetch user data:', error);
               setTimeout(() => {
                 setUser(null);
                 setPageState(ContentViewPageState.loaded); // Delay the loading state

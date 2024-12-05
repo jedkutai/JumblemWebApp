@@ -2,40 +2,39 @@ import { useEffect, useState } from "react";
 import { useStandardGameManager } from "../../../../Background/Managers/StandardGameManager";
 import { GameModel, MoveModel, UserModel, WordModel } from "../../../../Background/Models";
 import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
-import { RatedGameService } from "../../../../Background/Service";
-import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
-import { View, VSpacer, VStack } from "../../../../ReactSwiftly";
-import RatedRatedGameGrid from "./RatedGameGrid";
-import RatedGameHeader from "./RatedGameHeader";
 import { Button } from "@mui/material";
-import HomeView from "../../Body/HomeView";
+import { PrivateGameService } from "../../../../Background/Service";
 import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
-import RatedGameOverGrid from "./RatedGameOverGrid";
+import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
+import { View, VStack, VSpacer } from "../../../../ReactSwiftly";
+import HomeView from "../../Body/HomeView";
 import JumblemLogoSimple from "../../../../assets/jumblem_logo_simple.png";
+import PrivateGameHeader from "./PrivateGameHeader";
+import PrivateGameGrid from "./PrivateGameGrid";
+import PrivateGameOverGrid from "./PrivateGameOverGrid";
 
-interface PlayRatedGameViewProps {
+interface PlayPrivateGameViewProps {
     passedUser: UserModel;
     passedGame: GameModel;
-
 }
 
-export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedGameViewProps) {
+export default function PlayPrivateGameView({ passedUser, passedGame }: PlayPrivateGameViewProps) {
     const {
         moves,
     } = useStandardGameManager(passedUser, passedGame);
 
     const [user] = useState<UserModel>(passedUser);
-    const [game, setGame] = useState<GameModel>(passedGame);
+    const [game] = useState<GameModel>(passedGame);
     const [gameOver, setGameOver] = useState(false);
     const [winningWords, setWinningWords] = useState<WordModel[]>([]);
     const [userTimeExpired, setUserTimeExpired] = useState(false);
     const [checkOpponentTimeExpired, setCheckOpponentTimeExpired] = useState(false);
     const [tickCount, setTickCount] = useState(0);
     const [matchAbortedTicker, setMatchAbortedTicker] = useState(false);
-    const [matchAbortedTime, setMatchAbortedTime] = useState(10);
+    const [matchAbortedTime, setMatchAbortedTime] = useState(15);
     const [wordCheckComplete, setWordCheckComplete] = useState(true);
     const [winningGridSpots, setWinningGridSpots] = useState<string[]>([]);
-    const [view, setView] = useState<"HomeView" | "PlayRatedGameView">("PlayRatedGameView");
+    const [view, setView] = useState<"HomeView" | "PlayPrivateGameView">("PlayPrivateGameView");
     const { width, height, minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
     const upperBound = 650;
@@ -47,7 +46,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
     const [opponentTimeRemaining, setOpponentTimeRemaining] = useState(180);
     const [checkGameOver, setCheckGameOver] = useState(false);
     const [movesMade, setMovesMade] = useState(0);
-    
+
 
     useEffect(() => {
         setMatchAbortedTicker(!matchAbortedTicker);
@@ -73,7 +72,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
             const timeout = setTimeout(async () => {
                 setTickCount(tickCount + 1);
                 try {
-                    const _ = await RatedGameService.getGameUpdate(game);
+                    const _ = await PrivateGameService.getGameUpdate(game);
                 } catch {
                     setGameOver(true);
                 }
@@ -93,8 +92,8 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
 
                 if (matchAbortedTime === 0) {
                     try {
-                        await RatedGameService.setGameWinner(game, "aborted", [], []);
-                        await RatedGameService.moveFinishedGame(game);
+                        await PrivateGameService.setGameWinner(game, "aborted", [], []);
+                        await PrivateGameService.moveFinishedGame(game);
                     } catch {
                         // continue
                     }
@@ -121,11 +120,11 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
         const fetchLastMove = async (): Promise<void> => {
             if (checkOpponentTimeExpired && !gameOver) {
                 try {
-                    let lastMove = await RatedGameService.getFinalMove(game);
+                    let lastMove = await PrivateGameService.getFinalMove(game);
                     if (lastMove !== null) {
                         if (lastMove.userId === user.id) {
-                            await RatedGameService.setGameWinner(game, user.id, [], []);
-                            await RatedGameService.moveFinishedGame(game);
+                            await PrivateGameService.setGameWinner(game, user.id, [], []);
+                            await PrivateGameService.moveFinishedGame(game);
                             setGameOver(true);
                         }
                     }
@@ -152,8 +151,8 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
 
                 if (winnerId) {
                     try {
-                        await RatedGameService.setGameWinner(game, winnerId, [], []);
-                        await RatedGameService.moveFinishedGame(game);
+                        await PrivateGameService.setGameWinner(game, winnerId, [], []);
+                        await PrivateGameService.moveFinishedGame(game);
                         setGameOver(true);
                     } catch {
 
@@ -218,8 +217,8 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
 
                 if (updatedWinningWords.length !== 0) {
                     let wordArray = updatedWinningWords.map((item) => item.word);
-                    await RatedGameService.setGameWinner(game, lastMove.userId, wordArray, [...winningSpots]);
-                    await RatedGameService.moveFinishedGame(game);
+                    await PrivateGameService.setGameWinner(game, lastMove.userId, wordArray, [...winningSpots]);
+                    await PrivateGameService.moveFinishedGame(game);
                     setGameOver(true);
                 }
                 setWordCheckComplete(true);
@@ -231,8 +230,8 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
             if (movesCopy.length >= 49) {
                 if (winningWords.length === 0) { // Use derived or passed variable here
                     try {
-                        await RatedGameService.setGameWinner(game, "draw", [], []);
-                        await RatedGameService.moveFinishedGame(game);
+                        await PrivateGameService.setGameWinner(game, "draw", [], []);
+                        await PrivateGameService.moveFinishedGame(game);
                         setGameOver(true);
                     } catch {
                     }
@@ -253,7 +252,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
                 <VStack>
                 <img src={JumblemLogoSimple} alt="Jumblem Logo" style={style} />
 
-                    <RatedGameHeader
+                    <PrivateGameHeader
                         userTimeExpired={userTimeExpired}
                         setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
                         checkOpponentTimeExpired={checkOpponentTimeExpired}
@@ -265,14 +264,11 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
                         yourTurn={yourTurn}
                         firstMoveMade={movesCopy.length !== 0}
                         gameOver={gameOver}
-                        userRatingChange={user.id === game.playerOneId ? game.playerOneRatingChange : game.playerTwoRatingChange}
-                        opponentRatingChange={user.id !== game.playerOneId ? game.playerOneRatingChange : game.playerTwoRatingChange}
                     />
 
-                    <RatedGameOverGrid
+                    <PrivateGameOverGrid
                         user={user}
                         game={game}
-                        setGame={setGame}
                         movesDict={movesDict}
                         winningWords={winningWords}
                         winningGridSpots={winningGridSpots}
@@ -292,7 +288,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
                     {/* <VSpacer /> */}
                     <img src={JumblemLogoSimple} alt="Jumblem Logo" style={style} />
 
-                    <RatedGameHeader
+                    <PrivateGameHeader
                         userTimeExpired={userTimeExpired}
                         setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
                         checkOpponentTimeExpired={checkOpponentTimeExpired}
@@ -304,10 +300,9 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
                         yourTurn={yourTurn}
                         firstMoveMade={movesCopy.length !== 0}
                         gameOver={gameOver}
-                        
                     />
 
-                    <RatedRatedGameGrid
+                    <PrivateGameGrid
                         user={user}
                         game={game}
                         gameOver={gameOver}

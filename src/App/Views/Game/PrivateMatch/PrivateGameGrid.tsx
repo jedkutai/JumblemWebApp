@@ -3,12 +3,12 @@ import { GameModel, GridSpotModel, MoveModel, UserModel } from "../../../../Back
 import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
 import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
 import { VStack } from "../../../../ReactSwiftly";
-import RatedGameRow from "./RatedGameRow";
+import PrivateGameRow from "./PrivateGameRow";
 import { GridSpot } from "../../../../Background/Extends/GridSpot";
-import RatedLetterGenerator from "./RatedLetterGenerator";
+import PrivateLetterGenerator from "./PrivateLetterGenerator";
 
 
-interface RatedGameGridProps {
+interface PrivateGameGridProps {
     user: UserModel;
     game: GameModel;
     gameOver: boolean;
@@ -20,7 +20,7 @@ interface RatedGameGridProps {
     movesCopy: MoveModel[];
 }
 
-export default function RatedRatedGameGrid({
+export default function PrivateGameGrid({
     user,
     game,
     wordCheckComplete,
@@ -28,7 +28,7 @@ export default function RatedRatedGameGrid({
     movesDict,
     yourTurn,
     lastMove,
-}: RatedGameGridProps) {
+}: PrivateGameGridProps) {
     const { minDimension } = useWindowSize();
     const [grid] = useState<GridSpotModel[][]>(GridSpot.grid);
     const [letters, setLetters] = useState<string[]>([]);
@@ -53,7 +53,7 @@ export default function RatedRatedGameGrid({
                 cornerRadius="5px"
             >
                 {grid.map((row, index) => (
-                    <RatedGameRow
+                    <PrivateGameRow
                         key={index}
                         row={row}
                         availableBlocks={availableBlocks}
@@ -73,7 +73,7 @@ export default function RatedRatedGameGrid({
                 <p>Auto-abort in {Math.max(matchAbortedTime, 0)}...</p>
             )}
 
-            <RatedLetterGenerator
+            <PrivateLetterGenerator
                 user={user}
                 game={game}
                 letters={letters}

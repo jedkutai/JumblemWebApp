@@ -16,7 +16,6 @@ export class AuthService {
     try {
       await setDoc(doc(db, "users", uid), user);
     } catch (error) {
-      console.error("Failed to upload user data:", error);
     }
   }
 
@@ -43,7 +42,6 @@ export class AuthService {
   
       console.log('Username successfully set.');
     } catch (error) {
-      console.error('Failed to set username:', error);
     }
   }
 
@@ -56,7 +54,6 @@ export class AuthService {
       await this.uploadUserData(uid, email.toLowerCase());
       return uid;
     } catch (error: any) {
-      console.error("Error creating account:", error);
       // Throw the error so it can be handled by the calling function
       throw error;
     }
@@ -81,7 +78,6 @@ export class AuthService {
       const user = await FetchService.fetchUserByUid(uid);
       return user;
     } catch (error) {
-      console.error("Error during login:", error);
       return null;
     }
   }
@@ -95,7 +91,6 @@ export class AuthService {
         const loggedInUser = await FetchService.fetchUserByUid(user.uid);
         return loggedInUser;
       } catch (error) {
-        console.error("Error fetching logged-in user:", error);
         return null;
       }
     }
@@ -127,7 +122,6 @@ export class AuthService {
         await deleteUser(user);
       }
     } catch (error) {
-      console.error("Failed to delete account:", error);
     }
   }
 }

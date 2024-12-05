@@ -36,8 +36,6 @@ export class WordService {
 
           result.push(...retrievedWords);
         } catch (error) {
-          console.error(`Error fetching batch ${i + 1}:`, error);
-          // Optionally, rethrow or handle errors depending on your needs
         }
       }
     }

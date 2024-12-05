@@ -37,7 +37,6 @@ export class Checks {
         console.log(`Username isnt taken: ${snapshot.empty}`);
         return snapshot.empty; // If no documents are found, the username is available
       } catch (error) {
-        console.error("Failed to check username:", error);
         return false;
       }
     }

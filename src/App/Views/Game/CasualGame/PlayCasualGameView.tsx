@@ -5,7 +5,7 @@ import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
 import { CasualGameService } from "../../../../Background/Service";
 import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
 import { View, VSpacer, VStack } from "../../../../ReactSwiftly";
-import CasualCasualGameGrid from "./CasualGameGrid";
+import CasualGameGrid from "./CasualGameGrid";
 import CasualGameHeader from "./CasualGameHeader";
 import { Button } from "@mui/material";
 import HomeView from "../../Body/HomeView";
@@ -16,7 +16,6 @@ import JumblemLogoSimple from "../../../../assets/jumblem_logo_simple.png";
 interface PlayCasualGameViewProps {
     passedUser: UserModel;
     passedGame: GameModel;
-
 }
 
 export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasualGameViewProps) {
@@ -130,7 +129,6 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                         }
                     }
                 } catch (error) {
-                    console.error("Checking opp time expired:", error);
                 }
             }
 
@@ -226,7 +224,6 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                 setWordCheckComplete(true);
             }
         } catch (e) {
-            console.error("Error during word check function.", e);
         }
 
         if (!gameOver) {
@@ -237,7 +234,6 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                         await CasualGameService.moveFinishedGame(game);
                         setGameOver(true);
                     } catch {
-                        console.error("Error during draw handling");
                     }
                 }
             }
@@ -306,7 +302,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                         gameOver={gameOver}
                     />
 
-                    <CasualCasualGameGrid
+                    <CasualGameGrid
                         user={user}
                         game={game}
                         gameOver={gameOver}

@@ -10,6 +10,7 @@ import JumblemLogoSimple from "../../../assets/jumblem_logo_simple.png";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import StartCasualGameView from "../Game/CasualGame/StartCasualGameView";
 import StartRatedGameView from "../Game/RatedGame/StartRatedGameView";
+import PrivateMatchMenuView from "../Game/PrivateMatch/PrivateMatchMenuView";
 
 interface HomeViewProps {
     passedUser: UserModel;
@@ -18,7 +19,7 @@ interface HomeViewProps {
 export default function HomeView({
     passedUser,
 }: HomeViewProps) {
-    const [view, setView] = useState<"AppOpenView" | "Home" | "StartCasualGame" | "StartRatedGame">("Home");
+    const [view, setView] = useState<"AppOpenView" | "Home" | "StartCasualGame" | "StartRatedGame" | "PrivateMatchMenu">("Home");
     const [user, setUser] = useState<UserModel>(passedUser);
     const [isMissingUsername, setIsMissingUsername] = useState(!passedUser.username);
     const [newUsername, setNewUsername] = useState("");
@@ -58,7 +59,6 @@ export default function HomeView({
             await signOut(auth);
             setView("AppOpenView");
         } catch (error) {
-            console.error("Logout failed:", error);
         }
     };
 
@@ -124,9 +124,11 @@ export default function HomeView({
         case "AppOpenView":
             return (<AppOpenView />);
         case "StartCasualGame":
-            return (<StartCasualGameView passedUser={user} />)
+            return (<StartCasualGameView passedUser={user} />);
         case "StartRatedGame":
-            return (<StartRatedGameView passedUser={user} />)
+            return (<StartRatedGameView passedUser={user} />);
+        case "PrivateMatchMenu":
+            return (<PrivateMatchMenuView passedUser={user}/>);
     }
 
     return (
@@ -144,7 +146,7 @@ export default function HomeView({
                         </Button>
                     </Box>
 
-                    <Box style={{ display: "flex", justifyContent: "center" }}>
+                    <Box style={{ display: "flex", justifyContent: "center" }} onClick={() => setView(loadingUser ? "Home" : "PrivateMatchMenu")}>
                         <Button variant="contained" style={styles.button}>
                             PRIVATE MATCH
                         </Button>

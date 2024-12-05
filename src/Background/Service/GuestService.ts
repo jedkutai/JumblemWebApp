@@ -37,7 +37,6 @@ import {
   
         return user;
       } catch (error: any) {
-        console.error("Error during anonymous account creation:", error.message);
         return null;
       }
     }

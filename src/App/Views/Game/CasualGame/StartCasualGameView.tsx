@@ -72,7 +72,6 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
             }
         } catch (error) {
             setStopSearching(true);
-            console.error("Error finding a match", error);
             setGameModeState(CasualGameModeState.error);
             wipeGame();
         }
@@ -109,7 +108,6 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
                         }
                     } catch (error) {
                         setStopSearching(true);
-                        console.error("Error with ticker action", error);
                         setGameModeState(CasualGameModeState.error);
                     }
                 }, 1000);
@@ -142,7 +140,7 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
 
                 {gameModeState === CasualGameModeState.findingMatch && (
                     <>
-                        <p>Finding Match...</p>
+                        <p>Finding Casual Match...</p>
                         <CircularProgress />
                     </>
                 )}

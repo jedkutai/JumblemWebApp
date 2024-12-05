@@ -20,10 +20,11 @@ interface CasualGameGridProps {
     movesCopy: MoveModel[];
 }
 
-export default function CasualCasualGameGrid({
+export default function CasualGameGrid({
     user,
     game,
     wordCheckComplete,
+    matchAbortedTime,
     movesDict,
     yourTurn,
     lastMove,
@@ -68,7 +69,9 @@ export default function CasualCasualGameGrid({
 
             </VStack>
             
-            {/* <VSpacer /> */}
+            {lastMove == undefined && (
+                <p>Auto-abort in {Math.max(matchAbortedTime, 0)}...</p>
+            )}
 
             <CasualLetterGenerator
                 user={user}
