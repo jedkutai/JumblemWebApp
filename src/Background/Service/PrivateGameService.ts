@@ -68,23 +68,6 @@ export class PrivateGameService {
       limit(1)
     );
 
-    // const snapshot = await getDocs(gameQuery);
-    // const games = snapshot.docs.map((doc) => doc.data() as GameModel);
-
-    // if (games.length === 0) return null;
-
-    // const selectedGame = games[0];
-    // await updateDoc(doc(db, "newGames", selectedGame.id), { matchFound: true });
-
-    // const updatedGame: GameModel = {
-    //   ...selectedGame,
-    //   playerTwoId: user.id,
-    //   playerTwoRating: user.standardRating,
-    //   matchFound: true,
-    // };
-
-    // await PrivateGameService.getGameUpdate(updatedGame);
-    // return updatedGame;
     const snapshot = await getDocs(queryRef);
     const snapshotGames = snapshot.docs.map((doc) => doc.data() as GameModel);
 
@@ -115,7 +98,7 @@ export class PrivateGameService {
     if (!opponentId) return null;
 
     const db = getFirestore();
-    const rematchQuery = query(
+    const queryRef = query(
       collection(db, "newGames"),
       where("gameMode", "==", "private"),
       where("matchFound", "==", false),
@@ -123,23 +106,30 @@ export class PrivateGameService {
       limit(1)
     );
 
-    const snapshot = await getDocs(rematchQuery);
-    const games = snapshot.docs.map((doc) => doc.data() as GameModel);
+    const snapshot = await getDocs(queryRef);
+    const snapshotGames = snapshot.docs.map((doc) => doc.data() as GameModel);
 
-    if (games.length === 0) return null;
+    if (snapshotGames.length > 0) {
+      const selectedGame = snapshotGames[0];
+      const gameRef = doc(db, "newGames", selectedGame.id);
+      await updateDoc(gameRef, { matchFound: true });
 
-    const selectedGame = games[0];
-    await updateDoc(doc(db, "newGames", selectedGame.id), { matchFound: true });
+      let newGame = selectedGame;
+      newGame.playerTwoId = user.id;
+      newGame.playerTwoRating = user.standardRating;
+      newGame.matchFound = true;
 
-    const updatedGame: GameModel = {
-      ...selectedGame,
-      playerTwoId: user.id,
-      playerTwoRating: user.standardRating,
-      matchFound: true,
-    };
+      const updatedGame = await this.getGameUpdate(selectedGame);
 
-    await PrivateGameService.getGameUpdate(updatedGame);
-    return updatedGame;
+      if (updatedGame.matchFound && !updatedGame.playerTwoId) {
+        const encodedGame = { ...newGame };
+        await setDoc(gameRef, encodedGame);
+      }
+
+      return selectedGame;
+    }
+
+    return null;
   }
 
   static async createGame(user: UserModel): Promise<GameModel | null> {

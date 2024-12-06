@@ -46,7 +46,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
     const [opponentTimeRemaining, setOpponentTimeRemaining] = useState(180);
     const [checkGameOver, setCheckGameOver] = useState(false);
     const [movesMade, setMovesMade] = useState(0);
-    
+
 
     useEffect(() => {
         setMatchAbortedTicker(!matchAbortedTicker);
@@ -250,7 +250,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
         return (
             <View>
                 <VStack>
-                <img src={JumblemLogoSimple} alt="Jumblem Logo" style={style} />
+                    <img src={JumblemLogoSimple} alt="Jumblem Logo" style={style} />
 
                     <CasualGameHeader
                         userTimeExpired={userTimeExpired}
@@ -266,6 +266,10 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                         gameOver={gameOver}
                     />
 
+                    <Button onClick={() => setView("HomeView")}>
+                        Home
+                    </Button>
+                    
                     <CasualGameOverGrid
                         user={user}
                         game={game}
@@ -275,9 +279,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                     />
 
 
-                    <Button onClick={() => setView("HomeView")}>
-                        Home
-                    </Button>
+
                 </VStack>
             </View>
         );

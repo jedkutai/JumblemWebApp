@@ -6,12 +6,14 @@ import { Button } from "@mui/material";
 import { PrivateGameService } from "../../../../Background/Service";
 import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
 import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
-import { View, VStack, VSpacer } from "../../../../ReactSwiftly";
+import { View, VStack, VSpacer, HStack } from "../../../../ReactSwiftly";
 import HomeView from "../../Body/HomeView";
 import JumblemLogoSimple from "../../../../assets/jumblem_logo_simple.png";
 import PrivateGameHeader from "./PrivateGameHeader";
 import PrivateGameGrid from "./PrivateGameGrid";
 import PrivateGameOverGrid from "./PrivateGameOverGrid";
+import RematchButton from "../../../Components/RematchButton";
+import RematchController from "./PrivateRematch/RematchController";
 
 interface PlayPrivateGameViewProps {
     passedUser: UserModel;
@@ -34,7 +36,7 @@ export default function PlayPrivateGameView({ passedUser, passedGame }: PlayPriv
     const [matchAbortedTime, setMatchAbortedTime] = useState(15);
     const [wordCheckComplete, setWordCheckComplete] = useState(true);
     const [winningGridSpots, setWinningGridSpots] = useState<string[]>([]);
-    const [view, setView] = useState<"HomeView" | "PlayPrivateGameView">("PlayPrivateGameView");
+    const [view, setView] = useState<"HomeView" | "PlayPrivateGameView" | "PrivateRematchView">("PlayPrivateGameView");
     const { width, height, minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
     const upperBound = 650;
@@ -47,12 +49,21 @@ export default function PlayPrivateGameView({ passedUser, passedGame }: PlayPriv
     const [checkGameOver, setCheckGameOver] = useState(false);
     const [movesMade, setMovesMade] = useState(0);
 
+    const [rematchOffered, setRematchedOffered] = useState(false);
+    const [rematchTicker, setRematchTicker] = useState(false);
+    const [stopRematchTicker, setStopRematchTicker] = useState(false);
 
     useEffect(() => {
         setMatchAbortedTicker(!matchAbortedTicker);
         setTickCount(tickCount + 1);
         setYourTurn(game.playerOneId == user.id);
     }, []);
+
+    useEffect(() => {
+        if (gameOver) {
+            setRematchTicker(!rematchTicker);
+        }
+    }, [gameOver]);
 
     useEffect(() => {
         if (moves.length > movesMade) {
@@ -64,8 +75,6 @@ export default function PlayPrivateGameView({ passedUser, passedGame }: PlayPriv
             setCheckGameOver(true);
         }
     }, [moves])
-
-
 
     useEffect(() => {
         if (tickCount < 20 && !gameOver) {
@@ -168,10 +177,30 @@ export default function PlayPrivateGameView({ passedUser, passedGame }: PlayPriv
 
     }, [userTimeExpired]);
 
+    useEffect(() => {
+        if (!stopRematchTicker || !gameOver) {
+            rematchTickerActions();
+        }
+    }, [rematchTicker]);
+
     const style = {
         maxWidth: "auto",
         maxHeight: `${Math.max(minDimension, upperBound) / dimensionDivider}px`,
         marginBottom: "20px",
+    }
+
+    async function rematchTickerActions() {
+        const timeout = setTimeout(async () => {
+            try {
+                const result = await PrivateGameService.checkIfRematchOffered(user, game);
+                setRematchedOffered(result);
+            } catch {
+
+            }
+            setRematchTicker(!rematchTicker);
+        }, 1000);
+
+        return () => clearTimeout(timeout);
     }
 
     function gameManagerFunction() {
@@ -240,17 +269,33 @@ export default function PlayPrivateGameView({ passedUser, passedGame }: PlayPriv
         }
     }
 
-    if (view === "HomeView") {
-        return (
-            <HomeView passedUser={user} />
-        )
+    function navigateHomeView() {
+        setView("HomeView");
+        setStopRematchTicker(true);
+
+    }
+
+    function navigateRematchView() {
+        setView("PrivateRematchView");
+        setStopRematchTicker(true);
+    }
+
+    switch(view) {
+        case "HomeView":
+            return (
+                <HomeView passedUser={user} />
+            );
+        case "PrivateRematchView":
+            return (
+                <RematchController passedUser={user} previousGame={game}/>
+            );
     }
 
     if (gameOver || checkGameOver) {
         return (
             <View>
                 <VStack>
-                <img src={JumblemLogoSimple} alt="Jumblem Logo" style={style} />
+                    <img src={JumblemLogoSimple} alt="Jumblem Logo" style={style} />
 
                     <PrivateGameHeader
                         userTimeExpired={userTimeExpired}
@@ -266,6 +311,14 @@ export default function PlayPrivateGameView({ passedUser, passedGame }: PlayPriv
                         gameOver={gameOver}
                     />
 
+                    <HStack>
+                        <Button onClick={() => navigateHomeView()}>
+                            Home
+                        </Button>
+
+                        <RematchButton flash={rematchOffered} setView={() => navigateRematchView()}/>
+                    </HStack>
+
                     <PrivateGameOverGrid
                         user={user}
                         game={game}
@@ -275,9 +328,7 @@ export default function PlayPrivateGameView({ passedUser, passedGame }: PlayPriv
                     />
 
 
-                    <Button onClick={() => setView("HomeView")}>
-                        Home
-                    </Button>
+
                 </VStack>
             </View>
         );

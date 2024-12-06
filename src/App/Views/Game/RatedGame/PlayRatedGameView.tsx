@@ -269,6 +269,10 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
                         opponentRatingChange={user.id !== game.playerOneId ? game.playerOneRatingChange : game.playerTwoRatingChange}
                     />
 
+                    <Button onClick={() => setView("HomeView")}>
+                        Home
+                    </Button>
+                    
                     <RatedGameOverGrid
                         user={user}
                         game={game}
@@ -279,9 +283,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
                     />
 
 
-                    <Button onClick={() => setView("HomeView")}>
-                        Home
-                    </Button>
+
                 </VStack>
             </View>
         );

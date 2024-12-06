@@ -5,6 +5,7 @@ import { View, VStack } from "../../../../ReactSwiftly";
 import HomeView from "../../Body/HomeView";
 import { FetchService, PrivateGameService } from "../../../../Background/Service";
 import PlayPrivateGameView from "./PlayPrivateGameView";
+import PrivateMatchMenuView from "./PrivateMatchMenuView";
 
 interface StartPrivateGameViewProps {
     passedUser: UserModel
@@ -17,7 +18,7 @@ enum PrivateGameModeState {
 }
 
 export default function StartPrivateGameView({ passedUser }: StartPrivateGameViewProps) {
-    const [view, setView] = useState<"StartPrivateGameView" | "HomeView">("StartPrivateGameView");
+    const [view, setView] = useState<"StartPrivateGameView" | "Menu" >("StartPrivateGameView");
     const [user, setUser] = useState<UserModel>(passedUser);
     const [gameModeState, setGameModeState] = useState<PrivateGameModeState>(PrivateGameModeState.findingMatch);
     const [game, setGame] = useState<GameModel | null>(null);
@@ -25,6 +26,7 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
     const [stopSearching, setStopSearching] = useState(false);
     const [ticker, setTicker] = useState(false);
     const [tickCount, setTickCount] = useState(0);
+
 
     useEffect(() => {
         onAppearActions();
@@ -34,9 +36,11 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
         tickerActions();
     }, [ticker]);
 
+    
+
     const dismiss = async () => {
         wipeGame();
-        setView("HomeView");
+        setView("Menu");
     }
 
     const onAppearActions = async () => {
@@ -69,6 +73,8 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
             }
         }
     }
+
+    
 
     const tickerActions = async () => {
         if (!stopSearching) {
@@ -107,8 +113,8 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
         }
     };
 
-    if (view === "HomeView") {
-        return <HomeView passedUser={user} />
+    if (view === "Menu") {
+        return <PrivateMatchMenuView passedUser={user} />
     }
 
     if (gameModeState === PrivateGameModeState.matchFound && game) {
