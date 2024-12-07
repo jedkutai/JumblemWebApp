@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useStandardGameManager } from "../../../../Background/Managers/StandardGameManager";
 import { GameModel, MoveModel, UserModel, WordModel } from "../../../../Background/Models";
 import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { PrivateGameService } from "../../../../Background/Service";
 import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
 import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
@@ -20,7 +20,10 @@ interface PlayPrivateGameViewProps {
     passedGame: GameModel;
 }
 
-export default function PlayPrivateGameView({ passedUser, passedGame }: PlayPrivateGameViewProps) {
+export default function PlayPrivateGameView({
+    passedUser,
+    passedGame,
+}: PlayPrivateGameViewProps) {
     const {
         moves,
     } = useStandardGameManager(passedUser, passedGame);
@@ -52,6 +55,7 @@ export default function PlayPrivateGameView({ passedUser, passedGame }: PlayPriv
     const [rematchOffered, setRematchedOffered] = useState(false);
     const [rematchTicker, setRematchTicker] = useState(false);
     const [stopRematchTicker, setStopRematchTicker] = useState(false);
+
 
     useEffect(() => {
         setMatchAbortedTicker(!matchAbortedTicker);
@@ -280,14 +284,17 @@ export default function PlayPrivateGameView({ passedUser, passedGame }: PlayPriv
         setStopRematchTicker(true);
     }
 
-    switch(view) {
+    switch (view) {
         case "HomeView":
             return (
                 <HomeView passedUser={user} />
             );
         case "PrivateRematchView":
             return (
-                <RematchController passedUser={user} previousGame={game}/>
+                <RematchController
+                    passedUser={user}
+                    previousGame={game}
+                />
             );
     }
 
@@ -316,7 +323,7 @@ export default function PlayPrivateGameView({ passedUser, passedGame }: PlayPriv
                             Home
                         </Button>
 
-                        <RematchButton flash={rematchOffered} setView={() => navigateRematchView()}/>
+                        <RematchButton flash={rematchOffered} setView={() => navigateRematchView()} />
                     </HStack>
 
                     <PrivateGameOverGrid

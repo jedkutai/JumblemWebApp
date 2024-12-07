@@ -11,6 +11,7 @@ import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import StartCasualGameView from "../Game/CasualGame/StartCasualGameView";
 import StartRatedGameView from "../Game/RatedGame/StartRatedGameView";
 import PrivateMatchMenuView from "../Game/PrivateMatch/PrivateMatchMenuView";
+import LoadDailyPuzzleView from "../DailyPuzzle/LoadDailyPuzzleView";
 
 interface HomeViewProps {
     passedUser: UserModel;
@@ -19,7 +20,7 @@ interface HomeViewProps {
 export default function HomeView({
     passedUser,
 }: HomeViewProps) {
-    const [view, setView] = useState<"AppOpenView" | "Home" | "StartCasualGame" | "StartRatedGame" | "PrivateMatchMenu">("Home");
+    const [view, setView] = useState<"AppOpenView" | "Home" | "StartCasualGame" | "StartRatedGame" | "PrivateMatchMenu" | "DailyPuzzle">("Home");
     const [user, setUser] = useState<UserModel>(passedUser);
     const [isMissingUsername, setIsMissingUsername] = useState(!passedUser.username);
     const [newUsername, setNewUsername] = useState("");
@@ -129,6 +130,8 @@ export default function HomeView({
             return (<StartRatedGameView passedUser={user} />);
         case "PrivateMatchMenu":
             return (<PrivateMatchMenuView passedUser={user}/>);
+        case "DailyPuzzle":
+            return (<LoadDailyPuzzleView passedUser={user} />);
     }
 
     return (
@@ -157,7 +160,7 @@ export default function HomeView({
                 <Box style={styles.section}>
                     <Typography style={styles.sectionTitle}>TRAIN</Typography>
                     <Box style={styles.buttonContainer}>
-                        <Button variant="contained" style={styles.button}>
+                        <Button variant="contained" style={styles.button} onClick={() => setView(loadingUser ? "Home" : "DailyPuzzle")}>
                             DAILY PUZZLE
                         </Button>
                         <Button variant="contained" style={styles.button}>

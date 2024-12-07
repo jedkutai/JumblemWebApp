@@ -18,7 +18,10 @@ enum StartPrivateRematchGameModeState {
     error
 }
 
-export default function StartPrivateRematchView({passedUser, previousGame}: StartPrivateRematchViewProps) {
+export default function StartPrivateRematchView({
+    passedUser,
+    previousGame,
+}: StartPrivateRematchViewProps) {
     const [view, setView] = useState<"StartPrivateGameView" | "HomeView">("StartPrivateGameView");
     const [user, setUser] = useState<UserModel>(passedUser);
     const [gameModeState, setGameModeState] = useState<StartPrivateRematchGameModeState>(StartPrivateRematchGameModeState.findingMatch);
@@ -111,11 +114,16 @@ export default function StartPrivateRematchView({passedUser, previousGame}: Star
     }
 
     if (view === "HomeView") {
-        return <HomeView passedUser={user} />
+        return (<HomeView passedUser={user} />);
     }
 
     if (gameModeState === StartPrivateRematchGameModeState.matchFound && game) {
-        return <PlayPrivateGameView passedUser={user} passedGame={game} />;
+        return (
+            <PlayPrivateGameView
+                passedUser={user}
+                passedGame={game}
+            />
+        );
     }
 
     return (

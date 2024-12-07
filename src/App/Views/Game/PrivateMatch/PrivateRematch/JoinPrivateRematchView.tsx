@@ -9,6 +9,12 @@ import PlayPrivateGameView from "../PlayPrivateGameView";
 interface JoinPrivateRematchViewProps {
     passedUser: UserModel;
     previousGame: GameModel;
+    // wins: number;
+    // draws: number;
+    // losses: number;
+    // setWins: (wins: number) => void;
+    // setDraws: (draws: number) => void;
+    // setLosses: (losses: number) => void;
 }
 
 enum JoinPrivateRematchModeState {
@@ -17,7 +23,16 @@ enum JoinPrivateRematchModeState {
     error
 }
 
-export default function JoinPrivateRematchView({passedUser, previousGame}: JoinPrivateRematchViewProps) {
+export default function JoinPrivateRematchView({
+    passedUser,
+    previousGame,
+    // wins,
+    // draws,
+    // losses,
+    // setWins,
+    // setDraws,
+    // setLosses
+}: JoinPrivateRematchViewProps) {
     const [view, setView] = useState<"StartPrivateGameView" | "HomeView">("StartPrivateGameView");
     const [user, setUser] = useState<UserModel>(passedUser);
     const [gameModeState, setGameModeState] = useState<JoinPrivateRematchModeState>(JoinPrivateRematchModeState.findingMatch);
@@ -93,13 +108,23 @@ export default function JoinPrivateRematchView({passedUser, previousGame}: JoinP
     }
 
     if (view === "HomeView") {
-        return <HomeView passedUser={user} />
+        return (<HomeView passedUser={user} />);
     }
 
     if (gameModeState === JoinPrivateRematchModeState.matchFound && game) {
-        return <PlayPrivateGameView passedUser={user} passedGame={game} />;
+        return (
+            <PlayPrivateGameView
+                passedUser={user}
+                passedGame={game}
+                // wins={wins}
+                // draws={draws}
+                // losses={losses}
+                // setWins={setWins}
+                // setDraws={setDraws}
+                // setLosses={setLosses}
+            />);
     }
-    
+
     return (
         <View>
             <VStack>

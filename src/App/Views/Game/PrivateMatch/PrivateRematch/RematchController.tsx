@@ -7,10 +7,21 @@ interface RematchControllerProps {
     previousGame: GameModel;
 }
 
-export default function RematchController({passedUser, previousGame}: RematchControllerProps) {
+export default function RematchController({
+    passedUser,
+    previousGame,
+}: RematchControllerProps) {
     if (previousGame.playerOneId == passedUser.id) {
-        return (<JoinPrivateRematchView passedUser={passedUser} previousGame={previousGame}/>);
+        return (
+            <JoinPrivateRematchView
+                passedUser={passedUser}
+                previousGame={previousGame}
+            />);
     } else {
-        return (<StartPrivateRematchView passedUser={passedUser} previousGame={previousGame}/>);
+        return (
+            <StartPrivateRematchView
+                passedUser={passedUser}
+                previousGame={previousGame}
+            />);
     }
 }

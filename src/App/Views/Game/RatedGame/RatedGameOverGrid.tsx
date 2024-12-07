@@ -24,8 +24,9 @@ export default function RatedGameOverGrid({
     movesDict,
     winningWords,
     winningGridSpots,
+
 }: RatedGameOverGridProps) {
-    // const [game, setFinalGame] = useState<GameModel | undefined>(undefined);
+    
     const [grid] = useState<GridSpotModel[][]>(GridSpot.grid);
 
     const { minDimension } = useWindowSize();
@@ -44,6 +45,8 @@ export default function RatedGameOverGrid({
 
         fetchFinalGame();
     }, []);
+
+
     return (
         <VStack>
             <VStack maxHeight={`${(Math.max(minDimension, upperBound) * 8 / dimensionDivider) + 200}px`} spacing="10px">

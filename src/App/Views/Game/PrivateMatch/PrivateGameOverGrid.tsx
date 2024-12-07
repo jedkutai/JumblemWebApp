@@ -13,7 +13,12 @@ interface PrivateGameOverGridProps {
     movesDict: Record<string, MoveModel>;
     winningWords: WordModel[];
     winningGridSpots: string[];
-
+    // wins: number;
+    // draws: number;
+    // losses: number;
+    // setWins: (wins: number) => void;
+    // setDraws: (draws: number) => void;
+    // setLosses: (losses: number) => void;
 }
 
 export default function PrivateGameOverGrid({
@@ -23,6 +28,7 @@ export default function PrivateGameOverGrid({
     winningWords,
     winningGridSpots,
 }: PrivateGameOverGridProps) {
+    const [scoreUpdated, setScoreUpdated] = useState(false);
     const [finalGame, setFinalGame] = useState<GameModel | undefined>(undefined);
     const [grid] = useState<GridSpotModel[][]>(GridSpot.grid);
 

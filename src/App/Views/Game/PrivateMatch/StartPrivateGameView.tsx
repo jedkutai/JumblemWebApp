@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { GameModel, UserModel } from "../../../../Background/Models";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import { View, VStack } from "../../../../ReactSwiftly";
-import HomeView from "../../Body/HomeView";
 import { FetchService, PrivateGameService } from "../../../../Background/Service";
 import PlayPrivateGameView from "./PlayPrivateGameView";
 import PrivateMatchMenuView from "./PrivateMatchMenuView";
@@ -18,7 +17,7 @@ enum PrivateGameModeState {
 }
 
 export default function StartPrivateGameView({ passedUser }: StartPrivateGameViewProps) {
-    const [view, setView] = useState<"StartPrivateGameView" | "Menu" >("StartPrivateGameView");
+    const [view, setView] = useState<"StartPrivateGameView" | "Menu">("StartPrivateGameView");
     const [user, setUser] = useState<UserModel>(passedUser);
     const [gameModeState, setGameModeState] = useState<PrivateGameModeState>(PrivateGameModeState.findingMatch);
     const [game, setGame] = useState<GameModel | null>(null);
@@ -26,6 +25,7 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
     const [stopSearching, setStopSearching] = useState(false);
     const [ticker, setTicker] = useState(false);
     const [tickCount, setTickCount] = useState(0);
+    const [codeCopied, setCodeCopied] = useState(false);
 
 
     useEffect(() => {
@@ -36,7 +36,7 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
         tickerActions();
     }, [ticker]);
 
-    
+
 
     const dismiss = async () => {
         wipeGame();
@@ -74,7 +74,7 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
         }
     }
 
-    
+
 
     const tickerActions = async () => {
         if (!stopSearching) {
@@ -107,18 +107,26 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
     const handleCopy = async (game: GameModel) => {
         try {
             await navigator.clipboard.writeText(game.id);
-            alert("Text copied to clipboard!");
+            setCodeCopied(true);
+            const timeout = setTimeout(async () => {
+                setCodeCopied(false);
+            }, 1000);
+
+            return () => clearTimeout(timeout);
         } catch (error) {
-            alert("Failed to copy text. Please try again.");
+
         }
     };
 
     if (view === "Menu") {
-        return <PrivateMatchMenuView passedUser={user} />
+        return <PrivateMatchMenuView passedUser={user} />;
     }
 
     if (gameModeState === PrivateGameModeState.matchFound && game) {
-        return <PlayPrivateGameView passedUser={user} passedGame={game} />;
+        return <PlayPrivateGameView
+            passedUser={user}
+            passedGame={game}
+        />;
     }
 
     return (
@@ -158,7 +166,7 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
                         onClick={() => handleCopy(game)}
                         style={{ marginTop: "10px" }}
                     >
-                        Copy Code
+                        {codeCopied ? "Copied" : "Copy Code"}
                     </Button>
                 )}
 
