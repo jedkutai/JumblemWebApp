@@ -32,7 +32,6 @@ export default function CasualGameGrid({
     const { minDimension } = useWindowSize();
     const [grid] = useState<GridSpotModel[][]>(GridSpot.grid);
     const [letters, setLetters] = useState<string[]>([]);
-    // const [canSelect, setCanSelect] = useState(false);
     const [availableBlocks, setAvailableBlocks] = useState(["3,3"]);
     const [selectedBlock, setSelectedBlock] = useState("");
     const dimensionDivider = 9 * 1.75;

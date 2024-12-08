@@ -7,6 +7,8 @@ import { FetchService } from "../../../Background/Service";
 import { DailyPuzzleFunctions } from "../../../Background/Utils/DailyPuzzleFunctions";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import JumblemLogoSimple from "../../../assets/jumblem_logo_simple.png";
+import HomeView from "../Body/HomeView";
+import DailyPuzzleView from "./DailyPuzzleView";
 
 enum DailyPuzzleState {
     loading,
@@ -53,7 +55,7 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
     function nextPuzzleDate(time: Timestamp): string {
         const nextPuzzleDate = new Date(time.toDate());
         nextPuzzleDate.setHours(nextPuzzleDate.getHours() + 24);
-        return nextPuzzleDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+        return nextPuzzleDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric" });
     }
 
     async function onAppearActions() {
@@ -85,6 +87,22 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
 
     }
 
+    switch (view) {
+        case "Home":
+            return (<HomeView passedUser={user} />);
+        case "PlayDailyPuzzle":
+            if (dailyPuzzle) {
+                return (<DailyPuzzleView passedUser={user} dailyPuzzle={dailyPuzzle} dailyPuzzleDict={dailyPuzzleDict} />);
+            }
+            break;
+        case "LeaderBoard":
+            break;
+        case "LoadDailyPuzzle":
+            break;
+        default:
+            break;
+    }
+
     return (
         <View>
             <VStack>
@@ -101,7 +119,7 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
                             <Typography textAlign={"center"}>Note:</Typography>
                             <Typography textAlign={"center"}>Once you start today's puzzle, you can't replay it.</Typography>
                             <Typography textAlign={"center"}>The puzzle only ends when you hit submit. It doesn't matter if you've found all the words.</Typography>
-                            <Button variant="contained" onClick={navigateToPuzzle}>Play</Button>
+                            <Button variant="contained" onClick={() => navigateToPuzzle()}>Play</Button>
                         </>
                     )}
                     {dailyPuzzleState === DailyPuzzleState.alreadyPlayed && dailyPuzzle && (
