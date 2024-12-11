@@ -9,6 +9,7 @@ import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import JumblemLogoSimple from "../../../assets/jumblem_logo_simple.png";
 import HomeView from "../Body/HomeView";
 import DailyPuzzleView from "./DailyPuzzleView";
+import DailyPuzzleLeaderboardView from "./DailyPuzzleLeaderboardView";
 
 enum DailyPuzzleState {
     loading,
@@ -96,6 +97,11 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
             }
             break;
         case "LeaderBoard":
+            if (dailyPuzzle) {
+                return (
+                    <DailyPuzzleLeaderboardView passedUser={user} dailyPuzzle={dailyPuzzle}/>
+                );
+            }
             break;
         case "LoadDailyPuzzle":
             break;

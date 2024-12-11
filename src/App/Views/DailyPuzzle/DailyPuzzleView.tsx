@@ -11,6 +11,8 @@ import { Timestamp } from "firebase/firestore";
 import { DailyPuzzleFunctions } from "../../../Background/Utils/DailyPuzzleFunctions";
 import DailyPuzzleLetterBank from "./DailyPuzzleLetterBank";
 import DailyPuzzleFoundWords from "./DailyPuzzleFoundWords";
+import DailyPuzzleLeaderboardView from "./DailyPuzzleLeaderboardView";
+// import { set } from "date-fns";
 
 interface DailyPuzzleViewProps {
     passedUser: UserModel;
@@ -33,10 +35,12 @@ export default function DailyPuzzleView({
     const [goldenGrids, setGoldenGrids] = useState<string[]>([]);
     const [wrongGuessHighlight, setWrongGuessHighlight] = useState(false);
     const [showScoreDetails, setShowScoreDetails] = useState(false);
-    const [showHowToPlaySheet, setShowHowToPlaySheet] = useState(false);
+    // const [showHowToPlaySheet, setShowHowToPlaySheet] = useState(false);
     const [correctWords, setCorrectWords] = useState<Record<string, [WordModel, number]>>({});
     const [grid, setGrid] = useState<GridSpotModel[][]>(GridSpot.grid);
-    const startTime = new Date();
+    const [submittingPuzzle, setSubmittingPuzzle] = useState(false);
+    const [view, setView] = useState<"PlayPuzzle" | "PuzzleLeaderBoard">("PlayPuzzle");
+    const startTime = Date.now();
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
     const upperBound = 650;
@@ -47,18 +51,18 @@ export default function DailyPuzzleView({
             marginBottom: "20px",
         },
     }
-    const updateGrid = (r: number, c: number, letter: string) => {
-        setGrid((prevGrid) =>
-            prevGrid.map((row, rowIndex) =>
-                row.map((cell, colIndex) => {
-                    if (rowIndex === r && colIndex === c) {
-                        return { ...cell, guess: letter }; // Update the specific cell
-                    }
-                    return cell; // Keep other cells unchanged
-                })
-            )
-        );
-    };
+    // const updateGrid = (r: number, c: number, letter: string) => {
+    //     setGrid((prevGrid) =>
+    //         prevGrid.map((row, rowIndex) =>
+    //             row.map((cell, colIndex) => {
+    //                 if (rowIndex === r && colIndex === c) {
+    //                     return { ...cell, guess: letter }; // Update the specific cell
+    //                 }
+    //                 return cell; // Keep other cells unchanged
+    //             })
+    //         )
+    //     );
+    // };
 
     useEffect(() => {
         onAppearActions();
@@ -99,7 +103,7 @@ export default function DailyPuzzleView({
         try {
             const updatedUser = await FetchService.fetchUserByUid(user.id);
             setUser(updatedUser);
-            // await GameService.updateLastPuzzlePlayed(user, dailyPuzzle);
+            await GameService.updateLastPuzzlePlayed(user, dailyPuzzle);
             const newGrid = GridSpot.grid.map((row, r) =>
                 row.map((_, c) => {
                     const key = `${r},${c}`;
@@ -203,12 +207,29 @@ export default function DailyPuzzleView({
         }
     }
 
-
-
-
     function displayPuzzleDate(time: Timestamp): string {
         const puzzleDate = new Date(time.toDate());
         return puzzleDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+    }
+
+    async function submitPuzzle() {
+        if (submittingPuzzle) return;
+
+        setSubmittingPuzzle(true);
+        try {
+            const timeDuration = (Date.now() - startTime) / 1000;
+            await GameService.submitDailyPuzzleEntry(user, dailyPuzzle, correctWords, timeDuration);
+            setView("PuzzleLeaderBoard");
+        } catch {
+
+        }
+        setSubmittingPuzzle(false);
+    }
+
+    if (view === "PuzzleLeaderBoard") {
+        return (
+            <DailyPuzzleLeaderboardView passedUser={user} dailyPuzzle={dailyPuzzle}/>
+        );
     }
 
     return (
@@ -226,13 +247,14 @@ export default function DailyPuzzleView({
                 />
 
                 <HStack padding="10px">
-                    {/* <Button variant={wrongGuessHighlight ? "contained" : "outlined"} color={livesRemaining > 1 ? "secondary" : "error"}>
-                        {`Lives: ${livesRemaining}`}
-                    </Button> */}
                     <Typography color={livesRemaining > 1 ? "primary" : "error"}>{`Lives: ${livesRemaining}`}</Typography>
 
                     <Button variant={showScoreDetails ? "contained" : "outlined"} onClick={() => setShowScoreDetails(!showScoreDetails)}>
                         {`Score: ${DailyPuzzleFunctions.getScore(correctWords)}`}
+                    </Button>
+
+                    <Button variant={submittingPuzzle ? "outlined" : "contained"} onClick={() => submitPuzzle()}>
+                        {submittingPuzzle ? "Submitting..." : "Submit"}
                     </Button>
                 </HStack>
 
@@ -240,13 +262,15 @@ export default function DailyPuzzleView({
                     <DailyPuzzleFoundWords correctWords={correctWords} />
                 )}
 
-                <DailyPuzzleLetterBank
+                {(livesRemaining > 0 || !submittingPuzzle) && (
+                    <DailyPuzzleLetterBank
                     letters={dailyPuzzle.letterBank.sort()}
                     selectedGridSpot={selectedGridSpot}
                     setSelectedLetter={setSelectedLetter}
                     livesRemaining={livesRemaining}
                     blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}
                 />
+                )}
 
                 <VStack spacing="0px" height="30px">
                     {repeatGuessWarning ? (
