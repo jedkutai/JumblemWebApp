@@ -1,26 +1,26 @@
 import { useEffect, useState } from "react";
 import { GameModel, UserModel } from "../../../../Background/Models";
 import { View, VStack } from "../../../../ReactSwiftly";
-import { Button, CircularProgress, Typography } from "@mui/material";
-import HomeView from "../../Body/HomeView";
+import { Button, CircularProgress } from "@mui/material";
 import { RatedGameService, FetchService } from "../../../../Background/Service";
 import PlayRatedGameView from "./PlayRatedGameView";
 import { useNavigate } from "react-router-dom";
+import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 
 interface StartRatedGameViewProps {
     passedUser: UserModel
 }
 
 enum RatedGameModeState {
+    idle,
     findingMatch,
     matchFound,
     error
 }
 
 export default function StartRatedGameView({ passedUser }: StartRatedGameViewProps) {
-    const [view, setView] = useState<"StartRatedGameView" | "HomeView">("StartRatedGameView");
     const [user, setUser] = useState<UserModel>(passedUser);
-    const [gameModeState, setGameModeState] = useState<RatedGameModeState>(RatedGameModeState.findingMatch);
+    const [gameModeState, setGameModeState] = useState<RatedGameModeState>(RatedGameModeState.idle);
     const [game, setGame] = useState<GameModel | null>(null);
     const [hostOfMatch, setHostOfMatch] = useState(false);
     const [stopSearching, setStopSearching] = useState(false);
@@ -28,9 +28,9 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
     const [ticker, setTicker] = useState(false);
     const [tickCount, setTickCount] = useState(0);
     const navigate = useNavigate();
-    useEffect(() => {
-        onAppearActions();
-    }, []);
+    // useEffect(() => {
+    //     onAppearActions();
+    // }, []);
 
     useEffect(() => {
         tickerActions();
@@ -124,10 +124,6 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
         }
     }
 
-    if (view === "HomeView") {
-        return <HomeView passedUser={user} />
-    }
-
     if (gameModeState === RatedGameModeState.matchFound && game) {
         return <PlayRatedGameView passedUser={user} passedGame={game} />;
     }
@@ -135,9 +131,19 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
     return (
         <View>
             <VStack>
-                <Typography variant="h4" gutterBottom>
-                    Jumblem
-                </Typography>
+
+                <JumblemLogoSimple />
+                {gameModeState === RatedGameModeState.idle && (
+                    <>
+                        <Button
+                            color="primary"
+                            variant="contained"
+                            onClick={onAppearActions}
+                        >
+                            Find Casual Match
+                        </Button>
+                    </>
+                )}
 
                 {gameModeState === RatedGameModeState.findingMatch && (
                     <>
@@ -164,8 +170,8 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
 
 
                 <Button
-                    variant="outlined"
-                    color="secondary"
+                    variant="contained"
+                    color="error"
                     onClick={dismiss}
                     style={{ marginTop: "10px" }}
                 >

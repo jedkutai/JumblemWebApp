@@ -95,8 +95,6 @@ export default function HomeView({
 
                 isUsernameAvailable={isUsernameAvailable}
                 setIsUsernameAvailable={setIsUsernameAvailable}
-
-                setIsMissingUsername={setIsMissingUsername}
             />
         );
     }

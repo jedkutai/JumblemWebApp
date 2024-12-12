@@ -1,9 +1,7 @@
-import { View } from "../../ReactSwiftly";
+import CreateAccountView from "../../App/Views/CreateAccount/CreateAccountView";
 
 export default function CreateAccountRoute() {
     return (
-        <View>
-            <h2>Create Account View</h2>
-        </View>
+        <CreateAccountView/>
     );
 }
