@@ -3,7 +3,6 @@ import { DailyPuzzleModel, GridSpotModel, UserModel, WordModel } from "../../../
 import { GridSpot } from "../../../Background/Extends/GridSpot";
 import { HStack, View, VStack } from "../../../ReactSwiftly";
 import DailyPuzzleGrid from "./DailyPuzzleGrid";
-import JumblemLogoSimple from "../../../assets/jumblem_logo_simple.png";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import { Button, Typography } from "@mui/material";
 import { FetchService, GameService } from "../../../Background/Service";
@@ -12,7 +11,7 @@ import { DailyPuzzleFunctions } from "../../../Background/Utils/DailyPuzzleFunct
 import DailyPuzzleLetterBank from "./DailyPuzzleLetterBank";
 import DailyPuzzleFoundWords from "./DailyPuzzleFoundWords";
 import DailyPuzzleLeaderboardView from "./DailyPuzzleLeaderboardView";
-// import { set } from "date-fns";
+import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 
 interface DailyPuzzleViewProps {
     passedUser: UserModel;
@@ -51,18 +50,6 @@ export default function DailyPuzzleView({
             marginBottom: "20px",
         },
     }
-    // const updateGrid = (r: number, c: number, letter: string) => {
-    //     setGrid((prevGrid) =>
-    //         prevGrid.map((row, rowIndex) =>
-    //             row.map((cell, colIndex) => {
-    //                 if (rowIndex === r && colIndex === c) {
-    //                     return { ...cell, guess: letter }; // Update the specific cell
-    //                 }
-    //                 return cell; // Keep other cells unchanged
-    //             })
-    //         )
-    //     );
-    // };
 
     useEffect(() => {
         onAppearActions();
@@ -235,7 +222,7 @@ export default function DailyPuzzleView({
     return (
         <View>
             <VStack spacing="0px">
-                <img src={JumblemLogoSimple} alt="Jumblem Logo" style={styles.logo} />
+                <JumblemLogoSimple />
                 <Typography>Daily Puzzle: {displayPuzzleDate(dailyPuzzle.timestamp)}</Typography>
 
                 <DailyPuzzleGrid

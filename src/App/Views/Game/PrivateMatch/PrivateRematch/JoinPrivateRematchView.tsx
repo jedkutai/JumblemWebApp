@@ -5,6 +5,7 @@ import { View, VStack } from "../../../../../ReactSwiftly";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import HomeView from "../../../Body/HomeView";
 import PlayPrivateGameView from "../PlayPrivateGameView";
+import { useNavigate } from "react-router-dom";
 
 interface JoinPrivateRematchViewProps {
     passedUser: UserModel;
@@ -40,7 +41,8 @@ export default function JoinPrivateRematchView({
     const [stopSearching, setStopSearching] = useState(false);
     const [ticker, setTicker] = useState(false);
     const [rematchOffered, setRematchOffered] = useState(false);
-
+    const navigate = useNavigate();
+    
     useEffect(() => {
         onAppearActions();
     }, []);
@@ -97,10 +99,10 @@ export default function JoinPrivateRematchView({
     }
 
     const dismiss = async () => {
-        setView("HomeView");
         if (rematchOffered) {
             try {
                 await PrivateGameService.destroySpecificRematchOffer(previousGame);
+                navigate("/home");
             } catch {
 
             }

@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { DailyPuzzleEntryModel, DailyPuzzleModel, UserModel } from "../../../Background/Models";
 import { View, VStack } from "../../../ReactSwiftly";
 import { Button, CircularProgress, Typography } from "@mui/material";
-import JumblemLogoSimple from "../../../assets/jumblem_logo_simple.png";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import { Timestamp } from "firebase/firestore";
 import LeaderboardEntry from "./LeaderboardEntry";
 import { FetchService } from "../../../Background/Service";
-import { Home } from "@mui/icons-material";
+// import { Home } from "@mui/icons-material";
 import HomeView from "../Body/HomeView";
+import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
+import { useNavigate } from "react-router-dom";
 
 enum LeaderboardState {
     loading,
@@ -28,6 +29,7 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
     const [leaderboard, setLeaderboard] = useState<DailyPuzzleEntryModel[]>([]);
     const [userPuzzleEntry, setUserPuzzleEntry] = useState<DailyPuzzleEntryModel | null>(null);
     const { minDimension } = useWindowSize();
+    const navigate = useNavigate();
     const styles = {
         logo: {
             maxWidth: `${Math.min(minDimension / 3, 300)}px`,
@@ -69,8 +71,8 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
     return (
         <View>
             <VStack>
-                <Button onClick={() => setView("Home")}>
-                    <img src={JumblemLogoSimple} alt="Jumblem Logo" style={styles.logo} />
+                <Button onClick={() => navigate("/home")}>
+                    <JumblemLogoSimple />
                 </Button>
                 {leaderboardState === LeaderboardState.loading && (
                     <CircularProgress />

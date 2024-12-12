@@ -5,6 +5,7 @@ import { Button, CircularProgress, Typography } from "@mui/material";
 import HomeView from "../../Body/HomeView";
 import { RatedGameService, FetchService } from "../../../../Background/Service";
 import PlayRatedGameView from "./PlayRatedGameView";
+import { useNavigate } from "react-router-dom";
 
 interface StartRatedGameViewProps {
     passedUser: UserModel
@@ -26,7 +27,7 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
     const [takingLongToFindMatch, setTakingLongToFindMatch] = useState(false);
     const [ticker, setTicker] = useState(false);
     const [tickCount, setTickCount] = useState(0);
-
+    const navigate = useNavigate();
     useEffect(() => {
         onAppearActions();
     }, []);
@@ -37,7 +38,7 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
 
     const dismiss = async () => {
         wipeGame();
-        setView("HomeView");
+        navigate("/home");
     }
 
 

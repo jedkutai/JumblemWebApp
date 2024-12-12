@@ -6,10 +6,11 @@ import { Timestamp } from "firebase/firestore";
 import { FetchService } from "../../../Background/Service";
 import { DailyPuzzleFunctions } from "../../../Background/Utils/DailyPuzzleFunctions";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
-import JumblemLogoSimple from "../../../assets/jumblem_logo_simple.png";
 import HomeView from "../Body/HomeView";
 import DailyPuzzleView from "./DailyPuzzleView";
 import DailyPuzzleLeaderboardView from "./DailyPuzzleLeaderboardView";
+import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
+import { useNavigate } from "react-router-dom";
 
 enum DailyPuzzleState {
     loading,
@@ -29,7 +30,8 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
     const [dailyPuzzleDict, setDailyPuzzleDict] = useState<Record<string, GridSpotModel>>({});
     const [view, setView] = useState<"LoadDailyPuzzle" | "PlayDailyPuzzle" | "Home" | "LeaderBoard">("LoadDailyPuzzle");
     const { height, minDimension } = useWindowSize();
-
+    const navigate = useNavigate();
+    
     const styles = {
         logo: {
             maxWidth: `${Math.min(minDimension / 3, 300)}px`,
@@ -45,9 +47,6 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
         setView("PlayDailyPuzzle");
     }
 
-    function navigateToHome() {
-        setView("Home");
-    }
 
     function navigateToLeaderBoard() {
         setView("LeaderBoard");
@@ -112,7 +111,7 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
     return (
         <View>
             <VStack>
-                <img src={JumblemLogoSimple} alt="Jumblem Logo" style={styles.logo} />
+                <JumblemLogoSimple />
 
                 <VStack height={`${height / 2}px`}>
                     <VSpacer />
@@ -147,7 +146,7 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
                     <VSpacer />
                 </VStack>
 
-                <Button variant="outlined" onClick={navigateToHome}>Home</Button>
+                <Button variant="outlined" onClick={() => navigate("/home")}>Home</Button>
 
             </VStack>
         </View>

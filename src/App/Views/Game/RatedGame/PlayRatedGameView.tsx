@@ -11,7 +11,8 @@ import { Button } from "@mui/material";
 import HomeView from "../../Body/HomeView";
 import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
 import RatedGameOverGrid from "./RatedGameOverGrid";
-import JumblemLogoSimple from "../../../../assets/jumblem_logo_simple.png";
+import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
+import { useNavigate } from "react-router-dom";
 
 interface PlayRatedGameViewProps {
     passedUser: UserModel;
@@ -47,7 +48,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
     const [opponentTimeRemaining, setOpponentTimeRemaining] = useState(180);
     const [checkGameOver, setCheckGameOver] = useState(false);
     const [movesMade, setMovesMade] = useState(0);
-    
+    const navigate = useNavigate();
 
     useEffect(() => {
         setMatchAbortedTicker(!matchAbortedTicker);
@@ -251,7 +252,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
         return (
             <View>
                 <VStack>
-                <img src={JumblemLogoSimple} alt="Jumblem Logo" style={style} />
+                    <JumblemLogoSimple />
 
                     <RatedGameHeader
                         userTimeExpired={userTimeExpired}
@@ -269,10 +270,10 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
                         opponentRatingChange={user.id !== game.playerOneId ? game.playerOneRatingChange : game.playerTwoRatingChange}
                     />
 
-                    <Button onClick={() => setView("HomeView")}>
+                    <Button onClick={() => navigate("/home")}>
                         Home
                     </Button>
-                    
+
                     <RatedGameOverGrid
                         user={user}
                         game={game}
@@ -292,7 +293,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
             <View>
                 <VStack width={`${width}px`} height={`${height}px`}>
                     {/* <VSpacer /> */}
-                    <img src={JumblemLogoSimple} alt="Jumblem Logo" style={style} />
+                    <JumblemLogoSimple />
 
                     <RatedGameHeader
                         userTimeExpired={userTimeExpired}
@@ -306,7 +307,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
                         yourTurn={yourTurn}
                         firstMoveMade={movesCopy.length !== 0}
                         gameOver={gameOver}
-                        
+
                     />
 
                     <RatedRatedGameGrid

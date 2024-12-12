@@ -11,7 +11,8 @@ import { Button } from "@mui/material";
 import HomeView from "../../Body/HomeView";
 import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
 import CasualGameOverGrid from "./CasualGameOverGrid";
-import JumblemLogoSimple from "../../../../assets/jumblem_logo_simple.png";
+import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
+import { useNavigate } from "react-router-dom";
 
 interface PlayCasualGameViewProps {
     passedUser: UserModel;
@@ -46,7 +47,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
     const [opponentTimeRemaining, setOpponentTimeRemaining] = useState(180);
     const [checkGameOver, setCheckGameOver] = useState(false);
     const [movesMade, setMovesMade] = useState(0);
-
+    const navigate = useNavigate();
 
     useEffect(() => {
         setMatchAbortedTicker(!matchAbortedTicker);
@@ -250,7 +251,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
         return (
             <View>
                 <VStack>
-                    <img src={JumblemLogoSimple} alt="Jumblem Logo" style={style} />
+                    <JumblemLogoSimple />
 
                     <CasualGameHeader
                         userTimeExpired={userTimeExpired}
@@ -266,7 +267,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                         gameOver={gameOver}
                     />
 
-                    <Button onClick={() => setView("HomeView")}>
+                    <Button onClick={() => navigate("/home")}>
                         Home
                     </Button>
                     
@@ -288,7 +289,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
             <View>
                 <VStack width={`${width}px`} height={`${height}px`}>
                     {/* <VSpacer /> */}
-                    <img src={JumblemLogoSimple} alt="Jumblem Logo" style={style} />
+                    <JumblemLogoSimple />
 
                     <CasualGameHeader
                         userTimeExpired={userTimeExpired}

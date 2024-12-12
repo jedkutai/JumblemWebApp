@@ -1,33 +1,25 @@
 import { useEffect, useState } from "react";
 import { UserModel } from "../../../../Background/Models";
 import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
-import { FetchService } from "../../../../Background/Service";
 import { View, VStack } from "../../../../ReactSwiftly";
 import { Box, Button, Typography } from "@mui/material";
-import HomeView from "../../Body/HomeView";
 import StartPrivateGameView from "./StartPrivateGameView";
 import JoinPrivateGameView from "./JoinPrivateGameView";
+import { useNavigate } from "react-router-dom";
 
 interface PrivateMatchMenuViewProps {
     passedUser: UserModel;
 }
 
 export default function PrivateMatchMenuView({passedUser}: PrivateMatchMenuViewProps) {
-    const [user, setUser] = useState(passedUser);
-    const [view, setView] = useState<"Home" | "Menu" | "Create" | "Join">("Menu");
-    const [loadingUser, setLoadingUser] = useState(true);
+    const [view, setView] = useState<"Menu" | "Create" | "Join">("Menu");
     const { minDimension } = useWindowSize();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const onAppearActions = async () => {
-            try {
-                const loadedUser = await FetchService.fetchUserByUid(user.id);
-                setUser(loadedUser);
-                setLoadingUser(false);
-            } catch {
-            }
+        if (passedUser.username === null) {
+            navigate("/home");
         }
-        onAppearActions();
 
     }, []);
 
@@ -43,7 +35,7 @@ export default function PrivateMatchMenuView({passedUser}: PrivateMatchMenuViewP
             margin: "10px",
             flex: 1,
             backgroundColor: "rgb(227, 218, 195)",
-            color: loadingUser ? "gray" : "black",
+            color: "black",
             fontWeight: 600,
         },
         logo: {
@@ -70,12 +62,10 @@ export default function PrivateMatchMenuView({passedUser}: PrivateMatchMenuViewP
     }
 
     switch(view) {
-        case "Home":
-            return (<HomeView passedUser={user}/>);
         case "Create":
-            return (<StartPrivateGameView passedUser={user}/>);
+            return (<StartPrivateGameView passedUser={passedUser}/>);
         case "Join":
-            return (<JoinPrivateGameView passedUser={user}/>);
+            return (<JoinPrivateGameView passedUser={passedUser}/>);
     }
 
     return (
@@ -84,10 +74,10 @@ export default function PrivateMatchMenuView({passedUser}: PrivateMatchMenuViewP
             <Box style={styles.section}>
                     <Typography style={styles.sectionTitle}>PRIVATE MATCH</Typography>
                     <Box style={styles.buttonContainer}>
-                        <Button variant="contained" style={styles.button} onClick={() => setView(loadingUser ? "Menu" : "Create")}>
+                        <Button variant="contained" style={styles.button} onClick={() => setView("Create")}>
                             CREATE
                         </Button>
-                        <Button variant="contained" style={styles.button} onClick={() => setView(loadingUser ? "Menu" : "Join")}>
+                        <Button variant="contained" style={styles.button} onClick={() => setView("Join")}>
                             JOIN
                         </Button>
                     </Box>
@@ -96,7 +86,7 @@ export default function PrivateMatchMenuView({passedUser}: PrivateMatchMenuViewP
                 <Button
                     variant="outlined"
                     color="primary"
-                    onClick={() => setView("Home")}
+                    onClick={() => navigate("/home")}
                     style={{ marginTop: "10px" }}
                 >
                     Home

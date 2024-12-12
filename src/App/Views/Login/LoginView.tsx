@@ -5,12 +5,10 @@ import { View, VStack } from "../../../ReactSwiftly";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import { Alert, Box, Button, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
-interface LoginViewProps {
-    onBack: () => void,
-}
 
-export default function LoginView({onBack}: LoginViewProps) {
+export default function LoginView() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -18,6 +16,7 @@ export default function LoginView({onBack}: LoginViewProps) {
     const [user, setUser] = useState<UserModel | null>(null);
     const [error, setError] = useState<string | null>(null);
     const { minDimension } = useWindowSize();
+    const navigate = useNavigate();
 
     const handleLogin = async () => {
       setCanLogin(false);
@@ -118,9 +117,6 @@ export default function LoginView({onBack}: LoginViewProps) {
                     {canLogin ? 'Login' : 'Logging in...'}
                     </Button>
                 </Box>
-                <Button onClick={onBack} style={{ marginTop: '20px' }}>
-                Back
-                </Button>
             </VStack>
         </View>
     );

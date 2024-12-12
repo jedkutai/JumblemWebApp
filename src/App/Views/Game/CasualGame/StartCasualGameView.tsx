@@ -5,12 +5,15 @@ import { Button, CircularProgress, Typography } from "@mui/material";
 import HomeView from "../../Body/HomeView";
 import { CasualGameService, FetchService } from "../../../../Background/Service";
 import PlayCasualGameView from "./PlayCasualGameView";
+import { useNavigate } from "react-router-dom";
+import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 
 interface StartCasualGameViewProps {
     passedUser: UserModel
 }
 
 enum CasualGameModeState {
+    idle,
     findingMatch,
     matchFound,
     error
@@ -19,16 +22,17 @@ enum CasualGameModeState {
 export default function StartCasualGameView({ passedUser }: StartCasualGameViewProps) {
     const [view, setView] = useState<"StartCasualGameView" | "HomeView">("StartCasualGameView");
     const [user, setUser] = useState<UserModel>(passedUser);
-    const [gameModeState, setGameModeState] = useState<CasualGameModeState>(CasualGameModeState.findingMatch);
+    const [gameModeState, setGameModeState] = useState<CasualGameModeState>(CasualGameModeState.idle);
     const [game, setGame] = useState<GameModel | null>(null);
     const [hostOfMatch, setHostOfMatch] = useState(false);
     const [stopSearching, setStopSearching] = useState(false);
     const [takingLongToFindMatch, setTakingLongToFindMatch] = useState(false);
     const [ticker, setTicker] = useState(false);
     const [tickCount, setTickCount] = useState(0);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        onAppearActions();
+        // onAppearActions();
     }, []);
 
     useEffect(() => {
@@ -37,7 +41,7 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
 
     const dismiss = async () => {
         wipeGame();
-        setView("HomeView");
+        navigate("/home");
     }
 
 
@@ -134,9 +138,18 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
     return (
         <View>
             <VStack>
-                <Typography variant="h4" gutterBottom>
-                    Jumblem
-                </Typography>
+                <JumblemLogoSimple/>
+                {gameModeState === CasualGameModeState.idle && (
+                    <>
+                        <Button
+                            color="primary"
+                            variant="contained"
+                            onClick={onAppearActions}
+                        >
+                            Find Casual Match
+                        </Button>
+                    </>
+                )}
 
                 {gameModeState === CasualGameModeState.findingMatch && (
                     <>
@@ -151,7 +164,7 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
                         <p>There was an error when finding a match.</p>
                         <Button
                             color="primary"
-                            variant="outlined"
+                            variant="contained"
                             onClick={onAppearActions}
                         >
                             Retry
@@ -163,8 +176,8 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
 
 
                 <Button
-                    variant="outlined"
-                    color="secondary"
+                    variant="contained"
+                    color="error"
                     onClick={dismiss}
                     style={{ marginTop: "10px" }}
                 >

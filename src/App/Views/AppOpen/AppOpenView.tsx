@@ -1,49 +1,27 @@
-import { useEffect, useState } from "react";
-import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import { View, VStack } from "../../../ReactSwiftly";
-import JumblemLogo from "../../../assets/jumblem_logo.png";
 import { Button } from "@mui/material";
-import LoginView from "../Login/LoginView";
+import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
+import { useNavigate } from "react-router-dom";
 
 
 export default function AppOpenView() {
-    const { minDimension } = useWindowSize();
-    const [view, setView] = useState<"AppOpenView" | "LoginView" | "CreateAccountView" | "GuestView">("AppOpenView");
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        
-    }, []);
-
-    const styles = {
-        image: {
-            maxWidth: `${minDimension / 3}px`,
-            maxHeight: `${minDimension / 3}px`,
-        },
-    }
-
-    switch (view) {
-        case "LoginView":
-            return (<LoginView onBack={() => setView("AppOpenView")}/>);
-        case "CreateAccountView":
-            // return (<CreateAccountView onBack={() => setView("AppOpenView")}/>);
-        case "GuestView":
-            // return (<View><VStack><Text text="GuestView"/><button onClick={() => setView("AppOpenView")}>Back</button></VStack></View>);
-    }
 
     return (
         <View>
             <VStack>
-                <img src={JumblemLogo} style={styles.image}/>
+                <JumblemLogoSimple/>
 
-                <Button onClick={() => setView("LoginView")}>
+                <Button onClick={() => navigate("/login")}>
                     LOGIN
                 </Button>
 
-                <Button onClick={() => setView("CreateAccountView")}>
+                <Button onClick={() => navigate("/createaccount")}>
                     CREATE ACCOUNT
                 </Button>
 
-                <Button onClick={() => setView("GuestView")}>
+                <Button onClick={() => navigate("/home")}>
                     CONTINUE AS GUEST
                 </Button>
             </VStack>

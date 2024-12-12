@@ -8,12 +8,13 @@ import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
 import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
 import { View, VStack, VSpacer, HStack } from "../../../../ReactSwiftly";
 import HomeView from "../../Body/HomeView";
-import JumblemLogoSimple from "../../../../assets/jumblem_logo_simple.png";
 import PrivateGameHeader from "./PrivateGameHeader";
 import PrivateGameGrid from "./PrivateGameGrid";
 import PrivateGameOverGrid from "./PrivateGameOverGrid";
 import RematchButton from "../../../Components/RematchButton";
 import RematchController from "./PrivateRematch/RematchController";
+import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
+import { useNavigate } from "react-router-dom";
 
 interface PlayPrivateGameViewProps {
     passedUser: UserModel;
@@ -55,7 +56,7 @@ export default function PlayPrivateGameView({
     const [rematchOffered, setRematchedOffered] = useState(false);
     const [rematchTicker, setRematchTicker] = useState(false);
     const [stopRematchTicker, setStopRematchTicker] = useState(false);
-
+    const navigate = useNavigate();
 
     useEffect(() => {
         setMatchAbortedTicker(!matchAbortedTicker);
@@ -273,12 +274,6 @@ export default function PlayPrivateGameView({
         }
     }
 
-    function navigateHomeView() {
-        setView("HomeView");
-        setStopRematchTicker(true);
-
-    }
-
     function navigateRematchView() {
         setView("PrivateRematchView");
         setStopRematchTicker(true);
@@ -302,7 +297,7 @@ export default function PlayPrivateGameView({
         return (
             <View>
                 <VStack>
-                    <img src={JumblemLogoSimple} alt="Jumblem Logo" style={style} />
+                    <JumblemLogoSimple />
 
                     <PrivateGameHeader
                         userTimeExpired={userTimeExpired}
@@ -319,7 +314,7 @@ export default function PlayPrivateGameView({
                     />
 
                     <HStack>
-                        <Button onClick={() => navigateHomeView()}>
+                        <Button onClick={() => navigate("/home")}>
                             Home
                         </Button>
 
@@ -344,7 +339,7 @@ export default function PlayPrivateGameView({
             <View>
                 <VStack width={`${width}px`} height={`${height}px`}>
                     {/* <VSpacer /> */}
-                    <img src={JumblemLogoSimple} alt="Jumblem Logo" style={style} />
+                    <JumblemLogoSimple />
 
                     <PrivateGameHeader
                         userTimeExpired={userTimeExpired}

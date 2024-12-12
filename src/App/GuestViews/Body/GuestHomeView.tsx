@@ -1,48 +1,14 @@
-import { useEffect, useState } from "react";
-import { UserModel } from "../../../Background/Models";
-import { getAuth, signOut } from "firebase/auth";
-import MissingUsernameView from "../AppOpen/MissingUsernameView";
-import { View, VStack } from "../../../ReactSwiftly";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
+import { View, VStack } from "../../../ReactSwiftly";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 
-interface HomeViewProps {
-    passedUser: UserModel;
-}
-
-export default function HomeView({
-    passedUser,
-}: HomeViewProps) {
-    const [user, setUser] = useState<UserModel>(passedUser);
-    const [isMissingUsername, setIsMissingUsername] = useState(!passedUser.username);
-    const [newUsername, setNewUsername] = useState("");
-    const [isCheckingUsername, setIsCheckingUsername] = useState(false);
-    const [isUsernameAvailable, setIsUsernameAvailable] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+export default function GuestHomeView() {
     const { minDimension } = useWindowSize();
     const navigate = useNavigate();
-
-
-    useEffect(() => {
-        if (!user.username) {
-            setIsMissingUsername(true);
-        } else {
-            // refresh user
-        }
-    });
-
-
-    const handleLogout = async () => {
-        const auth = getAuth();
-        try {
-            await signOut(auth);
-            navigate("/");
-        } catch (error) {
-        }
-    };
-
+    const [showLoginMessage, setShowLoginMessage] = useState(false);
     const styles = {
         buttonContainer: {
             display: "flex",
@@ -54,6 +20,13 @@ export default function HomeView({
             flex: 1,
             backgroundColor: "rgb(227, 218, 195)",
             color: "black",
+            fontWeight: 600,
+        },
+        bannedButton: {
+            margin: "10px",
+            flex: 1,
+            backgroundColor: "rgb(227, 218, 195)",
+            color: "gray",
             fontWeight: 600,
         },
         logo: {
@@ -79,46 +52,27 @@ export default function HomeView({
         },
     }
 
-    if (isMissingUsername) {
-        return (
-            <MissingUsernameView
-                currentUser={user}
-
-                error={error}
-                setError={setError}
-
-                newUsername={newUsername}
-                setNewUsername={setNewUsername}
-
-                isCheckingUsername={isCheckingUsername}
-                setIsCheckingUsername={setIsCheckingUsername}
-
-                isUsernameAvailable={isUsernameAvailable}
-                setIsUsernameAvailable={setIsUsernameAvailable}
-
-                setIsMissingUsername={setIsMissingUsername}
-            />
-        );
-    }
-
 
     return (
         <View>
             <VStack>
-                <JumblemLogoSimple />
+                <JumblemLogoSimple/>
+                {showLoginMessage && (
+                    <Typography variant="h6" style={{ textAlign: "center", color: "red" }} >Login for more modes!</Typography>
+                )}
                 <Box style={styles.section}>
                     <Typography style={styles.sectionTitle}>VERSUS</Typography>
                     <Box style={styles.buttonContainer}>
                         <Button variant="contained" style={styles.button} onClick={() => navigate("/casual")}>
                             CASUAL
                         </Button>
-                        <Button variant="contained" style={styles.button} onClick={() => navigate("/rated")}>
+                        <Button variant="contained" style={styles.bannedButton} onClick={() => setShowLoginMessage(!showLoginMessage)}>
                             RATED
                         </Button>
                     </Box>
 
-                    <Box style={{ display: "flex", justifyContent: "center" }} onClick={() => navigate("/private")}>
-                        <Button variant="contained" style={styles.button}>
+                    <Box style={{ display: "flex", justifyContent: "center" }} >
+                        <Button variant="contained" style={styles.bannedButton} onClick={() => setShowLoginMessage(!showLoginMessage)}>
                             PRIVATE MATCH
                         </Button>
                     </Box>
@@ -128,10 +82,10 @@ export default function HomeView({
                 <Box style={styles.section}>
                     <Typography style={styles.sectionTitle}>TRAIN</Typography>
                     <Box style={styles.buttonContainer}>
-                        <Button variant="contained" style={styles.button} onClick={() => navigate("/dailypuzzle")}>
+                        <Button variant="contained" style={styles.button}>
                             DAILY PUZZLE
                         </Button>
-                        <Button variant="contained" style={styles.button} onClick={() => navigate("/wordtrainer")}>
+                        <Button variant="contained" style={styles.bannedButton} onClick={() => setShowLoginMessage(!showLoginMessage)}>
                             WORD TRAINER
                         </Button>
                     </Box>
@@ -142,17 +96,17 @@ export default function HomeView({
                 <Box style={styles.section}>
                     <Typography style={styles.sectionTitle}>HOW TO PLAY</Typography>
                     <Box style={styles.buttonContainer}>
-                        <Button variant="contained" style={styles.button} onClick={() => navigate("/howto/dailypuzzle")}>
+                        <Button variant="contained" style={styles.button}>
                             DAILY PUZZLE
                         </Button>
-                        <Button variant="contained" style={styles.button} onClick={() => navigate("/howto/versus")}>
+                        <Button variant="contained" style={styles.button}>
                             CASUAL & RATED
                         </Button>
                     </Box>
 
                 </Box>
 
-                <Button variant="contained" onClick={handleLogout}>Logout</Button>
+                <Button variant="contained" onClick={() => navigate("/")}>LOGIN</Button>
             </VStack>
         </View>
     );
