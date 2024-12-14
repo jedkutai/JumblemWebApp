@@ -35,14 +35,7 @@ export default function HomeView({
     });
 
 
-    const handleLogout = async () => {
-        const auth = getAuth();
-        try {
-            await signOut(auth);
-            navigate("/");
-        } catch (error) {
-        }
-    };
+
 
     const styles = {
         buttonContainer: {
@@ -167,14 +160,14 @@ export default function HomeView({
 
                 </Box>
 
-                <Button variant="contained" onClick={handleLogout}>Logout</Button>
+                {/* <Button variant="contained" onClick={handleLogout}>Logout</Button> */}
 
                 <HStack>
                     <Button variant="contained" style={styles.moreButton}>
                         People
                     </Button>
 
-                    <Button variant="contained" style={styles.moreButton}>
+                    <Button variant="contained" style={styles.moreButton} onClick={() => navigate("/profile")}>
                         Profile
                     </Button>
                 </HStack>

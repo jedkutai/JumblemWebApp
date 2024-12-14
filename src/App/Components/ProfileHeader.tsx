@@ -1,6 +1,8 @@
+import { Box, Typography } from "@mui/material";
 import { UserModel } from "../../Background/Models";
 import { useWindowSize } from "../../Background/Utils/useWindowSize";
 import { HStack, VStack } from "../../ReactSwiftly";
+import { DisplayFunctions } from "../../Background/Utils/DisplayFunctions";
 
 interface ProfileHeaderProps {
     passedUser: UserModel;
@@ -9,27 +11,30 @@ interface ProfileHeaderProps {
 export default function ProfileHeader({
     passedUser,
 }: ProfileHeaderProps) {
+    const upperBound = 650;
+    const dimensionDivider = 9 * 1.75;
     const { minDimension } = useWindowSize();
 
 
     const style = {
         section: {
-            backgroundImage:
-                "linear-gradient(to bottom right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05))",
+            backgroundColor: "black",
             borderRadius: "15px",
             border: "3px solid rgba(0, 0, 0, 0.1)",
             padding: "20px",
-            marginBottom: "20px",
-            width: "100%",
-            maxWidth: `${Math.min(400, minDimension * 0.8)}px`,
+            width: `${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px`,
         },
     }
 
     return (
-        <VStack>
-            <HStack>
-                <></>
-            </HStack>
-        </VStack>
+        <Box style={style.section}>
+            <VStack spacing="10px">
+                <HStack spacing="10px">
+                    <Typography variant="h2" style={{ color:"white", fontWeight: "bolder"}}>{passedUser.usernameDisplayed ?? "N/A"}</Typography>
+                    <Typography variant="h4" style={{ color:"gray", fontWeight: "bold"}}>{`(${passedUser.standardRating})`}</Typography>
+                </HStack>
+                <Typography variant="h6" style={{ color:"gray", fontWeight: "bold"}}>{`Est. ${DisplayFunctions.displayUserDate(passedUser.timestamp)}`}</Typography>
+            </VStack>
+        </Box>
     );
 }

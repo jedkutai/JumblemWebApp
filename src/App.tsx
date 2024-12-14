@@ -9,6 +9,7 @@ import PrivateGameRoute from './RouteControllers/Versus/PrivateGameRoute';
 import DailyPuzzleRoute from './RouteControllers/Training/DailyPuzzleRoute';
 import HowToDailyPuzzleRoute from './RouteControllers/HowTo/HowToDailyPuzzleRoute';
 import HowToVersusRoute from './RouteControllers/HowTo/HowToVersusRoute';
+import ProfileRoute from './RouteControllers/Root/ProfileRoute';
 
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
         // Root
         <Route path="/" element={<ContentView/>} />
         <Route path="/home" element={<HomeRoute />} />
-        // profile
+        <Route path="/profile" element={<ProfileRoute />} />
         
 
         // Login
