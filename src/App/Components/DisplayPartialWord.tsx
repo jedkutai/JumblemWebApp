@@ -12,7 +12,7 @@ export default function DisplayPartialWord({partialWord, blockDismension}: Displ
     return (
         <HStack spacing="0px">
             {partialWord.partialWord.split("").map((letter, index) => (
-                <WhiteLetterBlock key={index} letter={letter} blockDimension={blockDismension} />
+                <WhiteLetterBlock key={index} letter={letter} blockDimension={blockDismension} border={true}/>
             ))}
         </HStack>
     );

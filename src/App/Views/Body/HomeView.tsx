@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { UserModel } from "../../../Background/Models";
 import { getAuth, signOut } from "firebase/auth";
 import MissingUsernameView from "../AppOpen/MissingUsernameView";
-import { View, VStack } from "../../../ReactSwiftly";
+import { HStack, View, VStack } from "../../../ReactSwiftly";
 import { Box, Button, Typography } from "@mui/material";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import { useNavigate } from "react-router-dom";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
+
 
 interface HomeViewProps {
     passedUser: UserModel;
@@ -15,7 +16,7 @@ interface HomeViewProps {
 export default function HomeView({
     passedUser,
 }: HomeViewProps) {
-    const [user, setUser] = useState<UserModel>(passedUser);
+    const [user] = useState<UserModel>(passedUser);
     const [isMissingUsername, setIsMissingUsername] = useState(!passedUser.username);
     const [newUsername, setNewUsername] = useState("");
     const [isCheckingUsername, setIsCheckingUsername] = useState(false);
@@ -54,6 +55,22 @@ export default function HomeView({
             flex: 1,
             backgroundColor: "rgb(227, 218, 195)",
             color: "black",
+            fontWeight: 600,
+        },
+        moreButton: {
+            margin: "10px",
+            flex: 1,
+            backgroundColor: "rgb(0, 0, 0)",
+            color: "white",
+            fontWeight: 600,
+            width: "100%",
+            maxWidth: `${Math.min(200, minDimension * 0.3)}px`,
+        },
+        wordTrainerButton: {
+            margin: "10px",
+            flex: 1,
+            backgroundColor: "rgb(48, 146, 221)",
+            color: "white",
             fontWeight: 600,
         },
         logo: {
@@ -129,7 +146,7 @@ export default function HomeView({
                         <Button variant="contained" style={styles.button} onClick={() => navigate("/dailypuzzle")}>
                             DAILY PUZZLE
                         </Button>
-                        <Button variant="contained" style={styles.button} onClick={() => navigate("/wordtrainer")}>
+                        <Button variant="contained" style={styles.wordTrainerButton}>
                             WORD TRAINER
                         </Button>
                     </Box>
@@ -151,6 +168,16 @@ export default function HomeView({
                 </Box>
 
                 <Button variant="contained" onClick={handleLogout}>Logout</Button>
+
+                <HStack>
+                    <Button variant="contained" style={styles.moreButton}>
+                        People
+                    </Button>
+
+                    <Button variant="contained" style={styles.moreButton}>
+                        Profile
+                    </Button>
+                </HStack>
             </VStack>
         </View>
     );

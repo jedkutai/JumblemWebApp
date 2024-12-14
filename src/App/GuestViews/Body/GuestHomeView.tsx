@@ -22,6 +22,13 @@ export default function GuestHomeView() {
             color: "black",
             fontWeight: 600,
         },
+        wordTrainerButton: {
+            margin: "10px",
+            flex: 1,
+            backgroundColor: "rgb(48, 146, 221)",
+            color: "white",
+            fontWeight: 600,
+        },
         bannedButton: {
             margin: "10px",
             flex: 1,
@@ -82,10 +89,10 @@ export default function GuestHomeView() {
                 <Box style={styles.section}>
                     <Typography style={styles.sectionTitle}>TRAIN</Typography>
                     <Box style={styles.buttonContainer}>
-                        <Button variant="contained" style={styles.button}>
+                        <Button variant="contained" style={styles.button} onClick={() => navigate("/dailypuzzle")}>
                             DAILY PUZZLE
                         </Button>
-                        <Button variant="contained" style={styles.bannedButton} onClick={() => setShowLoginMessage(!showLoginMessage)}>
+                        <Button variant="contained" style={styles.wordTrainerButton}>
                             WORD TRAINER
                         </Button>
                     </Box>
@@ -96,10 +103,10 @@ export default function GuestHomeView() {
                 <Box style={styles.section}>
                     <Typography style={styles.sectionTitle}>HOW TO PLAY</Typography>
                     <Box style={styles.buttonContainer}>
-                        <Button variant="contained" style={styles.button}>
+                        <Button variant="contained" style={styles.button} onClick={() => navigate("/howto/dailypuzzle")}>
                             DAILY PUZZLE
                         </Button>
-                        <Button variant="contained" style={styles.button}>
+                        <Button variant="contained" style={styles.button} onClick={() => navigate("/howto/versus")}>
                             CASUAL & RATED
                         </Button>
                     </Box>

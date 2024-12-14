@@ -6,12 +6,12 @@ import DailyPuzzleGrid from "./DailyPuzzleGrid";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import { Button, Typography } from "@mui/material";
 import { FetchService, GameService } from "../../../Background/Service";
-import { Timestamp } from "firebase/firestore";
 import { DailyPuzzleFunctions } from "../../../Background/Utils/DailyPuzzleFunctions";
 import DailyPuzzleLetterBank from "./DailyPuzzleLetterBank";
 import DailyPuzzleFoundWords from "./DailyPuzzleFoundWords";
 import DailyPuzzleLeaderboardView from "./DailyPuzzleLeaderboardView";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
+import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
 
 interface DailyPuzzleViewProps {
     passedUser: UserModel;
@@ -194,10 +194,7 @@ export default function DailyPuzzleView({
         }
     }
 
-    function displayPuzzleDate(time: Timestamp): string {
-        const puzzleDate = new Date(time.toDate());
-        return puzzleDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-    }
+
 
     async function submitPuzzle() {
         if (submittingPuzzle) return;
@@ -223,7 +220,7 @@ export default function DailyPuzzleView({
         <View>
             <VStack spacing="0px">
                 <JumblemLogoSimple />
-                <Typography>Daily Puzzle: {displayPuzzleDate(dailyPuzzle.timestamp)}</Typography>
+                <Typography>Daily Puzzle: {DisplayFunctions.displayPuzzleDate(dailyPuzzle.timestamp)}</Typography>
 
                 <DailyPuzzleGrid
                     grid={grid}

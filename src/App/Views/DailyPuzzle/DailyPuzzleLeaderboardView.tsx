@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-import { DailyPuzzleEntryModel, DailyPuzzleModel, UserModel } from "../../../Background/Models";
+import { DailyPuzzleEntryModel, DailyPuzzleModel, UserModel, WordModel } from "../../../Background/Models";
 import { View, VStack } from "../../../ReactSwiftly";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
-import { Timestamp } from "firebase/firestore";
 import LeaderboardEntry from "./LeaderboardEntry";
 import { FetchService } from "../../../Background/Service";
 // import { Home } from "@mui/icons-material";
-import HomeView from "../Body/HomeView";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { useNavigate } from "react-router-dom";
+import DailyPuzzleFoundWords from "./DailyPuzzleFoundWords";
+import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
 
 enum LeaderboardState {
     loading,
@@ -30,6 +30,11 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
     const [userPuzzleEntry, setUserPuzzleEntry] = useState<DailyPuzzleEntryModel | null>(null);
     const { minDimension } = useWindowSize();
     const navigate = useNavigate();
+
+    const [wordsLoaded, setWordsLoaded] = useState(false);
+    const [expand, setExpand] = useState(false); // first expand should load words
+    const [words, setWords] = useState<Record<string, [WordModel, number]>>({});
+
     const styles = {
         logo: {
             maxWidth: `${Math.min(minDimension / 3, 300)}px`,
@@ -41,6 +46,33 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
     useEffect(() => {
         onAppearActions();
     }, []);
+
+    useEffect(() => {
+        fetchWords();
+    }, [expand]);
+
+    async function fetchWords() {
+        if (wordsLoaded) {
+            return;
+        }
+        if (userPuzzleEntry) {
+            try {
+                let fetchedWords: Record<string, [WordModel, number]> = {};
+                for (const word of userPuzzleEntry.words) {
+                    if (Object.keys(fetchedWords).includes(word)) {
+                        fetchedWords[word][1] += 1;
+                    } else {
+                        const wordModel = await FetchService.fetchWordModelByWord(word);
+                        fetchedWords[word] = [wordModel, 1];
+                    }
+                }
+                setWords(fetchedWords);
+                setWordsLoaded(true);
+            } catch (error) {
+                console.error("Failed to fetch words", error);
+            }
+        }
+    }
 
     async function onAppearActions() {
         setLeaderboardState(LeaderboardState.loading);
@@ -59,14 +91,8 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
         }
     }
 
-    function displayPuzzleDate(time: Timestamp): string {
-        const puzzleDate = new Date(time.toDate());
-        return puzzleDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-    }
 
-    if (view === "Home") {
-        return (<HomeView passedUser={user} />);
-    }
+
 
     return (
         <View>
@@ -80,9 +106,21 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
 
                 {leaderboardState === LeaderboardState.loaded && (
                     <>
-                        <Typography>{displayPuzzleDate(dailyPuzzle.timestamp)}</Typography>
+                        <Typography>{DisplayFunctions.displayPuzzleDate(dailyPuzzle.timestamp)}</Typography>
                         {userPuzzleEntry && (
-                            <></>
+                            <>
+                                <Button style={{ backgroundColor: "rgb(0, 0, 0)", color: "white", fontWeight: 600 }} onClick={() => setExpand(!expand)}>
+                                    {`Your score: ${Math.floor(userPuzzleEntry.score)}`.toUpperCase()}
+                                </Button>
+
+                                {expand && wordsLoaded && (
+                                    <DailyPuzzleFoundWords correctWords={words} />
+                                )}
+
+                                {expand && !wordsLoaded && (
+                                    <CircularProgress />
+                                )}
+                            </>
                         )}
                         {leaderboard.map((entry, index) => (
                             <div key={index}>

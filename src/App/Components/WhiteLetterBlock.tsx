@@ -3,9 +3,10 @@ interface WhiteLetterBlockProps {
     letter: string;
     blockDimension: number;
     highlight?: boolean;
+    border?: boolean;
 }
 
-export function WhiteLetterBlock({letter, blockDimension, highlight}: WhiteLetterBlockProps) {
+export function WhiteLetterBlock({letter, blockDimension, highlight, border}: WhiteLetterBlockProps) {
     const style = {
         width: `${blockDimension}px`,
         height: `${blockDimension}px`,
@@ -16,6 +17,7 @@ export function WhiteLetterBlock({letter, blockDimension, highlight}: WhiteLette
         justifyContent: "center",
         background: "white",   // Optional: Border style
         fontSize: `${blockDimension / 2}px`, // Dynamically scale font size
+        border: border ? "3px solid black" : "none",
         fontWeight: "bold",
         color: highlight ? "rgba(255,149,0,255)" : "black",
     };

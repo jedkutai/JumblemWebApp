@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { DailyPuzzleEntryModel, UserModel, WordModel } from "../../../Background/Models";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { HSpacer, HStack, VStack } from "../../../ReactSwiftly";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
 import { FetchService } from "../../../Background/Service";
+import DailyPuzzleFoundWords from "./DailyPuzzleFoundWords";
 
 enum ViewState {
     loading,
@@ -25,8 +26,10 @@ export default function LeaderboardEntry({
     passedUser
 }: LeaderBoardEntryProps) {
     const [player, setPlayer] = useState<UserModel | null>(null);
-    // const [correctWords, setCorrectWords] = useState<Record<string, [WordModel, number]>>({});
     const [viewState, setViewState] = useState<ViewState>(ViewState.hidden);
+    const [wordsLoaded, setWordsLoaded] = useState(false);
+    const [expand, setExpand] = useState(false); // first expand should load words
+    const [words, setWords] = useState<Record<string, [WordModel, number]>>({});
     const dimensionDivider = 9 * 1.75;
     const upperBound = 650;
     const { minDimension } = useWindowSize();
@@ -34,6 +37,13 @@ export default function LeaderboardEntry({
     useEffect(() => {
         onAppearActions();
     }, []);
+
+    useEffect(() => {
+        fetchWords();
+    }, [expand]);
+
+
+
 
     async function onAppearActions() {
         // fetch player
@@ -45,58 +55,70 @@ export default function LeaderboardEntry({
         }
     }
 
+    async function fetchWords() {
+        if (wordsLoaded) {
+            return;
+        }
+        try {
+            let fetchedWords: Record<string, [WordModel, number]> = {};
+            for (const word of entry.words) {
+                if (Object.keys(fetchedWords).includes(word)) {
+                    fetchedWords[word][1] += 1;
+                } else {
+                    const wordModel = await FetchService.fetchWordModelByWord(word);
+                    fetchedWords[word] = [wordModel, 1];
+                }
+            }
+            setWords(fetchedWords);
+            setWordsLoaded(true);
+        } catch(error) {
+            console.error("Failed to fetch words", error);
+        }
+    }
+
     const style = {
         section: {
             backgroundImage:
                 "linear-gradient(to bottom right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05))",
             borderRadius: "15px",
-            border: "3px solid rgba(0, 0, 0, 0.1)",
+            border: passedUser.id == entry.userId ? "3px solid rgba(219, 112, 246, 0.83)" : "3px solid rgba(0, 0, 0, 0.1)",
             padding: "20px",
-            // marginBottom: "20px",
             width: `${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px`,
-            // maxWidth: `${Math.min(400, minDimension * 0.8)}px`,
         },
     }
 
     return (
-        <Button>
+        <Button onClick={() => setExpand(!expand)}>
             <Box style={style.section}>
-                <HStack>
-                    <>
-                        <Typography variant="h6" sx={{ color: 'black', textTransform: "none"}}>{position > 0 ? position : "-"}</Typography>
+                <VStack>
+                    <HStack>
+                        <>
+                            <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{position > 0 ? position : "-"}</Typography>
 
-                        <HSpacer />
-                        {(player && player.usernameDisplayed) ? (
-                            <Typography variant="h6" sx={{ color: 'black', textTransform: "none"}}>{DisplayFunctions.displayUsername(player.usernameDisplayed)}</Typography>
-                        ) : (
-                            <Typography variant="h6" sx={{ color: 'black', textTransform: "none"}}>{"Loading..."}</Typography>
-                        )}
+                            <HSpacer />
+                            {(player && player.usernameDisplayed) ? (
+                                <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{DisplayFunctions.displayUsername(player.usernameDisplayed)}</Typography>
+                            ) : (
+                                <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{"Loading..."}</Typography>
+                            )}
 
-                        <HSpacer />
+                            <HSpacer />
 
-                        <Typography variant="h6" sx={{ color: 'black', textTransform: "none"}}>{Math.floor(entry.score)}</Typography>
-                    </>
+                            <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{Math.floor(entry.score)}</Typography>
+                        </>
 
-                </HStack>
-            </Box>
-            {/* <HStack width={`${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px`}>
+                    </HStack>
 
-                <>
-                    <Typography variant="h4">{position > 0 ? position : "-"}</Typography>
-
-                    <HSpacer />
-                    {(player && player.username) ? (
-                        <Typography variant="h4">{DisplayFunctions.displayUsername(player.username)}</Typography>
-                    ) : (
-                        <Typography variant="h4">{"Loading..."}</Typography>
+                    {expand &&  wordsLoaded && (
+                        <DailyPuzzleFoundWords correctWords={words} />
                     )}
 
-                    <HSpacer />
+                    {expand && !wordsLoaded && (
+                        <CircularProgress/>
+                    )}
 
-                    <Typography variant="h4">{Math.floor(entry.score)}</Typography>
-                </>
-
-            </HStack> */}
+                </VStack>
+            </Box>
         </Button>
     )
 }

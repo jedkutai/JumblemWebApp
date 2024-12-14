@@ -37,8 +37,8 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
     const [winningGridSpots, setWinningGridSpots] = useState<string[]>([]);
     const [view, setView] = useState<"HomeView" | "PlayCasualGameView">("PlayCasualGameView");
     const { width, height, minDimension } = useWindowSize();
-    const dimensionDivider = 9 * 1.75;
-    const upperBound = 650;
+    // const dimensionDivider = 9 * 1.75;
+    // const upperBound = 650;
 
     const [movesCopy, setMovesCopy] = useState<MoveModel[]>([]);
     const [movesDict, setMovesDict] = useState<Record<string, MoveModel>>({});
@@ -169,11 +169,11 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
 
     }, [userTimeExpired]);
 
-    const style = {
-        maxWidth: "auto",
-        maxHeight: `${Math.max(minDimension, upperBound) / dimensionDivider}px`,
-        marginBottom: "20px",
-    }
+    // const style = {
+    //     maxWidth: "auto",
+    //     maxHeight: `${Math.max(minDimension, upperBound) / dimensionDivider}px`,
+    //     marginBottom: "20px",
+    // }
 
     function gameManagerFunction() {
         if (movesCopy.length > 0) {
@@ -204,7 +204,6 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
             if (lastMove) {
                 setWordCheckComplete(false);
                 const wordResults = await GameFunctions.checkWords(lastMove, checkMovesDict);
-                // console.log(`Word Results: ${wordResults.length}\n`);
                 let winningSpots: Set<string> = new Set();
                 let updatedWinningWords = [...winningWords]; // Local copy
 

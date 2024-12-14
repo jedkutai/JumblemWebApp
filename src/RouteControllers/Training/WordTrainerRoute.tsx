@@ -1,11 +1,6 @@
-import { CircularProgress } from "@mui/material";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import WordTrainerView from "../../App/Views/WordTrainer/WordTrainerView";
 import { UserModel } from "../../Background/Models";
-import { FetchService } from "../../Background/Service";
-import app from "../../firebase";
 import { View } from "../../ReactSwiftly";
 
 enum PageState {
@@ -19,55 +14,39 @@ export default function WordTrainerRoute() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        onAppearActions();
+        // onAppearActions();
     }, []);
 
-    async function onAppearActions() {
-        const auth = getAuth(app);
+    // async function onAppearActions() {
+    //     const auth = getAuth(app);
 
-        const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-            if (firebaseUser) {
-                try {
-                    const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
+    //     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+    //         if (firebaseUser) {
+    //             try {
+    //                 const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
 
-                    if (fetchedUser.username) {
-                        setUser(fetchedUser);
-                        setPageState(PageState.loaded);
-                    } else {
-                        navigate("/home");
-                    }
-                } catch (error) {
-                    setUser(null);
-                    navigate("/");
-                }
-            } else {
-                setUser(null);
-                setPageState(PageState.loaded);
-            }
-        });
+    //                 if (fetchedUser.username) {
+    //                     setUser(fetchedUser);
+    //                     setPageState(PageState.loaded);
+    //                 } else {
+    //                     navigate("/home");
+    //                 }
+    //             } catch (error) {
+    //                 setUser(null);
+    //                 navigate("/");
+    //             }
+    //         } else {
+    //             setUser(null);
+    //             setPageState(PageState.loaded);
+    //         }
+    //     });
 
-        return () => unsubscribe();
-    }
+    //     return () => unsubscribe();
+    // }
 
-    switch (pageState) {
-        case PageState.loading:
-            return (
-                <View>
-                    <CircularProgress />
-                </View>
-            );
-
-        case PageState.loaded:
-            if (user) {
-                return (
-                    <WordTrainerView passedUser={user} />
-                );
-            } else {
-                return (
-                    <View><h1>WordTrainerView</h1></View>
-                )
-            }
-            break;
-
-    }
+    return (
+        <View>
+            <h2>Word Trainer App Store Preview</h2>
+        </View>
+    )
 }

@@ -32,16 +32,16 @@ export function ColoredWord({ word }: ColoredWordProps) {
     return (
         <>
             {wordRarity == WordRarity.common && (
-                <h2 style={{ color: "gray", margin: 0, padding: 0 }}>{word.word}</h2>
+                <h2 style={{ color: "gray", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
             )}
             {wordRarity == WordRarity.uncommon && (
-                <h2 style={{ color: "black", margin: 0, padding: 0 }}>{word.word}</h2>
+                <h2 style={{ color: "black", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
             )}
             {wordRarity == WordRarity.rare && (
-                <h2 style={{ color: "purple", margin: 0, padding: 0 }}>{word.word}</h2>
+                <h2 style={{ color: "purple", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
             )}
             {wordRarity == WordRarity.legendary && (
-                <h2 style={{ color: "red", margin: 0, padding: 0 }}>{word.word}</h2>
+                <h2 style={{ color: "red", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
             )}
         </>
     );

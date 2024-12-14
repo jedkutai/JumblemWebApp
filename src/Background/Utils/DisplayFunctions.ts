@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export class DisplayFunctions {
 
     static displayUsername(usernameDisplayed?: string): string {
@@ -8,5 +10,21 @@ export class DisplayFunctions {
         }
 
         return result;
+    }
+
+    static displayUserDate(time: Timestamp): string {
+        const creationDate = new Date(time.toDate());
+        return creationDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+    }
+
+    static displayPuzzleDate(time: Timestamp): string {
+        const puzzleDate = new Date(time.toDate());
+        return puzzleDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+    }
+
+    static nextPuzzleDate(time: Timestamp): string {
+        const nextPuzzleDate = new Date(time.toDate());
+        nextPuzzleDate.setHours(nextPuzzleDate.getHours() + 24);
+        return nextPuzzleDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric" });
     }
 }

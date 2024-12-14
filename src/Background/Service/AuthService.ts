@@ -40,7 +40,6 @@ export class AuthService {
       // Add the username to the `publicUsernames` collection
       await setDoc(doc(db, 'publicUsernames', user.id), publicUsername);
   
-      console.log('Username successfully set.');
     } catch (error) {
     }
   }
@@ -64,13 +63,11 @@ export class AuthService {
     const auth = getAuth();
     const user = auth.currentUser;
     if (!user) return false;
-    console.log("Verified:", user.emailVerified);
     return user.emailVerified;
   }
 
 
   static async login(email: string, password: string): Promise<UserModel | null> {
-    console.log("AuthService.login called with email:", email);
     const auth = getAuth();
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);

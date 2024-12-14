@@ -37,19 +37,19 @@ export default function DailyPuzzleFoundWords({ correctWords }: DailyPuzzleFound
                 const [wordModel, count] = correctWords[word];
                 const wordRarity = getWordRarity(wordModel);
                 return (
-                    <HStack>
+                    <HStack key={word}>
                         <ColoredWord word={wordModel} />
                         {wordRarity == WordRarity.common && (
-                            <Typography>{`[25 x ${count}]`}</Typography>
+                            <Typography style={{ color: "black", fontWeight: 600 }}>{count > 1 ? `25 x ${count}` : "25"}</Typography>
                         )}
                         {wordRarity == WordRarity.uncommon && (
-                            <Typography>{`[50 x ${count}]`}</Typography>
+                            <Typography style={{ color: "black", fontWeight: 600 }}>{count > 1 ? `50 x ${count}` : "50"}</Typography>
                         )}
                         {wordRarity == WordRarity.rare && (
-                            <Typography>{`[75 x ${count}]`}</Typography>
+                            <Typography style={{ color: "black", fontWeight: 600 }}>{count > 1 ? `75 x ${count}` : "75"}</Typography>
                         )}
                         {wordRarity == WordRarity.legendary && (
-                            <Typography>{`[100 x ${count}]`}</Typography>
+                            <Typography style={{ color: "black", fontWeight: 600 }}>{count > 1 ? `100 x ${count}` : "100"}</Typography>
                         )}
                     </HStack>
                 );

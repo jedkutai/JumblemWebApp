@@ -237,7 +237,6 @@ export default function PlayPrivateGameView({
             if (lastMove) {
                 setWordCheckComplete(false);
                 const wordResults = await GameFunctions.checkWords(lastMove, checkMovesDict);
-                // console.log(`Word Results: ${wordResults.length}\n`);
                 let winningSpots: Set<string> = new Set();
                 let updatedWinningWords = [...winningWords]; // Local copy
 

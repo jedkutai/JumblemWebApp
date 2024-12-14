@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
-import { UserModel } from "./Background/Models";
-import { FetchService } from "./Background/Service";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import app from "./firebase";
 import AppLoadingView from "./App/Views/AppOpen/AppLoadingView";
 import AppOpenView from "./App/Views/AppOpen/AppOpenView";
 import { useNavigate } from "react-router-dom";
-// import HomeView from "./App/Views/Body/HomeView";
 
 enum ContentViewPageState {
   loading,

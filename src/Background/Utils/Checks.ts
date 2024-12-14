@@ -26,7 +26,6 @@ export class Checks {
   // Check username availability in Firestore
   static async isUsernameAvailable(username: string): Promise<boolean> {
     if (!this.isValidUsername(username)) {
-      console.log("Username isnt legit");
       return false;
     } else {
       try {
@@ -34,7 +33,6 @@ export class Checks {
         const usernamesRef = collection(db, "publicUsernames");
         const usernameQuery = query(usernamesRef, where("userNameLowercased", "==", username.toLowerCase()));
         const snapshot = await getDocs(usernameQuery);
-        console.log(`Username isnt taken: ${snapshot.empty}`);
         return snapshot.empty; // If no documents are found, the username is available
       } catch (error) {
         return false;
