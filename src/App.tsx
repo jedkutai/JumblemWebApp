@@ -10,6 +10,7 @@ import DailyPuzzleRoute from './RouteControllers/Training/DailyPuzzleRoute';
 import HowToDailyPuzzleRoute from './RouteControllers/HowTo/HowToDailyPuzzleRoute';
 import HowToVersusRoute from './RouteControllers/HowTo/HowToVersusRoute';
 import ProfileRoute from './RouteControllers/Root/ProfileRoute';
+import PeopleRoute from './RouteControllers/More/PeopleRoute';
 
 
 function App() {
@@ -39,8 +40,7 @@ function App() {
         <Route path="/howto/versus" element={<HowToVersusRoute/>}/>
 
         // more
-        // friends
-        // settings
+        <Route path="/people" element={<PeopleRoute/>}/>
         
 
       </Routes>
