@@ -30,8 +30,8 @@ export default function ProfileHeader({
         <Box style={style.section}>
             <VStack spacing="10px">
                 <HStack spacing="10px">
-                    <Typography variant="h2" style={{ color:"white", fontWeight: "bolder"}}>{passedUser.usernameDisplayed ?? "N/A"}</Typography>
-                    <Typography variant="h4" style={{ color:"gray", fontWeight: "bold"}}>{`(${passedUser.standardRating})`}</Typography>
+                    <Typography variant="h5" style={{ color:"white", fontWeight: "bolder"}}>{DisplayFunctions.displayUsername(passedUser.usernameDisplayed) ?? "N/A"}</Typography>
+                    <Typography variant="h6" style={{ color:"gray", fontWeight: "bold"}}>{`(${passedUser.standardRating})`}</Typography>
                 </HStack>
                 <Typography variant="h6" style={{ color:"gray", fontWeight: "bold"}}>{`Est. ${DisplayFunctions.displayUserDate(passedUser.timestamp)}`}</Typography>
             </VStack>

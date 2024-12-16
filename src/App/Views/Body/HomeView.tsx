@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { UserModel } from "../../../Background/Models";
-import { getAuth, signOut } from "firebase/auth";
 import MissingUsernameView from "../AppOpen/MissingUsernameView";
 import { HStack, View, VStack } from "../../../ReactSwiftly";
 import { Box, Button, Typography } from "@mui/material";
@@ -160,10 +159,9 @@ export default function HomeView({
 
                 </Box>
 
-                {/* <Button variant="contained" onClick={handleLogout}>Logout</Button> */}
 
                 <HStack>
-                    <Button variant="contained" style={styles.moreButton}>
+                    <Button variant="contained" style={styles.moreButton} onClick={() => navigate("/people")}>
                         People
                     </Button>
 

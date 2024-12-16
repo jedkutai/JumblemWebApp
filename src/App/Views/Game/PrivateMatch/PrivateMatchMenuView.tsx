@@ -6,12 +6,13 @@ import { Box, Button, Typography } from "@mui/material";
 import StartPrivateGameView from "./StartPrivateGameView";
 import JoinPrivateGameView from "./JoinPrivateGameView";
 import { useNavigate } from "react-router-dom";
+import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 
 interface PrivateMatchMenuViewProps {
     passedUser: UserModel;
 }
 
-export default function PrivateMatchMenuView({passedUser}: PrivateMatchMenuViewProps) {
+export default function PrivateMatchMenuView({ passedUser }: PrivateMatchMenuViewProps) {
     const [view, setView] = useState<"Menu" | "Create" | "Join">("Menu");
     const { minDimension } = useWindowSize();
     const navigate = useNavigate();
@@ -61,17 +62,20 @@ export default function PrivateMatchMenuView({passedUser}: PrivateMatchMenuViewP
         },
     }
 
-    switch(view) {
+    switch (view) {
         case "Create":
-            return (<StartPrivateGameView passedUser={passedUser}/>);
+            return (<StartPrivateGameView passedUser={passedUser} />);
         case "Join":
-            return (<JoinPrivateGameView passedUser={passedUser}/>);
+            return (<JoinPrivateGameView passedUser={passedUser} />);
     }
 
     return (
         <View>
             <VStack>
-            <Box style={styles.section}>
+                <Button onClick={() => navigate("/home")}>
+                    <JumblemLogoSimple />
+                </Button>
+                <Box style={styles.section}>
                     <Typography style={styles.sectionTitle}>PRIVATE MATCH</Typography>
                     <Box style={styles.buttonContainer}>
                         <Button variant="contained" style={styles.button} onClick={() => setView("Create")}>
@@ -83,14 +87,6 @@ export default function PrivateMatchMenuView({passedUser}: PrivateMatchMenuViewP
                     </Box>
                 </Box>
 
-                <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => navigate("/home")}
-                    style={{ marginTop: "10px" }}
-                >
-                    Home
-                </Button>
             </VStack>
         </View>
     );

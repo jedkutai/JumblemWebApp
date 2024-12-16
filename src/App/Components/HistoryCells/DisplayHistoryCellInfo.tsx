@@ -43,14 +43,15 @@ export default function DisplayHistoryCellInfo({
         <HStack>
             <>
                 {otherUser ? (
-                    <>
-                        {passedPlayerId == passedUser.id ? (
-                            <Typography>You</Typography>
-                        ) : (
-                            <Typography>{DisplayFunctions.displayUsername(otherUser.usernameDisplayed)}</Typography>
-                        )}
+                    <Typography>{DisplayFunctions.displayUsername(otherUser.usernameDisplayed)}</Typography>
+                    // <>
+                    //     {passedPlayerId == passedUser.id ? (
+                    //         <Typography>You</Typography>
+                    //     ) : (
+                    //         <Typography>{DisplayFunctions.displayUsername(otherUser.usernameDisplayed)}</Typography>
+                    //     )}
 
-                    </>
+                    // </>
                 ) : (
                     <Typography>N/A</Typography>
                 )}

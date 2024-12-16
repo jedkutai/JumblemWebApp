@@ -11,6 +11,8 @@ import HowToDailyPuzzleRoute from './RouteControllers/HowTo/HowToDailyPuzzleRout
 import HowToVersusRoute from './RouteControllers/HowTo/HowToVersusRoute';
 import ProfileRoute from './RouteControllers/Root/ProfileRoute';
 import PeopleRoute from './RouteControllers/More/PeopleRoute';
+import FindPeopleRoute from './RouteControllers/More/FindPeopleRoute';
+import SpecificPlayerRoute from './RouteControllers/OpenSpecific/SpecificPlayerRoute';
 
 
 function App() {
@@ -41,6 +43,10 @@ function App() {
 
         // more
         <Route path="/people" element={<PeopleRoute/>}/>
+        <Route path="/findpeople" element={<FindPeopleRoute/>}/>
+
+        // open specific
+        <Route path="/people/:username" element={<SpecificPlayerRoute/>}/>
         
 
       </Routes>

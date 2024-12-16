@@ -117,4 +117,37 @@ export class FetchService {
     const snapshot = await getDocs(followedUsersQuery);
     return snapshot.docs.map(doc => doc.data() as FollowModel);
   }
+
+  static async fetchUserByUsername(username: string): Promise<UserModel | null> {
+    const usernameLowercased = username.trim().toLowerCase();
+    
+    if (usernameLowercased.length > 0) {
+      const db = getFirestore();
+      const usersRef = collection(db, "users");
+      const usernameQuery = query(usersRef, where("username", "==", usernameLowercased));
+      const snapshot = await getDocs(usernameQuery);
+      
+      if (!snapshot.empty) {
+        const first = snapshot.docs[0];
+        return first.data() as UserModel;
+      }
+    }
+
+    return null;
+    
+  }
+
+  static async checkIfUserAFollowsUserB(userA: UserModel, userB: UserModel): Promise<boolean> {
+    const db = getFirestore();
+    const followRef = collection(db, "follows");
+    const followedUsersQuery = query(
+      followRef,
+      where("userId", "==", userA.id),
+      where("userToFollowId", "==", userB.id),
+      limit(1)
+    );
+    const snapshot = await getDocs(followedUsersQuery);
+    return !snapshot.empty;
+    
+  }
 }

@@ -21,7 +21,7 @@ export default function PeopleView({ passedUser }: PeopleViewProps) {
     const [followedUsers, setFollowedUsers] = useState<UserModel[]>([]);
     const [viewState, setViewState] = useState<ViewState>(ViewState.loading);
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         onAppearActions();
     }, []);
@@ -35,7 +35,7 @@ export default function PeopleView({ passedUser }: PeopleViewProps) {
                 const user = await FetchService.fetchUserByUid(follow.userToFollowId);
                 fetchedUsers.push(user);
             }
-            fetchedUsers.sort((a, b) => a.standardRating - b.standardRating);
+            fetchedUsers.sort((a, b) => b.standardRating - a.standardRating);
             setFollowedUsers(fetchedUsers);
             setViewState(ViewState.loaded);
         } catch {
@@ -64,15 +64,15 @@ export default function PeopleView({ passedUser }: PeopleViewProps) {
                             <HStack key={index}>
                                 <Typography style={{ color: "gray", width: "50px", fontWeight: "bolder" }}>{index + 1}</Typography>
 
-                                <ProfileHeader passedUser={user} />
+                                <Button onClick={() => navigate(`/people/${user.username}`)}>
+                                    <ProfileHeader passedUser={user} />
+                                </Button>
                             </HStack>
                         ))}
 
-                        {followedUsers.length === 0 && (
-                            <Button variant="text" color="primary">
-                                Find People
-                            </Button>
-                        )}
+                        <Button variant="text" color="primary" onClick={() => navigate("/findpeople")}>
+                            {followedUsers.length === 0 ? "Find People" : "Find More People"}
+                        </Button>
                     </>
                 )}
             </VStack>
