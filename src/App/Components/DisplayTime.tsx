@@ -8,7 +8,7 @@ interface DisplayTimeProps {
 export const DisplayTime: React.FC<DisplayTimeProps> = ({ timeRemaining }) => {
   const formatTime = (): string => {
     if (timeRemaining <= 0) {
-      return "0";
+      return "-";
     }
 
     if (timeRemaining > 10) {

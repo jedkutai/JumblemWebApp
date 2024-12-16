@@ -14,7 +14,7 @@ export class FetchService {
     const userDoc = doc(db, "users", uid);
     const snapshot = await getDoc(userDoc);
     if (!snapshot.exists()) {
-      throw new Error(`User with ID ${uid} not found.`);
+      throw new Error(`User not found.`);
     }
     return snapshot.data() as UserModel;
   }
@@ -149,5 +149,15 @@ export class FetchService {
     const snapshot = await getDocs(followedUsersQuery);
     return !snapshot.empty;
     
+  }
+
+  static async fetchGameById(gameId: string): Promise<GameModel> {
+    const db = getFirestore();
+    const userDoc = doc(db, "finishedGames", gameId);
+    const snapshot = await getDoc(userDoc);
+    if (!snapshot.exists()) {
+      throw new Error(`Game not found.`);
+    }
+    return snapshot.data() as GameModel;
   }
 }

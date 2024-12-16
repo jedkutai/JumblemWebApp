@@ -1,9 +1,10 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { UserModel, GameModel } from "../../../Background/Models";
 import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import { VStack, HStack } from "../../../ReactSwiftly";
 import DisplayHistoryCellInfo from "./DisplayHistoryCellInfo";
+import { useNavigate } from "react-router-dom";
 
 interface PrivateHistoryCellProps {
     passedUser: UserModel;
@@ -15,7 +16,7 @@ export default function PrivateHistoryCell({ passedGame, passedUser }: PrivateHi
     const upperBound = 650;
     const dimensionDivider = 9 * 1.75;
     const { minDimension } = useWindowSize();
-
+    const navigate = useNavigate();
 
     const style = {
         section: {
@@ -24,31 +25,39 @@ export default function PrivateHistoryCell({ passedGame, passedUser }: PrivateHi
             padding: "20px",
             width: `${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px`,
         },
+
+        text: {
+            color: "black",
+            fontWeight: "bolder",
+            textTransform: "none"
+        }
     }
 
     return (
-        <Box style={style.section}>
-            <VStack>
-                <Typography style={{ color: "black", fontWeight: "bolder" }}>{`Private: ${DisplayFunctions.displayGameDate(passedGame.timestamp)}`}</Typography>
+        <Button onClick={() => navigate(`/games/${passedGame.id}`)}>
+            <Box style={style.section}>
+                <VStack>
+                    <Typography sx={style.text}>{`Private: ${DisplayFunctions.displayGameDate(passedGame.timestamp)}`}</Typography>
 
-                <HStack>
-                    <DisplayHistoryCellInfo
-                        passedUser={passedUser}
-                        passedPlayerId={passedUser.id}
-                        passedRating={undefined}
-                        passedRatingChange={undefined}
-                    />
+                    <HStack>
+                        <DisplayHistoryCellInfo
+                            passedUser={passedUser}
+                            passedPlayerId={passedUser.id}
+                            passedRating={undefined}
+                            passedRatingChange={undefined}
+                        />
 
-                    <Typography style={{ color: "black" }}>vs.</Typography>
+                        <Typography sx={{ color: "black", textTransform: "none" }}>vs.</Typography>
 
-                    <DisplayHistoryCellInfo
-                        passedUser={passedUser}
-                        passedPlayerId={passedUser.id == passedGame.playerOneId ? passedGame.playerTwoId : passedGame.playerOneId}
-                        passedRating={undefined}
-                        passedRatingChange={undefined}
-                    />
-                </HStack>
-            </VStack>
-        </Box>
+                        <DisplayHistoryCellInfo
+                            passedUser={passedUser}
+                            passedPlayerId={passedUser.id == passedGame.playerOneId ? passedGame.playerTwoId : passedGame.playerOneId}
+                            passedRating={undefined}
+                            passedRatingChange={undefined}
+                        />
+                    </HStack>
+                </VStack>
+            </Box>
+        </Button>
     );
 }

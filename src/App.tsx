@@ -13,6 +13,7 @@ import ProfileRoute from './RouteControllers/Root/ProfileRoute';
 import PeopleRoute from './RouteControllers/More/PeopleRoute';
 import FindPeopleRoute from './RouteControllers/More/FindPeopleRoute';
 import SpecificPlayerRoute from './RouteControllers/OpenSpecific/SpecificPlayerRoute';
+import SpecificGameRoute from './RouteControllers/OpenSpecific/SpecificGameRoute';
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
 
         // open specific
         <Route path="/people/:username" element={<SpecificPlayerRoute/>}/>
+        <Route path="/games/:gameId" element={<SpecificGameRoute/>}/>
         
 
       </Routes>

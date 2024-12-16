@@ -20,6 +20,12 @@ export default function DisplayHistoryCellInfo({
     passedRatingChange
 }: DisplayHistoryCellInfoProps) {
     const [otherUser, setOtherUser] = useState<UserModel | null>(null);
+    const styles = {
+        textStyle: {
+            color: "black",
+            textTransform: "none"
+        }
+    }
     useEffect(() => {
         onAppearActions();
     }, []);
@@ -43,22 +49,14 @@ export default function DisplayHistoryCellInfo({
         <HStack>
             <>
                 {otherUser ? (
-                    <Typography>{DisplayFunctions.displayUsername(otherUser.usernameDisplayed)}</Typography>
-                    // <>
-                    //     {passedPlayerId == passedUser.id ? (
-                    //         <Typography>You</Typography>
-                    //     ) : (
-                    //         <Typography>{DisplayFunctions.displayUsername(otherUser.usernameDisplayed)}</Typography>
-                    //     )}
-
-                    // </>
+                    <Typography sx={styles.textStyle}>{DisplayFunctions.displayUsername(otherUser.usernameDisplayed)}</Typography>
                 ) : (
-                    <Typography>N/A</Typography>
+                    <Typography sx={styles.textStyle}>N/A</Typography>
                 )}
 
                 {passedRating && passedRatingChange ? (
                     <>
-                        <Typography>{passedRating}</Typography>
+                        <Typography sx={styles.textStyle}>{passedRating}</Typography>
 
                         {passedRatingChange > 0 && (
                             <Typography style={{ color: "green" }}>{`+${passedRatingChange}`}</Typography>
