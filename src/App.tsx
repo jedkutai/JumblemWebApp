@@ -14,6 +14,7 @@ import PeopleRoute from './RouteControllers/More/PeopleRoute';
 import FindPeopleRoute from './RouteControllers/More/FindPeopleRoute';
 import SpecificPlayerRoute from './RouteControllers/OpenSpecific/SpecificPlayerRoute';
 import SpecificGameRoute from './RouteControllers/OpenSpecific/SpecificGameRoute';
+import SpecificWordRoute from './RouteControllers/OpenSpecific/SpecificWordRoute';
 
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
         // open specific
         <Route path="/people/:username" element={<SpecificPlayerRoute/>}/>
         <Route path="/games/:gameId" element={<SpecificGameRoute/>}/>
+        <Route path="/dictionary/:word" element={<SpecificWordRoute/>}/>
         
 
       </Routes>

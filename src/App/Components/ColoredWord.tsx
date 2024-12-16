@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import { WordModel } from "../../Background/Models";
 
 enum WordRarity {
@@ -28,21 +29,27 @@ export function ColoredWord({ word }: ColoredWordProps) {
         return wordType;
     }
 
+    function getDefinition() {
+        window.open(`/dictionary/${word.word}`, "_blank");
+    }
+
 
     return (
-        <>
-            {wordRarity == WordRarity.common && (
-                <h2 style={{ color: "gray", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
-            )}
-            {wordRarity == WordRarity.uncommon && (
-                <h2 style={{ color: "black", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
-            )}
-            {wordRarity == WordRarity.rare && (
-                <h2 style={{ color: "purple", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
-            )}
-            {wordRarity == WordRarity.legendary && (
-                <h2 style={{ color: "red", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
-            )}
-        </>
+        <Button onClick={getDefinition}>
+            <>
+                {wordRarity == WordRarity.common && (
+                    <h2 style={{ color: "gray", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
+                )}
+                {wordRarity == WordRarity.uncommon && (
+                    <h2 style={{ color: "black", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
+                )}
+                {wordRarity == WordRarity.rare && (
+                    <h2 style={{ color: "purple", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
+                )}
+                {wordRarity == WordRarity.legendary && (
+                    <h2 style={{ color: "red", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
+                )}
+            </>
+        </Button>
     );
 }

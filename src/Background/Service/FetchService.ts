@@ -7,6 +7,8 @@ import { PartialWordModel } from "../Models/PartialWordModel";
 import { WordModel } from "../Models/WordModel";
 import { FollowModel } from "../Models/FollowModel";
 import { DayFunctions } from "../Utils/DayFunctions"; // Assuming DayFunctions provides date utilities.
+import { DictionaryWordModel } from "../Models";
+import axios from "axios";
 
 export class FetchService {
   static async fetchUserByUid(uid: string): Promise<UserModel> {
@@ -160,4 +162,32 @@ export class FetchService {
     }
     return snapshot.data() as GameModel;
   }
+
+  static async fetchWordDefinition(word: string): Promise<DictionaryWordModel[] | null> {
+    try {
+        const response = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+        const data = response.data;
+
+        // Transform the response into your models
+        const words: DictionaryWordModel[] = data.map((entry: any) => ({
+            word: entry.word,
+            phonetics: entry.phonetics.map((phonetic: any) => ({
+                text: phonetic.text,
+                audio: phonetic.audio,
+            })),
+            meanings: entry.meanings.map((meaning: any) => ({
+                partOfSpeech: meaning.partOfSpeech,
+                definitions: meaning.definitions.map((definition: any) => ({
+                    definition: definition.definition,
+                    example: definition.example,
+                })),
+            })),
+        }));
+
+        return words;
+    } catch (error) {
+        console.error("Error fetching word definition:", error);
+        throw new Error("Failed to fetch word definition.");
+    }
+}
 }
