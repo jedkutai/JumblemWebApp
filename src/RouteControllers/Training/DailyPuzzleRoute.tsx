@@ -7,6 +7,7 @@ import { UserModel } from "../../Background/Models";
 import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
 import { View } from "../../ReactSwiftly";
+import GuestLoadDailyPuzzleView from "../../App/GuestViews/DailyPuzzle/GuestLoadDailyPuzzleView";
 
 enum PageState {
     loading,
@@ -32,10 +33,9 @@ export default function DailyPuzzleRoute() {
 
                     if (fetchedUser.username) {
                         setUser(fetchedUser);
-                        setPageState(PageState.loaded);
-                    } else {
-                        navigate("/home");
+                        
                     }
+                    setPageState(PageState.loaded);
                 } catch (error) {
                     setUser(null);
                     navigate("/");
@@ -64,7 +64,7 @@ export default function DailyPuzzleRoute() {
                 );
             } else {
                 return (
-                    <View><h1>GuestDailyPuzzleView</h1></View>
+                    <GuestLoadDailyPuzzleView />
                 )
             }
             break;

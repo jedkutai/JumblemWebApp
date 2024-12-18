@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { UserModel } from "../../Background/Models";
 import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
-import { CircularProgress } from "@mui/material";
-import { View } from "../../ReactSwiftly";
+import { Button, CircularProgress, Typography } from "@mui/material";
+import { HStack, View, VStack } from "../../ReactSwiftly";
 import PrivateMatchMenuView from "../../App/Views/Game/PrivateMatch/PrivateMatchMenuView";
+import JumblemLogoSimple from "../../App/Components/JumblemLogoSimple";
 
 enum PageState {
     loading,
@@ -64,7 +65,20 @@ export default function PrivateGameRoute() {
                 );
             } else {
                 return (
-                    <View><h1>GuestPrivateMatchMenuView</h1></View>
+                    <View>
+                        <VStack>
+                            <Button onClick={() => navigate("/home")}>
+                                <JumblemLogoSimple />
+                            </Button>
+
+                            <Typography textAlign={"center"}>Login required to play private matches.</Typography>
+
+                            <HStack>
+                                <Button variant="contained" color="secondary" onClick={() => navigate("/login")}>Login</Button>
+                                <Button variant="contained" color="primary">Download</Button>
+                            </HStack>
+                        </VStack>
+                    </View>
                 )
             }
             break;

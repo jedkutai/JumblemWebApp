@@ -17,6 +17,7 @@ import {
   import { UserModel } from "../Models/UserModel";
   import { GameModel } from "../Models/GameModel";
   import { MoveModel } from "../Models/MoveModel";
+import { GameService } from "./GameService";
   
   export class GuestService {
     static async anonymousAccountCreation(): Promise<UserModel | null> {
@@ -41,52 +42,64 @@ import {
       }
     }
   
-    static async findGame(user: UserModel): Promise<GameModel | null> {
-      const db = getFirestore();
-  
-      const gameQuery = query(
-        collection(db, "newGames"),
-        where("gameMode", "==", "casual"),
-        where("matchFound", "==", false),
-        where("playerOneId", "!=", user.id),
-        orderBy("timestamp", "asc"),
-        limit(1)
-      );
-  
-      const snapshot = await getDocs(gameQuery);
-      const games = snapshot.docs.map((doc) => doc.data() as GameModel);
-  
-      if (games.length === 0) return null;
-  
-      const selectedGame = games[0];
-      await updateDoc(doc(db, "newGames", selectedGame.id), { matchFound: true });
-  
-      const updatedGame: GameModel = {
-        ...selectedGame,
-        playerTwoId: user.id,
-        playerTwoRating: user.standardRating,
-        matchFound: true,
-      };
-  
-      await GuestService.getGameUpdate(updatedGame);
-      return updatedGame;
+  static async findGame(user: UserModel): Promise<GameModel | null> {
+    const db = getFirestore();
+    try {
+      await GameService.cleanOldGames();
+    } catch {
+      
     }
-  
-    static async createGame(user: UserModel): Promise<GameModel | null> {
-      const db = getFirestore();
-      const gameRef = doc(collection(db, "newGames"));
-      const newGame: GameModel = {
-        id: gameRef.id,
-        gameMode: "casual",
-        playerOneId: user.id,
-        playerOneRating: user.standardRating,
-        timestamp: Timestamp.now(),
-        matchFound: false
-      };
-  
-      await setDoc(gameRef, newGame);
-      return newGame;
+
+    const queryRef = query(
+      collection(db, "newGames"),
+      where("gameMode", "==", "casual"),
+      where("matchFound", "==", false),
+      where("playerOneId", "!=", user.id),
+      orderBy("timestamp", "asc"),
+      limit(1)
+    );
+
+    const snapshot = await getDocs(queryRef);
+    const snapshotGames = snapshot.docs.map((doc) => doc.data() as GameModel);
+
+    if (snapshotGames.length > 0) {
+      const selectedGame = snapshotGames[0];
+      const gameRef = doc(db, "newGames", selectedGame.id);
+      await updateDoc(gameRef, { matchFound: true });
+
+      let newGame = selectedGame;
+      newGame.playerTwoId = user.id;
+      newGame.playerTwoRating = user.standardRating;
+      newGame.matchFound = true;
+
+      const updatedGame = await this.getGameUpdate(selectedGame);
+
+      if (updatedGame.matchFound && !updatedGame.playerTwoId) {
+        const encodedGame = { ...newGame };
+        await setDoc(gameRef, encodedGame);
+      }
+
+      return selectedGame;
     }
+
+    return null;
+  }
+  
+  static async createGame(user: UserModel): Promise<GameModel | null> {
+    const db = getFirestore();
+    const gameRef = doc(collection(db, "newGames"));
+    const newGame: GameModel = {
+      id: gameRef.id,
+      gameMode: "casual",
+      playerOneId: user.id,
+      playerOneRating: user.standardRating,
+      timestamp: Timestamp.now(),
+      matchFound: false
+    };
+
+    await setDoc(gameRef, newGame);
+    return newGame;
+  }
   
     static async getGameUpdate(game: GameModel): Promise<GameModel> {
       const db = getFirestore();

@@ -1,10 +1,11 @@
-import { Typography, CircularProgress } from "@mui/material";
+import { Typography, CircularProgress, Button } from "@mui/material";
 import { useState, useEffect } from "react";
 import { UserModelGuest } from "../../../Background/Extends/UserModelGuest";
 import { UserModel } from "../../../Background/Models";
 import { FetchService } from "../../../Background/Service";
 import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
 import { VStack, HStack } from "../../../ReactSwiftly";
+import { useNavigate } from "react-router-dom";
 
 interface PreviousGameRatedPlayerHeaderProps {
     playerId: string | undefined,
@@ -21,6 +22,8 @@ export default function PreviousGameRatedPlayerHeader({
 
 }: PreviousGameRatedPlayerHeaderProps) {
     const [player, setPlayer] = useState<UserModel | undefined>(undefined);
+    const navigate = useNavigate();
+    
     useEffect(() => {
         const getPlayer = async (): Promise<void> => {
             if (playerId !== undefined) {
@@ -38,42 +41,30 @@ export default function PreviousGameRatedPlayerHeader({
         getPlayer();
 
     }, []);
+
+    function navigateToPlayer() {
+        if (player) {
+            navigate(`/people/${player.username}`);
+        }
+    }
     return (
 
-        <VStack>
-            {player && rating ? (
-                <VStack spacing="0px" minWidth={`${150}px`} minHeight={`${100}px`} maxWidth={`${150}px`} maxHeight={`${100}px`} border={highlight ? "3px solid white" : "3px solid black"} cornerRadius="20px">
+        <Button onClick={navigateToPlayer}>
+            <VStack>
+                {player && rating ? (
+                    <VStack spacing="0px" minWidth={`${150}px`} minHeight={`${100}px`} maxWidth={`${150}px`} maxHeight={`${100}px`} border={highlight ? "3px solid white" : "3px solid black"} cornerRadius="20px">
 
 
-                    <Typography
-                        variant="h6"
-                        style={{
-                            color: "black",
-                            fontWeight: "bold",
-                            padding: "0px",
-                            margin: "0px"
-                        }}
-                    >{DisplayFunctions.displayUsername(player.usernameDisplayed)}</Typography>
-                    <HStack>
                         <Typography
                             variant="h6"
                             style={{
                                 color: "black",
+                                fontWeight: "bold",
                                 padding: "0px",
                                 margin: "0px"
                             }}
-                        >{`${rating}`}</Typography>
-                        {ratingChange && ratingChange > 0 && (
-                            <Typography
-                                variant="h6"
-                                style={{
-                                    color: "green",
-                                    padding: "0px",
-                                    margin: "0px"
-                                }}
-                            >{`+${ratingChange}`}</Typography>
-                        )}
-                        {ratingChange && ratingChange == 0 && (
+                        >{DisplayFunctions.displayUsername(player.usernameDisplayed)}</Typography>
+                        <HStack>
                             <Typography
                                 variant="h6"
                                 style={{
@@ -81,25 +72,45 @@ export default function PreviousGameRatedPlayerHeader({
                                     padding: "0px",
                                     margin: "0px"
                                 }}
-                            >{`+${ratingChange}`}</Typography>
-                        )}
-                        {ratingChange && ratingChange < 0 && (
-                            <Typography
-                                variant="h6"
-                                style={{
-                                    color: "red",
-                                    padding: "0px",
-                                    margin: "0px"
-                                }}
-                            >{`${ratingChange}`}</Typography>
-                        )}
-                    </HStack>
-                </VStack>
+                            >{`${rating}`}</Typography>
+                            {ratingChange && ratingChange > 0 && (
+                                <Typography
+                                    variant="h6"
+                                    style={{
+                                        color: "green",
+                                        padding: "0px",
+                                        margin: "0px"
+                                    }}
+                                >{`+${ratingChange}`}</Typography>
+                            )}
+                            {ratingChange && ratingChange == 0 && (
+                                <Typography
+                                    variant="h6"
+                                    style={{
+                                        color: "black",
+                                        padding: "0px",
+                                        margin: "0px"
+                                    }}
+                                >{`+${ratingChange}`}</Typography>
+                            )}
+                            {ratingChange && ratingChange < 0 && (
+                                <Typography
+                                    variant="h6"
+                                    style={{
+                                        color: "red",
+                                        padding: "0px",
+                                        margin: "0px"
+                                    }}
+                                >{`${ratingChange}`}</Typography>
+                            )}
+                        </HStack>
+                    </VStack>
 
-            ) : (
-                <CircularProgress />
-            )}
-        </VStack>
+                ) : (
+                    <CircularProgress />
+                )}
+            </VStack>
+        </Button>
     );
 
 }

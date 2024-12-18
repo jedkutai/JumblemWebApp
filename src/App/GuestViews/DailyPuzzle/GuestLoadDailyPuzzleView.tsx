@@ -1,16 +1,13 @@
-import { useEffect, useState } from "react";
-import { DailyPuzzleModel, GridSpotModel, UserModel } from "../../../Background/Models";
-import { View, VSpacer, VStack } from "../../../ReactSwiftly";
-import { Button, CircularProgress, Typography } from "@mui/material";
+import { CircularProgress, Typography, Button } from "@mui/material";
 import { Timestamp } from "firebase/firestore";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { DailyPuzzleModel, GridSpotModel, WordModel } from "../../../Background/Models";
 import { FetchService } from "../../../Background/Service";
 import { DailyPuzzleFunctions } from "../../../Background/Utils/DailyPuzzleFunctions";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
-import HomeView from "../Body/HomeView";
-import DailyPuzzleView from "./DailyPuzzleView";
-import DailyPuzzleLeaderboardView from "./DailyPuzzleLeaderboardView";
+import { View, VStack, VSpacer, HStack } from "../../../ReactSwiftly";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
-import { useNavigate } from "react-router-dom";
 
 enum DailyPuzzleState {
     loading,
@@ -19,26 +16,17 @@ enum DailyPuzzleState {
     failed
 }
 
-interface LoadDailyPuzzleViewProps {
-    passedUser: UserModel;
-}
-
-export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewProps) {
-    const [user, setUser] = useState<UserModel>(passedUser);
+export default function GuestLoadDailyPuzzleView() {
+    const lastPuzzlePlayedId = localStorage.getItem("lastPuzzlePlayedId") ?? "";
+    const [winningWords, setWinningWords] = useState<WordModel[] | null>(null);
     const [dailyPuzzle, setDailyPuzzle] = useState<DailyPuzzleModel | null>(null);
     const [dailyPuzzleState, setDailyPuzzleState] = useState<DailyPuzzleState>(DailyPuzzleState.loading);
     const [dailyPuzzleDict, setDailyPuzzleDict] = useState<Record<string, GridSpotModel>>({});
     const [view, setView] = useState<"LoadDailyPuzzle" | "PlayDailyPuzzle" | "LeaderBoard">("LoadDailyPuzzle");
     const { height, minDimension } = useWindowSize();
     const navigate = useNavigate();
-    
-    const styles = {
-        logo: {
-            maxWidth: `${Math.min(minDimension / 3, 300)}px`,
-            maxHeight: `${Math.min(minDimension / 3, 200)}px`,
-            marginBottom: "20px",
-        },
-    }
+
+
     useEffect(() => {
         onAppearActions();
     }, []);
@@ -48,9 +36,9 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
     }
 
 
-    function navigateToLeaderBoard() {
-        setView("LeaderBoard");
-    }
+    // function navigateToLeaderBoard() {
+    //     setView("LeaderBoard");
+    // }
 
     function nextPuzzleDate(time: Timestamp): string {
         const nextPuzzleDate = new Date(time.toDate());
@@ -61,15 +49,13 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
     async function onAppearActions() {
         setDailyPuzzleState(DailyPuzzleState.loading);
         try {
-            const updatedUser = await FetchService.fetchUserByUid(user.id);
-            setUser(updatedUser);
 
             const fetchedDailyPuzzle = await FetchService.fetchTodaysDailyPuzzle();
             setDailyPuzzle(fetchedDailyPuzzle);
 
             if (fetchedDailyPuzzle) {
                 setDailyPuzzleDict(DailyPuzzleFunctions.signatureToGridDict(fetchedDailyPuzzle.signature));
-                if (user.lastPuzzlePlayedId != null && user.lastPuzzlePlayedId === fetchedDailyPuzzle.id) {
+                if (lastPuzzlePlayedId === fetchedDailyPuzzle.id) {
                     setDailyPuzzleState(DailyPuzzleState.alreadyPlayed);
                     return;
                 } else {
@@ -90,13 +76,15 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
     switch (view) {
         case "PlayDailyPuzzle":
             if (dailyPuzzle) {
-                return (<DailyPuzzleView passedUser={user} dailyPuzzle={dailyPuzzle} dailyPuzzleDict={dailyPuzzleDict} />);
+                <></>
+                // return (<DailyPuzzleView passedUser={user} dailyPuzzle={dailyPuzzle} dailyPuzzleDict={dailyPuzzleDict} />);
             }
             break;
         case "LeaderBoard":
             if (dailyPuzzle) {
                 return (
-                    <DailyPuzzleLeaderboardView passedUser={user} dailyPuzzle={dailyPuzzle}/>
+                    <></>
+                    // <DailyPuzzleLeaderboardView passedUser={user} dailyPuzzle={dailyPuzzle}/>
                 );
             }
             break;
@@ -131,7 +119,10 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
                             <Typography textAlign={"center"}>Next Puzzle:</Typography>
                             <Typography textAlign={"center"}>{nextPuzzleDate(dailyPuzzle.timestamp)}</Typography>
 
-                            <Button variant="contained" color="secondary" onClick={navigateToLeaderBoard}>Leaderboard</Button>
+                            <HStack>
+                                <Button style={{width: "100px"}} variant="contained" color="secondary" onClick={() => navigate("/dailypuzzle/guestresult")}>Results</Button>
+                                <Button style={{width: "100px"}} variant="contained" color="primary" onClick={() => navigate("/")}>Login</Button>
+                            </HStack>
                         </>
                     )}
                     {dailyPuzzleState === DailyPuzzleState.failed && (

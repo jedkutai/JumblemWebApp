@@ -1,4 +1,4 @@
-import { getFirestore, collection, doc, getDocs, setDoc, deleteDoc, query, where, orderBy, limit, updateDoc, DocumentSnapshot, Timestamp, getDoc } from "firebase/firestore";
+import { getFirestore, collection, doc, getDocs, setDoc, deleteDoc, query, where, orderBy, limit, updateDoc, Timestamp, getDoc } from "firebase/firestore";
 import { UserModel } from "../Models/UserModel";
 import { GameModel } from "../Models/GameModel";
 import { MoveModel } from "../Models/MoveModel";
@@ -66,7 +66,6 @@ export class CasualGameService {
 
   static async getGameUpdate(game: GameModel): Promise<GameModel> {
     const db = getFirestore();
-    // const gameSnapshot = await doc(db, "newGames", game.id).get();
     const gameSnapshot = await getDoc(doc(db, "newGames", game.id));
     const gameUpdate = gameSnapshot.data() as GameModel;
     return gameUpdate;

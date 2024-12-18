@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { GameModel, UserModel } from "../../../../Background/Models";
 import { View, VStack } from "../../../../ReactSwiftly";
-import { Button, CircularProgress, Typography } from "@mui/material";
-import HomeView from "../../Body/HomeView";
+import { Button, CircularProgress } from "@mui/material";
 import { CasualGameService, FetchService } from "../../../../Background/Service";
 import PlayCasualGameView from "./PlayCasualGameView";
 import { useNavigate } from "react-router-dom";
@@ -20,7 +19,6 @@ enum CasualGameModeState {
 }
 
 export default function StartCasualGameView({ passedUser }: StartCasualGameViewProps) {
-    const [view, setView] = useState<"StartCasualGameView" | "HomeView">("StartCasualGameView");
     const [user, setUser] = useState<UserModel>(passedUser);
     const [gameModeState, setGameModeState] = useState<CasualGameModeState>(CasualGameModeState.idle);
     const [game, setGame] = useState<GameModel | null>(null);
@@ -31,9 +29,6 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
     const [tickCount, setTickCount] = useState(0);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        // onAppearActions();
-    }, []);
 
     useEffect(() => {
         tickerActions();
@@ -127,9 +122,6 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
         }
     }
 
-    if (view === "HomeView") {
-        return <HomeView passedUser={user} />
-    }
 
     if (gameModeState === CasualGameModeState.matchFound && game) {
         return <PlayCasualGameView passedUser={user} passedGame={game} />;
