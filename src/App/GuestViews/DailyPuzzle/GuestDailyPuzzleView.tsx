@@ -1,30 +1,26 @@
-import { useEffect, useState } from "react";
-import { DailyPuzzleModel, GridSpotModel, UserModel, WordModel } from "../../../Background/Models";
+import { Typography, Button } from "@mui/material";
+import { useState, useEffect } from "react";
 import { GridSpot } from "../../../Background/Extends/GridSpot";
-import { HStack, View, VStack } from "../../../ReactSwiftly";
-import DailyPuzzleGrid from "./DailyPuzzleGrid";
-import { useWindowSize } from "../../../Background/Utils/useWindowSize";
-import { Button, Typography } from "@mui/material";
-import { FetchService, GameService } from "../../../Background/Service";
+import { DailyPuzzleModel, GridSpotModel, WordModel } from "../../../Background/Models";
 import { DailyPuzzleFunctions } from "../../../Background/Utils/DailyPuzzleFunctions";
-import DailyPuzzleLetterBank from "./DailyPuzzleLetterBank";
-import DailyPuzzleFoundWords from "./DailyPuzzleFoundWords";
-import DailyPuzzleLeaderboardView from "./DailyPuzzleLeaderboardView";
-import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
+import { useWindowSize } from "../../../Background/Utils/useWindowSize";
+import { View, VStack, HStack } from "../../../ReactSwiftly";
+import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
+import DailyPuzzleFoundWords from "../../Views/DailyPuzzle/DailyPuzzleFoundWords";
+import DailyPuzzleGrid from "../../Views/DailyPuzzle/DailyPuzzleGrid";
+import DailyPuzzleLetterBank from "../../Views/DailyPuzzle/DailyPuzzleLetterBank";
+import GuestDailyPuzzleResultsView from "./GuestDailyPuzzleResultsView";
 
 interface DailyPuzzleViewProps {
-    passedUser: UserModel;
     dailyPuzzle: DailyPuzzleModel;
     dailyPuzzleDict: Record<string, GridSpotModel>;
 }
 
 export default function DailyPuzzleView({
-    passedUser,
     dailyPuzzle,
     dailyPuzzleDict
 }: DailyPuzzleViewProps) {
-    const [user, setUser] = useState<UserModel>(passedUser);
     const [selectedGridSpot, setSelectedGridSpot] = useState("");
     const [selectedLetter, setSelectedLetter] = useState("");
     const [repeatGuessWarning, setRepeatGuessWarning] = useState(false);
@@ -37,18 +33,11 @@ export default function DailyPuzzleView({
     const [correctWords, setCorrectWords] = useState<Record<string, [WordModel, number]>>({});
     const [grid, setGrid] = useState<GridSpotModel[][]>(GridSpot.grid);
     const [submittingPuzzle, setSubmittingPuzzle] = useState(false);
-    const [view, setView] = useState<"PlayPuzzle" | "PuzzleLeaderBoard">("PlayPuzzle");
-    const startTime = Date.now();
+    const [view, setView] = useState<"PlayPuzzle" | "Results">("PlayPuzzle");
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
     const upperBound = 650;
-    const styles = {
-        logo: {
-            maxWidth: `${Math.min(minDimension / 3, 300)}px`,
-            maxHeight: `${Math.min(minDimension / 3, 200)}px`,
-            marginBottom: "20px",
-        },
-    }
+
 
     useEffect(() => {
         onAppearActions();
@@ -87,9 +76,7 @@ export default function DailyPuzzleView({
 
     async function onAppearActions() {
         try {
-            const updatedUser = await FetchService.fetchUserByUid(user.id);
-            setUser(updatedUser);
-            await GameService.updateLastPuzzlePlayed(user, dailyPuzzle);
+            localStorage.setItem("lastPuzzlePlayedId", dailyPuzzle.id);
             const newGrid = GridSpot.grid.map((row, r) =>
                 row.map((_, c) => {
                     const key = `${r},${c}`;
@@ -199,19 +186,22 @@ export default function DailyPuzzleView({
         if (submittingPuzzle) return;
 
         setSubmittingPuzzle(true);
-        try {
-            const timeDuration = (Date.now() - startTime) / 1000;
-            await GameService.submitDailyPuzzleEntry(user, dailyPuzzle, correctWords, timeDuration);
-            setView("PuzzleLeaderBoard");
-        } catch {
-
+        let saveString = "";
+        for (const word of Object.keys(correctWords).sort((a, b) => a.localeCompare(b))) {
+            for (let i = 0; i < correctWords[word][1]; i++) {
+                saveString += saveString === "" ? word : `,${word}`;
+            }
         }
+
+        localStorage.setItem("lastPuzzlePlayedResults", saveString);
+
+        setView("Results");
         setSubmittingPuzzle(false);
     }
 
-    if (view === "PuzzleLeaderBoard") {
+    if (view === "Results") {
         return (
-            <DailyPuzzleLeaderboardView passedUser={user} dailyPuzzle={dailyPuzzle}/>
+            <GuestDailyPuzzleResultsView />
         );
     }
 

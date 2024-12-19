@@ -2,12 +2,14 @@ import { CircularProgress, Typography, Button } from "@mui/material";
 import { Timestamp } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { DailyPuzzleModel, GridSpotModel, WordModel } from "../../../Background/Models";
+import { DailyPuzzleModel, GridSpotModel } from "../../../Background/Models";
 import { FetchService } from "../../../Background/Service";
 import { DailyPuzzleFunctions } from "../../../Background/Utils/DailyPuzzleFunctions";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import { View, VStack, VSpacer, HStack } from "../../../ReactSwiftly";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
+import GuestDailyPuzzleResultsView from "./GuestDailyPuzzleResultsView";
+import GuestDailyPuzzleView from "./GuestDailyPuzzleView";
 
 enum DailyPuzzleState {
     loading,
@@ -18,12 +20,12 @@ enum DailyPuzzleState {
 
 export default function GuestLoadDailyPuzzleView() {
     const lastPuzzlePlayedId = localStorage.getItem("lastPuzzlePlayedId") ?? "";
-    const [winningWords, setWinningWords] = useState<WordModel[] | null>(null);
+    // const [winningWords, setWinningWords] = useState<WordModel[] | null>(null);
     const [dailyPuzzle, setDailyPuzzle] = useState<DailyPuzzleModel | null>(null);
     const [dailyPuzzleState, setDailyPuzzleState] = useState<DailyPuzzleState>(DailyPuzzleState.loading);
     const [dailyPuzzleDict, setDailyPuzzleDict] = useState<Record<string, GridSpotModel>>({});
-    const [view, setView] = useState<"LoadDailyPuzzle" | "PlayDailyPuzzle" | "LeaderBoard">("LoadDailyPuzzle");
-    const { height, minDimension } = useWindowSize();
+    const [view, setView] = useState<"LoadDailyPuzzle" | "PlayDailyPuzzle" | "Results">("LoadDailyPuzzle");
+    const { height } = useWindowSize();
     const navigate = useNavigate();
 
 
@@ -36,9 +38,6 @@ export default function GuestLoadDailyPuzzleView() {
     }
 
 
-    // function navigateToLeaderBoard() {
-    //     setView("LeaderBoard");
-    // }
 
     function nextPuzzleDate(time: Timestamp): string {
         const nextPuzzleDate = new Date(time.toDate());
@@ -76,15 +75,13 @@ export default function GuestLoadDailyPuzzleView() {
     switch (view) {
         case "PlayDailyPuzzle":
             if (dailyPuzzle) {
-                <></>
-                // return (<DailyPuzzleView passedUser={user} dailyPuzzle={dailyPuzzle} dailyPuzzleDict={dailyPuzzleDict} />);
+                return (<GuestDailyPuzzleView  dailyPuzzle={dailyPuzzle} dailyPuzzleDict={dailyPuzzleDict} />);
             }
             break;
-        case "LeaderBoard":
+        case "Results":
             if (dailyPuzzle) {
                 return (
-                    <></>
-                    // <DailyPuzzleLeaderboardView passedUser={user} dailyPuzzle={dailyPuzzle}/>
+                    <GuestDailyPuzzleResultsView />
                 );
             }
             break;
@@ -120,7 +117,7 @@ export default function GuestLoadDailyPuzzleView() {
                             <Typography textAlign={"center"}>{nextPuzzleDate(dailyPuzzle.timestamp)}</Typography>
 
                             <HStack>
-                                <Button style={{width: "100px"}} variant="contained" color="secondary" onClick={() => navigate("/dailypuzzle/guestresult")}>Results</Button>
+                                <Button style={{width: "100px"}} variant="contained" color="secondary" onClick={() => setView("Results")}>Results</Button>
                                 <Button style={{width: "100px"}} variant="contained" color="primary" onClick={() => navigate("/")}>Login</Button>
                             </HStack>
                         </>
