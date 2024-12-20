@@ -41,7 +41,7 @@ export class PrivateGameService {
     }
   }
 
-  static async checkIfRematchOffered(user: UserModel, game: GameModel): Promise<boolean> {
+  static async checkIfRematchOffered(_user: UserModel, game: GameModel): Promise<boolean> {
     const db = getFirestore();
     const rematchQuery = query(
       collection(db, PrivateGameService.offeredRematches),

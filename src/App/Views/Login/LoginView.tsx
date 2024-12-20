@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { UserModel } from "../../../Background/Models";
+// import { UserModel } from "../../../Background/Models";
 import { AuthService } from "../../../Background/Service";
 import { View, VStack } from "../../../ReactSwiftly";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import { Alert, Box, Button, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 
 
@@ -14,10 +14,10 @@ export default function LoginView() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [canLogin, setCanLogin] = useState(true);
-  const [user, setUser] = useState<UserModel | null>(null);
+  // const [user, setUser] = useState<UserModel | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { minDimension } = useWindowSize();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleLogin = async () => {
     setCanLogin(false);
@@ -25,7 +25,9 @@ export default function LoginView() {
 
     try {
       const loggedInUser = await AuthService.login(email, password); // Replace with actual logic
-      setUser(loggedInUser);
+      if (loggedInUser) {
+
+      }
     } catch (err) {
       setError('Invalid email or password. Please try again.');
     } finally {

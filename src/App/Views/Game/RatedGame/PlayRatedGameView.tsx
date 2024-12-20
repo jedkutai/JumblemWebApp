@@ -8,7 +8,6 @@ import { View, VSpacer, VStack } from "../../../../ReactSwiftly";
 import RatedRatedGameGrid from "./RatedGameGrid";
 import RatedGameHeader from "./RatedGameHeader";
 import { Button } from "@mui/material";
-import HomeView from "../../Body/HomeView";
 import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
 import RatedGameOverGrid from "./RatedGameOverGrid";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
@@ -36,10 +35,8 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
     const [matchAbortedTime, setMatchAbortedTime] = useState(10);
     const [wordCheckComplete, setWordCheckComplete] = useState(true);
     const [winningGridSpots, setWinningGridSpots] = useState<string[]>([]);
-    const [view, setView] = useState<"HomeView" | "PlayRatedGameView">("PlayRatedGameView");
-    const { width, height, minDimension } = useWindowSize();
-    const dimensionDivider = 9 * 1.75;
-    const upperBound = 650;
+    // const [view, setView] = useState<"HomeView" | "PlayRatedGameView">("PlayRatedGameView");
+    const { width, height } = useWindowSize();
 
     const [movesCopy, setMovesCopy] = useState<MoveModel[]>([]);
     const [movesDict, setMovesDict] = useState<Record<string, MoveModel>>({});
@@ -74,7 +71,10 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
             const timeout = setTimeout(async () => {
                 setTickCount(tickCount + 1);
                 try {
-                    const _ = await RatedGameService.getGameUpdate(game);
+                    const update = await RatedGameService.getGameUpdate(game);
+                    if (update) {
+
+                    }
                 } catch {
                     setGameOver(true);
                 }
@@ -170,11 +170,6 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
 
     }, [userTimeExpired]);
 
-    const style = {
-        maxWidth: "auto",
-        maxHeight: `${Math.max(minDimension, upperBound) / dimensionDivider}px`,
-        marginBottom: "20px",
-    }
 
     function gameManagerFunction() {
         if (movesCopy.length > 0) {
@@ -241,11 +236,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
         }
     }
 
-    if (view === "HomeView") {
-        return (
-            <HomeView passedUser={user} />
-        )
-    }
+
 
     if (gameOver || checkGameOver) {
         return (

@@ -26,7 +26,7 @@ export default function LeaderboardEntry({
     passedUser
 }: LeaderBoardEntryProps) {
     const [player, setPlayer] = useState<UserModel | null>(null);
-    const [viewState, setViewState] = useState<ViewState>(ViewState.hidden);
+    const [_viewState, setViewState] = useState<ViewState>(ViewState.hidden);
     const [wordsLoaded, setWordsLoaded] = useState(false);
     const [expand, setExpand] = useState(false); // first expand should load words
     const [words, setWords] = useState<Record<string, [WordModel, number]>>({});

@@ -42,13 +42,6 @@ export default function DailyPuzzleView({
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
     const upperBound = 650;
-    const styles = {
-        logo: {
-            maxWidth: `${Math.min(minDimension / 3, 300)}px`,
-            maxHeight: `${Math.min(minDimension / 3, 200)}px`,
-            marginBottom: "20px",
-        },
-    }
 
     useEffect(() => {
         onAppearActions();

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useStandardGameManager } from "../../../../Background/Managers/StandardGameManager";
 import { GameModel, MoveModel, UserModel, WordModel } from "../../../../Background/Models";
 import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
-import { Button, Typography } from "@mui/material";
+import { Button } from "@mui/material";
 import { PrivateGameService } from "../../../../Background/Service";
 import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
 import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
@@ -41,9 +41,7 @@ export default function PlayPrivateGameView({
     const [wordCheckComplete, setWordCheckComplete] = useState(true);
     const [winningGridSpots, setWinningGridSpots] = useState<string[]>([]);
     const [view, setView] = useState<"HomeView" | "PlayPrivateGameView" | "PrivateRematchView">("PlayPrivateGameView");
-    const { width, height, minDimension } = useWindowSize();
-    const dimensionDivider = 9 * 1.75;
-    const upperBound = 650;
+    const { width, height } = useWindowSize();
 
     const [movesCopy, setMovesCopy] = useState<MoveModel[]>([]);
     const [movesDict, setMovesDict] = useState<Record<string, MoveModel>>({});
@@ -86,7 +84,10 @@ export default function PlayPrivateGameView({
             const timeout = setTimeout(async () => {
                 setTickCount(tickCount + 1);
                 try {
-                    const _ = await PrivateGameService.getGameUpdate(game);
+                    const update = await PrivateGameService.getGameUpdate(game);
+                    if (update) {
+
+                    }
                 } catch {
                     setGameOver(true);
                 }
@@ -188,11 +189,7 @@ export default function PlayPrivateGameView({
         }
     }, [rematchTicker]);
 
-    const style = {
-        maxWidth: "auto",
-        maxHeight: `${Math.max(minDimension, upperBound) / dimensionDivider}px`,
-        marginBottom: "20px",
-    }
+
 
     async function rematchTickerActions() {
         const timeout = setTimeout(async () => {

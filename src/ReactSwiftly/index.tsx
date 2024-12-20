@@ -2,7 +2,6 @@
 export { Frame } from "./Frame";
 export { HStack } from "./HStack";
 export { Image } from "./Image";
-export { NavigationLink } from "./NavigationLink";
 export { ProgressView } from "./ProgressView";
 export { HSpacer, VSpacer } from "./Spacer";
 export { Text } from "./Text";

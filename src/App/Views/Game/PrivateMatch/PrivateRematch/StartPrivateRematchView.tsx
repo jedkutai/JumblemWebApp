@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { UserModel, GameModel } from "../../../../../Background/Models";
-import HomeView from "../../../Body/HomeView";
 import PlayPrivateGameView from "../PlayPrivateGameView";
 import { View, VStack } from "../../../../../ReactSwiftly";
 import { Button, CircularProgress, Typography } from "@mui/material";
@@ -23,7 +22,7 @@ export default function StartPrivateRematchView({
     passedUser,
     previousGame,
 }: StartPrivateRematchViewProps) {
-    const [view, setView] = useState<"StartPrivateGameView" | "HomeView">("StartPrivateGameView");
+    // const [view, setView] = useState<"StartPrivateGameView" | "HomeView">("StartPrivateGameView");
     const [user, setUser] = useState<UserModel>(passedUser);
     const [gameModeState, setGameModeState] = useState<StartPrivateRematchGameModeState>(StartPrivateRematchGameModeState.findingMatch);
     const [game, setGame] = useState<GameModel | null>(null);
@@ -115,9 +114,7 @@ export default function StartPrivateRematchView({
         navigate("/home");
     }
 
-    if (view === "HomeView") {
-        return (<HomeView passedUser={user} />);
-    }
+
 
     if (gameModeState === StartPrivateRematchGameModeState.matchFound && game) {
         return (

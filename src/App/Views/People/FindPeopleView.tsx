@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { UserModel } from "../../../Background/Models";
 import { View, VSpacer, VStack } from "../../../ReactSwiftly";
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import { FetchService, SearchService } from "../../../Background/Service";
 import { useNavigate } from "react-router-dom";

@@ -3,7 +3,6 @@ import { UserModel, GameModel } from "../../../../../Background/Models";
 import { FetchService, PrivateGameService } from "../../../../../Background/Service";
 import { View, VStack } from "../../../../../ReactSwiftly";
 import { Button, CircularProgress, Typography } from "@mui/material";
-import HomeView from "../../../Body/HomeView";
 import PlayPrivateGameView from "../PlayPrivateGameView";
 import { useNavigate } from "react-router-dom";
 
@@ -34,7 +33,7 @@ export default function JoinPrivateRematchView({
     // setDraws,
     // setLosses
 }: JoinPrivateRematchViewProps) {
-    const [view, setView] = useState<"StartPrivateGameView" | "HomeView">("StartPrivateGameView");
+    // const [view, setView] = useState<"StartPrivateGameView" | "HomeView">("StartPrivateGameView");
     const [user, setUser] = useState<UserModel>(passedUser);
     const [gameModeState, setGameModeState] = useState<JoinPrivateRematchModeState>(JoinPrivateRematchModeState.findingMatch);
     const [game, setGame] = useState<GameModel | null>(null);
@@ -109,9 +108,6 @@ export default function JoinPrivateRematchView({
         }
     }
 
-    if (view === "HomeView") {
-        return (<HomeView passedUser={user} />);
-    }
 
     if (gameModeState === JoinPrivateRematchModeState.matchFound && game) {
         return (

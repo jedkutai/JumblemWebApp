@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { DailyPuzzleEntryModel, DailyPuzzleModel, UserModel, WordModel } from "../../../Background/Models";
 import { View, VStack } from "../../../ReactSwiftly";
 import { Button, CircularProgress, Typography } from "@mui/material";
-import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import LeaderboardEntry from "./LeaderboardEntry";
 import { FetchService } from "../../../Background/Service";
 // import { Home } from "@mui/icons-material";
@@ -23,25 +22,17 @@ interface DailyPuzzleLeaderboardViewProps {
 }
 
 export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: DailyPuzzleLeaderboardViewProps) {
-    const [view, setView] = useState<"Leaderboard" | "Home">("Leaderboard");
+    // const [view, setView] = useState<"Leaderboard" | "Home">("Leaderboard");
     const [user, setUser] = useState<UserModel>(passedUser);
     const [leaderboardState, setLeaderboardState] = useState<LeaderboardState>(LeaderboardState.loading);
     const [leaderboard, setLeaderboard] = useState<DailyPuzzleEntryModel[]>([]);
     const [userPuzzleEntry, setUserPuzzleEntry] = useState<DailyPuzzleEntryModel | null>(null);
-    const { minDimension } = useWindowSize();
     const navigate = useNavigate();
 
     const [wordsLoaded, setWordsLoaded] = useState(false);
     const [expand, setExpand] = useState(false); // first expand should load words
     const [words, setWords] = useState<Record<string, [WordModel, number]>>({});
 
-    const styles = {
-        logo: {
-            maxWidth: `${Math.min(minDimension / 3, 300)}px`,
-            maxHeight: `${Math.min(minDimension / 3, 200)}px`,
-            marginBottom: "20px",
-        },
-    }
 
     useEffect(() => {
         onAppearActions();
@@ -91,7 +82,19 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
         }
     }
 
+    // function generateCustomLink(puzzleEntry: DailyPuzzleEntryModel) {
+    //     const baseUrl = "https://jumblem.com/dailypuzzle";
+    //     const params = new URLSearchParams({
+    //         d: DisplayFunctions.displayPuzzleDate(dailyPuzzle.timestamp), // date
+    //         s: `${Math.floor(puzzleEntry.score)}`, // score
+    //         c: dailyPuzzle.id, // puzzle id
+    //         smid: "url-share", // Example share method
+    //     });
 
+    //     const customLink = `${baseUrl}?${params.toString()}`;
+    //     console.log(customLink); // Log or use the link
+    //     return customLink;
+    // };
 
 
     return (

@@ -8,7 +8,6 @@ import { View, VSpacer, VStack } from "../../../../ReactSwiftly";
 import CasualGameGrid from "./CasualGameGrid";
 import CasualGameHeader from "./CasualGameHeader";
 import { Button } from "@mui/material";
-import HomeView from "../../Body/HomeView";
 import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
 import CasualGameOverGrid from "./CasualGameOverGrid";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
@@ -35,8 +34,8 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
     const [matchAbortedTime, setMatchAbortedTime] = useState(10);
     const [wordCheckComplete, setWordCheckComplete] = useState(true);
     const [winningGridSpots, setWinningGridSpots] = useState<string[]>([]);
-    const [view, setView] = useState<"HomeView" | "PlayCasualGameView">("PlayCasualGameView");
-    const { width, height, minDimension } = useWindowSize();
+    // const [view, setView] = useState<"HomeView" | "PlayCasualGameView">("PlayCasualGameView");
+    const { width, height } = useWindowSize();
     // const dimensionDivider = 9 * 1.75;
     // const upperBound = 650;
 
@@ -73,7 +72,10 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
             const timeout = setTimeout(async () => {
                 setTickCount(tickCount + 1);
                 try {
-                    const _ = await CasualGameService.getGameUpdate(game);
+                    const check = await CasualGameService.getGameUpdate(game);
+                    if (check) {
+                        
+                    }
                 } catch {
                     setGameOver(true);
                 }
@@ -169,11 +171,6 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
 
     }, [userTimeExpired]);
 
-    // const style = {
-    //     maxWidth: "auto",
-    //     maxHeight: `${Math.max(minDimension, upperBound) / dimensionDivider}px`,
-    //     marginBottom: "20px",
-    // }
 
     function gameManagerFunction() {
         if (movesCopy.length > 0) {
@@ -238,12 +235,6 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                 }
             }
         }
-    }
-
-    if (view === "HomeView") {
-        return (
-            <HomeView passedUser={user} />
-        )
     }
 
     if (gameOver || checkGameOver) {

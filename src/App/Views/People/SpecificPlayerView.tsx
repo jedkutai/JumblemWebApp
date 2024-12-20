@@ -1,6 +1,6 @@
 import { CircularProgress, Button } from "@mui/material";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { UserModel, GameModel } from "../../../Background/Models";
 import { FetchService, UserService } from "../../../Background/Service";
 import { View, VStack } from "../../../ReactSwiftly";
@@ -27,7 +27,7 @@ export default function SpecificPlayerView({ passedUser, passedPlayer }: Specifi
     const [followedByUser, setFollowedByUser] = useState<boolean>(false);
     const [actionHappening, setActionHappening] = useState<boolean>(false);
     const [showRed, setShowRed] = useState<boolean>(false);
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const { minDimension } = useWindowSize();
     const upperBound = 650;
     const dimensionDivider = 9 * 1.75;

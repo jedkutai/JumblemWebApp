@@ -20,7 +20,7 @@ export default function SeePreviousGameView({ previousGame }: SeePreviousGameVie
     const [lastMovePlayerId, setLastMovePlayerId] = useState("");
     const [moves, setMoves] = useState<MoveModel[] | null>(null);
     const [movesDict, setMovesDict] = useState<Record<string, MoveModel>>({});
-    const [showWinningWords, setShowWinningWords] = useState(false);
+    // const [showWinningWords, setShowWinningWords] = useState(false);
     const [winningWords, setWinningWords] = useState<WordModel[]>([]);
     const [currentMove, setCurrentMove] = useState(49);
     const [maxMoves, setMaxMoves] = useState(49);

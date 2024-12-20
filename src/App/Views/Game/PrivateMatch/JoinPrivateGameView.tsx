@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { GameModel, UserModel } from "../../../../Background/Models";
-import HomeView from "../../Body/HomeView";
 import PlayPrivateGameView from "./PlayPrivateGameView";
 import { View, VStack } from "../../../../ReactSwiftly";
 import { Box, Button, CircularProgress, TextField, Typography } from "@mui/material";
@@ -22,13 +21,9 @@ interface JoinPrivateGameViewProps {
 
 export default function JoinPrivateGameView({ passedUser }: JoinPrivateGameViewProps) {
     const [view, setView] = useState<"JoinPrivateGameView" | "PrivateMatchMenuView">("JoinPrivateGameView");
-    const [user, setUser] = useState<UserModel>(passedUser);
+    // const [user, setUser] = useState<UserModel>(passedUser);
     const [gameModeState, setGameModeState] = useState<JoinPrivateGameModeState>(JoinPrivateGameModeState.enterMatchCode);
     const [game, setGame] = useState<GameModel | null>(null);
-    const [hostOfMatch, setHostOfMatch] = useState(false);
-    const [stopSearching, setStopSearching] = useState(false);
-    const [ticker, setTicker] = useState(false);
-    const [tickCount, setTickCount] = useState(0);
     const [code, setCode] = useState("");
     const { minDimension } = useWindowSize();
 
@@ -77,7 +72,7 @@ export default function JoinPrivateGameView({ passedUser }: JoinPrivateGameViewP
         if (strippedGameId.length > 0) {
             setGameModeState(JoinPrivateGameModeState.findingMatch);
             try {
-                const foundGame = await PrivateGameService.findGame(user, strippedGameId);
+                const foundGame = await PrivateGameService.findGame(passedUser, strippedGameId);
                 if (foundGame != null) {
                     setGame(foundGame);
                     setGameModeState(JoinPrivateGameModeState.matchFound);
@@ -91,11 +86,11 @@ export default function JoinPrivateGameView({ passedUser }: JoinPrivateGameViewP
     }
 
     if (view === "PrivateMatchMenuView") {
-        return <PrivateMatchMenuView passedUser={user} />
+        return <PrivateMatchMenuView passedUser={passedUser} />
     }
 
     if (gameModeState === JoinPrivateGameModeState.matchFound && game) {
-        return <PlayPrivateGameView passedUser={user} passedGame={game} />;
+        return <PlayPrivateGameView passedUser={passedUser} passedGame={game} />;
     }
 
     return (
@@ -164,6 +159,4 @@ export default function JoinPrivateGameView({ passedUser }: JoinPrivateGameViewP
 
 }
 
-function findMatch() {
-    throw new Error("Function not implemented.");
-}
+

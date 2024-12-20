@@ -13,7 +13,7 @@ interface PreviousGameGridProps {
 }
 
 export default function PreviousGameGrid({
-    winningWords,
+    // winningWords,
     winningGridSpots,
     moves,
     movesDict,

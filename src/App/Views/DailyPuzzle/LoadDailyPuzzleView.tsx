@@ -6,7 +6,6 @@ import { Timestamp } from "firebase/firestore";
 import { FetchService } from "../../../Background/Service";
 import { DailyPuzzleFunctions } from "../../../Background/Utils/DailyPuzzleFunctions";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
-import HomeView from "../Body/HomeView";
 import DailyPuzzleView from "./DailyPuzzleView";
 import DailyPuzzleLeaderboardView from "./DailyPuzzleLeaderboardView";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
@@ -29,16 +28,10 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
     const [dailyPuzzleState, setDailyPuzzleState] = useState<DailyPuzzleState>(DailyPuzzleState.loading);
     const [dailyPuzzleDict, setDailyPuzzleDict] = useState<Record<string, GridSpotModel>>({});
     const [view, setView] = useState<"LoadDailyPuzzle" | "PlayDailyPuzzle" | "LeaderBoard">("LoadDailyPuzzle");
-    const { height, minDimension } = useWindowSize();
+    const { height } = useWindowSize();
     const navigate = useNavigate();
     
-    const styles = {
-        logo: {
-            maxWidth: `${Math.min(minDimension / 3, 300)}px`,
-            maxHeight: `${Math.min(minDimension / 3, 200)}px`,
-            marginBottom: "20px",
-        },
-    }
+
     useEffect(() => {
         onAppearActions();
     }, []);

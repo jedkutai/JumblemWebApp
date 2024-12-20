@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { GridSpotModel } from "../../../Background/Models";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import { HStack, VStack } from "../../../ReactSwiftly";
@@ -18,7 +17,6 @@ export default function DailyPuzzleGrid({
     grid,
     selectedGridSpot,
     setSelectedGridSpot,
-    dailyPuzzleDict,
     goldenGrids
 }: DailyPuzzleGridProps) {
     const dimensionDivider = 9 * 1.75;

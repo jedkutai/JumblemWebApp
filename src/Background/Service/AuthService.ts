@@ -1,4 +1,4 @@
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, deleteUser, sendSignInLinkToEmail, User } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, deleteUser } from "firebase/auth";
 import { getFirestore, doc, setDoc, deleteDoc, Timestamp } from "firebase/firestore";
 import { UserModel } from "../Models/UserModel";
 import { FetchService } from "./FetchService";

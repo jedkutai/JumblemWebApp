@@ -24,12 +24,12 @@ export function ZStack({children}: ZStackProps) {
     );
 }
 
-interface ZItemProps {
-    /**
-     * The content to be displayed inside the ZStack.
-     */
-    children: React.ReactNode;
-}
+// interface ZItemProps {
+//     /**
+//      * The content to be displayed inside the ZStack.
+//      */
+//     children: React.ReactNode;
+// }
 
 export function ZItem({children, padding}: ZStackProps) {
     const style = {

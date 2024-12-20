@@ -24,7 +24,6 @@ export default function RatedLetterGenerator({
     letters,
     setLetters,
     wordCheckComplete,
-    moves,
     selectedBlock,
     setSelectedBlock,
     yourTurn,
