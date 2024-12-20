@@ -111,7 +111,6 @@ export default function HomeView({
         <View>
             <VStack>
                 <JumblemLogoSimple />
-                <Typography>Test</Typography>
                 <Box style={styles.section}>
                     <Typography style={styles.sectionTitle}>VERSUS</Typography>
                     <Box style={styles.buttonContainer}>
