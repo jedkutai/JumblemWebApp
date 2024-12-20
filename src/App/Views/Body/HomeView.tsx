@@ -28,8 +28,6 @@ export default function HomeView({
     useEffect(() => {
         if (!user.username) {
             setIsMissingUsername(true);
-        } else {
-            // refresh user
         }
     });
 
@@ -113,6 +111,7 @@ export default function HomeView({
         <View>
             <VStack>
                 <JumblemLogoSimple />
+                <Typography>Just a test.</Typography>
                 <Box style={styles.section}>
                     <Typography style={styles.sectionTitle}>VERSUS</Typography>
                     <Box style={styles.buttonContainer}>
