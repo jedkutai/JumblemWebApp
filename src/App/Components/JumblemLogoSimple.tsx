@@ -1,6 +1,6 @@
-// import jumblemLogoSimpleImage from "../../assets/jumblem_logo_simple.png";
-import jumblemLogoSimpleImage from "../../assets/drawing.svg";
-// import { useWindowSize } from "../../Background/Utils/useWindowSize";
+
+import jumblemLogoSimpleImage from "../../assets/drawingexport.svg";
+// import jumblemLogoSimpleImage from "../../assets/drawing.svg";
 
 export default function JumblemLogoSimple() {
     // const { minDimension } = useWindowSize();
