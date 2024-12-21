@@ -7,6 +7,7 @@ import { UserModel } from "../../Background/Models";
 import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
 import { View } from "../../ReactSwiftly";
+import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
 
 enum PageState {
     loading,
@@ -46,7 +47,7 @@ function PeopleRoute() {
     switch (pageState) {
         case PageState.loading:
             return (
-<AppLoadingView/>
+                <AppLoadingView />
             );
 
         case PageState.loaded:
@@ -57,7 +58,7 @@ function PeopleRoute() {
             } else {
                 return (
                     <View>
-                        <CircularProgress sx={{ color: "black" }}/>
+                        <CircularProgress sx={{ color: "black" }} />
                     </View>
                 )
             }
