@@ -51,12 +51,12 @@ export default function ProfileView({ passedUser }: ProfileViewProps) {
     };
     
     return (
-        <View>
+        <View startAtTop={true}>
             <VStack>
                 <ProfileHeader passedUser={passedUser} />
 
                 <HStack>
-                    <Button variant="text" style={{ color: "white", backgroundColor: "black", fontWeight: "bold" }}>
+                    <Button onClick={() => navigate("/settings")} variant="text" style={{ color: "white", backgroundColor: "black", fontWeight: "bold" }}>
                         Settings
                     </Button>
 

@@ -12,7 +12,7 @@ export default function SpecificWordView({ dictionaryModels, wordModel }: Specif
 
     return (
         <View>
-            <VStack padding="20px">
+            <VStack padding="20px" alignment="flex-start">
                 <Typography variant="h1" style={{ color: "gray"}}>{wordModel.word}</Typography>
 
                 {dictionaryModels.map((dictionaryModel, index) => (

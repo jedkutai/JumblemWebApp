@@ -1,35 +1,42 @@
-import { useState } from "react";
-// import { UserModel } from "../../../Background/Models";
+import { useEffect, useState } from "react";
 import { AuthService } from "../../../Background/Service";
 import { View, VStack } from "../../../ReactSwiftly";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import { Alert, Box, Button, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-// import { useNavigate } from "react-router-dom";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
+import ForgotPasswordView from "./ForgotPasswordView";
+import { useNavigate } from "react-router-dom";
 
 
 export default function LoginView() {
+  const [view, setView] = useState<"Login" | "ForgotPassword">("Login");
+  const [attempts, setAttempts] = useState(0);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [canLogin, setCanLogin] = useState(true);
-  // const [user, setUser] = useState<UserModel | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { minDimension } = useWindowSize();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    if (error) {
+      setError(null);
+    }
+  }, [email, password]);
+  
   const handleLogin = async () => {
     setCanLogin(false);
     setError(null); // Reset error state
-
+    setAttempts(attempts + 1);
     try {
       const loggedInUser = await AuthService.login(email, password); // Replace with actual logic
       if (loggedInUser) {
 
       }
     } catch (err) {
-      setError('Invalid email or password. Please try again.');
+      setError(attempts < 5 ? 'Invalid login. Please try again.' : 'Too many attempts. Please try again later.');
     } finally {
       setCanLogin(true);
     }
@@ -52,7 +59,7 @@ export default function LoginView() {
     forgotPassword: {
       marginTop: '10px',
       textAlign: 'right' as const,
-      color: 'gray',
+      color: attempts >= 5 ? 'red' : 'gray',
       cursor: 'pointer',
     },
     textField: {
@@ -65,10 +72,16 @@ export default function LoginView() {
     },
   }
 
+  if (view === "ForgotPassword") {
+    return (<ForgotPasswordView backButton={() => setView("Login")}/>);
+  }
+
   return (
     <View>
       <VStack>
-        <JumblemLogoSimple />
+        <Button onClick={() => navigate("/")}>
+          <JumblemLogoSimple />
+        </Button>
         <Box style={styles.form}>
           <Typography variant="h5" style={styles.welcomeMessage}>
             Login
@@ -107,7 +120,7 @@ export default function LoginView() {
           <Typography
             variant="body2"
             style={styles.forgotPassword}
-            onClick={() => console.log('Forgot password clicked')}
+            onClick={() => setView("ForgotPassword")}
           >
             Forgot Password?
           </Typography>

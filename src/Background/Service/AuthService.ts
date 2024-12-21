@@ -69,14 +69,11 @@ export class AuthService {
 
   static async login(email: string, password: string): Promise<UserModel | null> {
     const auth = getAuth();
-    try {
-      const result = await signInWithEmailAndPassword(auth, email, password);
-      const uid = result.user.uid;
-      const user = await FetchService.fetchUserByUid(uid);
-      return user;
-    } catch (error) {
-      return null;
-    }
+
+    const result = await signInWithEmailAndPassword(auth, email, password);
+    const uid = result.user.uid;
+    const user = await FetchService.fetchUserByUid(uid);
+    return user;
   }
 
   static async automaticLogin(): Promise<UserModel | null> {
