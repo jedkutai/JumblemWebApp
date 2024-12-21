@@ -100,7 +100,7 @@ export default function RatedPlayerHeaderProps({
                 </VStack>
 
             ) : (
-                <CircularProgress />
+                <CircularProgress sx={{ color: "black" }}/>
             )}
         </VStack>
     );

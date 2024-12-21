@@ -54,7 +54,7 @@ export default function GuestDailyPuzzleResultsView() {
             <VStack>
                 <JumblemLogoSimple />
                 {pageState === PageState.loading && (
-                    <CircularProgress />
+                    <CircularProgress sx={{ color: "black" }}/>
                 )}
                 {pageState === PageState.loaded && (
                     <>

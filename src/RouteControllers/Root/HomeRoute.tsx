@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { View } from "../../ReactSwiftly";
+// import { View } from "../../ReactSwiftly";
 import { UserModel } from "../../Background/Models";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
 import { useNavigate } from "react-router-dom";
-import { CircularProgress } from "@mui/material";
+// import { CircularProgress } from "@mui/material";
 import HomeView from "../../App/Views/Body/HomeView";
 import GuestHomeView from "../../App/GuestViews/Body/GuestHomeView";
+import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
 
 enum PageState {
     loading,
@@ -48,9 +49,7 @@ function HomeRoute() {
     switch (pageState) {
         case PageState.loading:
             return (
-                <View>
-                    <CircularProgress />
-                </View>
+                <AppLoadingView />
             );
 
         case PageState.loaded:

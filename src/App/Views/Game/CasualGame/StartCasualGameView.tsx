@@ -146,7 +146,7 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
                 {gameModeState === CasualGameModeState.findingMatch && (
                     <>
                         <p>Finding Casual Match...</p>
-                        <CircularProgress />
+                        <CircularProgress sx={{ color: "black" }}/>
                     </>
                 )}
 

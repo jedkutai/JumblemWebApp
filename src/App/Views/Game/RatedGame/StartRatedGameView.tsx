@@ -148,7 +148,7 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
                 {gameModeState === RatedGameModeState.findingMatch && (
                     <>
                         <p>Finding Rated Match...</p>
-                        <CircularProgress />
+                        <CircularProgress sx={{ color: "black" }}/>
                     </>
                 )}
 

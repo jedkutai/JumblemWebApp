@@ -108,7 +108,7 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
                     <VSpacer />
 
                     {dailyPuzzleState === DailyPuzzleState.loading && (
-                        <CircularProgress />
+                        <CircularProgress sx={{ color: "black" }}/>
                     )}
                     {dailyPuzzleState === DailyPuzzleState.loaded && (
                         <>

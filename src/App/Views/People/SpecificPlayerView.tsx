@@ -111,7 +111,7 @@ export default function SpecificPlayerView({ passedUser, passedPlayer }: Specifi
 
 
                 {viewState === ViewState.loading && (
-                    <CircularProgress />
+                    <CircularProgress sx={{ color: "black" }}/>
                 )}
 
                 {viewState === ViewState.failure && (

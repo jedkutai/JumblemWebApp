@@ -53,7 +53,7 @@ export default function PreviousGamePlayerHeaderProps({
                     </VStack>
 
                 ) : (
-                    <CircularProgress />
+                    <CircularProgress sx={{ color: "black" }}/>
                 )}
             </VStack>
         </Button>

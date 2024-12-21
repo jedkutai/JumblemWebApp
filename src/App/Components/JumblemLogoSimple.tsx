@@ -1,12 +1,18 @@
-import jumblemLogoSimpleImage from "../../assets/jumblem_logo_simple.png";
-import { useWindowSize } from "../../Background/Utils/useWindowSize";
+// import jumblemLogoSimpleImage from "../../assets/jumblem_logo_simple.png";
+import jumblemLogoSimpleImage from "../../assets/drawing.svg";
+// import { useWindowSize } from "../../Background/Utils/useWindowSize";
 
 export default function JumblemLogoSimple() {
-    const { minDimension } = useWindowSize();
+    // const { minDimension } = useWindowSize();
+    // const style = {
+    //     maxWidth: `${Math.min(minDimension / 3, 300)}px`,
+    //     maxHeight: `${Math.min(minDimension / 3, 200)}px`,
+    //     marginBottom: "20px",
+    // };
     const style = {
-        maxWidth: `${Math.min(minDimension / 3, 300)}px`,
-        maxHeight: `${Math.min(minDimension / 3, 200)}px`,
-        marginBottom: "20px",
+        maxWidth: "300px",
+        maxHeight: "200px",
+        margin: "20px",
     };
 
     return (

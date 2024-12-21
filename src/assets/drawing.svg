@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="211.62302mm"
+   height="55.79747mm"
+   viewBox="0 0 799.83502 210.88809"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <linearGradient
+       id="linearGradient65">
+      <stop
+         style="stop-color:#ff7f2a;stop-opacity:1;"
+         offset="0"
+         id="stop66" />
+      <stop
+         style="stop-color:#ff7f2a;stop-opacity:0;"
+         offset="1"
+         id="stop67" />
+    </linearGradient>
+  </defs>
+  <g
+     id="layer1"
+     transform="translate(-263.93594,-313.64305)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:201.812px;font-family:Thonburi;-inkscape-font-specification:'Thonburi, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;mix-blend-mode:normal;fill-opacity:1;stroke-width:1.00157;stroke-dasharray:none;paint-order:normal"
+       x="289.7226"
+       y="462.47971"
+       id="text1"
+       transform="scale(0.96481261,1.0364707)"><tspan
+         id="tspan1"
+         x="289.7226"
+         y="462.47971"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:201.812px;font-family:Thonburi;-inkscape-font-specification:'Thonburi, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill-opacity:1;stroke-width:1.00157;stroke-dasharray:none;paint-order:normal">jumblem</tspan></text>
+  </g>
+</svg>

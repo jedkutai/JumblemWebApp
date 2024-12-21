@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { UserModel } from "../../Background/Models";
 import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
-import { Button, CircularProgress, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { HStack, View, VStack } from "../../ReactSwiftly";
 import PrivateMatchMenuView from "../../App/Views/Game/PrivateMatch/PrivateMatchMenuView";
 import JumblemLogoSimple from "../../App/Components/JumblemLogoSimple";
+import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
 
 enum PageState {
     loading,
@@ -53,9 +54,7 @@ export default function PrivateGameRoute() {
     switch (pageState) {
         case PageState.loading:
             return (
-                <View>
-                    <CircularProgress />
-                </View>
+                <AppLoadingView />
             );
 
         case PageState.loaded:

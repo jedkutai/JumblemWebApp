@@ -135,7 +135,7 @@ export default function JoinPrivateGameView({ passedUser }: JoinPrivateGameViewP
                 {gameModeState === JoinPrivateGameModeState.findingMatch && (
                     <>
                         <p>Finding Private Match...</p>
-                        <CircularProgress />
+                        <CircularProgress sx={{ color: "black" }}/>
                     </>
                 )}
 

@@ -167,7 +167,7 @@ export default function SeePreviousGameView({ previousGame }: SeePreviousGameVie
                             )}
                         </VStack>
                     ) : (
-                        <CircularProgress />
+                        <CircularProgress sx={{ color: "black" }}/>
                     )}
                 </>
 

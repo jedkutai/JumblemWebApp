@@ -104,7 +104,7 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
                     <JumblemLogoSimple />
                 </Button>
                 {leaderboardState === LeaderboardState.loading && (
-                    <CircularProgress />
+                    <CircularProgress sx={{ color: "black" }}/>
                 )}
 
                 {leaderboardState === LeaderboardState.loaded && (
@@ -121,7 +121,7 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
                                 )}
 
                                 {expand && !wordsLoaded && (
-                                    <CircularProgress />
+                                    <CircularProgress sx={{ color: "black" }}/>
                                 )}
                             </>
                         )}

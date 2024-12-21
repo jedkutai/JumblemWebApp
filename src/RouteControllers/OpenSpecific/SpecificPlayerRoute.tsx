@@ -1,4 +1,4 @@
-import { CircularProgress, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -7,6 +7,7 @@ import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
 import { View } from "../../ReactSwiftly";
 import SpecificPlayerView from "../../App/Views/People/SpecificPlayerView";
+import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
 
 enum PageState {
     loading,
@@ -56,9 +57,7 @@ function SpecificPlayerRoute() {
     switch (pageState) {
         case PageState.loading:
             return (
-                <View>
-                    <CircularProgress />
-                </View>
+                <AppLoadingView />
             );
 
         case PageState.loaded:

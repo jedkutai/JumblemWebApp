@@ -107,7 +107,7 @@ export default function PreviousGameRatedPlayerHeader({
                     </VStack>
 
                 ) : (
-                    <CircularProgress />
+                    <CircularProgress sx={{ color: "black" }}/>
                 )}
             </VStack>
         </Button>

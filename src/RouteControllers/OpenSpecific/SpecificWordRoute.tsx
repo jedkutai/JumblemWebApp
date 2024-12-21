@@ -1,4 +1,4 @@
-import { CircularProgress, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
 import { View } from "../../ReactSwiftly";
 import SpecificWordView from "../../App/Views/Dictionary/SpecificWordView";
+import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
 
 enum PageState {
     loading,
@@ -62,9 +63,7 @@ function SpecificWordRoute() {
     switch (pageState) {
         case PageState.loading:
             return (
-                <View>
-                    <CircularProgress />
-                </View>
+                <AppLoadingView />
             );
 
         case PageState.loaded:

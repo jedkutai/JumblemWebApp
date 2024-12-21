@@ -1,4 +1,4 @@
-import { CircularProgress } from "@mui/material";
+
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -6,8 +6,8 @@ import LoadDailyPuzzleView from "../../App/Views/DailyPuzzle/LoadDailyPuzzleView
 import { UserModel } from "../../Background/Models";
 import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
-import { View } from "../../ReactSwiftly";
 import GuestLoadDailyPuzzleView from "../../App/GuestViews/DailyPuzzle/GuestLoadDailyPuzzleView";
+import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
 
 enum PageState {
     loading,
@@ -52,9 +52,7 @@ export default function DailyPuzzleRoute() {
     switch (pageState) {
         case PageState.loading:
             return (
-                <View>
-                    <CircularProgress />
-                </View>
+                <AppLoadingView />
             );
 
         case PageState.loaded:

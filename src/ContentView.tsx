@@ -11,7 +11,7 @@ enum ContentViewPageState {
 }
 
 export default function ContentView() {
-  const [pageState, setPageState] = useState<ContentViewPageState>(ContentViewPageState.loaded); // change to loading
+  const [pageState, setPageState] = useState<ContentViewPageState>(ContentViewPageState.loading); // change to loading
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -22,11 +22,15 @@ export default function ContentView() {
     const auth = getAuth(app);
 
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        navigate("/home");
-      } else {
-        setPageState(ContentViewPageState.loaded);
-      }
+      setTimeout(() => {
+        if (firebaseUser) {
+          navigate("/home");
+        } else {
+          setPageState(ContentViewPageState.loaded);
+          
+        }
+      }, 1000);
+
     });
 
     return () => unsubscribe();

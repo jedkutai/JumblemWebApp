@@ -135,7 +135,7 @@ export default function StartPrivateRematchView({
                 {gameModeState === StartPrivateRematchGameModeState.findingMatch && (
                     <>
                         <p>Finding Private Match...</p>
-                        <CircularProgress />
+                        <CircularProgress sx={{ color: "black" }}/>
                     </>
                 )}
 

@@ -46,9 +46,7 @@ function PeopleRoute() {
     switch (pageState) {
         case PageState.loading:
             return (
-                <View>
-                    <CircularProgress />
-                </View>
+<AppLoadingView/>
             );
 
         case PageState.loaded:
@@ -59,7 +57,7 @@ function PeopleRoute() {
             } else {
                 return (
                     <View>
-                        <CircularProgress />
+                        <CircularProgress sx={{ color: "black" }}/>
                     </View>
                 )
             }

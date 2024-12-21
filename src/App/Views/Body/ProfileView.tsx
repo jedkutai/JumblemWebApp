@@ -67,7 +67,7 @@ export default function ProfileView({ passedUser }: ProfileViewProps) {
 
 
                 {viewState === ViewState.loading && (
-                    <CircularProgress />
+                    <CircularProgress sx={{ color: "black" }}/>
                 )}
 
                 {viewState === ViewState.failure && (

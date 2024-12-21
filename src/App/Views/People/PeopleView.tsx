@@ -51,7 +51,7 @@ export default function PeopleView({ passedUser }: PeopleViewProps) {
                 </Button>
 
                 {viewState === ViewState.loading && (
-                    <CircularProgress />
+                    <CircularProgress sx={{ color: "black" }}/>
                 )}
                 {viewState === ViewState.failure && (
                     <Button color="error" variant="contained" onClick={onAppearActions}>
