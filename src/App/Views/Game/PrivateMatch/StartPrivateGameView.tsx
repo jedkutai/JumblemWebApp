@@ -171,8 +171,8 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
                 )}
 
                 <Button
-                    variant="outlined"
-                    color="secondary"
+                    variant="contained"
+                    color="error"
                     onClick={dismiss}
                     style={{ marginTop: "10px" }}
                 >

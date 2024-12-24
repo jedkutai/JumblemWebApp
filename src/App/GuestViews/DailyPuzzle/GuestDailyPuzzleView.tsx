@@ -11,6 +11,7 @@ import DailyPuzzleFoundWords from "../../Views/DailyPuzzle/DailyPuzzleFoundWords
 import DailyPuzzleGrid from "../../Views/DailyPuzzle/DailyPuzzleGrid";
 import DailyPuzzleLetterBank from "../../Views/DailyPuzzle/DailyPuzzleLetterBank";
 import GuestDailyPuzzleResultsView from "./GuestDailyPuzzleResultsView";
+import { WordBankFunctions } from "../../../Background/Utils/WordBankFunctions";
 
 interface DailyPuzzleViewProps {
     dailyPuzzle: DailyPuzzleModel;
@@ -21,6 +22,7 @@ export default function DailyPuzzleView({
     dailyPuzzle,
     dailyPuzzleDict
 }: DailyPuzzleViewProps) {
+    const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
     const [selectedGridSpot, setSelectedGridSpot] = useState("");
     const [selectedLetter, setSelectedLetter] = useState("");
     const [repeatGuessWarning, setRepeatGuessWarning] = useState(false);
@@ -57,7 +59,7 @@ export default function DailyPuzzleView({
         if (selectedLetter.length > 0) {
             const leter = selectedLetter;
             const gridSpot = selectedGridSpot;
-            checkForWord(gridSpot, leter);
+            checkForWord(gridSpot, leter, wordBankDict);
 
             setSelectedLetter("");
         }
@@ -76,6 +78,8 @@ export default function DailyPuzzleView({
 
     async function onAppearActions() {
         try {
+            const wordBank = await WordBankFunctions.getWordBank();
+            setWordBankDict(wordBank);
             localStorage.setItem("lastPuzzlePlayedId", dailyPuzzle.id);
             const newGrid = GridSpot.grid.map((row, r) =>
                 row.map((_, c) => {
@@ -89,7 +93,7 @@ export default function DailyPuzzleView({
         }
     }
 
-    async function checkForWord(gridSpot: string, letter: string) {
+    async function checkForWord(gridSpot: string, letter: string, wordBankDict: Record<string, string[]>) {
         if (!checkingGuess) {
             setCheckingGuess(true);
 
@@ -132,7 +136,7 @@ export default function DailyPuzzleView({
                     const updatedDailyPuzzleDict = { ...dailyPuzzleDict, [gridSpot]: updatedSpot };
 
                     try {
-                        const words = await DailyPuzzleFunctions.checkWords(updatedSpot, updatedDailyPuzzleDict);
+                        const words = await DailyPuzzleFunctions.checkWords(updatedSpot, updatedDailyPuzzleDict, wordBankDict);
 
                         // Update goldenGrids and correctWords immutably
                         words.forEach(([wordModel, winningGridSpots]) => {

@@ -1,7 +1,8 @@
 import { GridFunctions } from "./GridFunctions";
 import { WordModel } from "../Models/WordModel";
 import { MoveModel } from "../Models/MoveModel";
-import { WordService } from "../Service/WordService";
+// import { WordService } from "../Service/WordService";
+import { WordBankFunctions } from "./WordBankFunctions";
 
 export class GameFunctions {
   static letters(): string[] {
@@ -186,7 +187,8 @@ static chopString(consecutive: [string, string[]]): [string, string[]][] {
 
   static async checkWords(
     finalMove: MoveModel,
-    moves: Record<string, MoveModel>
+    moves: Record<string, MoveModel>,
+    wordBankDict: Record<string, string[]>
   ): Promise<[WordModel, string[]][]> {
     const wordsToCheck = this.getWordsToCheck(finalMove, moves);
     const wordDict: Record<string, string[]> = {};
@@ -202,8 +204,8 @@ static chopString(consecutive: [string, string[]]): [string, string[]][] {
     }
 
 
-    const validWords: WordModel[] = await WordService.checkWords(wordBank);
-
+    // const validWords: WordModel[] = await WordService.checkWords(wordBank);
+    const validWords = WordBankFunctions.checkWords(wordBank, wordBankDict);
     return validWords.map((word) => [word, wordDict[word.word]]);
   }
 }

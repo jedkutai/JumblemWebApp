@@ -11,7 +11,7 @@ interface SpecificWordViewProps {
 export default function SpecificWordView({ dictionaryModels, wordModel }: SpecificWordViewProps) {
 
     return (
-        <View>
+        <View startAtTop={true}>
             <VStack padding="20px" alignment="flex-start">
                 <Typography variant="h1" style={{ color: "gray"}}>{wordModel.word}</Typography>
 

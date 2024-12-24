@@ -12,6 +12,7 @@ import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
 import RatedGameOverGrid from "./RatedGameOverGrid";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import { useNavigate } from "react-router-dom";
+import { WordBankFunctions } from "../../../../Background/Utils/WordBankFunctions";
 
 interface PlayRatedGameViewProps {
     passedUser: UserModel;
@@ -23,7 +24,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
     const {
         moves,
     } = useStandardGameManager(passedUser, passedGame);
-
+    const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
     const [user] = useState<UserModel>(passedUser);
     const [game, setGame] = useState<GameModel>(passedGame);
     const [gameOver, setGameOver] = useState(false);
@@ -48,10 +49,23 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
     const navigate = useNavigate();
 
     useEffect(() => {
+        try {
+            onAppearActions();
+        } catch {
+            setGameOver(true);
+        }
+        // setMatchAbortedTicker(!matchAbortedTicker);
+        // setTickCount(tickCount + 1);
+        // setYourTurn(game.playerOneId == user.id);
+    }, []);
+
+    async function onAppearActions() {
+        const wordBank = await WordBankFunctions.getWordBank();
+        setWordBankDict(wordBank);
         setMatchAbortedTicker(!matchAbortedTicker);
         setTickCount(tickCount + 1);
         setYourTurn(game.playerOneId == user.id);
-    }, []);
+    }
 
     useEffect(() => {
         if (moves.length > movesMade) {
@@ -199,7 +213,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
             const checkMovesDict = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
             if (lastMove) {
                 setWordCheckComplete(false);
-                const wordResults = await GameFunctions.checkWords(lastMove, checkMovesDict);
+                const wordResults = await GameFunctions.checkWords(lastMove, checkMovesDict, wordBankDict);
                 let winningSpots: Set<string> = new Set();
                 let updatedWinningWords = [...winningWords]; // Local copy
 
@@ -242,7 +256,9 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
         return (
             <View>
                 <VStack>
-                    <JumblemLogoSimple />
+                    <Button onClick={() => navigate("/home")}>
+                        <JumblemLogoSimple />
+                    </Button>
 
                     <RatedGameHeader
                         userTimeExpired={userTimeExpired}

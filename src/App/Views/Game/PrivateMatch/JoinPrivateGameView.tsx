@@ -144,8 +144,8 @@ export default function JoinPrivateGameView({ passedUser }: JoinPrivateGameViewP
                     <>
                         <p>There was an error when finding a match.</p>
                         <Button
-                            color="primary"
-                            variant="outlined"
+                            color="error"
+                            variant="contained"
                             onClick={() => setGameModeState(JoinPrivateGameModeState.enterMatchCode)}
                         >
                             Retry

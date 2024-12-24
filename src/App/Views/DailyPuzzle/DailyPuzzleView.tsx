@@ -12,6 +12,7 @@ import DailyPuzzleFoundWords from "./DailyPuzzleFoundWords";
 import DailyPuzzleLeaderboardView from "./DailyPuzzleLeaderboardView";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
+import { WordBankFunctions } from "../../../Background/Utils/WordBankFunctions";
 
 interface DailyPuzzleViewProps {
     passedUser: UserModel;
@@ -24,6 +25,7 @@ export default function DailyPuzzleView({
     dailyPuzzle,
     dailyPuzzleDict
 }: DailyPuzzleViewProps) {
+    const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
     const [user, setUser] = useState<UserModel>(passedUser);
     const [selectedGridSpot, setSelectedGridSpot] = useState("");
     const [selectedLetter, setSelectedLetter] = useState("");
@@ -80,6 +82,8 @@ export default function DailyPuzzleView({
 
     async function onAppearActions() {
         try {
+            const wordBank = await WordBankFunctions.getWordBank();
+            setWordBankDict(wordBank);
             const updatedUser = await FetchService.fetchUserByUid(user.id);
             setUser(updatedUser);
             await GameService.updateLastPuzzlePlayed(user, dailyPuzzle);
@@ -138,7 +142,7 @@ export default function DailyPuzzleView({
                     const updatedDailyPuzzleDict = { ...dailyPuzzleDict, [gridSpot]: updatedSpot };
 
                     try {
-                        const words = await DailyPuzzleFunctions.checkWords(updatedSpot, updatedDailyPuzzleDict);
+                        const words = await DailyPuzzleFunctions.checkWords(updatedSpot, updatedDailyPuzzleDict, wordBankDict);
 
                         // Update goldenGrids and correctWords immutably
                         words.forEach(([wordModel, winningGridSpots]) => {
@@ -204,7 +208,7 @@ export default function DailyPuzzleView({
 
     if (view === "PuzzleLeaderBoard") {
         return (
-            <DailyPuzzleLeaderboardView passedUser={user} dailyPuzzle={dailyPuzzle}/>
+            <DailyPuzzleLeaderboardView passedUser={user} dailyPuzzle={dailyPuzzle} />
         );
     }
 
@@ -240,12 +244,12 @@ export default function DailyPuzzleView({
 
                 {(livesRemaining > 0 || !submittingPuzzle) && (
                     <DailyPuzzleLetterBank
-                    letters={dailyPuzzle.letterBank.sort()}
-                    selectedGridSpot={selectedGridSpot}
-                    setSelectedLetter={setSelectedLetter}
-                    livesRemaining={livesRemaining}
-                    blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}
-                />
+                        letters={dailyPuzzle.letterBank.sort()}
+                        selectedGridSpot={selectedGridSpot}
+                        setSelectedLetter={setSelectedLetter}
+                        livesRemaining={livesRemaining}
+                        blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}
+                    />
                 )}
 
                 <VStack spacing="0px" height="30px">

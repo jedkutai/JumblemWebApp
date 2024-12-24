@@ -1,7 +1,8 @@
 import { GridSpotModel } from "../Models/GridSpotModel";
 import { GridSpot } from "../Extends/GridSpot";
 import { WordModel } from "../Models/WordModel";
-import { WordService } from "../Service/WordService";
+// import { WordService } from "../Service/WordService";
+import { WordBankFunctions } from "./WordBankFunctions";
 
 export class DailyPuzzleFunctions {
   static validSquare(spot: GridSpotModel, grid: GridSpotModel[][]): boolean {
@@ -154,7 +155,8 @@ export class DailyPuzzleFunctions {
 
   static async checkWords(
     startingSpot: GridSpotModel,
-    gridDict: Record<string, GridSpotModel>
+    gridDict: Record<string, GridSpotModel>,
+    wordBankDict: Record<string, string[]>
   ): Promise<[WordModel, string[]][]> {
     const wordsToCheck = this.getWordsToCheck(startingSpot, gridDict);
     const wordDict: Record<string, string[]> = {};
@@ -169,7 +171,8 @@ export class DailyPuzzleFunctions {
       }
     }
 
-    const validWords: WordModel[] = await WordService.checkWords(wordBank); // Assumes WordService.checkWords returns valid words.
+    // const validWords: WordModel[] = await WordService.checkWords(wordBank);
+    const validWords = WordBankFunctions.checkWords(wordBank, wordBankDict);
     return validWords.map((word) => [word, wordDict[word.word]]);
   }
 }

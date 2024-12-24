@@ -132,7 +132,10 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
         <View>
             <VStack>
 
-                <JumblemLogoSimple />
+                <Button onClick={dismiss}>
+                    <JumblemLogoSimple />
+                </Button>
+                
                 {gameModeState === RatedGameModeState.idle && (
                     <>
                         <Button
@@ -148,7 +151,7 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
                 {gameModeState === RatedGameModeState.findingMatch && (
                     <>
                         <p>Finding Rated Match...</p>
-                        <CircularProgress sx={{ color: "black" }}/>
+                        <CircularProgress sx={{ color: "black" }} />
                     </>
                 )}
 

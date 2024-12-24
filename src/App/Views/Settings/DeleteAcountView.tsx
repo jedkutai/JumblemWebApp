@@ -72,7 +72,7 @@ export default function DeleteAccountView({ passedUser, onBack }: DeleteAccountV
     return (
         <View>
             <VStack>
-                <Button onClick={() => navigate("/")}>
+                <Button onClick={() => navigate("/home")}>
                     <JumblemLogoSimple />
                 </Button>
                 <Box style={styles.form}>

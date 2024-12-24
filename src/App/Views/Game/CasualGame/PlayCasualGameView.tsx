@@ -12,6 +12,7 @@ import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
 import CasualGameOverGrid from "./CasualGameOverGrid";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import { useNavigate } from "react-router-dom";
+import { WordBankFunctions } from "../../../../Background/Utils/WordBankFunctions";
 
 interface PlayCasualGameViewProps {
     passedUser: UserModel;
@@ -23,6 +24,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
         moves,
     } = useStandardGameManager(passedUser, passedGame);
 
+    const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
     const [user] = useState<UserModel>(passedUser);
     const [game] = useState<GameModel>(passedGame);
     const [gameOver, setGameOver] = useState(false);
@@ -49,10 +51,22 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
     const navigate = useNavigate();
 
     useEffect(() => {
+        try {
+            onAppearActions();
+        } catch {
+            setGameOver(true);
+        }
+    }, []);
+
+    async function onAppearActions() {
+        const wordBank = await WordBankFunctions.getWordBank();
+        setWordBankDict(wordBank);
+        const numberOfKeys = Object.keys(wordBank).length;
+        console.log(`onappear: The dictionary has ${numberOfKeys} keys.`);
         setMatchAbortedTicker(!matchAbortedTicker);
         setTickCount(tickCount + 1);
         setYourTurn(game.playerOneId == user.id);
-    }, []);
+    }
 
     useEffect(() => {
         if (moves.length > movesMade) {
@@ -74,7 +88,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                 try {
                     const check = await CasualGameService.getGameUpdate(game);
                     if (check) {
-                        
+
                     }
                 } catch {
                     setGameOver(true);
@@ -200,7 +214,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
             const checkMovesDict = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
             if (lastMove) {
                 setWordCheckComplete(false);
-                const wordResults = await GameFunctions.checkWords(lastMove, checkMovesDict);
+                const wordResults = await GameFunctions.checkWords(lastMove, checkMovesDict, wordBankDict);
                 let winningSpots: Set<string> = new Set();
                 let updatedWinningWords = [...winningWords]; // Local copy
 
@@ -260,7 +274,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                     <Button onClick={() => navigate("/home")}>
                         Home
                     </Button>
-                    
+
                     <CasualGameOverGrid
                         user={user}
                         game={game}

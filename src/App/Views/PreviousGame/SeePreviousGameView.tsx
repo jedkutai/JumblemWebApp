@@ -103,7 +103,7 @@ export default function SeePreviousGameView({ previousGame }: SeePreviousGameVie
                     {moves ? (
                         <VStack>
                             <Button onClick={() => navigate("/home")}>
-                            <JumblemLogoSimple />
+                                <JumblemLogoSimple />
                             </Button>
                             {previousGame.gameMode === "standard" ? (
                                 <HStack maxWidth="400px">
@@ -156,18 +156,18 @@ export default function SeePreviousGameView({ previousGame }: SeePreviousGameVie
                                     goToPreviousMove={goToPreviousMove}
                                 />
                             </HStack>
-                            
+
                             {winningWords.length > 0 && (
                                 <>
-                                <Typography>Words:</Typography>
-                                {winningWords.map((word, index) => (
-                                    <ColoredWord key={index} word={word} />
-                                ))}
+                                    <Typography>Words:</Typography>
+                                    {winningWords.map((word, index) => (
+                                        <ColoredWord key={index} word={word} />
+                                    ))}
                                 </>
                             )}
                         </VStack>
                     ) : (
-                        <CircularProgress sx={{ color: "black" }}/>
+                        <CircularProgress sx={{ color: "black" }} />
                     )}
                 </>
 

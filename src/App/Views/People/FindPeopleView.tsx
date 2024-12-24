@@ -89,8 +89,7 @@ export default function FindPeopleView({ passedUser }: FindPeopleViewProps) {
     return (
         <View>
             <VStack>
-                {/* <Typography variant="h2">Find People</Typography> */}
-                <Button onClick={() => navigate("/")}>
+                <Button onClick={() => navigate("/home")}>
                     <JumblemLogoSimple />
                 </Button>
                 <TextField

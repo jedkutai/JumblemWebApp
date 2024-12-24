@@ -38,16 +38,16 @@ export function ColoredWord({ word }: ColoredWordProps) {
         <Button onClick={getDefinition}>
             <>
                 {wordRarity == WordRarity.common && (
-                    <h2 style={{ color: "gray", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
+                    <h2 style={{ color: "rgba(142,142,147,255)", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
                 )}
                 {wordRarity == WordRarity.uncommon && (
                     <h2 style={{ color: "black", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
                 )}
                 {wordRarity == WordRarity.rare && (
-                    <h2 style={{ color: "purple", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
+                    <h2 style={{ color: "rgba(175,82,221,255)", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
                 )}
                 {wordRarity == WordRarity.legendary && (
-                    <h2 style={{ color: "red", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
+                    <h2 style={{ color: "rgba(255,59,48,255)", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
                 )}
             </>
         </Button>
