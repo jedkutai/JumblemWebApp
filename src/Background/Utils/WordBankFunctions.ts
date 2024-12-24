@@ -18,7 +18,6 @@ export class WordBankFunctions {
             rows.forEach((row) => {
                 const splitRow = row.toLowerCase().split(",");
                 const word = splitRow[0];
-                // const frequency = splitRow[1].trim();
                 const frequency = splitRow[1];
 
                 const wordPrefix: string = word.slice(0, 3);
@@ -90,19 +89,18 @@ export class WordBankFunctions {
             const mid = Math.floor((left + right) / 2);
             const midElement = sortedArray[mid];
 
-            // Extract the word part (before the '#')
             const midWord = midElement.split("#")[0];
 
             if (midWord === word) {
-                return midElement; // Word found
+                return midElement;
             } else if (midWord < word) {
-                left = mid + 1; // Search in the right half
+                left = mid + 1; 
             } else {
-                right = mid - 1; // Search in the left half
+                right = mid - 1; 
             }
         }
 
-        return null; // Word not found
+        return null;
     }
 
     static fetchWordModelByWord(

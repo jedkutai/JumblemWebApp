@@ -1,7 +1,6 @@
 import { GridSpotModel } from "../Models/GridSpotModel";
 import { GridSpot } from "../Extends/GridSpot";
 import { WordModel } from "../Models/WordModel";
-// import { WordService } from "../Service/WordService";
 import { WordBankFunctions } from "./WordBankFunctions";
 
 export class DailyPuzzleFunctions {
@@ -171,7 +170,6 @@ export class DailyPuzzleFunctions {
       }
     }
 
-    // const validWords: WordModel[] = await WordService.checkWords(wordBank);
     const validWords = WordBankFunctions.checkWords(wordBank, wordBankDict);
     return validWords.map((word) => [word, wordDict[word.word]]);
   }

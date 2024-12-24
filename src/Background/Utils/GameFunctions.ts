@@ -1,7 +1,6 @@
 import { GridFunctions } from "./GridFunctions";
 import { WordModel } from "../Models/WordModel";
 import { MoveModel } from "../Models/MoveModel";
-// import { WordService } from "../Service/WordService";
 import { WordBankFunctions } from "./WordBankFunctions";
 
 export class GameFunctions {
@@ -204,7 +203,6 @@ static chopString(consecutive: [string, string[]]): [string, string[]][] {
     }
 
 
-    // const validWords: WordModel[] = await WordService.checkWords(wordBank);
     const validWords = WordBankFunctions.checkWords(wordBank, wordBankDict);
     return validWords.map((word) => [word, wordDict[word.word]]);
   }
