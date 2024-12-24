@@ -1,4 +1,3 @@
-import { CircularProgress } from "@mui/material";
 import SettingsView from "../../App/Views/Settings/SettingsView";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect } from "react";
@@ -6,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { UserModel } from "../../Background/Models";
 import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
-import { View } from "../../ReactSwiftly";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
+import PageNotFoundView from "../../App/Components/PageNoteFoundView";
 
 enum PageState {
     loading,
@@ -51,15 +50,13 @@ function HomeRoute() {
             );
 
         case PageState.loaded:
-            if (user) {
+            if (user && user.username !== "guest") {
                 return (
                     <SettingsView passedUser={user} />
                 );
             } else {
                 return (
-                    <View>
-                        <CircularProgress sx={{ color: "black" }}/>
-                    </View>
+                    <PageNotFoundView />
                 )
             }
             break;

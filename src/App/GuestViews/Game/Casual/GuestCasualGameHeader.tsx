@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
-import { HSpacer, HStack, VStack } from "../../../../ReactSwiftly";
-import CasualPlayerHeader from "./CasualPlayerHeader";
+import { useState, useEffect } from "react";
+import { VStack, HStack, HSpacer } from "../../../../ReactSwiftly";
+import CasualPlayerHeader from "../../../Views/Game/CasualGame/CasualPlayerHeader";
 
-
-interface CasualGameHeaderProps {
+interface GuestCasualGameHeaderProps {
     userTimeExpired: boolean,
     setUserTimeExpired: (userTimeExpired: boolean) => void,
     checkOpponentTimeExpired: boolean,
@@ -17,7 +16,7 @@ interface CasualGameHeaderProps {
     gameOver: boolean,
 }
 
-export default function CasualGameHeader({
+export default function GuestCasualGameHeader({
     setUserTimeExpired,
     setCheckOpponentTimeExpired,
     userId, 
@@ -27,7 +26,7 @@ export default function CasualGameHeader({
     yourTurn, 
     firstMoveMade,
     gameOver,
-}: CasualGameHeaderProps) {
+}: GuestCasualGameHeaderProps) {
 
     const [tick, setTick] = useState(false);
     const [clock, setClock] = useState(0);

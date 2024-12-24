@@ -76,21 +76,21 @@ export class AuthService {
     return user;
   }
 
-  static async automaticLogin(): Promise<UserModel | null> {
-    const auth = getAuth();
-    const user = auth.currentUser;
+  // static async automaticLogin(): Promise<UserModel | null> {
+  //   const auth = getAuth();
+  //   const user = auth.currentUser;
 
-    if (user) {
-      try {
-        const loggedInUser = await FetchService.fetchUserByUid(user.uid);
-        return loggedInUser;
-      } catch (error) {
-        return null;
-      }
-    }
+  //   if (user) {
+  //     try {
+  //       const loggedInUser = await FetchService.fetchUserByUid(user.uid);
+  //       return loggedInUser;
+  //     } catch (error) {
+  //       return null;
+  //     }
+  //   }
 
-    return null;
-  }
+  //   return null;
+  // }
 
   static async signOut(): Promise<void> {
     const auth = getAuth();
@@ -108,7 +108,7 @@ export class AuthService {
 
     try {
       const user = auth.currentUser;
-      if (user) {
+      if (user && !user.isAnonymous) {
         const userDoc = doc(db, "users", user.uid);
         const publicUsernameDoc = doc(db, "publicUsernames", user.uid);
         await deleteDoc(userDoc);

@@ -27,7 +27,7 @@ export default function DailyPuzzleRoute() {
         const auth = getAuth(app);
 
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-            if (firebaseUser) {
+            if (firebaseUser && !firebaseUser.isAnonymous) {
                 try {
                     const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
 
@@ -56,7 +56,7 @@ export default function DailyPuzzleRoute() {
             );
 
         case PageState.loaded:
-            if (user) {
+            if (user && user.username !== "guest") {
                 return (
                     <LoadDailyPuzzleView passedUser={user} />
                 );

@@ -27,7 +27,6 @@ export default function ContentView() {
           navigate("/home");
         } else {
           setPageState(ContentViewPageState.loaded);
-          
         }
       }, 1000);
 

@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-// import { View } from "../../ReactSwiftly";
 import { UserModel } from "../../Background/Models";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
 import { useNavigate } from "react-router-dom";
-// import { CircularProgress } from "@mui/material";
+import { Timestamp } from "firebase/firestore";
 import HomeView from "../../App/Views/Body/HomeView";
 import GuestHomeView from "../../App/GuestViews/Body/GuestHomeView";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
+import PageNotFoundView from "../../App/Components/PageNoteFoundView";
 
 enum PageState {
     loading,
@@ -29,17 +29,32 @@ function HomeRoute() {
 
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
-                try {
-                    const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
-                    setUser(fetchedUser);
-                    setPageState(PageState.loaded); // Delay the loading state
-                } catch (error) {
-                    setUser(null);
-                    navigate("/");
+                if (firebaseUser.isAnonymous) {
+                    const guestUser: UserModel = {
+                        id: `GUEST${firebaseUser.uid}`,
+                        email: "",
+                        username: "guest",
+                        usernameDisplayed: "Guest",
+                        standardRating: 1500,
+                        timestamp: Timestamp.fromDate(new Date())
+                    }
+
+                    setUser(guestUser);
+                    setPageState(PageState.loaded);
+                } else {
+                    try {
+                        const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
+                        setUser(fetchedUser);
+                        setPageState(PageState.loaded); // Delay the loading state
+                    } catch (error) {
+                        setUser(null);
+                        navigate("/");
+                    }
                 }
             } else {
-                setUser(null);
-                setPageState(PageState.loaded);
+                // setUser(null);
+                navigate("/");
+
             }
         });
 
@@ -54,15 +69,20 @@ function HomeRoute() {
 
         case PageState.loaded:
             if (user) {
-                return (
-                    <HomeView passedUser={user} />
-                );
+                if (user.username === "guest") {
+                    return (
+                        <GuestHomeView />
+                    );
+                } else {
+                    return (
+                        <HomeView passedUser={user} />
+                    );
+                }
             } else {
                 return (
-                    <GuestHomeView />
+                    <PageNotFoundView />
                 )
             }
-            break;
 
     }
 }

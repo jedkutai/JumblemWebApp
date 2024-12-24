@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { UserModel } from "../../Background/Models";
 import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
-import { Button, Typography } from "@mui/material";
-import { HStack, View, VStack } from "../../ReactSwiftly";
 import StartCasualGameView from "../../App/Views/Game/CasualGame/StartCasualGameView";
-import JumblemLogoSimple from "../../App/Components/JumblemLogoSimple";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
+import PageNotFoundView from "../../App/Components/PageNoteFoundView";
+import GuestStartCasualGameView from "../../App/GuestViews/Game/Casual/GuestStartCasualGameView";
+import { Timestamp } from "firebase/firestore";
 
 enum PageState {
     loading,
@@ -29,18 +29,32 @@ export default function CasualGameRoute() {
 
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
-                try {
-                    const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
-
-                    if (fetchedUser.username) {
-                        setUser(fetchedUser);
-                        setPageState(PageState.loaded);
-                    } else {
-                        navigate("/home");
+                if (firebaseUser.isAnonymous) {
+                    const guestUser: UserModel = {
+                        id: `GUEST${firebaseUser.uid}`,
+                        email: "",
+                        username: "guest",
+                        usernameDisplayed: "Guest",
+                        standardRating: 1500,
+                        timestamp: Timestamp.fromDate(new Date())
                     }
-                } catch (error) {
-                    setUser(null);
-                    navigate("/");
+
+                    setUser(guestUser);
+                    setPageState(PageState.loaded);
+                } else {
+                    try {
+                        const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
+    
+                        if (fetchedUser.username) {
+                            setUser(fetchedUser);
+                            setPageState(PageState.loaded);
+                        } else {
+                            navigate("/home");
+                        }
+                    } catch (error) {
+                        setUser(null);
+                        navigate("/");
+                    }
                 }
             } else {
                 setUser(null);
@@ -59,25 +73,18 @@ export default function CasualGameRoute() {
 
         case PageState.loaded:
             if (user) {
-                return (
-                    <StartCasualGameView passedUser={user} />
-                );
+                if (user.username !== "guest") {
+                    return (
+                        <StartCasualGameView passedUser={user} />
+                    );
+                } else {
+                    return (
+                        <GuestStartCasualGameView passedUser={user} />
+                    );
+                }
             } else {
                 return (
-                    <View>
-                        <VStack>
-                            <Button onClick={() => navigate("/home")}>
-                                <JumblemLogoSimple />
-                            </Button>
-
-                            <Typography textAlign={"center"}>Login or download the iOS app to play as a guest.</Typography>
-
-                            <HStack>
-                                <Button variant="contained" color="secondary" onClick={() => navigate("/login")}>Login</Button>
-                                <Button variant="contained" color="primary">Download</Button>
-                            </HStack>
-                        </VStack>
-                    </View>
+                    <PageNotFoundView />
                 )
             }
             break;

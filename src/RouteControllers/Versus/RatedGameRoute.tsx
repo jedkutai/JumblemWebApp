@@ -29,18 +29,22 @@ export default function RatedGameRoute() {
 
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
-                try {
-                    const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
-
-                    if (fetchedUser.username) {
-                        setUser(fetchedUser);
-                        setPageState(PageState.loaded);
-                    } else {
-                        navigate("/home");
+                if (firebaseUser.isAnonymous) {
+                    navigate("/home");
+                } else {
+                    try {
+                        const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
+    
+                        if (fetchedUser.username) {
+                            setUser(fetchedUser);
+                            setPageState(PageState.loaded);
+                        } else {
+                            navigate("/home");
+                        }
+                    } catch (error) {
+                        setUser(null);
+                        navigate("/");
                     }
-                } catch (error) {
-                    setUser(null);
-                    navigate("/");
                 }
             } else {
                 setUser(null);
@@ -58,7 +62,7 @@ export default function RatedGameRoute() {
             );
 
         case PageState.loaded:
-            if (user) {
+            if (user && user.username !== "guest") {
                 return (
                     <StartRatedGameView passedUser={user} />
                 );

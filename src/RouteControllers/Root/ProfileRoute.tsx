@@ -1,4 +1,3 @@
-import { Typography } from "@mui/material";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -6,8 +5,8 @@ import ProfileView from "../../App/Views/Body/ProfileView";
 import { UserModel } from "../../Background/Models";
 import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
-import { View } from "../../ReactSwiftly";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
+import PageNotFoundView from "../../App/Components/PageNoteFoundView";
 
 enum PageState {
     loading,
@@ -28,13 +27,17 @@ function ProfileRoute() {
 
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
-                try {
-                    const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
-                    setUser(fetchedUser);
-                    setPageState(PageState.loaded); // Delay the loading state
-                } catch (error) {
-                    setUser(null);
-                    navigate("/");
+                if (firebaseUser.isAnonymous) {
+                    navigate("/home");
+                } else {
+                    try {
+                        const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
+                        setUser(fetchedUser);
+                        setPageState(PageState.loaded); // Delay the loading state
+                    } catch (error) {
+                        setUser(null);
+                        navigate("/");
+                    }
                 }
             } else {
                 navigate("/");
@@ -51,17 +54,13 @@ function ProfileRoute() {
             );
 
         case PageState.loaded:
-            if (user) {
+            if (user && user.username !== "guest") {
                 return (
                     <ProfileView passedUser={user} />
                 );
             } else {
                 return (
-                    <View>
-                        <Typography>
-                            ooopsy woopsy, something went wrong
-                        </Typography>
-                    </View>
+                    <PageNotFoundView />
                 )
             }
 

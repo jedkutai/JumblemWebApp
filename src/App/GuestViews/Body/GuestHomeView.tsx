@@ -4,6 +4,8 @@ import { View, VStack } from "../../../ReactSwiftly";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
+import { AuthService } from "../../../Background/Service";
+
 
 export default function GuestHomeView() {
     const { minDimension } = useWindowSize();
@@ -59,7 +61,13 @@ export default function GuestHomeView() {
         },
     }
 
-
+    async function loginButton() {
+        try {
+            await AuthService.signOut();
+        } catch {
+            // console.error(error);
+        }
+    }
     return (
         <View>
             <VStack>
@@ -113,7 +121,7 @@ export default function GuestHomeView() {
 
                 </Box>
 
-                <Button variant="contained" onClick={() => navigate("/")}>LOGIN</Button>
+                <Button variant="contained" onClick={loginButton}>LOGIN</Button>
             </VStack>
         </View>
     );

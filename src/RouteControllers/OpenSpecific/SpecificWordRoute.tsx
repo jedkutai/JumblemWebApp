@@ -1,13 +1,12 @@
-import { Typography } from "@mui/material";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { DictionaryWordModel, UserModel, WordModel } from "../../Background/Models";
 import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
-import { View } from "../../ReactSwiftly";
 import SpecificWordView from "../../App/Views/Dictionary/SpecificWordView";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
+import PageNotFoundView from "../../App/Components/PageNoteFoundView";
 
 enum PageState {
     loading,
@@ -32,26 +31,31 @@ function SpecificWordRoute() {
 
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
-                try {
-                    const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
-                    if (word) {
-                        const fetchedWordModel = await FetchService.fetchWordModelByWord(word);
-                        const fetchedDictionaryModels = await FetchService.fetchWordDefinition(word);
-                        setWordModel(fetchedWordModel);
-                        setDictionaryModels(fetchedDictionaryModels);
-                        if (fetchedWordModel && !fetchedDictionaryModels) {
-                            const searchUrl = `${googleLink}${word}+definition`;
-                            window.open(searchUrl, "_blank");
+                if (firebaseUser.isAnonymous) {
+                    navigate("/home");
+                } else {
+                    try {
+                        const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
+                        if (word) {
+                            const fetchedWordModel = await FetchService.fetchWordModelByWord(word);
+                            const fetchedDictionaryModels = await FetchService.fetchWordDefinition(word);
+                            setWordModel(fetchedWordModel);
+                            setDictionaryModels(fetchedDictionaryModels);
+                            if (fetchedWordModel && !fetchedDictionaryModels) {
+                                const searchUrl = `${googleLink}${word}+definition`;
+                                window.open(searchUrl, "_blank");
+                            }
                         }
+                        setUser(fetchedUser);
+                        setPageState(PageState.loaded);
+    
+                    } catch (error) {
+                        const searchUrl = `${googleLink}${word}+definition`;
+                        window.open(searchUrl, "_blank");
+                        navigate("/");
                     }
-                    setUser(fetchedUser);
-                    setPageState(PageState.loaded);
-
-                } catch (error) {
-                    const searchUrl = `${googleLink}${word}+definition`;
-                    window.open(searchUrl, "_blank");
-                    navigate("/");
                 }
+
             } else {
                 navigate("/");
             }
@@ -73,9 +77,7 @@ function SpecificWordRoute() {
                 );
             } else {
                 return (
-                    <View>
-                        <Typography>Word not found.</Typography>
-                    </View>
+                    <PageNotFoundView />
                 )
             }
             break;

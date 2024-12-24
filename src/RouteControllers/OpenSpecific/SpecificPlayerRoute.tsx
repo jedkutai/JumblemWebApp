@@ -30,22 +30,27 @@ function SpecificPlayerRoute() {
 
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
-                try {
-                    const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
-                    if (username) {
-                        if (fetchedUser.username == username.toLowerCase()) {
-                            navigate("/profile");
-                        } else {
-                            const fetchedPlayer = await FetchService.fetchUserByUsername(username);
-                            setSpecificPlayer(fetchedPlayer);
+                if (firebaseUser.isAnonymous) {
+                    navigate("/home");
+                } else {
+                    try {
+                        const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
+                        if (username) {
+                            if (fetchedUser.username == username.toLowerCase()) {
+                                navigate("/profile");
+                            } else {
+                                const fetchedPlayer = await FetchService.fetchUserByUsername(username);
+                                setSpecificPlayer(fetchedPlayer);
+                            }
                         }
-                    }
-                    setUser(fetchedUser);
-                    setPageState(PageState.loaded);
+                        setUser(fetchedUser);
+                        setPageState(PageState.loaded);
 
-                } catch (error) {
-                    navigate("/");
+                    } catch (error) {
+                        navigate("/");
+                    }
                 }
+
             } else {
                 navigate("/");
             }

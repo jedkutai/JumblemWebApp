@@ -29,19 +29,24 @@ export default function PrivateGameRoute() {
 
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
-                try {
-                    const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
-
-                    if (fetchedUser.username) {
-                        setUser(fetchedUser);
-                        setPageState(PageState.loaded);
-                    } else {
-                        navigate("/home");
+                if (firebaseUser.isAnonymous) {
+                    navigate("/home");
+                } else {
+                    try {
+                        const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
+    
+                        if (fetchedUser.username) {
+                            setUser(fetchedUser);
+                            setPageState(PageState.loaded);
+                        } else {
+                            navigate("/home");
+                        }
+                    } catch (error) {
+                        setUser(null);
+                        navigate("/");
                     }
-                } catch (error) {
-                    setUser(null);
-                    navigate("/");
                 }
+
             } else {
                 setUser(null);
                 setPageState(PageState.loaded);
@@ -58,7 +63,7 @@ export default function PrivateGameRoute() {
             );
 
         case PageState.loaded:
-            if (user) {
+            if (user && user.username !== "guest") {
                 return (
                     <PrivateMatchMenuView passedUser={user} />
                 );

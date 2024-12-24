@@ -30,19 +30,23 @@ function SpecificGameRoute() {
 
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
-                try {
-                    const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
-                    if (gameId) {
-                        const fetchedGame = await FetchService.fetchGameById(gameId);
-                        if (fetchedGame.winner !== "aborted") {
-                            setSpecificGame(fetchedGame);
+                if (firebaseUser.isAnonymous) {
+                    navigate("/home");
+                } else {
+                    try {
+                        const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
+                        if (gameId) {
+                            const fetchedGame = await FetchService.fetchGameById(gameId);
+                            if (fetchedGame.winner !== "aborted") {
+                                setSpecificGame(fetchedGame);
+                            }
                         }
+                        setUser(fetchedUser);
+                        setPageState(PageState.loaded);
+    
+                    } catch (error) {
+                        navigate("/");
                     }
-                    setUser(fetchedUser);
-                    setPageState(PageState.loaded);
-
-                } catch (error) {
-                    navigate("/");
                 }
             } else {
                 navigate("/");
