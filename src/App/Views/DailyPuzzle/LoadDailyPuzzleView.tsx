@@ -102,7 +102,9 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
     return (
         <View>
             <VStack>
+                <Button onClick={() => navigate("/home")}>
                 <JumblemLogoSimple />
+                </Button>
 
                 <VStack height={`${height / 2}px`}>
                     <VSpacer />
@@ -137,7 +139,7 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
                     <VSpacer />
                 </VStack>
 
-                <Button variant="outlined" onClick={() => navigate("/home")}>Home</Button>
+                <Button variant="contained" color="error" onClick={() => navigate("/home")}>Leave</Button>
 
             </VStack>
         </View>

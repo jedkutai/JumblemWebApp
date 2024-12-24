@@ -68,10 +68,6 @@ export default function PrivateGameGrid({
                 ))}
 
             </VStack>
-            
-            {lastMove == undefined && (
-                <p>Auto-abort in {Math.max(matchAbortedTime, 0)}...</p>
-            )}
 
             <PrivateLetterGenerator
                 user={user}
@@ -85,6 +81,10 @@ export default function PrivateGameGrid({
                 yourTurn={yourTurn}
                 blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}
             />
+
+            {lastMove == undefined && (
+                <p>Auto-abort in {Math.max(matchAbortedTime, 0)}...</p>
+            )}
         </VStack>
     );
 

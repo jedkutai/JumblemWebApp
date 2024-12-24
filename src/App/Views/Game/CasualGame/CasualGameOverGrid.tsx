@@ -6,6 +6,8 @@ import CasualGameOverRow from "./CasualGameOverRow";
 import { VStack } from "../../../../ReactSwiftly";
 import { CasualGameService } from "../../../../Background/Service";
 import { ColoredWord } from "../../../Components";
+// import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 
 interface CasualGameOverGridProps {
     user: UserModel;
@@ -25,7 +27,7 @@ export default function CasualGameOverGrid({
 }: CasualGameOverGridProps) {
     const [finalGame, setFinalGame] = useState<GameModel | undefined>(undefined);
     const [grid] = useState<GridSpotModel[][]>(GridSpot.grid);
-
+    // const navigate = useNavigate();
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
     const upperBound = 650;
@@ -77,15 +79,18 @@ export default function CasualGameOverGrid({
                 {finalGame && finalGame.winner != "draw" && finalGame.winner != "aborted" && finalGame.winner != user.id && (
                     <h2>You lose!</h2>
                 )}
+                
+                <Button variant="contained" color="error" onClick={() => window.location.reload()}>Leave</Button>
 
+                <VStack spacing="10px">
+                    {winningWords.map((word, index) => (
+                        <ColoredWord key={index} word={word} />
+                    ))}
+                </VStack>
 
             </VStack>
 
-            <VStack spacing="10px">
-                {winningWords.map((word, index) => (
-                    <ColoredWord key={index} word={word} />
-                ))}
-            </VStack>
+
 
         </VStack>
 

@@ -66,10 +66,6 @@ export default function GuestCasualGameGrid({
                 ))}
 
             </VStack>
-            
-            {lastMove == undefined && (
-                <p>Auto-abort in {Math.max(matchAbortedTime, 0)}...</p>
-            )}
 
             <CasualLetterGenerator
                 user={user}
@@ -83,6 +79,10 @@ export default function GuestCasualGameGrid({
                 yourTurn={yourTurn}
                 blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}
             />
+
+            {lastMove == undefined && (
+                <p>Auto-abort in {Math.max(matchAbortedTime, 0)}...</p>
+            )}
         </VStack>
     );
 

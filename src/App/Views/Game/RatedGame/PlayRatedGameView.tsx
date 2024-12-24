@@ -276,9 +276,9 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
                         opponentRatingChange={user.id !== game.playerOneId ? game.playerOneRatingChange : game.playerTwoRatingChange}
                     />
 
-                    <Button onClick={() => navigate("/home")}>
+                    {/* <Button onClick={() => navigate("/home")}>
                         Home
-                    </Button>
+                    </Button> */}
 
                     <RatedGameOverGrid
                         user={user}

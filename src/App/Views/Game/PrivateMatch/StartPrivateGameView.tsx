@@ -149,7 +149,7 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
                         <p>There was an error when finding a match.</p>
                         <Button
                             color="primary"
-                            variant="outlined"
+                            variant="contained"
                             onClick={onAppearActions}
                         >
                             Retry

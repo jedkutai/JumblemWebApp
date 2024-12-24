@@ -23,7 +23,7 @@ export default function RematchButton({ flash, setView }: RematchButtonProps) {
 
     return (
         <Button
-            variant="text"
+            variant="contained"
             color={flash ? tick ? "primary" : "error" : "primary"}
             onClick={setView}
         >

@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+// import { Button } from "@mui/material";
 import { View, VSpacer, VStack } from "../../../../ReactSwiftly";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import { GuestService } from "../../../../Background/Service";
@@ -13,6 +13,7 @@ import { useStandardGameManager } from "../../../../Background/Managers/Standard
 import GuestCasualGameHeader from "./GuestCasualGameHeader";
 import GuestCasualGameGrid from "./GuestCasualGameGrid";
 import GuestCasualGameOverGrid from "./GuestCasualGameOverGrid";
+import { Button } from "@mui/material";
 
 interface GuestPlayCasualGameViewProps {
     passedUser: UserModel;
@@ -249,9 +250,11 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
 
     if (gameOver || checkGameOver) {
         return (
-            <View>
+            <View startAtTop={true}>
                 <VStack>
+                    <Button onClick={() => navigate("/home")}>
                     <JumblemLogoSimple />
+                    </Button>
 
                     <GuestCasualGameHeader
                         userTimeExpired={userTimeExpired}
@@ -267,9 +270,6 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
                         gameOver={gameOver}
                     />
 
-                    <Button onClick={() => navigate("/home")}>
-                        Home
-                    </Button>
 
                     <GuestCasualGameOverGrid
                         user={passedUser}
@@ -286,7 +286,7 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
         );
     } else {
         return (
-            <View>
+            <View startAtTop={true}>
                 <VStack width={`${width}px`} height={`${height}px`}>
                     {/* <VSpacer /> */}
                     <JumblemLogoSimple />

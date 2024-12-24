@@ -118,8 +118,8 @@ export default function JoinPrivateGameView({ passedUser }: JoinPrivateGameViewP
                         </Box>
 
                         <Button
-                            variant="outlined"
-                            color="secondary"
+                            variant="contained"
+                            color="error"
                             onClick={() => setView("PrivateMatchMenuView")}
                             style={{ marginTop: "10px" }}
                         >

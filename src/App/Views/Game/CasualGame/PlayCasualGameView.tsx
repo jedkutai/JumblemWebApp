@@ -7,12 +7,12 @@ import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
 import { View, VSpacer, VStack } from "../../../../ReactSwiftly";
 import CasualGameGrid from "./CasualGameGrid";
 import CasualGameHeader from "./CasualGameHeader";
-import { Button } from "@mui/material";
 import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
 import CasualGameOverGrid from "./CasualGameOverGrid";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
-import { useNavigate } from "react-router-dom";
 import { WordBankFunctions } from "../../../../Background/Utils/WordBankFunctions";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 
 interface PlayCasualGameViewProps {
     passedUser: UserModel;
@@ -36,10 +36,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
     const [matchAbortedTime, setMatchAbortedTime] = useState(10);
     const [wordCheckComplete, setWordCheckComplete] = useState(true);
     const [winningGridSpots, setWinningGridSpots] = useState<string[]>([]);
-    // const [view, setView] = useState<"HomeView" | "PlayCasualGameView">("PlayCasualGameView");
     const { width, height } = useWindowSize();
-    // const dimensionDivider = 9 * 1.75;
-    // const upperBound = 650;
 
     const [movesCopy, setMovesCopy] = useState<MoveModel[]>([]);
     const [movesDict, setMovesDict] = useState<Record<string, MoveModel>>({});
@@ -253,9 +250,11 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
 
     if (gameOver || checkGameOver) {
         return (
-            <View>
+            <View startAtTop={true}>
                 <VStack>
-                    <JumblemLogoSimple />
+                    <Button onClick={() => navigate("/home")}>
+                        <JumblemLogoSimple />
+                    </Button>
 
                     <CasualGameHeader
                         userTimeExpired={userTimeExpired}
@@ -270,10 +269,6 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                         firstMoveMade={movesCopy.length !== 0}
                         gameOver={gameOver}
                     />
-
-                    <Button onClick={() => navigate("/home")}>
-                        Home
-                    </Button>
 
                     <CasualGameOverGrid
                         user={user}
@@ -290,9 +285,8 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
         );
     } else {
         return (
-            <View>
+            <View startAtTop={true}>
                 <VStack width={`${width}px`} height={`${height}px`}>
-                    {/* <VSpacer /> */}
                     <JumblemLogoSimple />
 
                     <CasualGameHeader

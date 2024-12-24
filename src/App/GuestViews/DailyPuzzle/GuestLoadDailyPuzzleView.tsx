@@ -75,7 +75,7 @@ export default function GuestLoadDailyPuzzleView() {
     switch (view) {
         case "PlayDailyPuzzle":
             if (dailyPuzzle) {
-                return (<GuestDailyPuzzleView  dailyPuzzle={dailyPuzzle} dailyPuzzleDict={dailyPuzzleDict} />);
+                return (<GuestDailyPuzzleView dailyPuzzle={dailyPuzzle} dailyPuzzleDict={dailyPuzzleDict} />);
             }
             break;
         case "Results":
@@ -94,13 +94,15 @@ export default function GuestLoadDailyPuzzleView() {
     return (
         <View>
             <VStack>
-                <JumblemLogoSimple />
+                <Button onClick={() => navigate("/home")}>
+                    <JumblemLogoSimple />
+                </Button>
 
                 <VStack height={`${height / 2}px`}>
                     <VSpacer />
 
                     {dailyPuzzleState === DailyPuzzleState.loading && (
-                        <CircularProgress sx={{ color: "black" }}/>
+                        <CircularProgress sx={{ color: "black" }} />
                     )}
                     {dailyPuzzleState === DailyPuzzleState.loaded && (
                         <>
@@ -117,8 +119,8 @@ export default function GuestLoadDailyPuzzleView() {
                             <Typography textAlign={"center"}>{nextPuzzleDate(dailyPuzzle.timestamp)}</Typography>
 
                             <HStack>
-                                <Button style={{width: "100px"}} variant="contained" color="secondary" onClick={() => setView("Results")}>Results</Button>
-                                <Button style={{width: "100px"}} variant="contained" color="primary" onClick={() => navigate("/")}>Login</Button>
+                                <Button style={{ width: "100px" }} variant="contained" color="secondary" onClick={() => setView("Results")}>Results</Button>
+                                <Button style={{ width: "100px" }} variant="contained" color="primary" onClick={() => navigate("/")}>Login</Button>
                             </HStack>
                         </>
                     )}
@@ -132,7 +134,7 @@ export default function GuestLoadDailyPuzzleView() {
                     <VSpacer />
                 </VStack>
 
-                <Button variant="outlined" onClick={() => navigate("/home")}>Home</Button>
+                <Button variant="contained" color="error" onClick={() => navigate("/home")}>Leave</Button>
 
             </VStack>
         </View>

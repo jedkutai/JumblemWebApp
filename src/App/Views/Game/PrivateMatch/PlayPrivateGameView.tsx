@@ -6,12 +6,12 @@ import { Button } from "@mui/material";
 import { PrivateGameService } from "../../../../Background/Service";
 import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
 import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
-import { View, VStack, VSpacer, HStack } from "../../../../ReactSwiftly";
+import { View, VStack, VSpacer } from "../../../../ReactSwiftly";
 import HomeView from "../../Body/HomeView";
 import PrivateGameHeader from "./PrivateGameHeader";
 import PrivateGameGrid from "./PrivateGameGrid";
 import PrivateGameOverGrid from "./PrivateGameOverGrid";
-import RematchButton from "../../../Components/RematchButton";
+// import RematchButton from "../../../Components/RematchButton";
 import RematchController from "./PrivateRematch/RematchController";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import { useNavigate } from "react-router-dom";
@@ -204,8 +204,6 @@ export default function PlayPrivateGameView({
         }
     }, [rematchTicker]);
 
-
-
     async function rematchTickerActions() {
         const timeout = setTimeout(async () => {
             try {
@@ -326,13 +324,6 @@ export default function PlayPrivateGameView({
                         gameOver={gameOver}
                     />
 
-                    <HStack>
-                        <Button onClick={() => navigate("/home")}>
-                            Home
-                        </Button>
-
-                        <RematchButton flash={rematchOffered} setView={() => navigateRematchView()} />
-                    </HStack>
 
                     <PrivateGameOverGrid
                         user={user}
@@ -340,6 +331,8 @@ export default function PlayPrivateGameView({
                         movesDict={movesDict}
                         winningWords={winningWords}
                         winningGridSpots={winningGridSpots}
+                        navigateRematchView={navigateRematchView}
+                        rematchOffered={rematchOffered}
                     />
 
 

@@ -9,12 +9,6 @@ import { useNavigate } from "react-router-dom";
 interface JoinPrivateRematchViewProps {
     passedUser: UserModel;
     previousGame: GameModel;
-    // wins: number;
-    // draws: number;
-    // losses: number;
-    // setWins: (wins: number) => void;
-    // setDraws: (draws: number) => void;
-    // setLosses: (losses: number) => void;
 }
 
 enum JoinPrivateRematchModeState {
@@ -26,12 +20,6 @@ enum JoinPrivateRematchModeState {
 export default function JoinPrivateRematchView({
     passedUser,
     previousGame,
-    // wins,
-    // draws,
-    // losses,
-    // setWins,
-    // setDraws,
-    // setLosses
 }: JoinPrivateRematchViewProps) {
     // const [view, setView] = useState<"StartPrivateGameView" | "HomeView">("StartPrivateGameView");
     const [user, setUser] = useState<UserModel>(passedUser);

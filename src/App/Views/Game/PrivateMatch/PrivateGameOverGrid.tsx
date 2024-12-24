@@ -3,9 +3,12 @@ import { GameModel, GridSpotModel, MoveModel, UserModel, WordModel } from "../..
 import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
 import { GridSpot } from "../../../../Background/Extends/GridSpot";
 import PrivateGameOverRow from "./PrivateGameOverRow";
-import { VStack } from "../../../../ReactSwiftly";
+import { HStack, VStack } from "../../../../ReactSwiftly";
 import { PrivateGameService } from "../../../../Background/Service";
 import { ColoredWord } from "../../../Components";
+import { Button } from "@mui/material";
+import RematchButton from "../../../Components/RematchButton";
+// import { useNavigate } from "react-router-dom";
 
 interface PrivateGameOverGridProps {
     user: UserModel;
@@ -13,6 +16,8 @@ interface PrivateGameOverGridProps {
     movesDict: Record<string, MoveModel>;
     winningWords: WordModel[];
     winningGridSpots: string[];
+    navigateRematchView: () => void;
+    rematchOffered: boolean;
 }
 
 export default function PrivateGameOverGrid({
@@ -21,6 +26,8 @@ export default function PrivateGameOverGrid({
     movesDict,
     winningWords,
     winningGridSpots,
+    navigateRematchView,
+    rematchOffered,
 }: PrivateGameOverGridProps) {
     const [finalGame, setFinalGame] = useState<GameModel | undefined>(undefined);
     const [grid] = useState<GridSpotModel[][]>(GridSpot.grid);
@@ -28,7 +35,7 @@ export default function PrivateGameOverGrid({
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
     const upperBound = 650;
-    // finalGame stuff to show the result (win loss draw ect)
+    // const navigate = useNavigate();
     useEffect(() => {
         const fetchFinalGame = async () => {
             try {
@@ -77,14 +84,22 @@ export default function PrivateGameOverGrid({
                     <h2>You lose!</h2>
                 )}
 
+                <HStack>
+                    <Button variant="contained" color="error" onClick={() => window.location.reload()}>
+                        Leave
+                    </Button>
 
+                    <RematchButton flash={rematchOffered} setView={navigateRematchView} />
+                </HStack>
+
+                <VStack spacing="10px">
+                    {winningWords.map((word, index) => (
+                        <ColoredWord key={index} word={word} />
+                    ))}
+                </VStack>
             </VStack>
 
-            <VStack spacing="10px">
-                {winningWords.map((word, index) => (
-                    <ColoredWord key={index} word={word} />
-                ))}
-            </VStack>
+
 
         </VStack>
 

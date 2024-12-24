@@ -49,10 +49,27 @@ export class GameFunctions {
     return Math.floor(score);
   }
 
-  static getLetters(amount: number): string[] {
+  static getLetters(count: number): string[] {
+    const randomIndexes = new Set<number>(); // Use a Set to avoid duplicates
+    const result: string[] = [];
     const letters = this.letters();
-    return [...letters].sort(() => Math.random() - 0.5).slice(0, amount);
-  }
+
+    while (randomIndexes.size < count) {
+        const randomIndex = Math.floor(Math.random() * letters.length);
+        randomIndexes.add(randomIndex); // Automatically prevents duplicates
+    }
+
+    randomIndexes.forEach(index => {
+        result.push(letters[index]);
+    });
+
+    return result;
+}
+
+  // static getLetters(amount: number): string[] {
+  //   const letters = this.letters();
+  //   return [...letters].sort(() => Math.random() - 0.5).slice(0, amount);
+  // }
 
   static getAvailableBlocks(moves: Record<string, MoveModel>, availableBlocks: string[]): string[] {
     let result = [...availableBlocks];

@@ -6,6 +6,8 @@ import RatedGameOverRow from "./RatedGameOverRow";
 import { VStack } from "../../../../ReactSwiftly";
 import { RatedGameService } from "../../../../Background/Service";
 import { ColoredWord } from "../../../Components";
+import { Button } from "@mui/material";
+// import { useNavigate } from "react-router-dom";
 
 interface RatedGameOverGridProps {
     user: UserModel;
@@ -26,9 +28,9 @@ export default function RatedGameOverGrid({
     winningGridSpots,
 
 }: RatedGameOverGridProps) {
-    
-    const [grid] = useState<GridSpotModel[][]>(GridSpot.grid);
 
+    const [grid] = useState<GridSpotModel[][]>(GridSpot.grid);
+    // const navigate = useNavigate();
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
     const upperBound = 650;
@@ -83,14 +85,17 @@ export default function RatedGameOverGrid({
                     <h2>You lose!</h2>
                 )}
 
+                <Button variant="contained" color="error" onClick={() => window.location.reload()}>Leave</Button>
+
+                <VStack spacing="10px">
+                    {winningWords.map((word, index) => (
+                        <ColoredWord key={index} word={word} />
+                    ))}
+                </VStack>
 
             </VStack>
 
-            <VStack spacing="10px">
-                {winningWords.map((word, index) => (
-                    <ColoredWord key={index} word={word} />
-                ))}
-            </VStack>
+
 
         </VStack>
 

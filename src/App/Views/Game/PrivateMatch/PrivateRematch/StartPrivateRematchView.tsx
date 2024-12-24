@@ -145,7 +145,7 @@ export default function StartPrivateRematchView({
                         <p>There was an error when finding a match.</p>
                         <Button
                             color="primary"
-                            variant="outlined"
+                            variant="contained"
                             onClick={onAppearActions}
                         >
                             Retry
@@ -157,8 +157,8 @@ export default function StartPrivateRematchView({
 
 
                 <Button
-                    variant="outlined"
-                    color="secondary"
+                    variant="contained"
+                    color="error"
                     onClick={dismiss}
                     style={{ marginTop: "10px" }}
                 >

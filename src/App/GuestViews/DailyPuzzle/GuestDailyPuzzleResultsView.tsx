@@ -52,9 +52,11 @@ export default function GuestDailyPuzzleResultsView() {
     return (
         <View>
             <VStack>
-                <JumblemLogoSimple />
+                <Button onClick={() => navigate("/home")}>
+                    <JumblemLogoSimple />
+                </Button>
                 {pageState === PageState.loading && (
-                    <CircularProgress sx={{ color: "black" }}/>
+                    <CircularProgress sx={{ color: "black" }} />
                 )}
                 {pageState === PageState.loaded && (
                     <>
