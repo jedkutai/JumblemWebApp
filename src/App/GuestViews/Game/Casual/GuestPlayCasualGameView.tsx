@@ -58,8 +58,6 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
     async function onAppearActions() {
         const wordBank = await WordBankFunctions.getWordBank();
         setWordBankDict(wordBank);
-        const numberOfKeys = Object.keys(wordBank).length;
-        console.log(`onappear: The dictionary has ${numberOfKeys} keys.`);
         setMatchAbortedTicker(!matchAbortedTicker);
         setTickCount(tickCount + 1);
         setYourTurn(game.playerOneId == passedUser.id);

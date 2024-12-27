@@ -6,6 +6,7 @@ import { CasualGameService, FetchService } from "../../../../Background/Service"
 import PlayCasualGameView from "./PlayCasualGameView";
 import { useNavigate } from "react-router-dom";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
+import BotPlayCasualGameView from "./CasualBot/BotPlayCasualGameView";
 
 interface StartCasualGameViewProps {
     passedUser: UserModel
@@ -15,6 +16,7 @@ enum CasualGameModeState {
     idle,
     findingMatch,
     matchFound,
+    playBot,
     error
 }
 
@@ -24,9 +26,10 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
     const [game, setGame] = useState<GameModel | null>(null);
     const [hostOfMatch, setHostOfMatch] = useState(false);
     const [stopSearching, setStopSearching] = useState(false);
-    const [takingLongToFindMatch, setTakingLongToFindMatch] = useState(false);
+    // const [takingLongToFindMatch, setTakingLongToFindMatch] = useState(false);
     const [ticker, setTicker] = useState(false);
     const [tickCount, setTickCount] = useState(0);
+    const [botMatchCreated, setBotMatchCreated] = useState(false);
     const navigate = useNavigate();
 
 
@@ -98,10 +101,20 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
                     try {
                         const gameUpdate = await CasualGameService.getGameUpdate(game);
                         if (gameUpdate.matchFound && gameUpdate.playerTwoId !== undefined) {
-                            setGame(gameUpdate);
-                            setGameModeState(CasualGameModeState.matchFound);
-                            setStopSearching(true);
+                            if (gameUpdate.playerTwoId.startsWith("BOT-")) {
+                                setGame(gameUpdate);
+                                setGameModeState(CasualGameModeState.playBot);
+                                setStopSearching(true);
+                            } else {
+                                setGame(gameUpdate);
+                                setGameModeState(CasualGameModeState.matchFound);
+                                setStopSearching(true);
+                            }
                         } else {
+                            if (tickCount > 10 && !botMatchCreated) {
+                                await CasualGameService.botJoinMatch(user, game);
+                                setBotMatchCreated(true);
+                            }
                             setTicker(!ticker);
                             setTickCount(tickCount + 1);
                         }
@@ -114,9 +127,7 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
                 return () => clearTimeout(timeout);
             }
 
-            if (tickCount > 10 && !takingLongToFindMatch) {
-                setTakingLongToFindMatch(true);
-            }
+
         } else {
             wipeGame();
         }
@@ -125,12 +136,14 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
 
     if (gameModeState === CasualGameModeState.matchFound && game) {
         return <PlayCasualGameView passedUser={user} passedGame={game} />;
+    } else if (gameModeState === CasualGameModeState.playBot && game) {
+        return <BotPlayCasualGameView passedUser={user} passedGame={game} />;
     }
 
     return (
         <View>
             <VStack>
-                <JumblemLogoSimple/>
+                <JumblemLogoSimple />
                 {gameModeState === CasualGameModeState.idle && (
                     <>
                         <Button
@@ -146,7 +159,7 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
                 {gameModeState === CasualGameModeState.findingMatch && (
                     <>
                         <p>Finding Casual Match...</p>
-                        <CircularProgress sx={{ color: "black" }}/>
+                        <CircularProgress sx={{ color: "black" }} />
                     </>
                 )}
 

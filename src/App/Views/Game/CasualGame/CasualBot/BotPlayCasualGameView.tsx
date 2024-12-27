@@ -1,25 +1,25 @@
-import { useEffect, useState } from "react";
-import { useStandardGameManager } from "../../../../Background/Managers/StandardGameManager";
-import { GameModel, MoveModel, UserModel, WordModel } from "../../../../Background/Models";
-import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
-import { CasualGameService } from "../../../../Background/Service";
-import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
-import { View, VSpacer, VStack } from "../../../../ReactSwiftly";
-import CasualGameGrid from "./CasualGameGrid";
-import CasualGameHeader from "./CasualGameHeader";
-import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
-import CasualGameOverGrid from "./CasualGameOverGrid";
-import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
-import { WordBankFunctions } from "../../../../Background/Utils/WordBankFunctions";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useStandardGameManager } from "../../../../../Background/Managers/StandardGameManager";
+import { UserModel, GameModel, WordModel, MoveModel } from "../../../../../Background/Models";
+import { CasualGameService } from "../../../../../Background/Service";
+import { ClockFunctions } from "../../../../../Background/Utils/ClockFunctions";
+import { GameFunctions } from "../../../../../Background/Utils/GameFunctions";
+import { useWindowSize } from "../../../../../Background/Utils/useWindowSize";
+import { WordBankFunctions } from "../../../../../Background/Utils/WordBankFunctions";
+import { View, VStack, VSpacer } from "../../../../../ReactSwiftly";
+import JumblemLogoSimple from "../../../../Components/JumblemLogoSimple";
+import CasualGameGrid from "../CasualGameGrid";
+import CasualGameHeader from "../CasualGameHeader";
+import CasualGameOverGrid from "../CasualGameOverGrid";
 
-interface PlayCasualGameViewProps {
+interface BotPlayCasualGameViewProps {
     passedUser: UserModel;
     passedGame: GameModel;
 }
 
-export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasualGameViewProps) {
+export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPlayCasualGameViewProps) {
     const {
         moves,
     } = useStandardGameManager(passedUser, passedGame);
@@ -40,12 +40,14 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
 
     const [movesCopy, setMovesCopy] = useState<MoveModel[]>([]);
     const [movesDict, setMovesDict] = useState<Record<string, MoveModel>>({});
-    const [yourTurn, setYourTurn] = useState(false);
+    const [yourTurn, setYourTurn] = useState(true);
     const [yourTimeRemaining, setYourTimeRemaining] = useState(180);
     const [opponentTimeRemaining, setOpponentTimeRemaining] = useState(180);
     const [checkGameOver, setCheckGameOver] = useState(false);
     const [movesMade, setMovesMade] = useState(0);
     const navigate = useNavigate();
+
+    const [botLetterBank, setBotLetterBank] = useState<string[]>(GameFunctions.getLetters(7));
 
     useEffect(() => {
         try {
@@ -73,8 +75,6 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
             setCheckGameOver(true);
         }
     }, [moves])
-
-
 
     useEffect(() => {
         if (tickCount < 20 && !gameOver) {
@@ -180,6 +180,41 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
 
     }, [userTimeExpired]);
 
+    useEffect(() => {
+        if (!yourTurn && wordCheckComplete && !gameOver) {
+            botMove();
+        }
+    }, [wordCheckComplete, yourTurn, gameOver]);
+
+    async function botMove() {
+        if (wordCheckComplete) {
+            if (!gameOver) {
+                if (!yourTurn) {
+                    const moveDelay = Math.floor(Math.random() * 3) + 5;
+                    const timeout = setTimeout(async () => {
+                        try {
+                            const [resultCoordinates, resultLetter] = await GameFunctions.botMove(botLetterBank, movesCopy, wordBankDict);
+                            await CasualGameService.makeBotMove(user, game, resultCoordinates, resultLetter);
+                            const indexToRemove = botLetterBank.indexOf(resultLetter);
+                            botLetterBank.splice(indexToRemove, 1);
+
+                            const newLetters = GameFunctions.getLetters(1);
+                            const updatedLetters: string[] = [...botLetterBank, ...newLetters];
+                            updatedLetters.sort();
+                            setBotLetterBank(updatedLetters);
+
+                        } catch {
+
+                        }
+
+                    }, 1000 * moveDelay);
+                    return () => clearTimeout(timeout);
+
+
+                }
+            }
+        }
+    }
 
     function gameManagerFunction() {
         if (movesCopy.length > 0) {

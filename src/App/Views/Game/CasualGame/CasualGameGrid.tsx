@@ -43,7 +43,8 @@ export default function CasualGameGrid({
 
 
     return (
-        <VStack maxHeight={`${(Math.max(minDimension, upperBound) * 8 / dimensionDivider) + 200}px`} spacing="10px">
+        // <VStack maxHeight={`${(Math.max(minDimension, upperBound) * 8 / dimensionDivider) + 200}px`} spacing="10px">
+        <VStack spacing="10px">
             <VStack
                 spacing="0px"
                 backgroundColor="rgb(255, 255, 255, 0.25)"

@@ -37,8 +37,7 @@ export class WordBankFunctions {
             console.error("Error reading the word bank:", error);
         }
 
-        const numberOfKeys = Object.keys(wordBank).length;
-        console.log(`WordBankFunctions: The dictionary has ${numberOfKeys} keys.`);
+        // const numberOfKeys = Object.keys(wordBank).length;
 
         return wordBank;
     }
@@ -49,15 +48,11 @@ export class WordBankFunctions {
     ): WordModel[] {
         const results: WordModel[] = [];
 
-        console.log("Checking words:", words);
         for (const word of words) {
-            console.log("Checking:", word);
             const prefix = word.slice(0, 3); // Extract the first 3 characters as the prefix
             const sortedArray = wordBank[prefix];
 
             if (sortedArray) {
-                console.log("Prefix found:", prefix);
-                console.log("Sorted array:", sortedArray);
                 const wordAndFrequency = this.binarySearchWord(sortedArray, word);
 
                 if (wordAndFrequency) {
@@ -72,7 +67,6 @@ export class WordBankFunctions {
                             score: frequency,
                         };
                         results.push(newWordModel);
-                        console.log("Word found:", word);
                     }
                 }
             }

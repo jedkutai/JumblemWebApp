@@ -43,7 +43,8 @@ function SpecificWordRoute() {
                             setDictionaryModels(fetchedDictionaryModels);
                             if (fetchedWordModel && !fetchedDictionaryModels) {
                                 const searchUrl = `${googleLink}${word}+definition`;
-                                window.open(searchUrl, "_blank");
+                                window.location.href = searchUrl;
+                                // window.open(searchUrl);
                             }
                         }
                         setUser(fetchedUser);
@@ -51,8 +52,9 @@ function SpecificWordRoute() {
     
                     } catch (error) {
                         const searchUrl = `${googleLink}${word}+definition`;
-                        window.open(searchUrl, "_blank");
-                        navigate("/");
+                        window.location.href = searchUrl;
+                        // window.open(searchUrl);
+                        // navigate("/");
                     }
                 }
 

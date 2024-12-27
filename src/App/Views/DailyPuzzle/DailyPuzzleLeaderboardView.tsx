@@ -82,19 +82,6 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
         }
     }
 
-    // function generateCustomLink(puzzleEntry: DailyPuzzleEntryModel) {
-    //     const baseUrl = "https://jumblem.com/dailypuzzle";
-    //     const params = new URLSearchParams({
-    //         d: DisplayFunctions.displayPuzzleDate(dailyPuzzle.timestamp), // date
-    //         s: `${Math.floor(puzzleEntry.score)}`, // score
-    //         c: dailyPuzzle.id, // puzzle id
-    //         smid: "url-share", // Example share method
-    //     });
-
-    //     const customLink = `${baseUrl}?${params.toString()}`;
-    //     console.log(customLink); // Log or use the link
-    //     return customLink;
-    // };
 
 
     return (

@@ -51,7 +51,7 @@ export default function DisplayHistoryCellInfo({
                 {otherUser ? (
                     <Typography sx={styles.textStyle}>{DisplayFunctions.displayUsername(otherUser.usernameDisplayed)}</Typography>
                 ) : (
-                    <Typography sx={styles.textStyle}>N/A</Typography>
+                    <Typography sx={styles.textStyle}>Guest</Typography>
                 )}
 
                 {passedRating && passedRatingChange ? (

@@ -2,6 +2,7 @@ import { GridFunctions } from "./GridFunctions";
 import { WordModel } from "../Models/WordModel";
 import { MoveModel } from "../Models/MoveModel";
 import { WordBankFunctions } from "./WordBankFunctions";
+import { Timestamp } from "firebase/firestore";
 
 export class GameFunctions {
   static letters(): string[] {
@@ -55,21 +56,17 @@ export class GameFunctions {
     const letters = this.letters();
 
     while (randomIndexes.size < count) {
-        const randomIndex = Math.floor(Math.random() * letters.length);
-        randomIndexes.add(randomIndex); // Automatically prevents duplicates
+      const randomIndex = Math.floor(Math.random() * letters.length);
+      randomIndexes.add(randomIndex); // Automatically prevents duplicates
     }
 
     randomIndexes.forEach(index => {
-        result.push(letters[index]);
+      result.push(letters[index]);
     });
 
     return result;
-}
+  }
 
-  // static getLetters(amount: number): string[] {
-  //   const letters = this.letters();
-  //   return [...letters].sort(() => Math.random() - 0.5).slice(0, amount);
-  // }
 
   static getAvailableBlocks(moves: Record<string, MoveModel>, availableBlocks: string[]): string[] {
     let result = [...availableBlocks];
@@ -98,7 +95,7 @@ export class GameFunctions {
       `${r},${c + 1}`, // Right
     ];
   }
- 
+
   static checkDirection(
     finalMove: MoveModel,
     moves: Record<string, MoveModel>,
@@ -151,55 +148,92 @@ export class GameFunctions {
     return words;
   }
 
-  // static chopString(consecutive: [string, string[]]): [string, string[]][] {
-  //   const potentialWords: [string, string[]][] = [];
-  //   const wordLen = consecutive[0].length;
-  //   const ranges = [4, 5, 6, 7]; // Desired lengths of substrings
+  static async botMove(
+    letterBank: string[],
+    movesCopy: MoveModel[],
+    wordBankDict: Record<string, string[]>
+  ): Promise<[string, string]> {
+    let movesDict = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
+    let availableBlocks = this.getAvailableBlocks(movesDict, []);
+    let openBlocks = availableBlocks.filter((block) => !movesDict[block]);
 
-  //   for (const length of ranges) {
-  //     if (wordLen >= length) {
-  //       for (let i = 0; i <= wordLen - length; i++) {
-  //         const sub = consecutive[0].substring(i, i + length);
-  //         const reversedSub = sub.split("").reverse().join("");
+    let resultCoordinates = "";
+    let resultLetter = "";
+    for (const block of openBlocks) {
+      for (const letter of letterBank) {
+        const testMove: MoveModel = {
+          id: "",
+          gameId: "",
+          userId: "",
+          coordinates: block,
+          letter: letter,
+          timestamp: Timestamp.now(),
+        }
 
-  //         const subCoordinates = consecutive[1].slice(i, i + length);
-  //         const reversedSubCoordinates = [...subCoordinates].reverse();
+        let testMovesDict = { ...movesDict };
+        testMovesDict[block] = testMove;
+        const validWords = await this.checkWords(testMove, testMovesDict, wordBankDict);
+        for (const validWord of validWords) {
+          if (validWord[0].score >= 433133) {
+            resultCoordinates = block;
+            resultLetter = letter;
+            break;
+          } else {
+            const randomNum = (Math.random() * 10);
+            if (randomNum < 2.5) {
+              resultCoordinates = block;
+              resultLetter = letter;
+              break;
+            }
+          }
+        }
+        if (resultCoordinates !== "" && resultLetter !== "") {
+          break;
+        }
+      }
+      if (resultCoordinates !== "" && resultLetter !== "") {
+        break;
+      }
+    }
 
-  //         potentialWords.push([sub, subCoordinates]);
-  //         potentialWords.push([reversedSub, reversedSubCoordinates]);
-  //       }
-  //     }
-  //   }
+    if (resultCoordinates == "") {
+      const randomCoordinateIndex = Math.floor(Math.random() * openBlocks.length);
+      const randomLetterIndex = Math.floor(Math.random() * letterBank.length);
+      resultCoordinates = openBlocks[randomCoordinateIndex];
+      resultLetter = letterBank[randomLetterIndex];
+    }
 
-  //   return potentialWords;
-  // }
-static chopString(consecutive: [string, string[]]): [string, string[]][] {
+
+    return [resultCoordinates, resultLetter];
+  }
+
+  static chopString(consecutive: [string, string[]]): [string, string[]][] {
     const potentialWords: [string, string[]][] = [];
     const wordLen = consecutive[0].length;
 
     // Ensure input is valid
     if (!consecutive[0] || !consecutive[1] || consecutive[0].length === 0 || consecutive[1].length === 0) {
-        return [];
+      return [];
     }
 
     const ranges = [4, 5, 6, 7].filter((length) => length <= wordLen); // Filter ranges to valid lengths
 
     for (const length of ranges) {
-        for (let i = 0; i <= wordLen - length; i++) {
-            const sub = consecutive[0].substring(i, i + length);
-            const reversedSub = sub.split("").reverse().join("");
+      for (let i = 0; i <= wordLen - length; i++) {
+        const sub = consecutive[0].substring(i, i + length);
+        const reversedSub = sub.split("").reverse().join("");
 
-            const subCoordinates = consecutive[1].slice(i, i + length);
-            const reversedSubCoordinates = [...subCoordinates].reverse();
+        const subCoordinates = consecutive[1].slice(i, i + length);
+        const reversedSubCoordinates = [...subCoordinates].reverse();
 
 
-            potentialWords.push([sub, subCoordinates]);
-            potentialWords.push([reversedSub, reversedSubCoordinates]);
-        }
+        potentialWords.push([sub, subCoordinates]);
+        potentialWords.push([reversedSub, reversedSubCoordinates]);
+      }
     }
 
     return potentialWords;
-}
+  }
 
   static async checkWords(
     finalMove: MoveModel,
