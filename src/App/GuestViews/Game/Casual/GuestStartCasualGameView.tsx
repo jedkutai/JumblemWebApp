@@ -6,6 +6,7 @@ import { GuestService } from "../../../../Background/Service";
 import { View, VStack } from "../../../../ReactSwiftly";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import GuestPlayCasualGameView from "./GuestPlayCasualGameView";
+import BotPlayCasualGameView from "../../../Views/Game/CasualGame/CasualBot/BotPlayCasualGameView";
 
 interface GuestStartCasualGameViewProps {
     passedUser: UserModel
@@ -15,6 +16,7 @@ enum GuestCasualGameModeState {
     idle,
     findingMatch,
     matchFound,
+    playBot,
     error
 }
 
@@ -26,6 +28,7 @@ export default function GuestStartCasualGameView({ passedUser }: GuestStartCasua
     const [takingLongToFindMatch, setTakingLongToFindMatch] = useState(false);
     const [ticker, setTicker] = useState(false);
     const [tickCount, setTickCount] = useState(0);
+    const [botMatchCreated, setBotMatchCreated] = useState(false);
     const navigate = useNavigate();
 
 
@@ -95,10 +98,23 @@ export default function GuestStartCasualGameView({ passedUser }: GuestStartCasua
                     try {
                         const gameUpdate = await GuestService.getGameUpdate(game);
                         if (gameUpdate.matchFound && gameUpdate.playerTwoId !== undefined) {
-                            setGame(gameUpdate);
-                            setGameModeState(GuestCasualGameModeState.matchFound);
-                            setStopSearching(true);
+                            if (gameUpdate.playerTwoId.startsWith("BOT-")) {
+                                setGame(gameUpdate);
+                                setGameModeState(GuestCasualGameModeState.playBot);
+                                setStopSearching(true);
+                            } else {
+                                setGame(gameUpdate);
+                                setGameModeState(GuestCasualGameModeState.matchFound);
+                                setStopSearching(true);
+                            }
+                            // setGame(gameUpdate);
+                            // setGameModeState(GuestCasualGameModeState.matchFound);
+                            // setStopSearching(true);
                         } else {
+                            if (tickCount > 10 && !botMatchCreated) {
+                                await GuestService.botJoinMatch(passedUser, game);
+                                setBotMatchCreated(true);
+                            }
                             setTicker(!ticker);
                             setTickCount(tickCount + 1);
                         }
@@ -122,13 +138,14 @@ export default function GuestStartCasualGameView({ passedUser }: GuestStartCasua
 
     if (gameModeState === GuestCasualGameModeState.matchFound && game) {
         return <GuestPlayCasualGameView passedUser={passedUser} passedGame={game} />;
-        
+    } else if (gameModeState === GuestCasualGameModeState.playBot && game) {
+        return <BotPlayCasualGameView passedUser={passedUser} passedGame={game} />;
     }
 
     return (
         <View>
             <VStack>
-                <JumblemLogoSimple/>
+                <JumblemLogoSimple />
                 {gameModeState === GuestCasualGameModeState.idle && (
                     <>
                         <Button
@@ -144,7 +161,7 @@ export default function GuestStartCasualGameView({ passedUser }: GuestStartCasua
                 {gameModeState === GuestCasualGameModeState.findingMatch && (
                     <>
                         <p>Finding Casual Match...</p>
-                        <CircularProgress sx={{ color: "black" }}/>
+                        <CircularProgress sx={{ color: "black" }} />
                     </>
                 )}
 
