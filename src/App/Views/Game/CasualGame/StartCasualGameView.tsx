@@ -30,6 +30,7 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
     const [ticker, setTicker] = useState(false);
     const [tickCount, setTickCount] = useState(0);
     const [botMatchCreated, setBotMatchCreated] = useState(false);
+    const botMatchCreationDelay = Math.floor(Math.random() * 5) + 5;
     const navigate = useNavigate();
 
 
@@ -111,7 +112,7 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
                                 setStopSearching(true);
                             }
                         } else {
-                            if (tickCount > 10 && !botMatchCreated) {
+                            if (tickCount > botMatchCreationDelay && !botMatchCreated) {
                                 await CasualGameService.botJoinMatch(user, game);
                                 setBotMatchCreated(true);
                             }

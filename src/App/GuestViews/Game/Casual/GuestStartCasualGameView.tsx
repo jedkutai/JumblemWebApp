@@ -30,6 +30,7 @@ export default function GuestStartCasualGameView({ passedUser }: GuestStartCasua
     const [tickCount, setTickCount] = useState(0);
     const [botMatchCreated, setBotMatchCreated] = useState(false);
     const navigate = useNavigate();
+    const botMatchCreationDelay = Math.floor(Math.random() * 5) + 5;
 
 
     useEffect(() => {
@@ -111,7 +112,7 @@ export default function GuestStartCasualGameView({ passedUser }: GuestStartCasua
                             // setGameModeState(GuestCasualGameModeState.matchFound);
                             // setStopSearching(true);
                         } else {
-                            if (tickCount > 10 && !botMatchCreated) {
+                            if (tickCount > botMatchCreationDelay && !botMatchCreated) {
                                 await GuestService.botJoinMatch(passedUser, game);
                                 setBotMatchCreated(true);
                             }
