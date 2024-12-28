@@ -82,18 +82,27 @@ export class GameFunctions {
     if (result.length === 0) {
       result = ["3,3"];
     }
+
+    console.log(result);
     return [...new Set(result)];
   }
 
   static getAdjacentBlocks(coordinate: string): string[] {
     const [r, c] = coordinate.split(",").map(Number);
 
-    return [
-      `${r - 1},${c}`, // Up
-      `${r + 1},${c}`, // Down
-      `${r},${c - 1}`, // Left
-      `${r},${c + 1}`, // Right
-    ];
+    const result: string[] = [];
+    if (r > 0) result.push(`${r - 1},${c}`); // Up
+    if (r < 6) result.push(`${r + 1},${c}`); // Down
+    if (c > 0) result.push(`${r},${c - 1}`); // Left
+    if (c < 6) result.push(`${r},${c + 1}`); // Right
+
+    return result;
+    // return [
+    //   `${r - 1},${c}`, // Up
+    //   `${r + 1},${c}`, // Down
+    //   `${r},${c - 1}`, // Left
+    //   `${r},${c + 1}`, // Right
+    // ];
   }
 
   static checkDirection(
