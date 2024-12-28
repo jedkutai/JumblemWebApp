@@ -49,6 +49,10 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
 
     const [botLetterBank, setBotLetterBank] = useState<string[]>(GameFunctions.getLetters(7));
 
+    const [tick, setTick] = useState(false);
+    const [clock, setClock] = useState(0);
+    const [anchorTime, setAnchorTime] = useState(Date.now());
+
     useEffect(() => {
         try {
             onAppearActions();
@@ -57,7 +61,41 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
         }
     }, []);
 
+    useEffect(() => {
+        setClock(0);
+        setAnchorTime(Date.now());
+    }, [yourTurn]);
+
+    useEffect(() => {
+
+        if (!gameOver) {
+            const timeout = setTimeout(async () => {
+                if (movesCopy.length !== 0) {
+
+                    const elapsedSeconds = Math.floor((Date.now() - anchorTime) / 1000);
+                    setClock(elapsedSeconds);
+                }
+
+                if (yourTurn && yourTimeRemaining - clock <= 0) {
+                    setUserTimeExpired(true);
+                }
+                if (!yourTurn && opponentTimeRemaining - clock <= 0) {
+                    setCheckOpponentTimeExpired(true);
+                }
+
+                setTick(!tick);
+            }, 1000);
+
+
+
+            return () => clearTimeout(timeout);
+        }
+    }, [tick])
+
+
+
     async function onAppearActions() {
+        setTick(!tick);
         const wordBank = await WordBankFunctions.getWordBank();
         setWordBankDict(wordBank);
         setMatchAbortedTicker(!matchAbortedTicker);
@@ -129,17 +167,24 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
     }, [movesCopy]);
 
     useEffect(() => {
+        console.log("Checking opponent time expired");
         const fetchLastMove = async (): Promise<void> => {
             if (checkOpponentTimeExpired && !gameOver) {
+                console.log("Parameters met");
                 try {
-                    let lastMove = await CasualGameService.getFinalMove(game);
-                    if (lastMove !== null) {
-                        if (lastMove.userId === user.id) {
-                            await CasualGameService.setGameWinner(game, user.id, [], []);
-                            await CasualGameService.moveFinishedGame(game);
-                            setGameOver(true);
-                        }
-                    }
+                    await CasualGameService.setGameWinner(game, user.id, [], []);
+                    await CasualGameService.moveFinishedGame(game);
+                    setGameOver(true);
+                    // let lastMove = await CasualGameService.getFinalMove(game);
+                    // if (lastMove !== null) {
+                    //     console.log("Last move found");
+                    //     if (lastMove.userId === user.id) {
+                    //         console.log("User made last move");
+                    //         await CasualGameService.setGameWinner(game, user.id, [], []);
+                    //         await CasualGameService.moveFinishedGame(game);
+                    //         setGameOver(true);
+                    //     }
+                    // }
                 } catch (error) {
                 }
             }
@@ -190,7 +235,7 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
         if (wordCheckComplete) {
             if (!gameOver) {
                 if (!yourTurn) {
-                    const moveDelay = Math.floor(Math.random() * 5) + 2;
+                    const moveDelay = movesCopy.length < 11 ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 5) + 2;
                     const timeout = setTimeout(async () => {
                         try {
                             const [resultCoordinates, resultLetter] = await GameFunctions.botMove(botLetterBank, movesCopy, wordBankDict);
@@ -281,6 +326,8 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
         }
     }
 
+
+
     if (gameOver || checkGameOver) {
         return (
             <View startAtTop={true}>
@@ -290,17 +337,18 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
                     </Button>
 
                     <CasualGameHeader
-                        userTimeExpired={userTimeExpired}
-                        setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
-                        checkOpponentTimeExpired={checkOpponentTimeExpired}
-                        setCheckOpponentTimeExpired={() => setCheckOpponentTimeExpired(checkOpponentTimeExpired)}
+                        // userTimeExpired={userTimeExpired}
+                        // setUserTimeExpired={userTimeExpiredTrigger}
+                        // checkOpponentTimeExpired={checkOpponentTimeExpired}
+                        // setCheckOpponentTimeExpired={oppenentTimeExpiredTrigger}
                         userId={user.id}
                         opponentId={user.id === game.playerOneId ? game.playerTwoId : game.playerOneId}
                         userTimeRemaining={yourTimeRemaining}
                         opponentTimeRemaining={opponentTimeRemaining}
                         yourTurn={yourTurn}
-                        firstMoveMade={movesCopy.length !== 0}
-                        gameOver={gameOver}
+                        // firstMoveMade={movesCopy.length !== 0}
+                        // gameOver={gameOver}
+                        clock={clock}
                     />
 
                     <CasualGameOverGrid
@@ -323,17 +371,18 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
                     <JumblemLogoSimple />
 
                     <CasualGameHeader
-                        userTimeExpired={userTimeExpired}
-                        setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
-                        checkOpponentTimeExpired={checkOpponentTimeExpired}
-                        setCheckOpponentTimeExpired={() => setCheckOpponentTimeExpired(checkOpponentTimeExpired)}
+                        // userTimeExpired={userTimeExpired}
+                        // setUserTimeExpired={userTimeExpiredTrigger}
+                        // checkOpponentTimeExpired={checkOpponentTimeExpired}
+                        // setCheckOpponentTimeExpired={oppenentTimeExpiredTrigger}
                         userId={user.id}
                         opponentId={user.id === game.playerOneId ? game.playerTwoId : game.playerOneId}
                         userTimeRemaining={yourTimeRemaining}
                         opponentTimeRemaining={opponentTimeRemaining}
                         yourTurn={yourTurn}
-                        firstMoveMade={movesCopy.length !== 0}
-                        gameOver={gameOver}
+                        clock={clock}
+                    // firstMoveMade={movesCopy.length !== 0}
+                    // gameOver={gameOver}
                     />
 
                     <CasualGameGrid

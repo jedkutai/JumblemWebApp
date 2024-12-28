@@ -47,6 +47,10 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
     const [movesMade, setMovesMade] = useState(0);
     const navigate = useNavigate();
 
+    const [tick, setTick] = useState(false);
+    const [clock, setClock] = useState(0);
+    const [anchorTime, setAnchorTime] = useState(Date.now());
+
     useEffect(() => {
         try {
             onAppearActions();
@@ -55,7 +59,39 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
         }
     }, []);
 
+    useEffect(() => {
+        setClock(0);
+        setAnchorTime(Date.now());
+    }, [yourTurn]);
+
+    useEffect(() => {
+
+        if (!gameOver) {
+            const timeout = setTimeout(async() => {
+                if (movesCopy.length !== 0) {
+
+                    const elapsedSeconds = Math.floor((Date.now() - anchorTime) / 1000);
+                    setClock(elapsedSeconds);
+                }
+
+                if (yourTurn && yourTimeRemaining - clock <= 0) {
+                    setUserTimeExpired(true);
+                }
+                if (!yourTurn && opponentTimeRemaining - clock <= 0) {
+                    setCheckOpponentTimeExpired(true);
+                }
+
+                setTick(!tick);
+            }, 1000);
+
+
+
+            return () => clearTimeout(timeout);
+        }
+    }, [tick])
+
     async function onAppearActions() {
+        setTick(!tick);
         const wordBank = await WordBankFunctions.getWordBank();
         setWordBankDict(wordBank);
         setMatchAbortedTicker(!matchAbortedTicker);
@@ -129,18 +165,16 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
     }, [movesCopy]);
 
     useEffect(() => {
+        if (checkOpponentTimeExpired) {
         const fetchLastMove = async (): Promise<void> => {
             if (checkOpponentTimeExpired && !gameOver) {
                 try {
-                    let lastMove = await CasualGameService.getFinalMove(game);
-                    if (lastMove !== null) {
-                        if (lastMove.userId === user.id) {
-                            await CasualGameService.setGameWinner(game, user.id, [], []);
-                            await CasualGameService.moveFinishedGame(game);
-                            setGameOver(true);
-                        }
-                    }
+                    console.log("trying")
+                    await CasualGameService.setGameWinner(game, user.id, [], []);
+                    await CasualGameService.moveFinishedGame(game);
+                    setGameOver(true);
                 } catch (error) {
+                    console.log("error");
                 }
             }
 
@@ -148,6 +182,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
         }
 
         fetchLastMove();
+        }
 
     }, [checkOpponentTimeExpired]);
 
@@ -246,6 +281,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
         }
     }
 
+
     if (gameOver || checkGameOver) {
         return (
             <View startAtTop={true}>
@@ -255,17 +291,12 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                     </Button>
 
                     <CasualGameHeader
-                        userTimeExpired={userTimeExpired}
-                        setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
-                        checkOpponentTimeExpired={checkOpponentTimeExpired}
-                        setCheckOpponentTimeExpired={() => setCheckOpponentTimeExpired(checkOpponentTimeExpired)}
                         userId={user.id}
                         opponentId={user.id === game.playerOneId ? game.playerTwoId : game.playerOneId}
                         userTimeRemaining={yourTimeRemaining}
                         opponentTimeRemaining={opponentTimeRemaining}
                         yourTurn={yourTurn}
-                        firstMoveMade={movesCopy.length !== 0}
-                        gameOver={gameOver}
+                        clock={clock}
                     />
 
                     <CasualGameOverGrid
@@ -288,17 +319,12 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                     <JumblemLogoSimple />
 
                     <CasualGameHeader
-                        userTimeExpired={userTimeExpired}
-                        setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
-                        checkOpponentTimeExpired={checkOpponentTimeExpired}
-                        setCheckOpponentTimeExpired={() => setCheckOpponentTimeExpired(checkOpponentTimeExpired)}
                         userId={user.id}
                         opponentId={user.id === game.playerOneId ? game.playerTwoId : game.playerOneId}
                         userTimeRemaining={yourTimeRemaining}
                         opponentTimeRemaining={opponentTimeRemaining}
                         yourTurn={yourTurn}
-                        firstMoveMade={movesCopy.length !== 0}
-                        gameOver={gameOver}
+                        clock={clock}
                     />
 
                     <CasualGameGrid

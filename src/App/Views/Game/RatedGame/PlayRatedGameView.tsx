@@ -48,18 +48,49 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
     const [movesMade, setMovesMade] = useState(0);
     const navigate = useNavigate();
 
+    const [tick, setTick] = useState(false);
+    const [clock, setClock] = useState(0);
+    const [anchorTime, setAnchorTime] = useState(Date.now());
+
     useEffect(() => {
         try {
             onAppearActions();
         } catch {
             setGameOver(true);
         }
-        // setMatchAbortedTicker(!matchAbortedTicker);
-        // setTickCount(tickCount + 1);
-        // setYourTurn(game.playerOneId == user.id);
     }, []);
 
+    useEffect(() => {
+        setClock(0);
+        setAnchorTime(Date.now());
+    }, [yourTurn]);
+
+    useEffect(() => {
+
+        if (!gameOver) {
+            const timeout = setTimeout(async () => {
+                if (movesCopy.length !== 0) {
+                    const elapsedSeconds = Math.floor((Date.now() - anchorTime) / 1000);
+                    setClock(elapsedSeconds);
+                }
+
+                if (yourTurn && yourTimeRemaining - clock <= 0) {
+                    setUserTimeExpired(true);
+                } else if (!yourTurn && opponentTimeRemaining - clock <= 0) {
+                    setCheckOpponentTimeExpired(true);
+                }
+
+                setTick(!tick);
+            }, 1000);
+
+
+
+            return () => clearTimeout(timeout);
+        }
+    }, [tick])
+
     async function onAppearActions() {
+        setTick(!tick);
         const wordBank = await WordBankFunctions.getWordBank();
         setWordBankDict(wordBank);
         setMatchAbortedTicker(!matchAbortedTicker);
@@ -136,14 +167,17 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
         const fetchLastMove = async (): Promise<void> => {
             if (checkOpponentTimeExpired && !gameOver) {
                 try {
-                    let lastMove = await RatedGameService.getFinalMove(game);
-                    if (lastMove !== null) {
-                        if (lastMove.userId === user.id) {
-                            await RatedGameService.setGameWinner(game, user.id, [], []);
-                            await RatedGameService.moveFinishedGame(game);
-                            setGameOver(true);
-                        }
-                    }
+                    await RatedGameService.setGameWinner(game, user.id, [], []);
+                    await RatedGameService.moveFinishedGame(game);
+                    setGameOver(true);
+                    // let lastMove = await RatedGameService.getFinalMove(game);
+                    // if (lastMove !== null) {
+                    //     if (lastMove.userId === user.id) {
+                    //         await RatedGameService.setGameWinner(game, user.id, [], []);
+                    //         await RatedGameService.moveFinishedGame(game);
+                    //         setGameOver(true);
+                    //     }
+                    // }
                 } catch (error) {
                 }
             }
@@ -261,24 +295,23 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
                     </Button>
 
                     <RatedGameHeader
-                        userTimeExpired={userTimeExpired}
-                        setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
-                        checkOpponentTimeExpired={checkOpponentTimeExpired}
-                        setCheckOpponentTimeExpired={() => setCheckOpponentTimeExpired(checkOpponentTimeExpired)}
+                        // userTimeExpired={userTimeExpired}
+                        // setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
+                        // checkOpponentTimeExpired={checkOpponentTimeExpired}
+                        // setCheckOpponentTimeExpired={() => setCheckOpponentTimeExpired(checkOpponentTimeExpired)}
                         userId={user.id}
                         opponentId={user.id === game.playerOneId ? game.playerTwoId : game.playerOneId}
                         userTimeRemaining={yourTimeRemaining}
                         opponentTimeRemaining={opponentTimeRemaining}
                         yourTurn={yourTurn}
-                        firstMoveMade={movesCopy.length !== 0}
-                        gameOver={gameOver}
+                        clock={clock}
+                        // firstMoveMade={movesCopy.length !== 0}
+                        // gameOver={gameOver}
                         userRatingChange={user.id === game.playerOneId ? game.playerOneRatingChange : game.playerTwoRatingChange}
                         opponentRatingChange={user.id !== game.playerOneId ? game.playerOneRatingChange : game.playerTwoRatingChange}
                     />
 
-                    {/* <Button onClick={() => navigate("/home")}>
-                        Home
-                    </Button> */}
+
 
                     <RatedGameOverGrid
                         user={user}
@@ -302,17 +335,18 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
                     <JumblemLogoSimple />
 
                     <RatedGameHeader
-                        userTimeExpired={userTimeExpired}
-                        setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
-                        checkOpponentTimeExpired={checkOpponentTimeExpired}
-                        setCheckOpponentTimeExpired={() => setCheckOpponentTimeExpired(checkOpponentTimeExpired)}
+                        // userTimeExpired={userTimeExpired}
+                        // setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
+                        // checkOpponentTimeExpired={checkOpponentTimeExpired}
+                        // setCheckOpponentTimeExpired={() => setCheckOpponentTimeExpired(checkOpponentTimeExpired)}
                         userId={user.id}
                         opponentId={user.id === game.playerOneId ? game.playerTwoId : game.playerOneId}
                         userTimeRemaining={yourTimeRemaining}
                         opponentTimeRemaining={opponentTimeRemaining}
                         yourTurn={yourTurn}
-                        firstMoveMade={movesCopy.length !== 0}
-                        gameOver={gameOver}
+                        clock={clock}
+                        // firstMoveMade={movesCopy.length !== 0}
+                        // gameOver={gameOver}
 
                     />
 

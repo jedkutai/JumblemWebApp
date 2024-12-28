@@ -47,6 +47,10 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
     const [movesMade, setMovesMade] = useState(0);
     const navigate = useNavigate();
 
+    const [tick, setTick] = useState(false);
+    const [clock, setClock] = useState(0);
+    const [anchorTime, setAnchorTime] = useState(Date.now());
+
     useEffect(() => {
         try {
             onAppearActions();
@@ -55,7 +59,38 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
         }
     }, []);
 
+    useEffect(() => {
+        setClock(0);
+        setAnchorTime(Date.now());
+    }, [yourTurn]);
+
+    useEffect(() => {
+
+        if (!gameOver) {
+            const timeout = setTimeout(async () => {
+                if (movesCopy.length !== 0) {
+
+                    const elapsedSeconds = Math.floor((Date.now() - anchorTime) / 1000);
+                    setClock(elapsedSeconds);
+                }
+
+                if (yourTurn && yourTimeRemaining - clock <= 0) {
+                    setUserTimeExpired(true);
+                } else if (!yourTurn && opponentTimeRemaining - clock <= 0) {
+                    setCheckOpponentTimeExpired(true);
+                }
+
+                setTick(!tick);
+            }, 1000);
+
+
+
+            return () => clearTimeout(timeout);
+        }
+    }, [tick])
+
     async function onAppearActions() {
+        setTick(!tick);
         const wordBank = await WordBankFunctions.getWordBank();
         setWordBankDict(wordBank);
         setMatchAbortedTicker(!matchAbortedTicker);
@@ -132,14 +167,17 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
         const fetchLastMove = async (): Promise<void> => {
             if (checkOpponentTimeExpired && !gameOver) {
                 try {
-                    let lastMove = await GuestService.getFinalMove(game);
-                    if (lastMove !== null) {
-                        if (lastMove.userId === passedUser.id) {
-                            await GuestService.setGameWinner(game, passedUser.id, [], []);
-                            await GuestService.moveFinishedGame(game);
-                            setGameOver(true);
-                        }
-                    }
+                    await GuestService.setGameWinner(game, passedUser.id, [], []);
+                    await GuestService.moveFinishedGame(game);
+                    setGameOver(true);
+                    // let lastMove = await GuestService.getFinalMove(game);
+                    // if (lastMove !== null) {
+                    //     if (lastMove.userId === passedUser.id) {
+                    //         await GuestService.setGameWinner(game, passedUser.id, [], []);
+                    //         await GuestService.moveFinishedGame(game);
+                    //         setGameOver(true);
+                    //     }
+                    // }
                 } catch (error) {
                 }
             }
@@ -251,21 +289,22 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
             <View startAtTop={true}>
                 <VStack>
                     <Button onClick={() => navigate("/home")}>
-                    <JumblemLogoSimple />
+                        <JumblemLogoSimple />
                     </Button>
 
                     <GuestCasualGameHeader
-                        userTimeExpired={userTimeExpired}
-                        setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
-                        checkOpponentTimeExpired={checkOpponentTimeExpired}
-                        setCheckOpponentTimeExpired={() => setCheckOpponentTimeExpired(checkOpponentTimeExpired)}
+                        // userTimeExpired={userTimeExpired}
+                        // setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
+                        // checkOpponentTimeExpired={checkOpponentTimeExpired}
+                        // setCheckOpponentTimeExpired={() => setCheckOpponentTimeExpired(checkOpponentTimeExpired)}
                         userId={passedUser.id}
                         opponentId={passedUser.id === game.playerOneId ? game.playerTwoId : game.playerOneId}
                         userTimeRemaining={yourTimeRemaining}
                         opponentTimeRemaining={opponentTimeRemaining}
                         yourTurn={yourTurn}
-                        firstMoveMade={movesCopy.length !== 0}
-                        gameOver={gameOver}
+                        clock={clock}
+                        // firstMoveMade={movesCopy.length !== 0}
+                        // gameOver={gameOver}
                     />
 
 
@@ -290,17 +329,18 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
                     <JumblemLogoSimple />
 
                     <GuestCasualGameHeader
-                        userTimeExpired={userTimeExpired}
-                        setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
-                        checkOpponentTimeExpired={checkOpponentTimeExpired}
-                        setCheckOpponentTimeExpired={() => setCheckOpponentTimeExpired(checkOpponentTimeExpired)}
+                        // userTimeExpired={userTimeExpired}
+                        // setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
+                        // checkOpponentTimeExpired={checkOpponentTimeExpired}
+                        // setCheckOpponentTimeExpired={() => setCheckOpponentTimeExpired(checkOpponentTimeExpired)}
                         userId={passedUser.id}
                         opponentId={passedUser.id === game.playerOneId ? game.playerTwoId : game.playerOneId}
                         userTimeRemaining={yourTimeRemaining}
                         opponentTimeRemaining={opponentTimeRemaining}
                         yourTurn={yourTurn}
-                        firstMoveMade={movesCopy.length !== 0}
-                        gameOver={gameOver}
+                        clock={clock}
+                        // firstMoveMade={movesCopy.length !== 0}
+                        // gameOver={gameOver}
                     />
 
                     <GuestCasualGameGrid

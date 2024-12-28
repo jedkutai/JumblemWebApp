@@ -83,7 +83,6 @@ export class GameFunctions {
       result = ["3,3"];
     }
 
-    console.log(result);
     return [...new Set(result)];
   }
 
