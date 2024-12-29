@@ -5,18 +5,6 @@ interface EmptySelectedBlockProps {
 }
 
 export function EmptySelectedBlock({blockDimension, setSelectedBlock}: EmptySelectedBlockProps) {
-    // const style = {
-    //     width: `${blockDimension}px`,
-    //     height: `${blockDimension}px`,
-    //     margin: `${blockDimension / 20}px`,
-    //     padding: "0px",
-    //     borderRadius: "5px",
-    //     border: "2px solid white",
-    //     display: "flex",
-    //     alignItems: "center",
-    //     justifyContent: "center",
-    //     background:"linear-gradient(to bottom right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05))",
-    // };
 
     const style = {
         width: `${blockDimension}px`,

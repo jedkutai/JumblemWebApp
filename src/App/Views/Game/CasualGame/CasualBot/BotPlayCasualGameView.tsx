@@ -50,7 +50,8 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
     const [botLetterBank, setBotLetterBank] = useState<string[]>(GameFunctions.getLetters(7));
 
     const [tick, setTick] = useState(false);
-    const [clock, setClock] = useState(0);
+    const [userClock, setUserClock] = useState(0);
+    const [opponentClock, setOpponentClock] = useState(0);
     const [anchorTime, setAnchorTime] = useState(Date.now());
 
     useEffect(() => {
@@ -62,7 +63,8 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
     }, []);
 
     useEffect(() => {
-        setClock(0);
+        setUserClock(0);
+        setOpponentClock(0);
         setAnchorTime(Date.now());
     }, [yourTurn]);
 
@@ -73,13 +75,17 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
                 if (movesCopy.length !== 0) {
 
                     const elapsedSeconds = Math.floor((Date.now() - anchorTime) / 1000);
-                    setClock(elapsedSeconds);
+                    if (yourTurn) {
+                        setUserClock(elapsedSeconds);
+                    } else {
+                        setOpponentClock(elapsedSeconds);
+                    }
                 }
 
-                if (yourTurn && yourTimeRemaining - clock <= 0) {
+                if (yourTurn && yourTimeRemaining - userClock <= 0) {
                     setUserTimeExpired(true);
                 }
-                if (!yourTurn && opponentTimeRemaining - clock <= 0) {
+                if (!yourTurn && opponentTimeRemaining - opponentClock <= 0) {
                     setCheckOpponentTimeExpired(true);
                 }
 
@@ -348,7 +354,7 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
                         yourTurn={yourTurn}
                         // firstMoveMade={movesCopy.length !== 0}
                         // gameOver={gameOver}
-                        clock={clock}
+                        clock={yourTurn ? userClock : opponentClock}
                     />
 
                     <CasualGameOverGrid
@@ -371,18 +377,12 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
                     <JumblemLogoSimple />
 
                     <CasualGameHeader
-                        // userTimeExpired={userTimeExpired}
-                        // setUserTimeExpired={userTimeExpiredTrigger}
-                        // checkOpponentTimeExpired={checkOpponentTimeExpired}
-                        // setCheckOpponentTimeExpired={oppenentTimeExpiredTrigger}
                         userId={user.id}
                         opponentId={user.id === game.playerOneId ? game.playerTwoId : game.playerOneId}
                         userTimeRemaining={yourTimeRemaining}
                         opponentTimeRemaining={opponentTimeRemaining}
                         yourTurn={yourTurn}
-                        clock={clock}
-                    // firstMoveMade={movesCopy.length !== 0}
-                    // gameOver={gameOver}
+                        clock={yourTurn ? userClock : opponentClock}
                     />
 
                     <CasualGameGrid

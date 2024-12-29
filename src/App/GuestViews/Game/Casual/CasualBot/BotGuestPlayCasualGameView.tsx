@@ -50,7 +50,8 @@ export default function BotGuestPlayCasualGameView({ passedUser, passedGame }: B
     const [botLetterBank, setBotLetterBank] = useState<string[]>(GameFunctions.getLetters(7));
 
     const [tick, setTick] = useState(false);
-    const [clock, setClock] = useState(0);
+    const [userClock, setUserClock] = useState(0);
+    const [opponentClock, setOpponentClock] = useState(0);
     const [anchorTime, setAnchorTime] = useState(Date.now());
 
 useEffect(() => {
@@ -62,7 +63,8 @@ useEffect(() => {
     }, []);
 
     useEffect(() => {
-        setClock(0);
+        setUserClock(0);
+        setOpponentClock(0);
         setAnchorTime(Date.now());
     }, [yourTurn]);
 
@@ -73,13 +75,17 @@ useEffect(() => {
                 if (movesCopy.length !== 0) {
 
                     const elapsedSeconds = Math.floor((Date.now() - anchorTime) / 1000);
-                    setClock(elapsedSeconds);
+                    if (yourTurn) {
+                        setUserClock(elapsedSeconds);
+                    } else {
+                        setOpponentClock(elapsedSeconds);
+                    }
                 }
 
-                if (yourTurn && yourTimeRemaining - clock <= 0) {
+                if (yourTurn && yourTimeRemaining - userClock <= 0) {
                     setUserTimeExpired(true);
                 }
-                if (!yourTurn && opponentTimeRemaining - clock <= 0) {
+                if (!yourTurn && opponentTimeRemaining - opponentClock <= 0) {
                     setCheckOpponentTimeExpired(true);
                 }
 
@@ -340,7 +346,7 @@ useEffect(() => {
                         userTimeRemaining={yourTimeRemaining}
                         opponentTimeRemaining={opponentTimeRemaining}
                         yourTurn={yourTurn}
-                        clock={clock}
+                        clock={yourTurn ? userClock : opponentClock}
                     />
 
 
@@ -369,7 +375,7 @@ useEffect(() => {
                         userTimeRemaining={yourTimeRemaining}
                         opponentTimeRemaining={opponentTimeRemaining}
                         yourTurn={yourTurn}
-                        clock={clock}
+                        clock={yourTurn ? userClock : opponentClock}
                     />
 
                     <GuestCasualGameGrid

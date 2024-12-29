@@ -48,7 +48,8 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
     const navigate = useNavigate();
 
     const [tick, setTick] = useState(false);
-    const [clock, setClock] = useState(0);
+    const [userClock, setUserClock] = useState(0);
+    const [opponentClock, setOpponentClock] = useState(0);
     const [anchorTime, setAnchorTime] = useState(Date.now());
 
     useEffect(() => {
@@ -60,7 +61,8 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
     }, []);
 
     useEffect(() => {
-        setClock(0);
+        setUserClock(0);
+        setOpponentClock(0);
         setAnchorTime(Date.now());
     }, [yourTurn]);
 
@@ -71,12 +73,16 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
                 if (movesCopy.length !== 0) {
 
                     const elapsedSeconds = Math.floor((Date.now() - anchorTime) / 1000);
-                    setClock(elapsedSeconds);
+                    if (yourTurn) {
+                        setUserClock(elapsedSeconds);
+                    } else {
+                        setOpponentClock(elapsedSeconds);
+                    }
                 }
 
-                if (yourTurn && yourTimeRemaining - clock <= 0) {
+                if (yourTurn && yourTimeRemaining - userClock <= 0) {
                     setUserTimeExpired(true);
-                } else if (!yourTurn && opponentTimeRemaining - clock <= 0) {
+                } else if (!yourTurn && opponentTimeRemaining - opponentClock <= 0) {
                     setCheckOpponentTimeExpired(true);
                 }
 
@@ -293,18 +299,12 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
                     </Button>
 
                     <GuestCasualGameHeader
-                        // userTimeExpired={userTimeExpired}
-                        // setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
-                        // checkOpponentTimeExpired={checkOpponentTimeExpired}
-                        // setCheckOpponentTimeExpired={() => setCheckOpponentTimeExpired(checkOpponentTimeExpired)}
                         userId={passedUser.id}
                         opponentId={passedUser.id === game.playerOneId ? game.playerTwoId : game.playerOneId}
                         userTimeRemaining={yourTimeRemaining}
                         opponentTimeRemaining={opponentTimeRemaining}
                         yourTurn={yourTurn}
-                        clock={clock}
-                        // firstMoveMade={movesCopy.length !== 0}
-                        // gameOver={gameOver}
+                        clock={yourTurn ? userClock : opponentClock}
                     />
 
 
@@ -325,22 +325,15 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
         return (
             <View startAtTop={true}>
                 <VStack width={`${width}px`} height={`${height}px`}>
-                    {/* <VSpacer /> */}
                     <JumblemLogoSimple />
 
                     <GuestCasualGameHeader
-                        // userTimeExpired={userTimeExpired}
-                        // setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
-                        // checkOpponentTimeExpired={checkOpponentTimeExpired}
-                        // setCheckOpponentTimeExpired={() => setCheckOpponentTimeExpired(checkOpponentTimeExpired)}
                         userId={passedUser.id}
                         opponentId={passedUser.id === game.playerOneId ? game.playerTwoId : game.playerOneId}
                         userTimeRemaining={yourTimeRemaining}
                         opponentTimeRemaining={opponentTimeRemaining}
                         yourTurn={yourTurn}
-                        clock={clock}
-                        // firstMoveMade={movesCopy.length !== 0}
-                        // gameOver={gameOver}
+                        clock={yourTurn ? userClock : opponentClock}
                     />
 
                     <GuestCasualGameGrid
