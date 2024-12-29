@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DailyPuzzleEntryModel, DailyPuzzleModel, UserModel, WordModel } from "../../../Background/Models";
-import { View, VStack } from "../../../ReactSwiftly";
+import { HStack, View, VStack } from "../../../ReactSwiftly";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import LeaderboardEntry from "./LeaderboardEntry";
 import { FetchService } from "../../../Background/Service";
@@ -33,6 +33,24 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
     const [expand, setExpand] = useState(false); // first expand should load words
     const [words, setWords] = useState<Record<string, [WordModel, number]>>({});
 
+    const handleGenerate = (sharedPuzzle: DailyPuzzleEntryModel) => {
+        const baseUrl = "https://jumblem.vercel.app/dailypuzzle";
+        const title = encodeURIComponent("Jumblem Daily Puzzle");
+        const description = encodeURIComponent(`I scored ${Math.floor(sharedPuzzle.score)} points on today's puzzle!`);
+        const image = encodeURIComponent("https://res.cloudinary.com/env-imgs/images/f_auto/shopimages/products/1200/GC140140BB-BACK/140x140mm-clariana-bright-blue-square-120gsm-gummed-v-flap.jpg");
+
+        const customLink = `${baseUrl}?title=${title}&description=${description}&image=${image}`;
+        console.log("Generated Link:", customLink);
+
+        return customLink;
+    };
+
+    const handleShare = () => {
+        if (userPuzzleEntry) {
+            const link = handleGenerate(userPuzzleEntry);
+            navigator.clipboard.writeText(link);
+        }
+    };
 
     useEffect(() => {
         onAppearActions();
@@ -91,24 +109,29 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
                     <JumblemLogoSimple />
                 </Button>
                 {leaderboardState === LeaderboardState.loading && (
-                    <CircularProgress sx={{ color: "black" }}/>
+                    <CircularProgress sx={{ color: "black" }} />
                 )}
 
                 {leaderboardState === LeaderboardState.loaded && (
                     <>
+
                         <Typography>{DisplayFunctions.displayPuzzleDate(dailyPuzzle.timestamp)}</Typography>
+
                         {userPuzzleEntry && (
                             <>
-                                <Button style={{ backgroundColor: "rgb(0, 0, 0)", color: "white", fontWeight: 600 }} onClick={() => setExpand(!expand)}>
-                                    {`Your score: ${Math.floor(userPuzzleEntry.score)}`.toUpperCase()}
-                                </Button>
+                                <HStack>
+                                    <Button style={{ backgroundColor: "rgb(0, 0, 0)", color: "white", fontWeight: 600 }} onClick={() => setExpand(!expand)}>
+                                        {`Your score: ${Math.floor(userPuzzleEntry.score)}`.toUpperCase()}
+                                    </Button>
+                                    <Button onClick={handleShare}>Share</Button>
+                                </HStack>
 
                                 {expand && wordsLoaded && (
                                     <DailyPuzzleFoundWords correctWords={words} />
                                 )}
 
                                 {expand && !wordsLoaded && (
-                                    <CircularProgress sx={{ color: "black" }}/>
+                                    <CircularProgress sx={{ color: "black" }} />
                                 )}
                             </>
                         )}
