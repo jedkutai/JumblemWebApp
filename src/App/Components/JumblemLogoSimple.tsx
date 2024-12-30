@@ -1,5 +1,5 @@
 
-import jumblemLogoSimpleImage from "../../assets/drawingexport (2).png";
+import jumblemLogoSimpleImage from "../../assets/jumblemlogo.png";
 import { useWindowSize } from "../../Background/Utils/useWindowSize";
 
 export default function JumblemLogoSimple() {

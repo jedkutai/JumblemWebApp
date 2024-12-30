@@ -31,29 +31,6 @@ export default function HomeView({
         }
     });
 
-    function openReddit() {
-        window.open("https://www.reddit.com/r/Jumblem/", "_blank");
-    }
-
-    function openYoutube() {
-        window.open("https://www.youtube.com/@JumblemOfficial", "_blank");
-    }
-
-    function openInstagram() {
-        window.open("https://www.instagram.com/jumblemofficial/", "_blank");
-    }
-
-    function openDiscord() {
-        window.open("https://discord.gg/bpG4AJRu", "_blank");
-    }
-
-    function openX() {
-        window.open("https://x.com/jumblemofficial", "_blank");
-    }
-
-    function openAppStore() {
-        window.open("https://apps.apple.com/us/app/jumblem/id6737129433", "_blank");
-    }
 
     function openHowToDailyPuzzle() {
         window.open("https://youtu.be/_V9frMe_Obo?feature=shared", "_blank");
@@ -83,7 +60,7 @@ export default function HomeView({
             color: "white",
             fontWeight: 600,
             width: "100%",
-            maxWidth: `${Math.min(200, minDimension * 0.3)}px`,
+            maxWidth: `${Math.min(200, minDimension * 0.15)}px`,
         },
         wordTrainerButton: {
             margin: "10px",
@@ -210,12 +187,6 @@ export default function HomeView({
                         <Button variant="contained" style={styles.button} onClick={() => navigate("/dailypuzzle")}>
                             DAILY PUZZLE
                         </Button>
-                        {/* <Button variant="contained" style={styles.button} onClick={() => navigate("/dailypuzzle")}>
-                            DAILY PUZZLE
-                        </Button>
-                        <Button variant="contained" style={styles.wordTrainerButton}>
-                            WORD TRAINER
-                        </Button> */}
                     </Box>
 
                 </Box>
@@ -234,44 +205,8 @@ export default function HomeView({
 
                 </Box>
 
-                <Box style={styles.section}>
-                    <Typography style={styles.sectionTitle}>CONNECT</Typography>
-                    <Box style={styles.buttonContainer}>
-                        <Button variant="contained" style={styles.redditButton} onClick={openReddit}>
-                            Reddit
-                        </Button>
 
-                        <Button variant="contained" style={styles.youtubeButton} onClick={openYoutube}>
-                            YouTube
-                        </Button>
-                    </Box>
 
-                    <Box style={{ display: "flex", justifyContent: "center" }}>
-                        <Button variant="contained" style={styles.xButton} onClick={openX}>
-                            {"X (Twitter)"}
-                        </Button>
-                    </Box>
-
-                    <Box style={styles.buttonContainer}>
-                        <Button variant="contained" style={styles.discordButton} onClick={openDiscord}>
-                            Discord
-                        </Button>
-
-                        <Button variant="contained" style={styles.instagramButton} onClick={openInstagram}>
-                            Instagram
-                        </Button>
-                    </Box>
-                </Box>
-
-                <Box style={styles.section}>
-                    <Typography style={styles.sectionTitle}>DOWNLOAD</Typography>
-
-                    <Box style={{ display: "flex", justifyContent: "center" }}>
-                        <Button variant="contained" style={styles.appStoreButton} onClick={openAppStore}>
-                            {"App Store"}
-                        </Button>
-                    </Box>
-                </Box>
 
                 <HStack>
                     <Button variant="contained" style={styles.moreButton} onClick={() => navigate("/people")}>
@@ -280,6 +215,10 @@ export default function HomeView({
 
                     <Button variant="contained" style={styles.moreButton} onClick={() => navigate("/profile")}>
                         Profile
+                    </Button>
+
+                    <Button variant="contained" style={styles.moreButton} onClick={() => navigate("/more")}>
+                        More
                     </Button>
                 </HStack>
             </VStack>
