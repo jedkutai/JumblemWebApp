@@ -64,7 +64,14 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
     useEffect(() => {
         setUserClock(0);
         setOpponentClock(0);
-        setAnchorTime(Date.now());
+        
+        const lastMove = movesCopy[movesCopy.length - 1];
+        if (lastMove) {
+            const lastMoveTime = new Date(lastMove.timestamp.toDate())
+            setAnchorTime(lastMoveTime.getTime())
+        } else {
+            setAnchorTime(Date.now());
+        }
     }, [yourTurn]);
 
     useEffect(() => {

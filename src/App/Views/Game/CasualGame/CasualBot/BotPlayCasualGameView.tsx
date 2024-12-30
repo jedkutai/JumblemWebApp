@@ -65,7 +65,14 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
     useEffect(() => {
         setUserClock(0);
         setOpponentClock(0);
-        setAnchorTime(Date.now());
+        
+        const lastMove = movesCopy[movesCopy.length - 1];
+        if (lastMove) {
+            const lastMoveTime = new Date(lastMove.timestamp.toDate())
+            setAnchorTime(lastMoveTime.getTime())
+        } else {
+            setAnchorTime(Date.now());
+        }
     }, [yourTurn]);
 
     useEffect(() => {
@@ -343,17 +350,11 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
                     </Button>
 
                     <CasualGameHeader
-                        // userTimeExpired={userTimeExpired}
-                        // setUserTimeExpired={userTimeExpiredTrigger}
-                        // checkOpponentTimeExpired={checkOpponentTimeExpired}
-                        // setCheckOpponentTimeExpired={oppenentTimeExpiredTrigger}
                         userId={user.id}
                         opponentId={user.id === game.playerOneId ? game.playerTwoId : game.playerOneId}
                         userTimeRemaining={yourTimeRemaining}
                         opponentTimeRemaining={opponentTimeRemaining}
                         yourTurn={yourTurn}
-                        // firstMoveMade={movesCopy.length !== 0}
-                        // gameOver={gameOver}
                         clock={yourTurn ? userClock : opponentClock}
                     />
 
