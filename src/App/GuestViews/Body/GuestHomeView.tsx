@@ -130,7 +130,7 @@ export default function GuestHomeView() {
         }
     }
     return (
-        <View>
+        <View startAtTop={true}>
             <VStack>
                 <JumblemLogoSimple />
                 {showLoginMessage && (

@@ -159,7 +159,7 @@ export default function HomeView({
 
 
     return (
-        <View>
+        <View startAtTop={true}>
             <VStack>
                 <JumblemLogoSimple />
                 <Box style={styles.section}>
