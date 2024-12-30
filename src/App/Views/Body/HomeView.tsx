@@ -31,8 +31,37 @@ export default function HomeView({
         }
     });
 
+    function openReddit() {
+        window.open("https://www.reddit.com/r/Jumblem/", "_blank");
+    }
 
+    function openYoutube() {
+        window.open("https://www.youtube.com/@JumblemOfficial", "_blank");
+    }
 
+    function openInstagram() {
+        window.open("https://www.instagram.com/jumblemofficial/", "_blank");
+    }
+
+    function openDiscord() {
+        window.open("https://discord.gg/bpG4AJRu", "_blank");
+    }
+
+    function openX() {
+        window.open("https://x.com/jumblemofficial", "_blank");
+    }
+
+    function openAppStore() {
+        window.open("https://apps.apple.com/us/app/jumblem/id6737129433", "_blank");
+    }
+
+    function openHowToDailyPuzzle() {
+        window.open("https://youtu.be/_V9frMe_Obo?feature=shared", "_blank");
+    }
+
+    function openHowToVersus() {
+        window.open("https://youtu.be/DvVO0vc1LQw?feature=shared", "_blank");
+    }
 
     const styles = {
         buttonContainer: {
@@ -59,7 +88,7 @@ export default function HomeView({
         wordTrainerButton: {
             margin: "10px",
             flex: 1,
-            backgroundColor: "rgb(48, 146, 221)",
+            backgroundColor: "rgb(88, 101, 242)",
             color: "white",
             fontWeight: 600,
         },
@@ -83,6 +112,51 @@ export default function HomeView({
             fontSize: "1.5rem",
             marginBottom: "10px",
             textAlign: "center" as const,
+        },
+
+
+
+        redditButton: {
+            margin: "10px",
+            flex: 1,
+            backgroundColor: "rgb(255, 69, 2)",
+            color: "white",
+            fontWeight: 600,
+        },
+        youtubeButton: {
+            margin: "10px",
+            flex: 1,
+            backgroundColor: "rgb(255, 0, 52)",
+            color: "white",
+            fontWeight: 600,
+        },
+        instagramButton: {
+            margin: "10px",
+            flex: 1,
+            backgroundImage: "linear-gradient(to bottom right, rgb(79, 91, 213), rgb(150, 47, 191), rgb(214, 41, 118), rgb(250, 126, 30), rgb(254, 218, 117)",
+            color: "white",
+            fontWeight: 600,
+        },
+        discordButton: {
+            margin: "10px",
+            flex: 1,
+            backgroundColor: "rgb(88, 101, 242)",
+            color: "white",
+            fontWeight: 600,
+        },
+        xButton: {
+            margin: "10px",
+            flex: 1,
+            backgroundColor: "black",
+            color: "white",
+            fontWeight: 600,
+        },
+        appStoreButton: {
+            margin: "10px",
+            flex: 1,
+            backgroundColor: "rgb(0, 122, 255)",
+            color: "white",
+            fontWeight: 600,
         },
     }
 
@@ -122,8 +196,8 @@ export default function HomeView({
                         </Button>
                     </Box>
 
-                    <Box style={{ display: "flex", justifyContent: "center" }} onClick={() => navigate("/private")}>
-                        <Button variant="contained" style={styles.button}>
+                    <Box style={{ display: "flex", justifyContent: "center" }}>
+                        <Button variant="contained" style={styles.button} onClick={() => navigate("/private")}>
                             PRIVATE MATCH
                         </Button>
                     </Box>
@@ -131,14 +205,17 @@ export default function HomeView({
 
 
                 <Box style={styles.section}>
-                    <Typography style={styles.sectionTitle}>TRAIN</Typography>
+                    <Typography style={styles.sectionTitle}>PUZZLE</Typography>
                     <Box style={styles.buttonContainer}>
                         <Button variant="contained" style={styles.button} onClick={() => navigate("/dailypuzzle")}>
                             DAILY PUZZLE
                         </Button>
+                        {/* <Button variant="contained" style={styles.button} onClick={() => navigate("/dailypuzzle")}>
+                            DAILY PUZZLE
+                        </Button>
                         <Button variant="contained" style={styles.wordTrainerButton}>
                             WORD TRAINER
-                        </Button>
+                        </Button> */}
                     </Box>
 
                 </Box>
@@ -147,16 +224,54 @@ export default function HomeView({
                 <Box style={styles.section}>
                     <Typography style={styles.sectionTitle}>HOW TO PLAY</Typography>
                     <Box style={styles.buttonContainer}>
-                        <Button variant="contained" style={styles.button} onClick={() => navigate("/howto/dailypuzzle")}>
+                        <Button variant="contained" style={styles.button} onClick={openHowToDailyPuzzle}>
                             DAILY PUZZLE
                         </Button>
-                        <Button variant="contained" style={styles.button} onClick={() => navigate("/howto/versus")}>
+                        <Button variant="contained" style={styles.button} onClick={openHowToVersus}>
                             CASUAL & RATED
                         </Button>
                     </Box>
 
                 </Box>
 
+                <Box style={styles.section}>
+                    <Typography style={styles.sectionTitle}>CONNECT</Typography>
+                    <Box style={styles.buttonContainer}>
+                        <Button variant="contained" style={styles.redditButton} onClick={openReddit}>
+                            Reddit
+                        </Button>
+
+                        <Button variant="contained" style={styles.youtubeButton} onClick={openYoutube}>
+                            YouTube
+                        </Button>
+                    </Box>
+
+                    <Box style={{ display: "flex", justifyContent: "center" }}>
+                        <Button variant="contained" style={styles.xButton} onClick={openX}>
+                            {"X (Twitter)"}
+                        </Button>
+                    </Box>
+
+                    <Box style={styles.buttonContainer}>
+                        <Button variant="contained" style={styles.discordButton} onClick={openDiscord}>
+                            Discord
+                        </Button>
+
+                        <Button variant="contained" style={styles.instagramButton} onClick={openInstagram}>
+                            Instagram
+                        </Button>
+                    </Box>
+                </Box>
+
+                <Box style={styles.section}>
+                    <Typography style={styles.sectionTitle}>DOWNLOAD</Typography>
+
+                    <Box style={{ display: "flex", justifyContent: "center" }}>
+                        <Button variant="contained" style={styles.appStoreButton} onClick={openAppStore}>
+                            {"App Store"}
+                        </Button>
+                    </Box>
+                </Box>
 
                 <HStack>
                     <Button variant="contained" style={styles.moreButton} onClick={() => navigate("/people")}>

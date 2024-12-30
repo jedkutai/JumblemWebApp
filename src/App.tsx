@@ -7,8 +7,6 @@ import CreateAccountRoute from './RouteControllers/Login/CreateAccountRoute';
 import RatedGameRoute from './RouteControllers/Versus/RatedGameRoute';
 import PrivateGameRoute from './RouteControllers/Versus/PrivateGameRoute';
 import DailyPuzzleRoute from './RouteControllers/Training/DailyPuzzleRoute';
-import HowToDailyPuzzleRoute from './RouteControllers/HowTo/HowToDailyPuzzleRoute';
-import HowToVersusRoute from './RouteControllers/HowTo/HowToVersusRoute';
 import ProfileRoute from './RouteControllers/Root/ProfileRoute';
 import PeopleRoute from './RouteControllers/More/PeopleRoute';
 import FindPeopleRoute from './RouteControllers/More/FindPeopleRoute';
@@ -39,10 +37,6 @@ function App() {
 
         // Training
         <Route path="/dailypuzzle" element={<DailyPuzzleRoute/>}/>
-
-        // How to
-        <Route path="/howto/dailypuzzle" element={<HowToDailyPuzzleRoute/>}/>
-        <Route path="/howto/versus" element={<HowToVersusRoute/>}/>
 
         // more
         <Route path="/people" element={<PeopleRoute/>}/>
