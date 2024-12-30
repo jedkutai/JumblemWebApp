@@ -3,8 +3,8 @@ import { UserModel } from "../../../Background/Models";
 import { AuthService } from "../../../Background/Service";
 import { Checks } from "../../../Background/Utils/Checks";
 import { View, VStack } from "../../../ReactSwiftly";
-import JumblemLogo from "../../../assets/jumblem_logo.png";
 import { useNavigate } from "react-router-dom";
+import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 
 interface MissingUsernameViewProps {
   currentUser: UserModel
@@ -136,7 +136,7 @@ export default function MissingUsernameView({
   return (
     <View>
       <VStack>
-        <img src={JumblemLogo} alt="Jumblem Logo" style={styles.logo} />
+        <JumblemLogoSimple />
         <Box style={styles.section}>
           <Typography variant="h6" style={styles.sectionTitle}>
             Create Your Username
