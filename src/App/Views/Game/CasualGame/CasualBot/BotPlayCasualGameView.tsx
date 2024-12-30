@@ -248,7 +248,7 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
         if (wordCheckComplete) {
             if (!gameOver) {
                 if (!yourTurn) {
-                    const moveDelay = movesCopy.length < 11 ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 5) + 2;
+                    const moveDelay = movesCopy.length < 6 ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 5) + 2;
                     const timeout = setTimeout(async () => {
                         try {
                             const [resultCoordinates, resultLetter] = await GameFunctions.botMove(botLetterBank, movesCopy, wordBankDict);
