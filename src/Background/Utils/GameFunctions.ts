@@ -184,7 +184,7 @@ export class GameFunctions {
         for (const validWord of validWords) {
           if (validWord[0].score >= 433133) {
             const randomNum = (Math.random() * 10);
-            if (randomNum < 5) {
+            if (randomNum < 6.5) {
               resultCoordinates = block;
               resultLetter = letter;
               break;
