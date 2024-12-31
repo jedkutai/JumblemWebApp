@@ -9,6 +9,7 @@ import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { useNavigate } from "react-router-dom";
 import DailyPuzzleFoundWords from "./DailyPuzzleFoundWords";
 import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
+import ShareDailyPuzzleScore from "../../Components/ShareDailyPuzzleScore";
 
 enum LeaderboardState {
     loading,
@@ -22,7 +23,6 @@ interface DailyPuzzleLeaderboardViewProps {
 }
 
 export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: DailyPuzzleLeaderboardViewProps) {
-    // const [view, setView] = useState<"Leaderboard" | "Home">("Leaderboard");
     const [user, setUser] = useState<UserModel>(passedUser);
     const [leaderboardState, setLeaderboardState] = useState<LeaderboardState>(LeaderboardState.loading);
     const [leaderboard, setLeaderboard] = useState<DailyPuzzleEntryModel[]>([]);
@@ -32,25 +32,6 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
     const [wordsLoaded, setWordsLoaded] = useState(false);
     const [expand, setExpand] = useState(false); // first expand should load words
     const [words, setWords] = useState<Record<string, [WordModel, number]>>({});
-
-    const handleGenerate = (sharedPuzzle: DailyPuzzleEntryModel) => {
-        const baseUrl = "https://jumblem.vercel.app/dailypuzzle";
-        const title = encodeURIComponent("Jumblem Daily Puzzle");
-        const description = encodeURIComponent(`I scored ${Math.floor(sharedPuzzle.score)} points on today's puzzle!`);
-        const image = encodeURIComponent("https://res.cloudinary.com/env-imgs/images/f_auto/shopimages/products/1200/GC140140BB-BACK/140x140mm-clariana-bright-blue-square-120gsm-gummed-v-flap.jpg");
-
-        const customLink = `${baseUrl}?title=${title}&description=${description}&image=${image}`;
-        console.log("Generated Link:", customLink);
-
-        return customLink;
-    };
-
-    const handleShare = () => {
-        if (userPuzzleEntry) {
-            const link = handleGenerate(userPuzzleEntry);
-            navigator.clipboard.writeText(link);
-        }
-    };
 
     useEffect(() => {
         onAppearActions();
@@ -123,7 +104,8 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
                                     <Button style={{ backgroundColor: "rgb(0, 0, 0)", color: "white", fontWeight: 600 }} onClick={() => setExpand(!expand)}>
                                         {`Your score: ${Math.floor(userPuzzleEntry.score)}`.toUpperCase()}
                                     </Button>
-                                    <Button onClick={handleShare}>Share</Button>
+                                    <ShareDailyPuzzleScore username={passedUser.username} score={Math.floor(userPuzzleEntry.score)} timestamp={dailyPuzzle.timestamp}/>
+                                    
                                 </HStack>
 
                                 {expand && wordsLoaded && (

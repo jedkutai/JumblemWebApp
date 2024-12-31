@@ -22,6 +22,11 @@ export class DisplayFunctions {
         return puzzleDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
     }
 
+    static displayPuzzleDateShort(time: Timestamp): string {
+        const puzzleDate = new Date(time.toDate());
+        return puzzleDate.toLocaleDateString("en-US", { month: "numeric", day: "numeric", year: "numeric" });
+    }
+
     static displayGameDate(time: Timestamp): string {
         const gameDate = new Date(time.toDate());
         return gameDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });

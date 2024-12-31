@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { WordModel } from "../../../Background/Models";
 import { FetchService } from "../../../Background/Service";
-import { View, VStack } from "../../../ReactSwiftly";
+import { HStack, View, VStack } from "../../../ReactSwiftly";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { useNavigate } from "react-router-dom";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import { DailyPuzzleFunctions } from "../../../Background/Utils/DailyPuzzleFunctions";
 import GuestDailyPuzzleFoundWords from "./GuestDailyPuzzleFoundWords";
+import ShareDailyPuzzleScore from "../../Components/ShareDailyPuzzleScore";
 
 enum PageState {
     loading,
@@ -17,6 +18,7 @@ enum PageState {
 export default function GuestDailyPuzzleResultsView() {
     const [pageState, setPageState] = useState<PageState>(PageState.loading);
     const [words, setWords] = useState<Record<string, [WordModel, number]>>({});
+    const lastPuzzlePlayedDate = localStorage.getItem("lastPuzzlePlayedDate");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -60,7 +62,10 @@ export default function GuestDailyPuzzleResultsView() {
                 )}
                 {pageState === PageState.loaded && (
                     <>
-                        <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{`Score: ${DailyPuzzleFunctions.getScore(words)}`}</Typography>
+                        <HStack>
+                            <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{`Score: ${DailyPuzzleFunctions.getScore(words)}`}</Typography>
+                            <ShareDailyPuzzleScore score={DailyPuzzleFunctions.getScore(words)} lastPuzzlePlayedDate={lastPuzzlePlayedDate}/>
+                        </HStack>
                         <GuestDailyPuzzleFoundWords correctWords={words} />
                     </>
                 )}

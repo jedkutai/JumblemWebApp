@@ -4,6 +4,8 @@ import { WordModel } from "../Models/WordModel";
 import { WordBankFunctions } from "./WordBankFunctions";
 
 export class DailyPuzzleFunctions {
+
+
   static validSquare(spot: GridSpotModel, grid: GridSpotModel[][]): boolean {
     const directions = ["north", "south", "east", "west"] as const;
     for (const dir of directions) {

@@ -81,6 +81,7 @@ export default function DailyPuzzleView({
             const wordBank = await WordBankFunctions.getWordBank();
             setWordBankDict(wordBank);
             localStorage.setItem("lastPuzzlePlayedId", dailyPuzzle.id);
+            localStorage.setItem("lastPuzzlePlayedDate", DisplayFunctions.displayPuzzleDateShort(dailyPuzzle.timestamp));
             const newGrid = GridSpot.grid.map((row, r) =>
                 row.map((_, c) => {
                     const key = `${r},${c}`;
