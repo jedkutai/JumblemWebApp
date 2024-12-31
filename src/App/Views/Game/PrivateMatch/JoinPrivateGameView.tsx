@@ -6,6 +6,7 @@ import { Box, Button, CircularProgress, TextField, Typography } from "@mui/mater
 import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
 import PrivateMatchMenuView from "./PrivateMatchMenuView";
 import { PrivateGameService } from "../../../../Background/Service";
+import GameRequirementsWarning from "../../../Components/GameRequirementsWarning";
 
 
 enum JoinPrivateGameModeState {
@@ -134,7 +135,8 @@ export default function JoinPrivateGameView({ passedUser }: JoinPrivateGameViewP
 
                 {gameModeState === JoinPrivateGameModeState.findingMatch && (
                     <>
-                        <p>Finding Private Match...</p>
+                        {/* <p>Finding Private Match...</p> */}
+                        <GameRequirementsWarning />
                         <CircularProgress sx={{ color: "black" }}/>
                     </>
                 )}

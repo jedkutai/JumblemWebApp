@@ -7,6 +7,7 @@ import PlayCasualGameView from "./PlayCasualGameView";
 import { useNavigate } from "react-router-dom";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import BotPlayCasualGameView from "./CasualBot/BotPlayCasualGameView";
+import GameRequirementsWarning from "../../../Components/GameRequirementsWarning";
 
 interface StartCasualGameViewProps {
     passedUser: UserModel
@@ -159,7 +160,8 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
 
                 {gameModeState === CasualGameModeState.findingMatch && (
                     <>
-                        <p>Finding Casual Match...</p>
+                        {/* <p>Finding Casual Match...</p> */}
+                        <GameRequirementsWarning />
                         <CircularProgress sx={{ color: "black" }} />
                     </>
                 )}

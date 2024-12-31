@@ -86,7 +86,7 @@ export default function RatedRatedGameGrid({
             />
 
             {lastMove == undefined && (
-                <p>Auto-abort in {Math.max(matchAbortedTime, 0)}...</p>
+                <p>{yourTurn ? `Make first move in ${Math.max(matchAbortedTime, 0)}...` : `Auto-abort in ${Math.max(matchAbortedTime, 0)}...`}</p>
             )}
         </VStack>
     );

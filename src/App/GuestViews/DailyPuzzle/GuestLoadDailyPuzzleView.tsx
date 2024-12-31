@@ -20,7 +20,6 @@ enum DailyPuzzleState {
 
 export default function GuestLoadDailyPuzzleView() {
     const lastPuzzlePlayedId = localStorage.getItem("lastPuzzlePlayedId") ?? "";
-    // const [winningWords, setWinningWords] = useState<WordModel[] | null>(null);
     const [dailyPuzzle, setDailyPuzzle] = useState<DailyPuzzleModel | null>(null);
     const [dailyPuzzleState, setDailyPuzzleState] = useState<DailyPuzzleState>(DailyPuzzleState.loading);
     const [dailyPuzzleDict, setDailyPuzzleDict] = useState<Record<string, GridSpotModel>>({});

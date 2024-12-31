@@ -5,6 +5,7 @@ import { View, VStack } from "../../../../ReactSwiftly";
 import { FetchService, PrivateGameService } from "../../../../Background/Service";
 import PlayPrivateGameView from "./PlayPrivateGameView";
 import PrivateMatchMenuView from "./PrivateMatchMenuView";
+import GameRequirementsWarning from "../../../Components/GameRequirementsWarning";
 
 interface StartPrivateGameViewProps {
     passedUser: UserModel
@@ -138,7 +139,8 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
 
                 {gameModeState === PrivateGameModeState.findingMatch && (
                     <>
-                        <p>Finding Private Match...</p>
+                        {/* <p>Finding Private Match...</p> */}
+                        <GameRequirementsWarning />
                         <CircularProgress sx={{ color: "black" }}/>
                     </>
                 )}

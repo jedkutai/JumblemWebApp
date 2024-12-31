@@ -5,6 +5,7 @@ import { View, VStack } from "../../../../../ReactSwiftly";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import PlayPrivateGameView from "../PlayPrivateGameView";
 import { useNavigate } from "react-router-dom";
+import GameRequirementsWarning from "../../../../Components/GameRequirementsWarning";
 
 interface JoinPrivateRematchViewProps {
     passedUser: UserModel;
@@ -120,7 +121,8 @@ export default function JoinPrivateRematchView({
 
                 {gameModeState === JoinPrivateRematchModeState.findingMatch && (
                     <>
-                        <p>Finding Private Match...</p>
+                        {/* <p>Finding Private Match...</p> */}
+                        <GameRequirementsWarning />
                         <CircularProgress sx={{ color: "black" }}/>
                     </>
                 )}
