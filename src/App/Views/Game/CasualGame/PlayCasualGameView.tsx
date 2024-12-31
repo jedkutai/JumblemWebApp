@@ -182,12 +182,10 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
         const fetchLastMove = async (): Promise<void> => {
             if (checkOpponentTimeExpired && !gameOver) {
                 try {
-                    console.log("trying")
                     await CasualGameService.setGameWinner(game, user.id, [], []);
                     await CasualGameService.moveFinishedGame(game);
                     setGameOver(true);
-                } catch (error) {
-                    console.log("error");
+                } catch {
                 }
             }
 

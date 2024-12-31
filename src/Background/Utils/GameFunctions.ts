@@ -183,12 +183,15 @@ export class GameFunctions {
         const validWords = await this.checkWords(testMove, testMovesDict, wordBankDict);
         for (const validWord of validWords) {
           if (validWord[0].score >= 433133) {
-            const randomNum = (Math.random() * 10);
-            if (randomNum < 6.5) {
-              resultCoordinates = block;
-              resultLetter = letter;
-              break;
-            }
+            // const randomNum = (Math.random() * 10);
+            // if (randomNum < 6.5) {
+            //   resultCoordinates = block;
+            //   resultLetter = letter;
+            //   break;
+            // }
+            // break;
+            resultCoordinates = block;
+            resultLetter = letter;
             break;
           } else {
             const randomNum = (Math.random() * 10);

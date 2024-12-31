@@ -180,24 +180,12 @@ useEffect(() => {
     }, [movesCopy]);
 
     useEffect(() => {
-        console.log("Checking opponent time expired");
         const fetchLastMove = async (): Promise<void> => {
             if (checkOpponentTimeExpired && !gameOver) {
-                console.log("Parameters met");
                 try {
                     await GuestService.setGameWinner(game, user.id, [], []);
                     await GuestService.moveFinishedGame(game);
                     setGameOver(true);
-                    // let lastMove = await GuestService.getFinalMove(game);
-                    // if (lastMove !== null) {
-                    //     console.log("Last move found");
-                    //     if (lastMove.userId === user.id) {
-                    //         console.log("User made last move");
-                    //         await GuestService.setGameWinner(game, user.id, [], []);
-                    //         await GuestService.moveFinishedGame(game);
-                    //         setGameOver(true);
-                    //     }
-                    // }
                 } catch (error) {
                 }
             }
