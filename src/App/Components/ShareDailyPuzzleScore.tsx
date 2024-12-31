@@ -35,7 +35,7 @@ export default function ScoreImageGenerator({score, timestamp, username, lastPuz
       ctx.drawImage(baseImage, 0, 0);
 
       // Define text styles
-      ctx.font = 'bolder 50px Calibri';
+      ctx.font = 'bolder 70px Calibri';
       ctx.fillStyle = '#000000'; // Text color
       ctx.textAlign = 'center';
 
@@ -50,11 +50,11 @@ export default function ScoreImageGenerator({score, timestamp, username, lastPuz
       }
 
       if (username) {
-        ctx.fillText(username.toUpperCase(), canvas.width / 2, 180);
+        ctx.fillText(username.toUpperCase(), canvas.width / 2, 200);
       }
       ctx.fillText(date, canvas.width / 2, 120);
-      ctx.fillText(text, canvas.width / 2, canvas.height - 120);
-      ctx.fillText(text2, canvas.width / 2, canvas.height - 60);
+      ctx.fillText(text, canvas.width / 2, canvas.height - 160);
+      ctx.fillText(text2, canvas.width / 2, canvas.height - 80);
 
       // Convert the canvas to a data URL
       const imageDataUrl = canvas.toDataURL();
