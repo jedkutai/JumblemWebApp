@@ -78,8 +78,8 @@ export default function DailyPuzzleScoreRoute() {
                         <title>{title}</title>
                         <meta property="og:title" content={title} />
                         <meta property="og:description" content="Can you beat my score? Try today's puzzle now!" />
-                        <meta property="og:image" content="https://yourdomain.com/web-app-manifest-512x512.png" />
-                        <meta property="og:url" content={`https://yourdomain.com/puzzle/${date}/${score}`} />
+                        <meta property="og:image" content="https://jumblem.com/web-app-manifest-512x512.png" />
+                        <meta property="og:url" content={`https://jumblem.com/puzzle/${date}/${score}`} />
                     </Helmet>
                     {user && user.username !== "guest" ? (
                         <LoadDailyPuzzleView passedUser={user} />

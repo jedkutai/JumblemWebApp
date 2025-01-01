@@ -15,6 +15,7 @@ import SpecificGameRoute from './RouteControllers/OpenSpecific/SpecificGameRoute
 import SpecificWordRoute from './RouteControllers/OpenSpecific/SpecificWordRoute';
 import SettingsRoute from './RouteControllers/Settings/SettingsRoute';
 import MoreRoute from './RouteControllers/More/MoreRoute';
+import DailyPuzzleScoreRoute from './RouteControllers/Training/DailyPuzzleScoreRoute';
 
 
 function App() {
@@ -38,7 +39,7 @@ function App() {
 
         // Training
         <Route path="/dailypuzzle" element={<DailyPuzzleRoute/>}/>
-        <Route path="/dailypuzzle/:date/:score" element={<DailyPuzzleRoute/>}/>
+        <Route path="/dailypuzzle/:date/:score" element={<DailyPuzzleScoreRoute/>}/>
 
 
         // more
