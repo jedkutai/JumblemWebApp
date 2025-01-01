@@ -1,7 +1,6 @@
 import { Timestamp } from "firebase/firestore";
 import { WordModel } from "../../Background/Models";
 import { format } from 'date-fns-tz';
-import { subDays, addHours } from 'date-fns';
 import { Button } from "@mui/material";
 import ShareIcon from "./SiteIcons/ShareIcon";
 // import { useState } from "react";
@@ -24,15 +23,8 @@ export default function SharePuzzleResultsButton({ date, words }: SharePuzzleRes
     function getPuzzleStartTime(timestamp: Date): Date {
         // Define the puzzle start time as 3 AM EST
         const baseDate = new Date(timestamp);
-        baseDate.setUTCHours(0, 0, 0, 0); // Reset to midnight in UTC
-        const puzzleStartTime = addHours(baseDate, 3); // Add 3 hours to set the puzzle start time
 
-        // If the timestamp is before today's 3 AM EST, return the previous day's 3 AM EST
-        if (timestamp < puzzleStartTime) {
-            return subDays(puzzleStartTime, 1); // Move to the previous day
-        }
-
-        return puzzleStartTime;
+        return baseDate;
     };
 
     async function shareLinkItem() {
