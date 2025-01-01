@@ -1,5 +1,7 @@
 import { Button } from "@mui/material";
 import { WordModel } from "../../Background/Models";
+import { HStack } from "../../ReactSwiftly";
+import { FaChevronRight } from "react-icons/fa";
 
 enum WordRarity {
     legendary,
@@ -36,7 +38,7 @@ export function ColoredWord({ word }: ColoredWordProps) {
 
     return (
         <Button onClick={getDefinition}>
-            <>
+            <HStack>
                 {wordRarity == WordRarity.common && (
                     <h2 style={{ color: "rgba(142,142,147,255)", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
                 )}
@@ -49,7 +51,8 @@ export function ColoredWord({ word }: ColoredWordProps) {
                 {wordRarity == WordRarity.legendary && (
                     <h2 style={{ color: "rgba(255,59,48,255)", margin: 0, padding: 0 }}>{word.word.toUpperCase()}</h2>
                 )}
-            </>
+                <FaChevronRight size={20} color="gray"/>
+            </HStack>
         </Button>
     );
 }

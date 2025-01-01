@@ -8,6 +8,7 @@ import { PrivateGameService } from "../../../../Background/Service";
 import { ColoredWord } from "../../../Components";
 import { Button } from "@mui/material";
 import RematchButton from "../../../Components/RematchButton";
+import WordRarityBar from "../../../Components/WordRarityBar";
 // import { useNavigate } from "react-router-dom";
 
 interface PrivateGameOverGridProps {
@@ -94,6 +95,7 @@ export default function PrivateGameOverGrid({
                 </HStack>
 
                 <VStack spacing="10px">
+                    <WordRarityBar />
                     {winningWords.map((word, index) => (
                         <ColoredWord key={index} word={word} />
                     ))}

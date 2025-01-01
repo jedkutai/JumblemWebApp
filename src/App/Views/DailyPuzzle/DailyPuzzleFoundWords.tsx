@@ -2,6 +2,7 @@ import { Typography } from "@mui/material";
 import { WordModel } from "../../../Background/Models";
 import { HStack, VStack } from "../../../ReactSwiftly";
 import { ColoredWord } from "../../Components";
+import WordRarityBar from "../../Components/WordRarityBar";
 
 enum WordRarity {
     legendary,
@@ -33,6 +34,7 @@ export default function DailyPuzzleFoundWords({ correctWords }: DailyPuzzleFound
 
     return (
         <VStack spacing="0px">
+            <WordRarityBar />
             {Object.keys(correctWords).sort().map((word) => {
                 const [wordModel, count] = correctWords[word];
                 const wordRarity = getWordRarity(wordModel);

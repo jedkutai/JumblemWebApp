@@ -8,6 +8,7 @@ import { CasualGameService } from "../../../../Background/Service";
 import { ColoredWord } from "../../../Components";
 // import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
+import WordRarityBar from "../../../Components/WordRarityBar";
 
 interface CasualGameOverGridProps {
     user: UserModel;
@@ -84,6 +85,7 @@ export default function CasualGameOverGrid({
                 <Button variant="contained" color="error" onClick={() => window.location.reload()}>Leave</Button>
 
                 <VStack spacing="10px">
+                    <WordRarityBar/>
                     {winningWords.map((word, index) => (
                         <ColoredWord key={index} word={word} />
                     ))}

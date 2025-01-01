@@ -8,6 +8,7 @@ import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import GuestPlayCasualGameView from "./GuestPlayCasualGameView";
 import BotPlayCasualGameView from "../../../Views/Game/CasualGame/CasualBot/BotPlayCasualGameView";
 import GameRequirementsWarning from "../../../Components/GameRequirementsWarning";
+import WordRarityBar from "../../../Components/WordRarityBar";
 
 interface GuestStartCasualGameViewProps {
     passedUser: UserModel
@@ -148,6 +149,7 @@ export default function GuestStartCasualGameView({ passedUser }: GuestStartCasua
         <View>
             <VStack>
                 <JumblemLogoSimple />
+                <WordRarityBar />
                 {gameModeState === GuestCasualGameModeState.idle && (
                     <>
                         <Button
@@ -162,7 +164,6 @@ export default function GuestStartCasualGameView({ passedUser }: GuestStartCasua
 
                 {gameModeState === GuestCasualGameModeState.findingMatch && (
                     <>
-                        {/* <p>Finding Casual Match...</p> */}
                         <GameRequirementsWarning />
                         <CircularProgress sx={{ color: "black" }} />
                     </>

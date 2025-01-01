@@ -2,7 +2,7 @@ import { Timestamp } from "firebase/firestore";
 import { WordModel } from "../../Background/Models";
 import { format } from 'date-fns-tz';
 import { Button } from "@mui/material";
-import ShareIcon from "./SiteIcons/ShareIcon";
+import { IoShareOutline } from "react-icons/io5";
 // import { useState } from "react";
 
 interface SharePuzzleResultsButtonProps {
@@ -64,7 +64,8 @@ export default function SharePuzzleResultsButton({ date, words }: SharePuzzleRes
 
     return (
         <Button onClick={shareLinkItem}>
-            <ShareIcon />
+            <IoShareOutline size={25} color="gray"/>
+
         </Button>
     );
 };

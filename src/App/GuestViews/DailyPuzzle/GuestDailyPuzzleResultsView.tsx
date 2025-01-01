@@ -70,6 +70,13 @@ export default function GuestDailyPuzzleResultsView() {
                 {pageState === PageState.loaded && (
                     <>
                         <HStack>
+                            <div
+                                style={{
+                                    width: "50px",
+                                    height: "25px",
+                                    visibility: "hidden", // Makes it invisible but keeps it in the layout
+                                }}
+                            ></div>
                             <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{`Score: ${DailyPuzzleFunctions.getScore(words)}`}</Typography>
                             {lastPuzzlePlayed && wordsLoaded && (
                                 <SharePuzzleResultsButton date={lastPuzzlePlayed.timestamp} words={words} />

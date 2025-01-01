@@ -11,6 +11,7 @@ import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import PreviousGameRatedPlayerHeader from "./PreviousGameRatedPlayerHeaderProps";
 import { useNavigate } from "react-router-dom";
 import { ColoredWord } from "../../Components";
+import WordRarityBar from "../../Components/WordRarityBar";
 
 interface SeePreviousGameViewProps {
     previousGame: GameModel;
@@ -159,7 +160,7 @@ export default function SeePreviousGameView({ previousGame }: SeePreviousGameVie
 
                             {winningWords.length > 0 && (
                                 <>
-                                    <Typography>Words:</Typography>
+                                    <WordRarityBar />
                                     {winningWords.map((word, index) => (
                                         <ColoredWord key={index} word={word} />
                                     ))}

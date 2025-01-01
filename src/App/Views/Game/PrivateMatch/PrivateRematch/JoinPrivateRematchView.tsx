@@ -6,6 +6,7 @@ import { Button, CircularProgress, Typography } from "@mui/material";
 import PlayPrivateGameView from "../PlayPrivateGameView";
 import { useNavigate } from "react-router-dom";
 import GameRequirementsWarning from "../../../../Components/GameRequirementsWarning";
+import WordRarityBar from "../../../../Components/WordRarityBar";
 
 interface JoinPrivateRematchViewProps {
     passedUser: UserModel;
@@ -103,12 +104,6 @@ export default function JoinPrivateRematchView({
             <PlayPrivateGameView
                 passedUser={user}
                 passedGame={game}
-                // wins={wins}
-                // draws={draws}
-                // losses={losses}
-                // setWins={setWins}
-                // setDraws={setDraws}
-                // setLosses={setLosses}
             />);
     }
 
@@ -118,10 +113,9 @@ export default function JoinPrivateRematchView({
                 <Typography variant="h4" gutterBottom>
                     Jumblem
                 </Typography>
-
+                <WordRarityBar />
                 {gameModeState === JoinPrivateRematchModeState.findingMatch && (
                     <>
-                        {/* <p>Finding Private Match...</p> */}
                         <GameRequirementsWarning />
                         <CircularProgress sx={{ color: "black" }}/>
                     </>

@@ -7,6 +7,7 @@ import PlayRatedGameView from "./PlayRatedGameView";
 import { useNavigate } from "react-router-dom";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import GameRequirementsWarning from "../../../Components/GameRequirementsWarning";
+import WordRarityBar from "../../../Components/WordRarityBar";
 
 interface StartRatedGameViewProps {
     passedUser: UserModel
@@ -136,7 +137,7 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
                 <Button onClick={dismiss}>
                     <JumblemLogoSimple />
                 </Button>
-                
+                <WordRarityBar />
                 {gameModeState === RatedGameModeState.idle && (
                     <>
                         <Button
@@ -151,7 +152,6 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
 
                 {gameModeState === RatedGameModeState.findingMatch && (
                     <>
-                        {/* <p>Finding Rated Match...</p> */}
                         <GameRequirementsWarning />
                         <CircularProgress sx={{ color: "black" }} />
                     </>

@@ -7,6 +7,7 @@ import { VStack } from "../../../../ReactSwiftly";
 import { RatedGameService } from "../../../../Background/Service";
 import { ColoredWord } from "../../../Components";
 import { Button } from "@mui/material";
+import WordRarityBar from "../../../Components/WordRarityBar";
 // import { useNavigate } from "react-router-dom";
 
 interface RatedGameOverGridProps {
@@ -89,6 +90,7 @@ export default function RatedGameOverGrid({
                 <Button variant="contained" color="error" onClick={() => window.location.reload()}>Leave</Button>
 
                 <VStack spacing="10px">
+                    <WordRarityBar/>
                     {winningWords.map((word, index) => (
                         <ColoredWord key={index} word={word} />
                     ))}

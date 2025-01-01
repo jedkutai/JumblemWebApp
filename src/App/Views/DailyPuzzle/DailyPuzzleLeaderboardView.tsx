@@ -10,7 +10,8 @@ import { useNavigate } from "react-router-dom";
 import DailyPuzzleFoundWords from "./DailyPuzzleFoundWords";
 import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
 import SharePuzzleResultsButton from "../../Components/SharePuzzleResultsButton";
-// import ShareDailyPuzzleScore from "../../Components/ShareDailyPuzzleScore";
+import { FaChevronDown } from "react-icons/fa";
+import { TbWashDryFlat } from "react-icons/tb";
 
 enum LeaderboardState {
     loading,
@@ -104,13 +105,33 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
                         {userPuzzleEntry && (
                             <>
                                 <HStack>
+                                    {wordsLoaded && (
+                                        <div
+                                            style={{
+                                                width: "50px",
+                                                height: "25px",
+                                                visibility: "hidden", // Makes it invisible but keeps it in the layout
+                                            }}
+                                        ></div>
+                                    )}
+
                                     <Button style={{ backgroundColor: "rgb(0, 0, 0)", color: "white", fontWeight: 600 }} onClick={() => setExpand(!expand)}>
-                                        {`Your score: ${Math.floor(userPuzzleEntry.score)}`.toUpperCase()}
+                                        <HStack>
+                                            {expand ? (
+                                                <FaChevronDown size={25} color="gray" />
+                                            ) : (
+                                                <TbWashDryFlat size={25} color="gray" />
+                                            )}
+                                            <Typography>
+                                                {`Your score: ${Math.floor(userPuzzleEntry.score)}`.toUpperCase()}
+                                            </Typography>
+
+                                        </HStack>
                                     </Button>
                                     {wordsLoaded && (
                                         <SharePuzzleResultsButton date={dailyPuzzle.timestamp} words={words} />
                                     )}
-                                    
+
                                 </HStack>
 
                                 {expand && wordsLoaded && (
