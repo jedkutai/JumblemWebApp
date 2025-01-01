@@ -6,7 +6,7 @@ import { UserModel } from "../../Background/Models";
 import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
-import PageNotFoundView from "../../App/Components/PageNoteFoundView";
+import PageNotFoundView from "../../App/Components/PageNotFoundView";
 
 enum PageState {
     loading,

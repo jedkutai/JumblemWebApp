@@ -6,7 +6,7 @@ import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
 import StartCasualGameView from "../../App/Views/Game/CasualGame/StartCasualGameView";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
-import PageNotFoundView from "../../App/Components/PageNoteFoundView";
+import PageNotFoundView from "../../App/Components/PageNotFoundView";
 import GuestStartCasualGameView from "../../App/GuestViews/Game/Casual/GuestStartCasualGameView";
 import { Timestamp } from "firebase/firestore";
 

@@ -8,7 +8,7 @@ import { Timestamp } from "firebase/firestore";
 import HomeView from "../../App/Views/Body/HomeView";
 import GuestHomeView from "../../App/GuestViews/Body/GuestHomeView";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
-import PageNotFoundView from "../../App/Components/PageNoteFoundView";
+import PageNotFoundView from "../../App/Components/PageNotFoundView";
 
 enum PageState {
     loading,
