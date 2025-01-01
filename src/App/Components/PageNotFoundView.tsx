@@ -16,11 +16,11 @@ export default function PageNotFoundView() {
                 <Typography variant="h1">
                     404
                 </Typography>
-                <Typography variant="h4" style={{ color: "gray"}}>
+                <Typography variant="h4" style={{ color: "gray" }}>
                     How did you get here?
                 </Typography>
                 <HowDidIGetHere />
-                
+
             </VStack>
         </View>
     )

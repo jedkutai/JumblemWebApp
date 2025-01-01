@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { WordModel } from "../../../Background/Models";
+import { DailyPuzzleModel, WordModel } from "../../../Background/Models";
 import { FetchService } from "../../../Background/Service";
 import { HStack, View, VStack } from "../../../ReactSwiftly";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import { DailyPuzzleFunctions } from "../../../Background/Utils/DailyPuzzleFunctions";
 import GuestDailyPuzzleFoundWords from "./GuestDailyPuzzleFoundWords";
+import SharePuzzleResultsButton from "../../Components/SharePuzzleResultsButton";
 // import ShareDailyPuzzleScore from "../../Components/ShareDailyPuzzleScore";
 
 enum PageState {
@@ -18,7 +19,8 @@ enum PageState {
 export default function GuestDailyPuzzleResultsView() {
     const [pageState, setPageState] = useState<PageState>(PageState.loading);
     const [words, setWords] = useState<Record<string, [WordModel, number]>>({});
-    // const lastPuzzlePlayedDate = localStorage.getItem("lastPuzzlePlayedDate");
+    const [lastPuzzlePlayed, setLastPuzzlePlayed] = useState<DailyPuzzleModel | null>(null);
+    const [wordsLoaded, setWordsLoaded] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -29,7 +31,11 @@ export default function GuestDailyPuzzleResultsView() {
     async function getResults() {
         setPageState(PageState.loading);
         try {
+            let lastPuzzlePlayedId = localStorage.getItem("lastPuzzlePlayedId") ?? "";
+            let fetchedPuzzle = await FetchService.fetchDailyPuzzleById(lastPuzzlePlayedId);
+            setLastPuzzlePlayed(fetchedPuzzle);
             let fetchedWords: Record<string, [WordModel, number]> = {};
+
             const wordString = localStorage.getItem("lastPuzzlePlayedResults") ?? "";
             if (wordString !== "") {
                 const splitWords = wordString.split(",");
@@ -44,6 +50,7 @@ export default function GuestDailyPuzzleResultsView() {
             }
 
             setWords(fetchedWords);
+            setWordsLoaded(true);
             setPageState(PageState.loaded);
         } catch {
             setPageState(PageState.failed);
@@ -64,7 +71,9 @@ export default function GuestDailyPuzzleResultsView() {
                     <>
                         <HStack>
                             <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{`Score: ${DailyPuzzleFunctions.getScore(words)}`}</Typography>
-                            {/* <ShareDailyPuzzleScore score={DailyPuzzleFunctions.getScore(words)} lastPuzzlePlayedDate={lastPuzzlePlayedDate}/> */}
+                            {lastPuzzlePlayed && wordsLoaded && (
+                                <SharePuzzleResultsButton date={lastPuzzlePlayed.timestamp} words={words} />
+                            )}
                         </HStack>
                         <GuestDailyPuzzleFoundWords correctWords={words} />
                     </>

@@ -9,6 +9,7 @@ import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { useNavigate } from "react-router-dom";
 import DailyPuzzleFoundWords from "./DailyPuzzleFoundWords";
 import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
+import SharePuzzleResultsButton from "../../Components/SharePuzzleResultsButton";
 // import ShareDailyPuzzleScore from "../../Components/ShareDailyPuzzleScore";
 
 enum LeaderboardState {
@@ -74,6 +75,8 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
             const userEntry = await FetchService.fetchUserPuzzleEntry(user, dailyPuzzle);
             setUserPuzzleEntry(userEntry);
 
+            setExpand(true);
+
             setLeaderboardState(LeaderboardState.loaded);
 
         } catch {
@@ -104,7 +107,9 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
                                     <Button style={{ backgroundColor: "rgb(0, 0, 0)", color: "white", fontWeight: 600 }} onClick={() => setExpand(!expand)}>
                                         {`Your score: ${Math.floor(userPuzzleEntry.score)}`.toUpperCase()}
                                     </Button>
-                                    {/* <ShareDailyPuzzleScore username={passedUser.username} score={Math.floor(userPuzzleEntry.score)} timestamp={dailyPuzzle.timestamp}/> */}
+                                    {wordsLoaded && (
+                                        <SharePuzzleResultsButton date={dailyPuzzle.timestamp} words={words} />
+                                    )}
                                     
                                 </HStack>
 

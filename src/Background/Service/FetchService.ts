@@ -11,6 +11,17 @@ import { DictionaryWordModel } from "../Models";
 import axios from "axios";
 
 export class FetchService {
+
+  static async fetchDailyPuzzleById(id: string): Promise<DailyPuzzleModel> {
+    const db = getFirestore();
+    const puzzleDoc = doc(db, "dailyPuzzles", id);
+    const snapshot = await getDoc(puzzleDoc);
+    if (!snapshot.exists()) {
+      throw new Error(`User not found.`);
+    }
+    return snapshot.data() as DailyPuzzleModel;
+  }
+
   static async fetchUserByUid(uid: string): Promise<UserModel> {
     const db = getFirestore();
     const userDoc = doc(db, "users", uid);
