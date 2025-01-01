@@ -62,7 +62,8 @@ export default function PlayPrivateGameView({
     const [userClock, setUserClock] = useState(0);
     const [opponentClock, setOpponentClock] = useState(0);
     const [anchorTime, setAnchorTime] = useState(Date.now());
-
+    const tickRate = 1000 * 0.5;
+    
     useEffect(() => {
         try {
             onAppearActions();
@@ -107,7 +108,7 @@ export default function PlayPrivateGameView({
                 }
 
                 setTick(!tick);
-            }, 1000);
+            }, tickRate);
 
 
 

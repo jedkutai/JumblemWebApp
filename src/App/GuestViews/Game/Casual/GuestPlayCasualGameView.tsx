@@ -51,7 +51,7 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
     const [userClock, setUserClock] = useState(0);
     const [opponentClock, setOpponentClock] = useState(0);
     const [anchorTime, setAnchorTime] = useState(Date.now());
-
+    const tickRate = 1000 * 0.5;
     useEffect(() => {
         try {
             onAppearActions();
@@ -94,7 +94,7 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
                 }
 
                 setTick(!tick);
-            }, 1000);
+            }, tickRate);
 
 
 

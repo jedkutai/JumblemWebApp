@@ -51,6 +51,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
     const [userClock, setUserClock] = useState(0);
     const [opponentClock, setOpponentClock] = useState(0);
     const [anchorTime, setAnchorTime] = useState(Date.now());
+    const tickRate = 1000 * 0.5;
 
     useEffect(() => {
         try {
@@ -95,7 +96,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                 }
 
                 setTick(!tick);
-            }, 1000);
+            }, tickRate);
 
 
 

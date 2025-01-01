@@ -52,6 +52,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
     const [userClock, setUserClock] = useState(0);
     const [opponentClock, setOpponentClock] = useState(0);
     const [anchorTime, setAnchorTime] = useState(Date.now());
+    const tickRate = 1000 * 0.5;
 
     useEffect(() => {
         try {
@@ -94,7 +95,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
                 }
 
                 setTick(!tick);
-            }, 1000);
+            }, tickRate);
 
 
 

@@ -38,6 +38,8 @@ function App() {
 
         // Training
         <Route path="/dailypuzzle" element={<DailyPuzzleRoute/>}/>
+        <Route path="/dailypuzzle/:date/:score" element={<DailyPuzzleRoute/>}/>
+
 
         // more
         <Route path="/people" element={<PeopleRoute/>}/>
