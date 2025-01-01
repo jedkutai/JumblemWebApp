@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import { DailyPuzzleFunctions } from "../../../Background/Utils/DailyPuzzleFunctions";
 import GuestDailyPuzzleFoundWords from "./GuestDailyPuzzleFoundWords";
-import ShareDailyPuzzleScore from "../../Components/ShareDailyPuzzleScore";
+// import ShareDailyPuzzleScore from "../../Components/ShareDailyPuzzleScore";
 
 enum PageState {
     loading,
@@ -18,7 +18,7 @@ enum PageState {
 export default function GuestDailyPuzzleResultsView() {
     const [pageState, setPageState] = useState<PageState>(PageState.loading);
     const [words, setWords] = useState<Record<string, [WordModel, number]>>({});
-    const lastPuzzlePlayedDate = localStorage.getItem("lastPuzzlePlayedDate");
+    // const lastPuzzlePlayedDate = localStorage.getItem("lastPuzzlePlayedDate");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -64,7 +64,7 @@ export default function GuestDailyPuzzleResultsView() {
                     <>
                         <HStack>
                             <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{`Score: ${DailyPuzzleFunctions.getScore(words)}`}</Typography>
-                            <ShareDailyPuzzleScore score={DailyPuzzleFunctions.getScore(words)} lastPuzzlePlayedDate={lastPuzzlePlayedDate}/>
+                            {/* <ShareDailyPuzzleScore score={DailyPuzzleFunctions.getScore(words)} lastPuzzlePlayedDate={lastPuzzlePlayedDate}/> */}
                         </HStack>
                         <GuestDailyPuzzleFoundWords correctWords={words} />
                     </>

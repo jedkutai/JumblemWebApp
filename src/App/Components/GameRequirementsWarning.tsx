@@ -5,6 +5,7 @@ enum MessageShown {
     findingMatch,
     fourToSevenLetterWords,
     anyDirection,
+    tapWord,
     expandingSearch,
 }
 
@@ -22,6 +23,9 @@ export default function GameRequirementsWarning() {
                     setMessageShown(MessageShown.anyDirection);
                     break;
                 case MessageShown.anyDirection:
+                    setMessageShown(MessageShown.tapWord);
+                    break;
+                case MessageShown.tapWord:
                     setMessageShown(MessageShown.expandingSearch);
                     break;
                 case MessageShown.expandingSearch:
@@ -44,6 +48,9 @@ export default function GameRequirementsWarning() {
                     setMessageShown(MessageShown.anyDirection);
                     break;
                 case MessageShown.anyDirection:
+                    setMessageShown(MessageShown.tapWord);
+                    break;
+                case MessageShown.tapWord:
                     setMessageShown(MessageShown.expandingSearch);
                     break;
                 case MessageShown.expandingSearch:
@@ -71,6 +78,11 @@ export default function GameRequirementsWarning() {
             {messageShown === MessageShown.anyDirection && (
                 <Typography>
                     Words can be written in any direction.
+                </Typography>
+            )}
+            {messageShown === MessageShown.tapWord && (
+                <Typography>
+                    Tap a word to see its definition.
                 </Typography>
             )}
             {messageShown === MessageShown.expandingSearch && (
