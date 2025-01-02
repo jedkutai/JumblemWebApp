@@ -33,7 +33,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
     const [checkOpponentTimeExpired, setCheckOpponentTimeExpired] = useState(false);
     const [tickCount, setTickCount] = useState(0);
     const [matchAbortedTicker, setMatchAbortedTicker] = useState(false);
-    const [matchAbortedTime, setMatchAbortedTime] = useState(10);
+    const [matchAbortedTime, setMatchAbortedTime] = useState(15);
     const [wordCheckComplete, setWordCheckComplete] = useState(true);
     const [winningGridSpots, setWinningGridSpots] = useState<string[]>([]);
     const { width, height } = useWindowSize();

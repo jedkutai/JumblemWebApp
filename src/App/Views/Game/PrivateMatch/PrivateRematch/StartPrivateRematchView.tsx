@@ -6,7 +6,6 @@ import { Button, CircularProgress, Typography } from "@mui/material";
 import { FetchService, PrivateGameService } from "../../../../../Background/Service";
 import { useNavigate } from "react-router-dom";
 import GameRequirementsWarning from "../../../../Components/GameRequirementsWarning";
-import WordRarityBar from "../../../../Components/WordRarityBar";
 
 interface StartPrivateRematchViewProps {
     passedUser: UserModel;
@@ -133,7 +132,6 @@ export default function StartPrivateRematchView({
                 <Typography variant="h4" gutterBottom>
                     Jumblem
                 </Typography>
-                <WordRarityBar />
                 {gameModeState === StartPrivateRematchGameModeState.findingMatch && (
                     <>
                         <GameRequirementsWarning />

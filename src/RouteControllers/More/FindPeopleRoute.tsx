@@ -50,7 +50,7 @@ function FindPeopleRoute() {
     switch (pageState) {
         case PageState.loading:
             return (
-                <AppLoadingView />
+                <AppLoadingView startAtTop={true}/>
             );
 
         case PageState.loaded:

@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import BotPlayCasualGameView from "./CasualBot/BotPlayCasualGameView";
 import GameRequirementsWarning from "../../../Components/GameRequirementsWarning";
-import WordRarityBar from "../../../Components/WordRarityBar";
 
 interface StartCasualGameViewProps {
     passedUser: UserModel
@@ -147,7 +146,6 @@ export default function StartCasualGameView({ passedUser }: StartCasualGameViewP
         <View>
             <VStack>
                 <JumblemLogoSimple />
-                <WordRarityBar />
                 {gameModeState === CasualGameModeState.idle && (
                     <>
                         <Button

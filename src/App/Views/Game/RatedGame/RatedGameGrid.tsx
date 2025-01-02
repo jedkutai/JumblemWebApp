@@ -6,6 +6,7 @@ import { VStack } from "../../../../ReactSwiftly";
 import RatedGameRow from "./RatedGameRow";
 import { GridSpot } from "../../../../Background/Extends/GridSpot";
 import RatedLetterGenerator from "./RatedLetterGenerator";
+import PregameMessage from "../../../Components/PregameMessage";
 
 
 interface RatedGameGridProps {
@@ -85,7 +86,10 @@ export default function RatedRatedGameGrid({
                 blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}
             />
 
-            {lastMove == undefined && (
+            {lastMove == undefined && matchAbortedTime > 10 && (
+                <PregameMessage />
+            )}
+            {lastMove == undefined && matchAbortedTime <= 10 && (
                 <p>{yourTurn ? `Make first move in ${Math.max(matchAbortedTime, 0)}...` : `Auto-abort in ${Math.max(matchAbortedTime, 0)}...`}</p>
             )}
         </VStack>

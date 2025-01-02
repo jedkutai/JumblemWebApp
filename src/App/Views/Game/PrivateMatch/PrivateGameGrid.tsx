@@ -6,6 +6,7 @@ import { VStack } from "../../../../ReactSwiftly";
 import PrivateGameRow from "./PrivateGameRow";
 import { GridSpot } from "../../../../Background/Extends/GridSpot";
 import PrivateLetterGenerator from "./PrivateLetterGenerator";
+import PregameMessage from "../../../Components/PregameMessage";
 
 
 interface PrivateGameGridProps {
@@ -83,7 +84,10 @@ export default function PrivateGameGrid({
                 blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}
             />
 
-            {lastMove == undefined && (
+            {lastMove == undefined && matchAbortedTime > 10 && (
+                <PregameMessage />
+            )}
+            {lastMove == undefined && matchAbortedTime <= 10 && (
                 <p>{yourTurn ? `Make first move in ${Math.max(matchAbortedTime, 0)}...` : `Auto-abort in ${Math.max(matchAbortedTime, 0)}...`}</p>
             )}
         </VStack>

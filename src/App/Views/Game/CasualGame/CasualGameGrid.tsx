@@ -6,6 +6,7 @@ import { VStack } from "../../../../ReactSwiftly";
 import CasualGameRow from "./CasualGameRow";
 import { GridSpot } from "../../../../Background/Extends/GridSpot";
 import CasualLetterGenerator from "./CasualLetterGenerator";
+import PregameMessage from "../../../Components/PregameMessage";
 
 
 interface CasualGameGridProps {
@@ -82,7 +83,10 @@ export default function CasualGameGrid({
                 blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}
             />
 
-            {lastMove == undefined && (
+            {lastMove == undefined && matchAbortedTime > 10 && (
+                <PregameMessage />
+            )}
+            {lastMove == undefined && matchAbortedTime <= 10 && (
                 <p>{yourTurn ? `Make first move in ${Math.max(matchAbortedTime, 0)}...` : `Auto-abort in ${Math.max(matchAbortedTime, 0)}...`}</p>
             )}
         </VStack>

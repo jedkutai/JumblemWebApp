@@ -6,7 +6,6 @@ import { FetchService, PrivateGameService } from "../../../../Background/Service
 import PlayPrivateGameView from "./PlayPrivateGameView";
 import PrivateMatchMenuView from "./PrivateMatchMenuView";
 import GameRequirementsWarning from "../../../Components/GameRequirementsWarning";
-import WordRarityBar from "../../../Components/WordRarityBar";
 
 interface StartPrivateGameViewProps {
     passedUser: UserModel
@@ -137,7 +136,6 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
                 <Typography variant="h4" gutterBottom>
                     Jumblem
                 </Typography>
-                <WordRarityBar />
                 {gameModeState === PrivateGameModeState.findingMatch && (
                     <>
                         <GameRequirementsWarning />
