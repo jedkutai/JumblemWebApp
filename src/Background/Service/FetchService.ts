@@ -44,12 +44,47 @@ export class FetchService {
     return snapshot.docs.map(doc => doc.data() as DailyPuzzleEntryModel);
   }
 
+  static async fetchFollowsLeaderboard(user: UserModel, dailyPuzzle: DailyPuzzleModel): Promise<DailyPuzzleEntryModel[]> {
+    const followedUsers = await this.fetchFollowedUsers(user);
+    let results: DailyPuzzleEntryModel[] = [];
+    for (const follow of followedUsers) {
+      try {
+        if (follow.userToFollowId.length > 0) {
+          const entry = await this.fetchFollowsPuzzleEntry(follow.userToFollowId, dailyPuzzle);
+          results.push(entry);
+        }
+      } catch {
+        // console.log("Failed to fetch user puzzle entry for followed user.");
+      }
+    }
+
+    try {
+      const entry = await this.fetchFollowsPuzzleEntry(user.id, dailyPuzzle);
+      results.push(entry);
+    } catch {
+
+    }
+    results.sort((a, b) => b.score - a.score);
+
+    return results;
+  }
+
   static async fetchUserPuzzleEntry(user: UserModel, dailyPuzzle: DailyPuzzleModel): Promise<DailyPuzzleEntryModel> {
     const db = getFirestore();
     const entryDoc = doc(db, `dailyPuzzles/${dailyPuzzle.id}/entries`, user.id);
     const snapshot = await getDoc(entryDoc);
     if (!snapshot.exists()) {
       throw new Error(`Puzzle entry for user ${user.id} not found.`);
+    }
+    return snapshot.data() as DailyPuzzleEntryModel;
+  }
+
+  static async fetchFollowsPuzzleEntry(userId: string, dailyPuzzle: DailyPuzzleModel): Promise<DailyPuzzleEntryModel> {
+    const db = getFirestore();
+    const entryDoc = doc(db, `dailyPuzzles/${dailyPuzzle.id}/entries`, userId);
+    const snapshot = await getDoc(entryDoc);
+    if (!snapshot.exists()) {
+      throw new Error(`Puzzle entry for user ${userId} not found.`);
     }
     return snapshot.data() as DailyPuzzleEntryModel;
   }

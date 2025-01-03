@@ -10,13 +10,18 @@ import { useNavigate } from "react-router-dom";
 import DailyPuzzleFoundWords from "./DailyPuzzleFoundWords";
 import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
 import SharePuzzleResultsButton from "../../Components/SharePuzzleResultsButton";
-import { FaChevronDown } from "react-icons/fa";
-import { TbWashDryFlat } from "react-icons/tb";
+import { FaGlobe } from "react-icons/fa";
+import { GiThreeFriends } from "react-icons/gi";
 
 enum LeaderboardState {
     loading,
     loaded,
     error
+}
+
+enum LeaderboardShown {
+    global,
+    followed
 }
 
 interface DailyPuzzleLeaderboardViewProps {
@@ -27,7 +32,9 @@ interface DailyPuzzleLeaderboardViewProps {
 export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: DailyPuzzleLeaderboardViewProps) {
     const [user, setUser] = useState<UserModel>(passedUser);
     const [leaderboardState, setLeaderboardState] = useState<LeaderboardState>(LeaderboardState.loading);
+    const [leaderboardShown, setLeaderboardShown] = useState<LeaderboardShown>(LeaderboardShown.global);
     const [leaderboard, setLeaderboard] = useState<DailyPuzzleEntryModel[]>([]);
+    const [followedLeaderboard, setFollowedLeaderboard] = useState<DailyPuzzleEntryModel[]>([]);
     const [userPuzzleEntry, setUserPuzzleEntry] = useState<DailyPuzzleEntryModel | null>(null);
     const navigate = useNavigate();
 
@@ -35,6 +42,8 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
     const [expand, setExpand] = useState(false); // first expand should load words
     const [words, setWords] = useState<Record<string, [WordModel, number]>>({});
 
+    const unselectedColor = "rgb(192, 191, 191)";
+    const iconSize = 25;
     useEffect(() => {
         onAppearActions();
     }, []);
@@ -42,6 +51,16 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
     useEffect(() => {
         fetchWords();
     }, [expand]);
+
+    function selectGloabalLeaderboard() {
+        setLeaderboardShown(LeaderboardShown.global);
+        setExpand(false);
+    }
+
+    function selectFollowedLeaderboard() {
+        setLeaderboardShown(LeaderboardShown.followed);
+        setExpand(false);
+    }
 
     async function fetchWords() {
         if (wordsLoaded) {
@@ -75,6 +94,8 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
             setLeaderboard(loadedLeaderboard);
             const userEntry = await FetchService.fetchUserPuzzleEntry(user, dailyPuzzle);
             setUserPuzzleEntry(userEntry);
+            const loadedFollowedLeaderboard = await FetchService.fetchFollowsLeaderboard(user, dailyPuzzle);
+            setFollowedLeaderboard(loadedFollowedLeaderboard);
 
             setExpand(true);
 
@@ -88,7 +109,7 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
 
 
     return (
-        <View>
+        <View startAtTop={true}>
             <VStack>
                 <Button onClick={() => navigate("/home")}>
                     <JumblemLogoSimple />
@@ -102,37 +123,48 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
 
                         <Typography>{DisplayFunctions.displayPuzzleDate(dailyPuzzle.timestamp)}</Typography>
 
-                        {userPuzzleEntry && (
-                            <>
-                                <HStack>
-                                    {wordsLoaded && (
-                                        <div
-                                            style={{
-                                                width: "50px",
-                                                height: "25px",
-                                                visibility: "hidden", // Makes it invisible but keeps it in the layout
-                                            }}
-                                        ></div>
-                                    )}
+                        <HStack>
+                            {userPuzzleEntry && (
+                                <>
 
-                                    <Button style={{ backgroundColor: "rgb(0, 0, 0)", color: "white", fontWeight: 600 }} onClick={() => setExpand(!expand)}>
-                                        <HStack>
-                                            {expand ? (
-                                                <FaChevronDown size={25} color="gray" />
-                                            ) : (
-                                                <TbWashDryFlat size={25} color="gray" />
-                                            )}
-                                            <Typography>
-                                                {`Your score: ${Math.floor(userPuzzleEntry.score)}`.toUpperCase()}
-                                            </Typography>
-
-                                        </HStack>
-                                    </Button>
                                     {wordsLoaded && (
                                         <SharePuzzleResultsButton date={dailyPuzzle.timestamp} words={words} />
                                     )}
 
-                                </HStack>
+                                    <Button style={{
+                                        backgroundColor: expand ? "rgb(0, 0, 0)" : unselectedColor,
+                                        color: expand ? "white" : "black"
+                                    }}
+                                        onClick={() => setExpand(!expand)}>
+                                        <HStack>
+                                            <Typography>
+                                                {`Score: ${Math.floor(userPuzzleEntry.score)}`.toUpperCase()}
+                                            </Typography>
+
+                                        </HStack>
+                                    </Button>
+                                </>
+                            )}
+                            <Button
+                                style={{
+                                    background: (leaderboardShown === LeaderboardShown.global && !expand) ? "black" : unselectedColor,
+                                    color: (leaderboardShown === LeaderboardShown.global && !expand) ? "white" : "black",
+                                }}
+                                onClick={selectGloabalLeaderboard}>
+
+                                <FaGlobe size={iconSize}/>
+                            </Button>
+                            <Button
+                                style={{
+                                    background: (leaderboardShown === LeaderboardShown.followed && !expand) ? "black" : unselectedColor,
+                                    color: (leaderboardShown === LeaderboardShown.followed && !expand) ? "white" : "black",
+                                }} onClick={selectFollowedLeaderboard}>
+                                <GiThreeFriends size={iconSize}/>
+                            </Button>
+                        </HStack>
+                        {userPuzzleEntry && (
+                            <>
+
 
                                 {expand && wordsLoaded && (
                                     <DailyPuzzleFoundWords correctWords={words} />
@@ -143,26 +175,54 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
                                 )}
                             </>
                         )}
-                        {leaderboard.map((entry, index) => (
-                            <div key={index}>
-                                {(index > 0) ? (
-                                    <>
-                                        {(leaderboard[index - 1].score == entry.score) ? (
-                                            // position == -1
-                                            <LeaderboardEntry position={-1} entry={entry} passedUser={user} />
+                        {leaderboardShown === LeaderboardShown.global && !expand && (
+                            <>
+                                {leaderboard.map((entry, index) => (
+                                    <div key={index}>
+                                        {(index > 0) ? (
+                                            <>
+                                                {(leaderboard[index - 1].score == entry.score) ? (
+                                                    // position == -1
+                                                    <LeaderboardEntry position={-1} entry={entry} passedUser={user} />
 
+                                                ) : (
+                                                    // position = index + 1
+                                                    <LeaderboardEntry position={index + 1} entry={entry} passedUser={user} />
+                                                )}
+                                            </>
                                         ) : (
                                             // position = index + 1
                                             <LeaderboardEntry position={index + 1} entry={entry} passedUser={user} />
                                         )}
-                                    </>
-                                ) : (
-                                    // position = index + 1
-                                    <LeaderboardEntry position={index + 1} entry={entry} passedUser={user} />
-                                )}
 
-                            </div>
-                        ))}
+                                    </div>
+                                ))}
+                            </>
+                        )}
+                        {leaderboardShown === LeaderboardShown.followed && !expand && (
+                            <>
+                                {followedLeaderboard.map((entry, index) => (
+                                    <div key={index}>
+                                        {(index > 0) ? (
+                                            <>
+                                                {(leaderboard[index - 1].score == entry.score) ? (
+                                                    // position == -1
+                                                    <LeaderboardEntry position={-1} entry={entry} passedUser={user} />
+
+                                                ) : (
+                                                    // position = index + 1
+                                                    <LeaderboardEntry position={index + 1} entry={entry} passedUser={user} />
+                                                )}
+                                            </>
+                                        ) : (
+                                            // position = index + 1
+                                            <LeaderboardEntry position={index + 1} entry={entry} passedUser={user} />
+                                        )}
+
+                                    </div>
+                                ))}
+                            </>
+                        )}
 
                     </>
                 )}
