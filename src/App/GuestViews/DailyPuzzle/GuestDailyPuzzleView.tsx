@@ -12,6 +12,7 @@ import DailyPuzzleGrid from "../../Views/DailyPuzzle/DailyPuzzleGrid";
 import DailyPuzzleLetterBank from "../../Views/DailyPuzzle/DailyPuzzleLetterBank";
 import GuestDailyPuzzleResultsView from "./GuestDailyPuzzleResultsView";
 import { WordBankFunctions } from "../../../Background/Utils/WordBankFunctions";
+import PrepuzzleMessage from "../../Components/PrepuzzleMessage";
 
 interface DailyPuzzleViewProps {
     dailyPuzzle: DailyPuzzleModel;
@@ -36,6 +37,7 @@ export default function DailyPuzzleView({
     const [grid, setGrid] = useState<GridSpotModel[][]>(GridSpot.grid);
     const [submittingPuzzle, setSubmittingPuzzle] = useState(false);
     const [view, setView] = useState<"PlayPuzzle" | "Results">("PlayPuzzle");
+    const [firstMoveMade, setFirstMoveMade] = useState(false);
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
     const upperBound = 650;
@@ -43,6 +45,11 @@ export default function DailyPuzzleView({
 
     useEffect(() => {
         onAppearActions();
+        const timeout = setTimeout(async () => {
+            setFirstMoveMade(true);
+        }, 1000 * 5.5);
+
+        return () => clearTimeout(timeout);
     }, []);
 
     useEffect(() => {
@@ -242,15 +249,19 @@ export default function DailyPuzzleView({
 
                 {(livesRemaining > 0 || !submittingPuzzle) && (
                     <DailyPuzzleLetterBank
-                    letters={dailyPuzzle.letterBank.sort()}
-                    selectedGridSpot={selectedGridSpot}
-                    setSelectedLetter={setSelectedLetter}
-                    livesRemaining={livesRemaining}
-                    blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}
-                />
+                        letters={dailyPuzzle.letterBank.sort()}
+                        selectedGridSpot={selectedGridSpot}
+                        setSelectedLetter={setSelectedLetter}
+                        livesRemaining={livesRemaining}
+                        blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}
+                    />
                 )}
 
+                {!firstMoveMade && (
+                    <PrepuzzleMessage />
+                )}
                 <VStack spacing="0px" height="30px">
+
                     {repeatGuessWarning ? (
                         <Typography color="error">This is a duplicate guess!</Typography>
                     ) : (

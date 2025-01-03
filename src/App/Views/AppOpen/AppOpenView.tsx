@@ -17,7 +17,7 @@ export default function AppOpenView() {
             }, 1000 * 0.5);
         }
     }, [showRed]);
-    
+
     async function continueAsGuest() {
         try {
             await GuestService.anonymousAccountCreation();
@@ -26,23 +26,23 @@ export default function AppOpenView() {
             // navigate("/");
             setShowRed(true);
         }
-        
+
     }
 
     return (
         <View>
             <VStack>
-                <JumblemLogoSimple/>
+                <JumblemLogoSimple />
 
-                <Button onClick={() => navigate("/login")}>
+                <Button style={{ color: "black" }} onClick={() => navigate("/login")}>
                     LOGIN
                 </Button>
 
-                <Button onClick={() => navigate("/createaccount")}>
+                <Button style={{ color: "black" }} onClick={() => navigate("/createaccount")}>
                     CREATE ACCOUNT
                 </Button>
 
-                <Button onClick={continueAsGuest} color={showRed ? "error" : "primary"}>
+                <Button style={{ color: "black" }} onClick={continueAsGuest} color={showRed ? "error" : "primary"}>
                     CONTINUE AS GUEST
                 </Button>
             </VStack>

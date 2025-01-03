@@ -13,6 +13,7 @@ import DailyPuzzleLeaderboardView from "./DailyPuzzleLeaderboardView";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
 import { WordBankFunctions } from "../../../Background/Utils/WordBankFunctions";
+import PrepuzzleMessage from "../../Components/PrepuzzleMessage";
 
 interface DailyPuzzleViewProps {
     passedUser: UserModel;
@@ -40,6 +41,7 @@ export default function DailyPuzzleView({
     const [grid, setGrid] = useState<GridSpotModel[][]>(GridSpot.grid);
     const [submittingPuzzle, setSubmittingPuzzle] = useState(false);
     const [view, setView] = useState<"PlayPuzzle" | "PuzzleLeaderBoard">("PlayPuzzle");
+    const [firstMoveMade, setFirstMoveMade] = useState(false);
     const startTime = Date.now();
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
@@ -47,6 +49,11 @@ export default function DailyPuzzleView({
 
     useEffect(() => {
         onAppearActions();
+        const timeout = setTimeout(async () => {
+            setFirstMoveMade(true);
+        }, 1000 * 5.5);
+
+        return () => clearTimeout(timeout);
     }, []);
 
     useEffect(() => {
@@ -60,6 +67,7 @@ export default function DailyPuzzleView({
     }, [repeatGuessWarning])
 
     useEffect(() => {
+        
         if (selectedLetter.length > 0) {
             const leter = selectedLetter;
             const gridSpot = selectedGridSpot;
@@ -252,7 +260,11 @@ export default function DailyPuzzleView({
                     />
                 )}
 
+                {!firstMoveMade && (
+                    <PrepuzzleMessage />
+                )}
                 <VStack spacing="0px" height="30px">
+
                     {repeatGuessWarning ? (
                         <Typography color="error">This is a duplicate guess!</Typography>
                     ) : (
