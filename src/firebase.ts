@@ -7,7 +7,8 @@ import { initializeApp } from "firebase/app";
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyDGtVEP5RUAQ3m5rHZMlD8dWF0eZrIGKIg",
-  authDomain: "wordgame-5ed3a.firebaseapp.com",
+  // authDomain: "wordgame-5ed3a.firebaseapp.com",
+  authDomain: "jumblem.com",
   projectId: "wordgame-5ed3a",
   storageBucket: "wordgame-5ed3a.appspot.com",
   messagingSenderId: "498937899228",
