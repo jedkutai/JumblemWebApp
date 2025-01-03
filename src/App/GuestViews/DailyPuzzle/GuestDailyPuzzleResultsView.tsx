@@ -77,7 +77,8 @@ export default function GuestDailyPuzzleResultsView() {
                                     visibility: "hidden", // Makes it invisible but keeps it in the layout
                                 }}
                             ></div>
-                            <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{`Score: ${DailyPuzzleFunctions.getScore(words)}`}</Typography>
+                            {/* <Typography variant="h2" sx={{ color: 'black', textTransform: "none" }}>{`Score: ${DailyPuzzleFunctions.getScore(words)}`}</Typography> */}
+                            <h2 style={{ color: 'black', textTransform: "none" }}>{`Score: ${DailyPuzzleFunctions.getScore(words)}`}</h2>
                             {lastPuzzlePlayed && wordsLoaded && (
                                 <SharePuzzleResultsButton date={lastPuzzlePlayed.timestamp} words={words} />
                             )}

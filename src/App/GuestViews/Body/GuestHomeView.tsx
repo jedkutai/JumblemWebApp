@@ -6,11 +6,14 @@ import { useState } from "react";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { AuthService } from "../../../Background/Service";
 
+import { CiCirclePlus } from "react-icons/ci";
+import { IoPerson } from "react-icons/io5";
 
 export default function GuestHomeView() {
     const { minDimension } = useWindowSize();
     const navigate = useNavigate();
     const [showLoginMessage, setShowLoginMessage] = useState(false);
+    const iconSize = 25;
 
     function openHowToDailyPuzzle() {
         window.open("https://youtu.be/_V9frMe_Obo?feature=shared", "_blank");
@@ -181,11 +184,11 @@ export default function GuestHomeView() {
 
                 <HStack>
                     <Button variant="contained" style={styles.moreButton} onClick={loginButton}>
-                        Login
+                        <IoPerson size={iconSize}/>
                     </Button>
 
                     <Button variant="contained" style={styles.moreButton} onClick={() => navigate("/more")}>
-                        More
+                        <CiCirclePlus size={iconSize}/>
                     </Button>
                 </HStack>
             </VStack>

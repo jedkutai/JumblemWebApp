@@ -7,6 +7,9 @@ import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import { useNavigate } from "react-router-dom";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 
+import { GiThreeFriends } from "react-icons/gi";
+import { CiCirclePlus } from "react-icons/ci";
+import { IoPerson } from "react-icons/io5";
 
 interface HomeViewProps {
     passedUser: UserModel;
@@ -24,6 +27,7 @@ export default function HomeView({
     const { minDimension } = useWindowSize();
     const navigate = useNavigate();
 
+    const iconSize = 25;
 
     useEffect(() => {
         if (!user.username) {
@@ -210,15 +214,15 @@ export default function HomeView({
 
                 <HStack>
                     <Button variant="contained" style={styles.moreButton} onClick={() => navigate("/people")}>
-                        People
+                        <GiThreeFriends size={iconSize}/>
                     </Button>
 
                     <Button variant="contained" style={styles.moreButton} onClick={() => navigate("/profile")}>
-                        Profile
+                        <IoPerson size={iconSize}/>
                     </Button>
 
                     <Button variant="contained" style={styles.moreButton} onClick={() => navigate("/more")}>
-                        More
+                        <CiCirclePlus size={iconSize}/>
                     </Button>
                 </HStack>
             </VStack>

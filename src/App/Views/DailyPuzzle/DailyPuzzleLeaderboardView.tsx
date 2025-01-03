@@ -11,6 +11,7 @@ import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
 import SharePuzzleResultsButton from "../../Components/SharePuzzleResultsButton";
 import { FaGlobe } from "react-icons/fa";
 import { GiThreeFriends } from "react-icons/gi";
+import { IoPerson } from "react-icons/io5";
 
 enum LeaderboardState {
     loading,
@@ -135,12 +136,13 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
                                         color: expand ? "white" : "black"
                                     }}
                                         onClick={() => setExpand(!expand)}>
-                                        <HStack>
+                                        <IoPerson size={iconSize} />
+                                        {/* <HStack>
                                             <Typography>
                                                 {`Score: ${Math.floor(userPuzzleEntry.score)}`.toUpperCase()}
                                             </Typography>
 
-                                        </HStack>
+                                        </HStack> */}
                                     </Button>
                                 </>
                             )}
@@ -151,14 +153,14 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
                                 }}
                                 onClick={selectGloabalLeaderboard}>
 
-                                <FaGlobe size={iconSize}/>
+                                <FaGlobe size={iconSize} />
                             </Button>
                             <Button
                                 style={{
                                     background: (leaderboardShown === LeaderboardShown.followed && !expand) ? "black" : unselectedColor,
                                     color: (leaderboardShown === LeaderboardShown.followed && !expand) ? "white" : "black",
                                 }} onClick={selectFollowedLeaderboard}>
-                                <GiThreeFriends size={iconSize}/>
+                                <GiThreeFriends size={iconSize} />
                             </Button>
                         </HStack>
                         {userPuzzleEntry && (
@@ -166,7 +168,10 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
 
 
                                 {expand && wordsLoaded && (
-                                    <DailyPuzzleFoundWords correctWords={words} />
+                                    <>
+                                        <h2 style={{color: "black"}}>{`Total: ${Math.floor(userPuzzleEntry.score)}`}</h2>
+                                        <DailyPuzzleFoundWords correctWords={words} />
+                                    </>
                                 )}
 
                                 {expand && !wordsLoaded && (
