@@ -211,7 +211,7 @@ export default function DailyPuzzleView({
     }
 
     return (
-        <View>
+        <View startAtTop={true}>
             <VStack spacing="0px">
                 <JumblemLogoSimple />
                 <Typography>Daily Puzzle: {DisplayFunctions.displayPuzzleDate(dailyPuzzle.timestamp)}</Typography>

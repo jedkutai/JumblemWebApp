@@ -4,7 +4,6 @@ import { HStack, View, VStack } from "../../../ReactSwiftly";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import LeaderboardEntry from "./LeaderboardEntry";
 import { FetchService } from "../../../Background/Service";
-// import { Home } from "@mui/icons-material";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { useNavigate } from "react-router-dom";
 import DailyPuzzleFoundWords from "./DailyPuzzleFoundWords";
