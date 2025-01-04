@@ -37,4 +37,8 @@ export class DisplayFunctions {
         nextPuzzleDate.setHours(nextPuzzleDate.getHours() + 24);
         return nextPuzzleDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric" });
     }
+
+    static longDate(date: Date): string {
+        return date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "numeric" });
+    }
 }

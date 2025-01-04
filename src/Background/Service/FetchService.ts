@@ -7,7 +7,7 @@ import { PartialWordModel } from "../Models/PartialWordModel";
 import { WordModel } from "../Models/WordModel";
 import { FollowModel } from "../Models/FollowModel";
 import { DayFunctions } from "../Utils/DayFunctions"; // Assuming DayFunctions provides date utilities.
-import { DictionaryWordModel } from "../Models";
+import { DictionaryWordModel, PublicUsernameModel } from "../Models";
 import axios from "axios";
 
 export class FetchService {
@@ -30,6 +30,16 @@ export class FetchService {
       throw new Error(`User not found.`);
     }
     return snapshot.data() as UserModel;
+  }
+
+  static async fetchPublicUserName(uid: string): Promise<PublicUsernameModel> {
+    const db = getFirestore();
+    const userDoc = doc(db, "publicUsernames", uid);
+    const snapshot = await getDoc(userDoc);
+    if (!snapshot.exists()) {
+      throw new Error(`User not found.`);
+    }
+    return snapshot.data() as PublicUsernameModel;
   }
 
   static async fetchLeaderboard(dailyPuzzle: DailyPuzzleModel, limitCount: number): Promise<DailyPuzzleEntryModel[]> {

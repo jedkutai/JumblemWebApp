@@ -1,19 +1,20 @@
-import SettingsView from "../../App/Views/Settings/SettingsView";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import PageNotFoundView from "../../App/Components/PageNotFoundView";
+import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
+import ChangeUsernameView from "../../App/Views/Settings/ChangeUsernameView";
 import { UserModel } from "../../Background/Models";
 import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
-import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
-import PageNotFoundView from "../../App/Components/PageNotFoundView";
+
 
 enum PageState {
     loading,
     loaded,
 }
 
-function SettingsRoute() {
+function ChangeUsernameRoute() {
     const [user, setUser] = useState<UserModel | null>(null);
     const [pageState, setPageState] = useState<PageState>(PageState.loading);
     const navigate = useNavigate();
@@ -52,7 +53,7 @@ function SettingsRoute() {
         case PageState.loaded:
             if (user && user.username !== "guest") {
                 return (
-                    <SettingsView />
+                    <ChangeUsernameView passedUser={user} />
                 );
             } else {
                 return (
@@ -64,4 +65,4 @@ function SettingsRoute() {
     }
 }
 
-export default SettingsRoute;
+export default ChangeUsernameRoute;

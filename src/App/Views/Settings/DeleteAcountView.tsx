@@ -10,10 +10,9 @@ import { AuthService, UserService } from "../../../Background/Service";
 
 interface DeleteAccountViewProps {
     passedUser: UserModel;
-    onBack: () => void;
 }
 
-export default function DeleteAccountView({ passedUser, onBack }: DeleteAccountViewProps) {
+export default function DeleteAccountView({ passedUser }: DeleteAccountViewProps) {
     // const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -112,7 +111,6 @@ export default function DeleteAccountView({ passedUser, onBack }: DeleteAccountV
                     </Button>
                 </Box>
 
-                <Button variant="text" onClick={onBack}>Back</Button>
             </VStack>
         </View>
     );

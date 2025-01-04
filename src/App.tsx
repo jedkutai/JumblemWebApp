@@ -16,6 +16,8 @@ import SpecificWordRoute from './RouteControllers/OpenSpecific/SpecificWordRoute
 import SettingsRoute from './RouteControllers/Settings/SettingsRoute';
 import MoreRoute from './RouteControllers/More/MoreRoute';
 import PageNotFoundView from './App/Components/PageNotFoundView';
+import DeleteAccountRoute from './RouteControllers/Settings/DeleteAccountRoute';
+import ChangeUsernameRoute from './RouteControllers/Settings/ChangeUsernameRoute';
 
 
 function App() {
@@ -53,6 +55,8 @@ function App() {
         
         // Settings
         <Route path="/settings" element={<SettingsRoute />} />
+        <Route path="/settings/deleteaccount" element={<DeleteAccountRoute />} />
+        <Route path="/settings/changeusername" element={<ChangeUsernameRoute />} />
 
         <Route path="*" element={<PageNotFoundView />} />
       </Routes>
