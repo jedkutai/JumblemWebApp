@@ -53,7 +53,7 @@ export default function SharePuzzleResultsButton({ date, words }: SharePuzzleRes
 
         }
 
-        const shareText = `Jumblem ${joinedDate}\n🟥x${legendaryCount}\n🟪x${rareCount}\n⬛️x${uncommonCount}\n⬜️x${commonCount}\n${link}\nScore: ${score}`;
+        const shareText = `Jumblem ${joinedDate}\n🟥LEGENDARY x${legendaryCount}\n🟪RARE x${rareCount}\n⬛️UNCOMMON x${uncommonCount}\n⬜️COMMON x${commonCount}\n${link}\nScore: ${score}`;
         try {
             await navigator.clipboard.writeText(shareText);
             alert('Score copied to clipboard!');
