@@ -1,7 +1,7 @@
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { DictionaryWordModel, UserModel, WordModel } from "../../Background/Models";
+import { DictionaryWordModel, WordModel } from "../../Background/Models";
 import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
 import SpecificWordView from "../../App/Views/Dictionary/SpecificWordView";
@@ -15,7 +15,7 @@ enum PageState {
 
 function SpecificWordRoute() {
     const { word } = useParams();
-    const [user, setUser] = useState<UserModel | null>(null);
+    // const [user, setUser] = useState<UserModel | null>(null);
     const [wordModel, setWordModel] = useState<WordModel | null>(null);
     const [dictionaryModels, setDictionaryModels] = useState<DictionaryWordModel[] | null>(null);
     const [pageState, setPageState] = useState<PageState>(PageState.loading);
@@ -31,31 +31,25 @@ function SpecificWordRoute() {
 
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
-                if (firebaseUser.isAnonymous) {
-                    navigate("/home");
-                } else {
-                    try {
-                        const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
-                        if (word) {
-                            const fetchedWordModel = await FetchService.fetchWordModelByWord(word);
-                            const fetchedDictionaryModels = await FetchService.fetchWordDefinition(word);
-                            setWordModel(fetchedWordModel);
-                            setDictionaryModels(fetchedDictionaryModels);
-                            if (fetchedWordModel && !fetchedDictionaryModels) {
-                                const searchUrl = `${googleLink}${word}+definition`;
-                                window.location.href = searchUrl;
-                                // window.open(searchUrl);
-                            }
+                try {
+                    // const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
+                    if (word) {
+                        const fetchedWordModel = await FetchService.fetchWordModelByWord(word);
+                        const fetchedDictionaryModels = await FetchService.fetchWordDefinition(word);
+                        setWordModel(fetchedWordModel);
+                        setDictionaryModels(fetchedDictionaryModels);
+                        if (fetchedWordModel && !fetchedDictionaryModels) {
+                            const searchUrl = `${googleLink}${word}+definition`;
+                            window.location.href = searchUrl;
+                            // window.open(searchUrl);
                         }
-                        setUser(fetchedUser);
-                        setPageState(PageState.loaded);
-    
-                    } catch (error) {
-                        const searchUrl = `${googleLink}${word}+definition`;
-                        window.location.href = searchUrl;
-                        // window.open(searchUrl);
-                        // navigate("/");
                     }
+                    // setUser(fetchedUser);
+                    setPageState(PageState.loaded);
+
+                } catch (error) {
+                    const searchUrl = `${googleLink}${word}+definition`;
+                    window.location.href = searchUrl;
                 }
 
             } else {
@@ -73,7 +67,7 @@ function SpecificWordRoute() {
             );
 
         case PageState.loaded:
-            if (user && wordModel && dictionaryModels) {
+            if (wordModel && dictionaryModels) {
                 return (
                     <SpecificWordView dictionaryModels={dictionaryModels} wordModel={wordModel} />
                 );
