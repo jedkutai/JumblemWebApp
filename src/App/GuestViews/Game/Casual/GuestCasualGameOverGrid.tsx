@@ -4,9 +4,9 @@ import { UserModel, GameModel, MoveModel, WordModel, GridSpotModel } from "../..
 import { GuestService } from "../../../../Background/Service";
 import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
 import { VStack } from "../../../../ReactSwiftly";
-import { GuestColoredWord } from "../../../Components/GuestColoredWord";
 import CasualGameOverRow from "../../../Views/Game/CasualGame/CasualGameOverRow";
 import { Button } from "@mui/material";
+import { ColoredWord } from "../../../Components";
 // import { useNavigate } from "react-router-dom";
 
 interface GuestCasualGameOverGridProps {
@@ -84,7 +84,7 @@ export default function GuestCasualGameOverGrid({
 
                 <VStack spacing="10px">
                     {winningWords.map((word, index) => (
-                        <GuestColoredWord key={index} word={word} />
+                        <ColoredWord key={index} word={word} />
                     ))}
                 </VStack>
                 

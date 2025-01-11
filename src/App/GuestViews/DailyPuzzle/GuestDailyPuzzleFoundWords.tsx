@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { WordModel } from "../../../Background/Models";
 import { VStack, HStack } from "../../../ReactSwiftly";
-import { GuestColoredWord } from "../../Components/GuestColoredWord";
+import { ColoredWord } from "../../Components";
 
 enum WordRarity {
     legendary,
@@ -38,7 +38,7 @@ export default function GuestDailyPuzzleFoundWords({ correctWords }: GuestDailyP
                 const wordRarity = getWordRarity(wordModel);
                 return (
                     <HStack key={word}>
-                        <GuestColoredWord word={wordModel} />
+                        <ColoredWord word={wordModel} />
                         {wordRarity == WordRarity.common && (
                             <Typography style={{ color: "black", fontWeight: 600 }}>{count > 1 ? `25 x ${count}` : "25"}</Typography>
                         )}

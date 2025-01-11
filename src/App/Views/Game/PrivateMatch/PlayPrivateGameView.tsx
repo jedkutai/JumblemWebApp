@@ -16,6 +16,7 @@ import RematchController from "./PrivateRematch/RematchController";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import { useNavigate } from "react-router-dom";
 import { WordBankFunctions } from "../../../../Background/Utils/WordBankFunctions";
+import HowToPlayHeader from "../../../Components/HowToPlayHeader";
 
 interface PlayPrivateGameViewProps {
     passedUser: UserModel;
@@ -63,7 +64,7 @@ export default function PlayPrivateGameView({
     const [opponentClock, setOpponentClock] = useState(0);
     const [anchorTime, setAnchorTime] = useState(Date.now());
     const tickRate = 1000 * 0.5;
-    
+
     useEffect(() => {
         try {
             onAppearActions();
@@ -77,7 +78,7 @@ export default function PlayPrivateGameView({
     useEffect(() => {
         setUserClock(0);
         setOpponentClock(0);
-        
+
         const lastMove = movesCopy[movesCopy.length - 1];
         if (lastMove) {
             const lastMoveTime = new Date(lastMove.timestamp.toDate())
@@ -357,23 +358,18 @@ export default function PlayPrivateGameView({
         return (
             <View>
                 <VStack>
+                    <HowToPlayHeader versus={true}/>
                     <Button onClick={() => navigate("/home")}>
                         <JumblemLogoSimple />
                     </Button>
 
                     <PrivateGameHeader
-                        // userTimeExpired={userTimeExpired}
-                        // setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
-                        // checkOpponentTimeExpired={checkOpponentTimeExpired}
-                        // setCheckOpponentTimeExpired={() => setCheckOpponentTimeExpired(checkOpponentTimeExpired)}
                         userId={user.id}
                         opponentId={user.id === game.playerOneId ? game.playerTwoId : game.playerOneId}
                         userTimeRemaining={yourTimeRemaining}
                         opponentTimeRemaining={opponentTimeRemaining}
                         yourTurn={yourTurn}
                         clock={yourTurn ? userClock : opponentClock}
-                        // firstMoveMade={movesCopy.length !== 0}
-                        // gameOver={gameOver}
                     />
 
 
@@ -396,22 +392,16 @@ export default function PlayPrivateGameView({
         return (
             <View>
                 <VStack width={`${width}px`} height={`${height}px`}>
-                    {/* <VSpacer /> */}
+                    <HowToPlayHeader versus={true} />
                     <JumblemLogoSimple />
 
                     <PrivateGameHeader
-                        // userTimeExpired={userTimeExpired}
-                        // setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
-                        // checkOpponentTimeExpired={checkOpponentTimeExpired}
-                        // setCheckOpponentTimeExpired={() => setCheckOpponentTimeExpired(checkOpponentTimeExpired)}
                         userId={user.id}
                         opponentId={user.id === game.playerOneId ? game.playerTwoId : game.playerOneId}
                         userTimeRemaining={yourTimeRemaining}
                         opponentTimeRemaining={opponentTimeRemaining}
                         yourTurn={yourTurn}
                         clock={yourTurn ? userClock : opponentClock}
-                        // firstMoveMade={movesCopy.length !== 0}
-                        // gameOver={gameOver}
                     />
 
                     <PrivateGameGrid

@@ -13,6 +13,7 @@ import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import { WordBankFunctions } from "../../../../Background/Utils/WordBankFunctions";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
+import HowToPlayHeader from "../../../Components/HowToPlayHeader";
 
 interface PlayCasualGameViewProps {
     passedUser: UserModel;
@@ -64,7 +65,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
     useEffect(() => {
         setUserClock(0);
         setOpponentClock(0);
-        
+
         const lastMove = movesCopy[movesCopy.length - 1];
         if (lastMove) {
             const lastMoveTime = new Date(lastMove.timestamp.toDate())
@@ -77,7 +78,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
     useEffect(() => {
 
         if (!gameOver) {
-            const timeout = setTimeout(async() => {
+            const timeout = setTimeout(async () => {
                 if (movesCopy.length !== 0) {
 
                     const elapsedSeconds = Math.floor((Date.now() - anchorTime) / 1000);
@@ -180,20 +181,20 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
 
     useEffect(() => {
         if (checkOpponentTimeExpired) {
-        const fetchLastMove = async (): Promise<void> => {
-            if (checkOpponentTimeExpired && !gameOver) {
-                try {
-                    await CasualGameService.setGameWinner(game, user.id, [], []);
-                    await CasualGameService.moveFinishedGame(game);
-                    setGameOver(true);
-                } catch {
+            const fetchLastMove = async (): Promise<void> => {
+                if (checkOpponentTimeExpired && !gameOver) {
+                    try {
+                        await CasualGameService.setGameWinner(game, user.id, [], []);
+                        await CasualGameService.moveFinishedGame(game);
+                        setGameOver(true);
+                    } catch {
+                    }
                 }
+
+                setCheckOpponentTimeExpired(false);
             }
 
-            setCheckOpponentTimeExpired(false);
-        }
-
-        fetchLastMove();
+            fetchLastMove();
         }
 
     }, [checkOpponentTimeExpired]);
@@ -298,6 +299,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
         return (
             <View startAtTop={true}>
                 <VStack>
+                    <HowToPlayHeader versus={true} />
                     <Button onClick={() => navigate("/home")}>
                         <JumblemLogoSimple />
                     </Button>
@@ -328,6 +330,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
         return (
             <View startAtTop={true}>
                 <VStack width={`${width}px`} height={`${height}px`}>
+                    <HowToPlayHeader versus={true} />
                     <JumblemLogoSimple />
 
                     <CasualGameHeader

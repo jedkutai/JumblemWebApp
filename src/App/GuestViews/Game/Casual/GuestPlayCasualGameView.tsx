@@ -14,6 +14,7 @@ import GuestCasualGameHeader from "./GuestCasualGameHeader";
 import GuestCasualGameGrid from "./GuestCasualGameGrid";
 import GuestCasualGameOverGrid from "./GuestCasualGameOverGrid";
 import { Button } from "@mui/material";
+import HowToPlayHeader from "../../../Components/HowToPlayHeader";
 
 interface GuestPlayCasualGameViewProps {
     passedUser: UserModel;
@@ -63,7 +64,7 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
     useEffect(() => {
         setUserClock(0);
         setOpponentClock(0);
-        
+
         const lastMove = movesCopy[movesCopy.length - 1];
         if (lastMove) {
             const lastMoveTime = new Date(lastMove.timestamp.toDate())
@@ -301,6 +302,7 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
         return (
             <View startAtTop={true}>
                 <VStack>
+                    <HowToPlayHeader versus={true} />
                     <Button onClick={() => navigate("/home")}>
                         <JumblemLogoSimple />
                     </Button>
@@ -332,6 +334,7 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
         return (
             <View startAtTop={true}>
                 <VStack width={`${width}px`} height={`${height}px`}>
+                    <HowToPlayHeader versus={true} />
                     <JumblemLogoSimple />
 
                     <GuestCasualGameHeader

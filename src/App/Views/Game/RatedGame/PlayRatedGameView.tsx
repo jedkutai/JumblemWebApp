@@ -13,6 +13,7 @@ import RatedGameOverGrid from "./RatedGameOverGrid";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import { useNavigate } from "react-router-dom";
 import { WordBankFunctions } from "../../../../Background/Utils/WordBankFunctions";
+import HowToPlayHeader from "../../../Components/HowToPlayHeader";
 
 interface PlayRatedGameViewProps {
     passedUser: UserModel;
@@ -65,7 +66,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
     useEffect(() => {
         setUserClock(0);
         setOpponentClock(0);
-        
+
         const lastMove = movesCopy[movesCopy.length - 1];
         if (lastMove) {
             const lastMoveTime = new Date(lastMove.timestamp.toDate())
@@ -304,23 +305,18 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
         return (
             <View>
                 <VStack>
+                    <HowToPlayHeader versus={true}/>
                     <Button onClick={() => navigate("/home")}>
                         <JumblemLogoSimple />
                     </Button>
 
                     <RatedGameHeader
-                        // userTimeExpired={userTimeExpired}
-                        // setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
-                        // checkOpponentTimeExpired={checkOpponentTimeExpired}
-                        // setCheckOpponentTimeExpired={() => setCheckOpponentTimeExpired(checkOpponentTimeExpired)}
                         userId={user.id}
                         opponentId={user.id === game.playerOneId ? game.playerTwoId : game.playerOneId}
                         userTimeRemaining={yourTimeRemaining}
                         opponentTimeRemaining={opponentTimeRemaining}
                         yourTurn={yourTurn}
                         clock={yourTurn ? userClock : opponentClock}
-                        // firstMoveMade={movesCopy.length !== 0}
-                        // gameOver={gameOver}
                         userRatingChange={user.id === game.playerOneId ? game.playerOneRatingChange : game.playerTwoRatingChange}
                         opponentRatingChange={user.id !== game.playerOneId ? game.playerOneRatingChange : game.playerTwoRatingChange}
                     />
@@ -345,22 +341,16 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
         return (
             <View>
                 <VStack width={`${width}px`} height={`${height}px`}>
-                    {/* <VSpacer /> */}
+                    <HowToPlayHeader versus={true} />
                     <JumblemLogoSimple />
 
                     <RatedGameHeader
-                        // userTimeExpired={userTimeExpired}
-                        // setUserTimeExpired={() => setUserTimeExpired(userTimeExpired)}
-                        // checkOpponentTimeExpired={checkOpponentTimeExpired}
-                        // setCheckOpponentTimeExpired={() => setCheckOpponentTimeExpired(checkOpponentTimeExpired)}
                         userId={user.id}
                         opponentId={user.id === game.playerOneId ? game.playerTwoId : game.playerOneId}
                         userTimeRemaining={yourTimeRemaining}
                         opponentTimeRemaining={opponentTimeRemaining}
                         yourTurn={yourTurn}
                         clock={yourTurn ? userClock : opponentClock}
-                        // firstMoveMade={movesCopy.length !== 0}
-                        // gameOver={gameOver}
 
                     />
 

@@ -13,6 +13,7 @@ import JumblemLogoSimple from "../../../../Components/JumblemLogoSimple";
 import GuestCasualGameGrid from "../GuestCasualGameGrid";
 import GuestCasualGameHeader from "../GuestCasualGameHeader";
 import GuestCasualGameOverGrid from "../GuestCasualGameOverGrid";
+import HowToPlayHeader from "../../../../Components/HowToPlayHeader";
 
 interface BotGuestPlayCasualGameViewProps {
     passedUser: UserModel;
@@ -54,7 +55,7 @@ export default function BotGuestPlayCasualGameView({ passedUser, passedGame }: B
     const [opponentClock, setOpponentClock] = useState(0);
     const [anchorTime, setAnchorTime] = useState(Date.now());
 
-useEffect(() => {
+    useEffect(() => {
         try {
             onAppearActions();
         } catch {
@@ -65,7 +66,7 @@ useEffect(() => {
     useEffect(() => {
         setUserClock(0);
         setOpponentClock(0);
-        
+
         const lastMove = movesCopy[movesCopy.length - 1];
         if (lastMove) {
             const lastMoveTime = new Date(lastMove.timestamp.toDate())
@@ -331,6 +332,7 @@ useEffect(() => {
         return (
             <View startAtTop={true}>
                 <VStack>
+                    <HowToPlayHeader versus={true} />
                     <Button onClick={() => navigate("/home")}>
                         <JumblemLogoSimple />
                     </Button>
@@ -362,6 +364,7 @@ useEffect(() => {
         return (
             <View startAtTop={true}>
                 <VStack width={`${width}px`} height={`${height}px`}>
+                    <HowToPlayHeader versus={true} />
                     <JumblemLogoSimple />
 
                     <GuestCasualGameHeader

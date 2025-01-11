@@ -14,6 +14,7 @@ import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
 import { WordBankFunctions } from "../../../Background/Utils/WordBankFunctions";
 import PrepuzzleMessage from "../../Components/PrepuzzleMessage";
+import HowToPlayHeader from "../../Components/HowToPlayHeader";
 
 interface DailyPuzzleViewProps {
     passedUser: UserModel;
@@ -223,6 +224,7 @@ export default function DailyPuzzleView({
     return (
         <View startAtTop={true}>
             <VStack spacing="0px">
+                <HowToPlayHeader versus={false}/>
                 <JumblemLogoSimple />
                 <Typography>Daily Puzzle: {DisplayFunctions.displayPuzzleDate(dailyPuzzle.timestamp)}</Typography>
 

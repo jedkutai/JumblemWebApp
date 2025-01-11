@@ -13,6 +13,7 @@ import JumblemLogoSimple from "../../../../Components/JumblemLogoSimple";
 import CasualGameGrid from "../CasualGameGrid";
 import CasualGameHeader from "../CasualGameHeader";
 import CasualGameOverGrid from "../CasualGameOverGrid";
+import HowToPlayHeader from "../../../../Components/HowToPlayHeader";
 
 interface BotPlayCasualGameViewProps {
     passedUser: UserModel;
@@ -65,7 +66,7 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
     useEffect(() => {
         setUserClock(0);
         setOpponentClock(0);
-        
+
         const lastMove = movesCopy[movesCopy.length - 1];
         if (lastMove) {
             const lastMoveTime = new Date(lastMove.timestamp.toDate())
@@ -333,6 +334,7 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
         return (
             <View startAtTop={true}>
                 <VStack>
+                    <HowToPlayHeader versus={true} />
                     <Button onClick={() => navigate("/home")}>
                         <JumblemLogoSimple />
                     </Button>
@@ -363,6 +365,7 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
         return (
             <View startAtTop={true}>
                 <VStack width={`${width}px`} height={`${height}px`}>
+                    <HowToPlayHeader versus={true} />
                     <JumblemLogoSimple />
 
                     <CasualGameHeader
