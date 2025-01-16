@@ -172,19 +172,22 @@ export class PrivateGameService {
   }
 
   static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string): Promise<void> {
-    const db = getFirestore();
-    const moveRef = doc(collection(db, `newGames/${game.id}/moves`));
+    if (coordinates.length > 0 && letter.length > 0) {
+      const db = getFirestore();
+      const moveRef = doc(collection(db, `newGames/${game.id}/moves`));
+  
+      const newMove: MoveModel = {
+        id: moveRef.id,
+        gameId: game.id,
+        userId: user.id,
+        coordinates,
+        letter,
+        timestamp: Timestamp.now()
+      };
+  
+      await setDoc(moveRef, newMove);
+    }
 
-    const newMove: MoveModel = {
-      id: moveRef.id,
-      gameId: game.id,
-      userId: user.id,
-      coordinates,
-      letter,
-      timestamp: Timestamp.now()
-    };
-
-    await setDoc(moveRef, newMove);
   }
 
   static async getFinalMove(game: GameModel): Promise<MoveModel | null> {
