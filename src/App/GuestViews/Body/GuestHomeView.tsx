@@ -151,7 +151,7 @@ export default function GuestHomeView() {
                     </Box>
 
                     <Box style={{ display: "flex", justifyContent: "center" }} >
-                        <Button variant="contained" style={styles.bannedButton} onClick={() => setShowLoginMessage(!showLoginMessage)}>
+                        <Button variant="contained" style={styles.button} onClick={() => navigate("/private")}>
                             PRIVATE MATCH
                         </Button>
                     </Box>

@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { UserModel } from "../../Background/Models";
 import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
-import { Button, Typography } from "@mui/material";
-import { HStack, View, VStack } from "../../ReactSwiftly";
+// import { Button, Typography } from "@mui/material";
+// import { HStack, View, VStack } from "../../ReactSwiftly";
 import PrivateMatchMenuView from "../../App/Views/Game/PrivateMatch/PrivateMatchMenuView";
-import JumblemLogoSimple from "../../App/Components/JumblemLogoSimple";
+// import JumblemLogoSimple from "../../App/Components/JumblemLogoSimple";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
+import PageNotFoundView from "../../App/Components/PageNotFoundView";
+import { Timestamp } from "firebase/firestore";
 
 enum PageState {
     loading,
@@ -30,11 +32,22 @@ export default function PrivateGameRoute() {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
                 if (firebaseUser.isAnonymous) {
-                    navigate("/home");
+                    // navigate("/home");
+                    const guestUser: UserModel = {
+                        id: `GUEST${firebaseUser.uid}`,
+                        email: "",
+                        username: "guest",
+                        usernameDisplayed: "Guest",
+                        standardRating: 1500,
+                        timestamp: Timestamp.fromDate(new Date())
+                    }
+
+                    setUser(guestUser);
+                    setPageState(PageState.loaded);
                 } else {
                     try {
                         const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
-    
+
                         if (fetchedUser.username) {
                             setUser(fetchedUser);
                             setPageState(PageState.loaded);
@@ -63,29 +76,36 @@ export default function PrivateGameRoute() {
             );
 
         case PageState.loaded:
-            if (user && user.username !== "guest") {
+            if (user) {
                 return (
                     <PrivateMatchMenuView passedUser={user} />
                 );
             } else {
-                return (
-                    <View>
-                        <VStack>
-                            <Button onClick={() => navigate("/home")}>
-                                <JumblemLogoSimple />
-                            </Button>
-
-                            <Typography textAlign={"center"}>Login required to play private matches.</Typography>
-
-                            <HStack>
-                                <Button variant="contained" color="secondary" onClick={() => navigate("/login")}>Login</Button>
-                                <Button variant="contained" color="primary">Download</Button>
-                            </HStack>
-                        </VStack>
-                    </View>
-                )
+                <PageNotFoundView />
             }
-            break;
+
+        // if (user && user.username !== "guest") {
+        //     return (
+        //         <PrivateMatchMenuView passedUser={user} />
+        //     );
+        // } else {
+        //     return (
+        //         <View>
+        //             <VStack>
+        //                 <Button onClick={() => navigate("/home")}>
+        //                     <JumblemLogoSimple />
+        //                 </Button>
+
+        //                 <Typography textAlign={"center"}>Login required to play private matches.</Typography>
+
+        //                 <HStack>
+        //                     <Button variant="contained" color="secondary" onClick={() => navigate("/login")}>Login</Button>
+        //                     <Button variant="contained" color="primary">Download</Button>
+        //                 </HStack>
+        //             </VStack>
+        //         </View>
+        //     )
+        // }
 
     }
 }

@@ -31,7 +31,7 @@ export default function StartPrivateRematchView({
     const [ticker, setTicker] = useState(false);
     const [rematchOffered, setRematchOffered] = useState(false);
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         onAppearActions();
     }, []);
@@ -43,8 +43,10 @@ export default function StartPrivateRematchView({
     const onAppearActions = async () => {
         setStopSearching(false);
         try {
-            const updatedUser = await FetchService.fetchUserByUid(user.id);
-            setUser(updatedUser);
+            if (user.username != "guest") {
+                const updatedUser = await FetchService.fetchUserByUid(user.id);
+                setUser(updatedUser);
+            }
 
             const createdGame = await PrivateGameService.createGame(user);
             setGame(createdGame);
@@ -135,7 +137,7 @@ export default function StartPrivateRematchView({
                 {gameModeState === StartPrivateRematchGameModeState.findingMatch && (
                     <>
                         <GameRequirementsWarning />
-                        <CircularProgress sx={{ color: "black" }}/>
+                        <CircularProgress sx={{ color: "black" }} />
                     </>
                 )}
 

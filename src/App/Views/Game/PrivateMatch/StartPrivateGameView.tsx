@@ -46,8 +46,10 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
 
     const onAppearActions = async () => {
         try {
-            const updatedUser = await FetchService.fetchUserByUid(user.id);
-            setUser(updatedUser);
+            if (user.username != "guest") {
+                const updatedUser = await FetchService.fetchUserByUid(user.id);
+                setUser(updatedUser);
+            }
 
             const createdGame = await PrivateGameService.createGame(user);
             setGame(createdGame);
@@ -139,7 +141,7 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
                 {gameModeState === PrivateGameModeState.findingMatch && (
                     <>
                         <GameRequirementsWarning />
-                        <CircularProgress sx={{ color: "black" }}/>
+                        <CircularProgress sx={{ color: "black" }} />
                     </>
                 )}
 
