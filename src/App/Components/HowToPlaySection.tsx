@@ -9,14 +9,14 @@ interface HowToPLaySectionProps {
 export default function HowToPLaySection({title, descriptions}: HowToPLaySectionProps) {
     
     return (
-        <VStack alignment="flex-start">
+        <VStack>
             <Typography variant="h3" style={{ color: "black" }}>
                 {title}
             </Typography>
 
             {descriptions.map((description, index) => (
                 <Typography key={index} variant="h6" style={{ color: "black" }}>
-                {` - ${description}`}
+                {` • ${description}`}
             </Typography>
             ))}
         </VStack>
