@@ -21,7 +21,7 @@ export default function HowToPlayDailyPuzzle() {
     const navigate = useNavigate();
     return (
         <View startAtTop={true}>
-            <VStack width={`${Math.max(width - 40, 400)}px`}>
+            <VStack width={`${width - 40}px`}>
                 <Button onClick={() => navigate("/home")}>
                     <JumblemLogoSimple />
                 </Button>
