@@ -16,11 +16,13 @@ export default function GuestHomeView() {
     const iconSize = 25;
 
     function openHowToDailyPuzzle() {
-        window.open("https://youtu.be/_V9frMe_Obo?feature=shared", "_blank");
+        // window.open("https://youtu.be/_V9frMe_Obo?feature=shared", "_blank");
+        navigate("/howto/dailypuzzle");
     }
 
     function openHowToVersus() {
-        window.open("https://youtu.be/DvVO0vc1LQw?feature=shared", "_blank");
+        // window.open("https://youtu.be/DvVO0vc1LQw?feature=shared", "_blank");
+        navigate("/howto/versus");
     }
 
     const styles = {
@@ -176,7 +178,7 @@ export default function GuestHomeView() {
                             DAILY PUZZLE
                         </Button>
                         <Button variant="contained" style={styles.button} onClick={openHowToVersus}>
-                            CASUAL & RATED
+                            VERSUS
                         </Button>
                     </Box>
 

@@ -199,8 +199,6 @@ export default function DailyPuzzleView({
         }
     }
 
-
-
     async function submitPuzzle() {
         if (submittingPuzzle) return;
 
@@ -215,6 +213,22 @@ export default function DailyPuzzleView({
         setSubmittingPuzzle(false);
     }
 
+    // const styles = {
+    //     deselectedButton: {
+    //         margin: "10px",
+    //         flex: 1,
+    //         backgroundColor: "rgb(0, 0, 0)",
+    //         color: "white",
+    //         fontWeight: 600,
+    //     },
+    //     selectedButton: {
+    //         margin: "10px",
+    //         flex: 1,
+    //         backgroundColor: "rgb(0, 0, 0)",
+    //         color: "white",
+    //         fontWeight: 600,
+    //     },
+    // }
     if (view === "PuzzleLeaderBoard") {
         return (
             <DailyPuzzleLeaderboardView passedUser={user} dailyPuzzle={dailyPuzzle} />

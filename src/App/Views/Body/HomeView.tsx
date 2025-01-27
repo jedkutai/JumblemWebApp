@@ -37,11 +37,13 @@ export default function HomeView({
 
 
     function openHowToDailyPuzzle() {
-        window.open("https://youtu.be/_V9frMe_Obo?feature=shared", "_blank");
+        // window.open("https://youtu.be/_V9frMe_Obo?feature=shared", "_blank");
+        navigate("/howto/dailypuzzle");
     }
 
     function openHowToVersus() {
-        window.open("https://youtu.be/DvVO0vc1LQw?feature=shared", "_blank");
+        // window.open("https://youtu.be/DvVO0vc1LQw?feature=shared", "_blank");
+        navigate("/howto/versus");
     }
 
     const styles = {
@@ -94,51 +96,7 @@ export default function HomeView({
             marginBottom: "10px",
             textAlign: "center" as const,
         },
-
-
-
-        redditButton: {
-            margin: "10px",
-            flex: 1,
-            backgroundColor: "rgb(255, 69, 2)",
-            color: "white",
-            fontWeight: 600,
-        },
-        youtubeButton: {
-            margin: "10px",
-            flex: 1,
-            backgroundColor: "rgb(255, 0, 52)",
-            color: "white",
-            fontWeight: 600,
-        },
-        instagramButton: {
-            margin: "10px",
-            flex: 1,
-            backgroundImage: "linear-gradient(to bottom right, rgb(79, 91, 213), rgb(150, 47, 191), rgb(214, 41, 118), rgb(250, 126, 30), rgb(254, 218, 117)",
-            color: "white",
-            fontWeight: 600,
-        },
-        discordButton: {
-            margin: "10px",
-            flex: 1,
-            backgroundColor: "rgb(88, 101, 242)",
-            color: "white",
-            fontWeight: 600,
-        },
-        xButton: {
-            margin: "10px",
-            flex: 1,
-            backgroundColor: "black",
-            color: "white",
-            fontWeight: 600,
-        },
-        appStoreButton: {
-            margin: "10px",
-            flex: 1,
-            backgroundColor: "rgb(0, 122, 255)",
-            color: "white",
-            fontWeight: 600,
-        },
+        
     }
 
     if (isMissingUsername) {
@@ -203,7 +161,7 @@ export default function HomeView({
                             DAILY PUZZLE
                         </Button>
                         <Button variant="contained" style={styles.button} onClick={openHowToVersus}>
-                            CASUAL & RATED
+                            VERSUS
                         </Button>
                     </Box>
 

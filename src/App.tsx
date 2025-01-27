@@ -18,6 +18,8 @@ import MoreRoute from './RouteControllers/More/MoreRoute';
 import PageNotFoundView from './App/Components/PageNotFoundView';
 import DeleteAccountRoute from './RouteControllers/Settings/DeleteAccountRoute';
 import ChangeUsernameRoute from './RouteControllers/Settings/ChangeUsernameRoute';
+import HowToPlayDailyPuzzle from './App/Views/HowToPlay/HowToPlayDailyPuzzle';
+import HowToPLayVersus from './App/Views/HowToPlay/HowToPlayVersus';
 
 
 function App() {
@@ -42,6 +44,9 @@ function App() {
         // Training
         <Route path="/dailypuzzle" element={<DailyPuzzleRoute/>}/>
 
+        // How to
+        <Route path="howto/dailypuzzle" element={<HowToPlayDailyPuzzle/>}/>
+        <Route path="howto/versus" element={<HowToPLayVersus/>}/>
 
         // more
         <Route path="/people" element={<PeopleRoute/>}/>
