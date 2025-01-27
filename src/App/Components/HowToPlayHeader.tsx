@@ -12,11 +12,11 @@ export default function HowToPlayHeader({ versus }: HowToPlayHeaderProps) {
     const upperBound = 650;
 
     function openHowToDailyPuzzle() {
-        window.open("https://youtu.be/_V9frMe_Obo?feature=shared", "_blank");
+        window.open("https://www.jumblem.com/howto/dailypuzzle", "_blank");
     }
 
     function openHowToVersus() {
-        window.open("https://youtu.be/DvVO0vc1LQw?feature=shared", "_blank");
+        window.open("https://www.jumblem.com/howto/versus", "_blank");
     }
 
     function action() {
