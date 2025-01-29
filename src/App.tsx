@@ -20,6 +20,8 @@ import DeleteAccountRoute from './RouteControllers/Settings/DeleteAccountRoute';
 import ChangeUsernameRoute from './RouteControllers/Settings/ChangeUsernameRoute';
 import HowToPlayDailyPuzzle from './App/Views/HowToPlay/HowToPlayDailyPuzzle';
 import HowToPLayVersus from './App/Views/HowToPlay/HowToPlayVersus';
+import TermsAndConditions from './App/General/TermsAndConditions';
+import PrivacyPolicy from './App/General/PrivacyPolicy';
 
 
 function App() {
@@ -62,6 +64,10 @@ function App() {
         <Route path="/settings" element={<SettingsRoute />} />
         <Route path="/settings/deleteaccount" element={<DeleteAccountRoute />} />
         <Route path="/settings/changeusername" element={<ChangeUsernameRoute />} />
+
+        // General
+        <Route path="/termsandconditions" element={<TermsAndConditions />} />
+        <Route path="/privacypolicy" element={<PrivacyPolicy />} />
 
         <Route path="*" element={<PageNotFoundView />} />
       </Routes>

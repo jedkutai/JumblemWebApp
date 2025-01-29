@@ -9,7 +9,7 @@ interface HowToPLaySectionProps {
 export default function HowToPLaySection({title, descriptions}: HowToPLaySectionProps) {
     
     return (
-        <VStack>
+        <VStack spacing="0px">
             <Typography variant="h3" style={{ color: "black" }}>
                 {title}
             </Typography>

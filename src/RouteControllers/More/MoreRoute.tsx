@@ -141,6 +141,21 @@ export default function MoreRoute() {
                 <Button onClick={() => navigate("/home")}>
                     <JumblemLogoSimple />
                 </Button>
+
+                <Box style={styles.section}>
+                    <Typography style={styles.sectionTitle}>POLICY</Typography>
+                    <Box style={styles.buttonContainer}>
+                        <Button variant="contained" style={styles.button} onClick={() => navigate("/termsandconditions")}>
+                            TERMS
+                        </Button>
+                        <Button variant="contained" style={styles.button} onClick={() => navigate("/privacypolicy")}>
+                            PRIVACY
+                        </Button>
+                    </Box>
+
+                </Box>
+
+
                 <Box style={styles.section}>
                     <Typography style={styles.sectionTitle}>DOWNLOAD</Typography>
 
