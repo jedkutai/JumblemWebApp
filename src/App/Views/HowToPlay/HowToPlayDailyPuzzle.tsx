@@ -17,11 +17,13 @@ enum ExampleGridShown {
 
 export default function HowToPlayDailyPuzzle() {
     const [exampleGridShown, setExampleGridShown] = useState<ExampleGridShown>(ExampleGridShown.puzzle)
-    const { width } = useWindowSize();
+    const { minDimension } = useWindowSize();
     const navigate = useNavigate();
+    const dimensionDivider = 9 * 1.75;
+    const upperBound = 650;
     return (
         <View startAtTop={true}>
-            <VStack width={`${width - 40}px`}>
+            <VStack width={`${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px`}>
                 <Button onClick={() => navigate("/home")}>
                     <JumblemLogoSimple />
                 </Button>

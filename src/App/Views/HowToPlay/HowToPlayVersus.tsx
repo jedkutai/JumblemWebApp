@@ -19,11 +19,13 @@ enum ExampleGridShown {
 
 export default function HowToPLayVersus() {
     const [exampleGridShown, setExampleGridShown] = useState<ExampleGridShown>(ExampleGridShown.example1)
-    const { width } = useWindowSize();
+    const { minDimension } = useWindowSize();
+    const dimensionDivider = 9 * 1.75;
+    const upperBound = 650;
     const navigate = useNavigate();
     return (
         <View startAtTop={true}>
-            <VStack width={`${width - 40}px`}>
+            <VStack width={`${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px`}>
                 <Button onClick={() => navigate("/home")}>
                     <JumblemLogoSimple />
                 </Button>
