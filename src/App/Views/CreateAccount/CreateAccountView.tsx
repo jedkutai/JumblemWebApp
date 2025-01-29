@@ -62,7 +62,9 @@ export default function CreateAccountView() {
     return (
         <View>
             <VStack>
+                <Button onClick={() => navigate("/")}>
                 <JumblemLogoSimple />
+                </Button>
                 <Box style={styles.form}>
                     <Typography variant="h5" style={{ textAlign: 'center', marginBottom: '20px' }}>
                         Create Account
@@ -111,9 +113,9 @@ export default function CreateAccountView() {
                         {canCreate ? 'Create Account' : 'Creating...'}
                     </Button>
                 </Box>
-                <Button onClick={() => navigate("/")} style={{ marginTop: '20px' }}>
+                {/* <Button onClick={() => navigate("/")} style={{ marginTop: '20px' }}>
                     Back
-                </Button>
+                </Button> */}
             </VStack>
         </View>
     );

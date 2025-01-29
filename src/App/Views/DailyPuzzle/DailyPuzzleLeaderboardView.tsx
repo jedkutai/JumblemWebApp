@@ -92,12 +92,17 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
             setUser(newUser);
             const loadedLeaderboard = await FetchService.fetchLeaderboard(dailyPuzzle, 100);
             setLeaderboard(loadedLeaderboard);
-            const userEntry = await FetchService.fetchUserPuzzleEntry(user, dailyPuzzle);
-            setUserPuzzleEntry(userEntry);
+            try {
+                const userEntry = await FetchService.fetchUserPuzzleEntry(user, dailyPuzzle);
+                setUserPuzzleEntry(userEntry);
+                setExpand(true);
+            } catch {
+
+            }
             const loadedFollowedLeaderboard = await FetchService.fetchFollowsLeaderboard(user, dailyPuzzle);
             setFollowedLeaderboard(loadedFollowedLeaderboard);
 
-            setExpand(true);
+            
 
             setLeaderboardState(LeaderboardState.loaded);
 
@@ -137,12 +142,6 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
                                     }}
                                         onClick={() => setExpand(!expand)}>
                                         <IoPerson size={iconSize} />
-                                        {/* <HStack>
-                                            <Typography>
-                                                {`Score: ${Math.floor(userPuzzleEntry.score)}`.toUpperCase()}
-                                            </Typography>
-
-                                        </HStack> */}
                                     </Button>
                                 </>
                             )}
@@ -169,7 +168,7 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
 
                                 {expand && wordsLoaded && (
                                     <>
-                                        <h2 style={{color: "black"}}>{`Total: ${Math.floor(userPuzzleEntry.score)}`}</h2>
+                                        <h2 style={{ color: "black" }}>{`Total: ${Math.floor(userPuzzleEntry.score)}`}</h2>
                                         <DailyPuzzleFoundWords correctWords={words} />
                                     </>
                                 )}

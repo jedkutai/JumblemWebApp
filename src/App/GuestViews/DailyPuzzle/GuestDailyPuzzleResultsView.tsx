@@ -1,27 +1,36 @@
 import { useEffect, useState } from "react";
-import { DailyPuzzleModel, WordModel } from "../../../Background/Models";
+import { DailyPuzzleEntryModel, DailyPuzzleModel, WordModel } from "../../../Background/Models";
 import { FetchService } from "../../../Background/Service";
 import { HStack, View, VStack } from "../../../ReactSwiftly";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { useNavigate } from "react-router-dom";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import { DailyPuzzleFunctions } from "../../../Background/Utils/DailyPuzzleFunctions";
-import GuestDailyPuzzleFoundWords from "./GuestDailyPuzzleFoundWords";
 import SharePuzzleResultsButton from "../../Components/SharePuzzleResultsButton";
-// import ShareDailyPuzzleScore from "../../Components/ShareDailyPuzzleScore";
+import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
+import { IoPerson } from "react-icons/io5";
+import { FaGlobe } from "react-icons/fa";
+import DailyPuzzleFoundWords from "../../Views/DailyPuzzle/DailyPuzzleFoundWords";
+import GuestLeaderboardEntry from "./GuestLeaderboardEntry";
 
-enum PageState {
+enum LeaderboardState {
     loading,
     loaded,
     failed
 }
 
 export default function GuestDailyPuzzleResultsView() {
-    const [pageState, setPageState] = useState<PageState>(PageState.loading);
+    const [leaderboardState, setLeaderboardState] = useState<LeaderboardState>(LeaderboardState.loading);
     const [words, setWords] = useState<Record<string, [WordModel, number]>>({});
-    const [lastPuzzlePlayed, setLastPuzzlePlayed] = useState<DailyPuzzleModel | null>(null);
     const [wordsLoaded, setWordsLoaded] = useState(false);
     const navigate = useNavigate();
+
+
+    const [dailyPuzzle, setDailyPuzzle] = useState<DailyPuzzleModel | null>(null);
+    const [leaderboard, setLeaderboard] = useState<DailyPuzzleEntryModel[]>([]);
+    const [expand, setExpand] = useState(true);
+    const unselectedColor = "rgb(192, 191, 191)";
+    const iconSize = 25;
 
     useEffect(() => {
         getResults();
@@ -29,11 +38,12 @@ export default function GuestDailyPuzzleResultsView() {
 
 
     async function getResults() {
-        setPageState(PageState.loading);
+        setLeaderboardState(LeaderboardState.loading);
         try {
             let lastPuzzlePlayedId = localStorage.getItem("lastPuzzlePlayedId") ?? "";
             let fetchedPuzzle = await FetchService.fetchDailyPuzzleById(lastPuzzlePlayedId);
-            setLastPuzzlePlayed(fetchedPuzzle);
+            setDailyPuzzle(fetchedPuzzle);
+            // setLastPuzzlePlayed(fetchedPuzzle);
             let fetchedWords: Record<string, [WordModel, number]> = {};
 
             const wordString = localStorage.getItem("lastPuzzlePlayedResults") ?? "";
@@ -49,51 +59,111 @@ export default function GuestDailyPuzzleResultsView() {
                 }
             }
 
+            const loadedLeaderboard = await FetchService.fetchLeaderboard(fetchedPuzzle, 100);
+            setLeaderboard(loadedLeaderboard);
+
             setWords(fetchedWords);
             setWordsLoaded(true);
-            setPageState(PageState.loaded);
+            setLeaderboardState(LeaderboardState.loaded);
         } catch {
-            setPageState(PageState.failed);
+            setLeaderboardState(LeaderboardState.failed);
             setWords({});
         }
     }
 
     return (
-        <View>
+        <View startAtTop={true}>
             <VStack>
                 <Button onClick={() => navigate("/home")}>
                     <JumblemLogoSimple />
                 </Button>
-                {pageState === PageState.loading && (
+                {leaderboardState === LeaderboardState.loading && (
                     <CircularProgress sx={{ color: "black" }} />
                 )}
-                {pageState === PageState.loaded && (
+                {leaderboardState === LeaderboardState.loaded && dailyPuzzle && (
                     <>
+                        <Typography>{DisplayFunctions.displayPuzzleDate(dailyPuzzle.timestamp)}</Typography>
+
                         <HStack>
-                            <div
-                                style={{
-                                    width: "50px",
-                                    height: "25px",
-                                    visibility: "hidden", // Makes it invisible but keeps it in the layout
-                                }}
-                            ></div>
-                            {/* <Typography variant="h2" sx={{ color: 'black', textTransform: "none" }}>{`Score: ${DailyPuzzleFunctions.getScore(words)}`}</Typography> */}
-                            <h2 style={{ color: 'black', textTransform: "none" }}>{`Score: ${DailyPuzzleFunctions.getScore(words)}`}</h2>
-                            {lastPuzzlePlayed && wordsLoaded && (
-                                <SharePuzzleResultsButton date={lastPuzzlePlayed.timestamp} words={words} />
+                            {wordsLoaded && (
+                                <SharePuzzleResultsButton date={dailyPuzzle.timestamp} words={words} />
                             )}
+
+                            <Button style={{
+                                backgroundColor: expand ? "rgb(0, 0, 0)" : unselectedColor,
+                                color: expand ? "white" : "black"
+                            }}
+                                onClick={() => setExpand(true)}>
+                                <IoPerson size={iconSize} />
+                            </Button>
+
+                            <Button
+                                style={{
+                                    background: (!expand) ? "black" : unselectedColor,
+                                    color: (!expand) ? "white" : "black",
+                                }}
+                                onClick={() => setExpand(false)}>
+
+                                <FaGlobe size={iconSize} />
+                            </Button>
                         </HStack>
-                        <GuestDailyPuzzleFoundWords correctWords={words} />
+
+                        <HStack spacing="0px">
+                            <Button onClick={() => navigate("/createaccount")}>
+                                <p>Create an account</p>
+                            </Button>
+
+                            <p>to add score to leaderboard.</p>
+
+
+
+                        </HStack>
+
+                        {expand && wordsLoaded && (
+                            <>
+                                <h2 style={{ color: "black" }}>{`Total: ${DailyPuzzleFunctions.getScore(words)}`}</h2>
+                                <DailyPuzzleFoundWords correctWords={words} />
+                            </>
+                        )}
+
+                        {expand && !wordsLoaded && (
+                            <CircularProgress sx={{ color: "black" }} />
+                        )}
+
+                        {!expand && (
+                            <>
+                                {leaderboard.map((entry, index) => (
+                                    <div key={index}>
+                                        {(index > 0) ? (
+                                            <>
+                                                {(leaderboard[index - 1].score == entry.score) ? (
+                                                    // position == -1
+                                                    <GuestLeaderboardEntry position={-1} entry={entry} />
+
+                                                ) : (
+                                                    // position = index + 1
+                                                    <GuestLeaderboardEntry position={index + 1} entry={entry} />
+                                                )}
+                                            </>
+                                        ) : (
+                                            // position = index + 1
+                                            <GuestLeaderboardEntry position={index + 1} entry={entry} />
+                                        )}
+
+                                    </div>
+                                ))}
+                            </>
+                        )}
+
                     </>
                 )}
-                {pageState === PageState.failed && (
+                {leaderboardState === LeaderboardState.failed && (
                     <>
                         <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>Failed to load results</Typography>
                         <Button onClick={() => getResults()} variant="contained" color="error">Retry</Button>
                     </>
                 )}
 
-                <Button onClick={() => navigate("/home")} variant="contained" color="primary">Home</Button>
             </VStack>
         </View>
     );
