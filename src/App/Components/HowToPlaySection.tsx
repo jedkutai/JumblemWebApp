@@ -10,7 +10,8 @@ export default function HowToPLaySection({title, descriptions}: HowToPLaySection
     
     return (
         <VStack spacing="0px">
-            <Typography variant="h3" style={{ color: "black" }}>
+            <div style={{ height: "20px"}}></div>
+            <Typography variant="h5" style={{ color: "black", fontWeight: "bold" }}>
                 {title}
             </Typography>
 
