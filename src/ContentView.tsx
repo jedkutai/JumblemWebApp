@@ -3,7 +3,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import app from "./firebase";
 import AppLoadingView from "./App/Views/AppOpen/AppLoadingView";
 import AppOpenView from "./App/Views/AppOpen/AppOpenView";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 enum ContentViewPageState {
   loading,
@@ -12,7 +12,7 @@ enum ContentViewPageState {
 
 export default function ContentView() {
   const [pageState, setPageState] = useState<ContentViewPageState>(ContentViewPageState.loading); // change to loading
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   
   useEffect(() => {
     onAppearActions();
@@ -27,7 +27,9 @@ export default function ContentView() {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setTimeout(() => {
         if (firebaseUser) {
-          navigate("/home");
+          // navigate("/home");
+          // await signOut(auth);
+          setPageState(ContentViewPageState.loaded);
         } else {
           setPageState(ContentViewPageState.loaded);
         }
