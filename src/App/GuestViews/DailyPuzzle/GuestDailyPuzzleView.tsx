@@ -46,11 +46,11 @@ export default function DailyPuzzleView({
 
     useEffect(() => {
         onAppearActions();
-        const timeout = setTimeout(async () => {
-            setFirstMoveMade(true);
-        }, 1000 * 5.5);
+        // const timeout = setTimeout(async () => {
+        //     setFirstMoveMade(true);
+        // }, 1000 * 5.5);
 
-        return () => clearTimeout(timeout);
+        // return () => clearTimeout(timeout);
     }, []);
 
     useEffect(() => {
@@ -70,6 +70,10 @@ export default function DailyPuzzleView({
             checkForWord(gridSpot, leter, wordBankDict);
 
             setSelectedLetter("");
+
+            if (!firstMoveMade) {
+                setFirstMoveMade(true);
+            }
         }
     }, [selectedLetter])
 

@@ -50,11 +50,11 @@ export default function DailyPuzzleView({
 
     useEffect(() => {
         onAppearActions();
-        const timeout = setTimeout(async () => {
-            setFirstMoveMade(true);
-        }, 1000 * 5.5);
+        // const timeout = setTimeout(async () => {
+        //     setFirstMoveMade(true);
+        // }, 1000 * 5.5);
 
-        return () => clearTimeout(timeout);
+        // return () => clearTimeout(timeout);
     }, []);
 
     useEffect(() => {
@@ -75,6 +75,10 @@ export default function DailyPuzzleView({
             checkForWord(gridSpot, leter);
 
             setSelectedLetter("");
+
+            if (!firstMoveMade) {
+                setFirstMoveMade(true);
+            }
         }
     }, [selectedLetter])
 
@@ -213,22 +217,6 @@ export default function DailyPuzzleView({
         setSubmittingPuzzle(false);
     }
 
-    // const styles = {
-    //     deselectedButton: {
-    //         margin: "10px",
-    //         flex: 1,
-    //         backgroundColor: "rgb(0, 0, 0)",
-    //         color: "white",
-    //         fontWeight: 600,
-    //     },
-    //     selectedButton: {
-    //         margin: "10px",
-    //         flex: 1,
-    //         backgroundColor: "rgb(0, 0, 0)",
-    //         color: "white",
-    //         fontWeight: 600,
-    //     },
-    // }
     if (view === "PuzzleLeaderBoard") {
         return (
             <DailyPuzzleLeaderboardView passedUser={user} dailyPuzzle={dailyPuzzle} />

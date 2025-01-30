@@ -37,7 +37,7 @@ export default function TermsAndConditions() {
                 <TermsAndConditionsSection
                     title={"2. Eligibility"}
                     details={[
-                        "You must be at least 13 years old to use Jumblem. By using our services, you confirm that you meet this age requirement and are legally capable of entering into a binding agreement."
+                        "You must be at least 6 years old to use Jumblem. By using our services, you confirm that you meet this age requirement and are legally capable of entering into a binding agreement."
                     ]}
                 />
 

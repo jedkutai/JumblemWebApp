@@ -33,7 +33,7 @@ export default function PrepuzzleMessage() {
 
     return (
         <h2>
-            {messageShown === MessageShown.selectSquare ? "Select a black square" : "Then select a letter"}
+            {messageShown === MessageShown.selectSquare ? "Select a square" : "Then select a letter"}
         </h2>
     );
 }
