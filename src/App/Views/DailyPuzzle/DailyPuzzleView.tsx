@@ -50,11 +50,6 @@ export default function DailyPuzzleView({
 
     useEffect(() => {
         onAppearActions();
-        // const timeout = setTimeout(async () => {
-        //     setFirstMoveMade(true);
-        // }, 1000 * 5.5);
-
-        // return () => clearTimeout(timeout);
     }, []);
 
     useEffect(() => {
