@@ -4,10 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { UserModel } from "../../Background/Models";
 import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
-// import { Button, Typography } from "@mui/material";
-// import { HStack, View, VStack } from "../../ReactSwiftly";
 import PrivateMatchMenuView from "../../App/Views/Game/PrivateMatch/PrivateMatchMenuView";
-// import JumblemLogoSimple from "../../App/Components/JumblemLogoSimple";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
 import PageNotFoundView from "../../App/Components/PageNotFoundView";
 import { Timestamp } from "firebase/firestore";
@@ -32,7 +29,6 @@ export default function PrivateGameRoute() {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
                 if (firebaseUser.isAnonymous) {
-                    // navigate("/home");
                     const guestUser: UserModel = {
                         id: `GUEST${firebaseUser.uid}`,
                         email: "",

@@ -1,13 +1,12 @@
-import { useState } from "react";
-import { useWindowSize } from "../../../Background/Utils/useWindowSize";
-import { HStack, View, VStack } from "../../../ReactSwiftly";
-import DailyPuzzleExampleGrid1 from "../../Components/HowTo/DailyPuzzleExampleGrid1";
-import HowToPLaySection from "../../Components/HowToPlaySection";
-import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { Button, Typography } from "@mui/material";
-import DailyPuzzleExampleGrid2 from "../../Components/HowTo/DailyPuzzleExampleGrid2";
-import DailyPuzzleExampleGrid3 from "../../Components/HowTo/DailyPuzzleExampleGrid3";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useWindowSize } from "../../Background/Utils/useWindowSize";
+import { View, VStack, HStack } from "../../ReactSwiftly";
+import DailyPuzzleExampleGrid1 from "../Components/HowTo/DailyPuzzleExampleGrid1";
+import DailyPuzzleExampleGrid2 from "../Components/HowTo/DailyPuzzleExampleGrid2";
+import DailyPuzzleExampleGrid3 from "../Components/HowTo/DailyPuzzleExampleGrid3";
+import HowToPLaySection from "../Components/HowToPlaySection";
+import JumblemLogoSimple from "../Components/JumblemLogoSimple";
 
 enum ExampleGridShown {
     puzzle,
@@ -15,23 +14,20 @@ enum ExampleGridShown {
     solution2
 }
 
-export default function HowToPlayDailyPuzzle() {
+export default function FirstOpenHowToPlayDailyPuzzle() {
     const [exampleGridShown, setExampleGridShown] = useState<ExampleGridShown>(ExampleGridShown.puzzle)
     const { minDimension } = useWindowSize();
-    const navigate = useNavigate();
     const dimensionDivider = 9 * 1.75;
     const upperBound = 650;
     return (
         <View startAtTop={true}>
             <VStack width={`${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px`}>
-                <Button onClick={() => navigate("/home")}>
-                    <JumblemLogoSimple />
-                </Button>
+                <JumblemLogoSimple />
 
                 <Typography variant="h5" style={{ color: "black", fontWeight: "bold" }}>
                     {"Daily Puzzle".toUpperCase()}
                 </Typography>
-                
+
                 <HowToPLaySection
                     title="Objective"
                     descriptions={["Create as many words as possible by placing one letter on the board at a time."]}

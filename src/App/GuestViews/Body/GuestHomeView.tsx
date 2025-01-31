@@ -8,12 +8,14 @@ import { AuthService } from "../../../Background/Service";
 
 import { CiCirclePlus } from "react-icons/ci";
 import { IoPerson } from "react-icons/io5";
+import FirstOpenController from "../../General/FirstOpenController";
 
 export default function GuestHomeView() {
     const { minDimension } = useWindowSize();
     const navigate = useNavigate();
     const [showLoginMessage, setShowLoginMessage] = useState(false);
     const iconSize = 25;
+    const firstOpenSeen = localStorage.getItem("firstOpenSeen") ?? "false"
 
     function openHowToDailyPuzzle() {
         // window.open("https://youtu.be/_V9frMe_Obo?feature=shared", "_blank");
@@ -134,6 +136,13 @@ export default function GuestHomeView() {
             // console.error(error);
         }
     }
+
+    if (firstOpenSeen == "false") {
+        return (
+            <FirstOpenController />
+        )
+    }
+    
     return (
         <View startAtTop={true}>
             <VStack>
@@ -186,11 +195,11 @@ export default function GuestHomeView() {
 
                 <HStack>
                     <Button variant="contained" style={styles.moreButton} onClick={loginButton}>
-                        <IoPerson size={iconSize}/>
+                        <IoPerson size={iconSize} />
                     </Button>
 
                     <Button variant="contained" style={styles.moreButton} onClick={() => navigate("/more")}>
-                        <CiCirclePlus size={iconSize}/>
+                        <CiCirclePlus size={iconSize} />
                     </Button>
                 </HStack>
             </VStack>

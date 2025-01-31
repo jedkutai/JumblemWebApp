@@ -1,14 +1,14 @@
-import { useState } from "react";
-import { useWindowSize } from "../../../Background/Utils/useWindowSize";
-import { HStack, View, VStack } from "../../../ReactSwiftly";
-import HowToPLaySection from "../../Components/HowToPlaySection";
-import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { Button, Typography } from "@mui/material";
-import VersusExamlpeGrid1 from "../../Components/HowTo/VersusExampleGrid1";
-import VersusExamlpeGrid2 from "../../Components/HowTo/VersusExampleGrid2";
-import VersusExamlpeGrid3 from "../../Components/HowTo/VersusExampleGrid3";
-import VersusExamlpeGrid4 from "../../Components/HowTo/VersusExampleGrid4";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useWindowSize } from "../../Background/Utils/useWindowSize";
+import { View, VStack, HStack } from "../../ReactSwiftly";
+import VersusExamlpeGrid1 from "../Components/HowTo/VersusExampleGrid1";
+import VersusExamlpeGrid2 from "../Components/HowTo/VersusExampleGrid2";
+import VersusExamlpeGrid3 from "../Components/HowTo/VersusExampleGrid3";
+import VersusExamlpeGrid4 from "../Components/HowTo/VersusExampleGrid4";
+import HowToPLaySection from "../Components/HowToPlaySection";
+import JumblemLogoSimple from "../Components/JumblemLogoSimple";
 
 enum ExampleGridShown {
     example1,
@@ -17,7 +17,7 @@ enum ExampleGridShown {
     example4
 }
 
-export default function HowToPLayVersus() {
+export default function FirstOpenHowToPLayVersus() {
     const [exampleGridShown, setExampleGridShown] = useState<ExampleGridShown>(ExampleGridShown.example1)
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
