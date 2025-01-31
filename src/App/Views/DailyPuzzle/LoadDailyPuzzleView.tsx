@@ -10,6 +10,7 @@ import DailyPuzzleView from "./DailyPuzzleView";
 import DailyPuzzleLeaderboardView from "./DailyPuzzleLeaderboardView";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { useNavigate } from "react-router-dom";
+import FirstOpenController from "../../General/FirstOpenController";
 
 enum DailyPuzzleState {
     loading,
@@ -30,7 +31,8 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
     const [view, setView] = useState<"LoadDailyPuzzle" | "PlayDailyPuzzle" | "LeaderBoard">("LoadDailyPuzzle");
     const { height } = useWindowSize();
     const navigate = useNavigate();
-    
+
+    const firstOpenSeen = localStorage.getItem("firstOpenSeen") ?? "false"
 
     useEffect(() => {
         onAppearActions();
@@ -79,6 +81,12 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
         }
 
     }
+    
+    if (firstOpenSeen == "false") {
+        return (
+            <FirstOpenController navigateTarget={"/dailypuzzle"} />
+        )
+    }
 
     switch (view) {
         case "PlayDailyPuzzle":
@@ -89,7 +97,7 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
         case "LeaderBoard":
             if (dailyPuzzle) {
                 return (
-                    <DailyPuzzleLeaderboardView passedUser={user} dailyPuzzle={dailyPuzzle}/>
+                    <DailyPuzzleLeaderboardView passedUser={user} dailyPuzzle={dailyPuzzle} />
                 );
             }
             break;
@@ -103,14 +111,14 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
         <View>
             <VStack>
                 <Button onClick={() => navigate("/home")}>
-                <JumblemLogoSimple />
+                    <JumblemLogoSimple />
                 </Button>
 
                 <VStack height={`${height / 2}px`}>
                     <VSpacer />
 
                     {dailyPuzzleState === DailyPuzzleState.loading && (
-                        <CircularProgress sx={{ color: "black" }}/>
+                        <CircularProgress sx={{ color: "black" }} />
                     )}
                     {dailyPuzzleState === DailyPuzzleState.loaded && (
                         <>

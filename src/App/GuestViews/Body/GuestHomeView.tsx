@@ -139,7 +139,7 @@ export default function GuestHomeView() {
 
     if (firstOpenSeen == "false") {
         return (
-            <FirstOpenController />
+            <FirstOpenController navigateTarget={"/home"} />
         )
     }
     

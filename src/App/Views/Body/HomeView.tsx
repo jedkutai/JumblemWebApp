@@ -121,7 +121,7 @@ export default function HomeView({
         );
     } else if (firstOpenSeen == "false") {
         return (
-            <FirstOpenController/>
+            <FirstOpenController navigateTarget={"/home"}/>
         )
     }
 

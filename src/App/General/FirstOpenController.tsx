@@ -14,15 +14,19 @@ enum TabShown {
     daily
 }
 
+interface FirstOpenControllerProps {
+    navigateTarget: string;
+}
 
-export default function FirstOpenController() {
+
+export default function FirstOpenController({ navigateTarget }: FirstOpenControllerProps) {
     const [tabShown, setTabShown] = useState<TabShown>(TabShown.intro);
     const { height } = useWindowSize();
     const navigate = useNavigate();
 
     function dismiss() {
         localStorage.setItem("firstOpenSeen", "true");
-        navigate("/home");
+        navigate(navigateTarget);
     }
 
     return (
