@@ -18,10 +18,12 @@ import MoreRoute from './RouteControllers/More/MoreRoute';
 import PageNotFoundView from './App/Components/PageNotFoundView';
 import DeleteAccountRoute from './RouteControllers/Settings/DeleteAccountRoute';
 import ChangeUsernameRoute from './RouteControllers/Settings/ChangeUsernameRoute';
-import HowToPlayDailyPuzzle from './App/Views/HowToPlay/HowToPlayDailyPuzzle';
-import HowToPLayVersus from './App/Views/HowToPlay/HowToPlayVersus';
+// import HowToPlayDailyPuzzle from './App/Views/HowToPlay/HowToPlayDailyPuzzle';
+// import HowToPLayVersus from './App/Views/HowToPlay/HowToPlayVersus';
 import TermsAndConditions from './App/General/TermsAndConditions';
 import PrivacyPolicy from './App/General/PrivacyPolicy';
+import DailyPuzzleCrashCourse from './App/General/CrashCourses/DailyPuzzle/DailyPuzzleCrashCourse';
+import VersusCrashCourse from './App/General/CrashCourses/Versus/VersusCrashCourse';
 
 
 function App() {
@@ -47,8 +49,10 @@ function App() {
         <Route path="/dailypuzzle" element={<DailyPuzzleRoute/>}/>
 
         // How to
-        <Route path="howto/dailypuzzle" element={<HowToPlayDailyPuzzle/>}/>
-        <Route path="howto/versus" element={<HowToPLayVersus/>}/>
+        {/* <Route path="howto/dailypuzzle" element={<HowToPlayDailyPuzzle/>}/>
+        <Route path="howto/versus" element={<HowToPLayVersus/>}/> */}
+        <Route path="howto/dailypuzzle" element={<DailyPuzzleCrashCourse/>}/>
+        <Route path="howto/versus" element={<VersusCrashCourse/>}/>
 
         // more
         <Route path="/people" element={<PeopleRoute/>}/>

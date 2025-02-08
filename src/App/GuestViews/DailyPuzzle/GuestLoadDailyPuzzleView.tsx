@@ -10,7 +10,6 @@ import { View, VStack, VSpacer, HStack } from "../../../ReactSwiftly";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import GuestDailyPuzzleResultsView from "./GuestDailyPuzzleResultsView";
 import GuestDailyPuzzleView from "./GuestDailyPuzzleView";
-import FirstOpenController from "../../General/FirstOpenController";
 
 enum DailyPuzzleState {
     loading,
@@ -27,8 +26,6 @@ export default function GuestLoadDailyPuzzleView() {
     const [view, setView] = useState<"LoadDailyPuzzle" | "PlayDailyPuzzle" | "Results">("LoadDailyPuzzle");
     const { height } = useWindowSize();
     const navigate = useNavigate();
-
-    const firstOpenSeen = localStorage.getItem("firstOpenSeen") ?? "false"
 
     useEffect(() => {
         onAppearActions();
@@ -73,11 +70,6 @@ export default function GuestLoadDailyPuzzleView() {
 
     }
 
-    if (firstOpenSeen == "false") {
-        return (
-            <FirstOpenController navigateTarget={"/dailypuzzle"} />
-        )
-    }
 
     switch (view) {
         case "PlayDailyPuzzle":

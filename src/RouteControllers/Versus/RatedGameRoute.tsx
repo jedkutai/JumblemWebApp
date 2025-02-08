@@ -9,6 +9,7 @@ import { HStack, View, VStack } from "../../ReactSwiftly";
 import StartRatedGameView from "../../App/Views/Game/RatedGame/StartRatedGameView";
 import JumblemLogoSimple from "../../App/Components/JumblemLogoSimple";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
+import VersusCrashCourse from "../../App/General/CrashCourses/Versus/VersusCrashCourse";
 
 enum PageState {
     loading,
@@ -19,6 +20,7 @@ export default function RatedGameRoute() {
     const [user, setUser] = useState<UserModel | null>(null);
     const [pageState, setPageState] = useState<PageState>(PageState.loading);
     const navigate = useNavigate();
+    const crashCoursePlayed = localStorage.getItem("versusCrashCoursePlayed");
 
     useEffect(() => {
         onAppearActions();
@@ -34,7 +36,7 @@ export default function RatedGameRoute() {
                 } else {
                     try {
                         const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
-    
+
                         if (fetchedUser.username) {
                             setUser(fetchedUser);
                             setPageState(PageState.loaded);
@@ -55,6 +57,12 @@ export default function RatedGameRoute() {
         return () => unsubscribe();
     }
 
+    if (!crashCoursePlayed && user) {
+        return (
+            <VersusCrashCourse />
+        );
+    }
+    
     switch (pageState) {
         case PageState.loading:
             return (

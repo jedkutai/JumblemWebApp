@@ -64,7 +64,6 @@ export class FetchService {
           results.push(entry);
         }
       } catch {
-        // console.log("Failed to fetch user puzzle entry for followed user.");
       }
     }
 

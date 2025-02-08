@@ -8,14 +8,12 @@ import { AuthService } from "../../../Background/Service";
 
 import { CiCirclePlus } from "react-icons/ci";
 import { IoPerson } from "react-icons/io5";
-import FirstOpenController from "../../General/FirstOpenController";
 
 export default function GuestHomeView() {
     const { minDimension } = useWindowSize();
     const navigate = useNavigate();
     const [showLoginMessage, setShowLoginMessage] = useState(false);
     const iconSize = 25;
-    const firstOpenSeen = localStorage.getItem("firstOpenSeen") ?? "false"
 
     function openHowToDailyPuzzle() {
         // window.open("https://youtu.be/_V9frMe_Obo?feature=shared", "_blank");
@@ -137,11 +135,7 @@ export default function GuestHomeView() {
         }
     }
 
-    if (firstOpenSeen == "false") {
-        return (
-            <FirstOpenController navigateTarget={"/home"} />
-        )
-    }
+
     
     return (
         <View startAtTop={true}>

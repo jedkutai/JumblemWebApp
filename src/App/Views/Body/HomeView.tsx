@@ -10,7 +10,6 @@ import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { GiThreeFriends } from "react-icons/gi";
 import { CiCirclePlus } from "react-icons/ci";
 import { IoPerson } from "react-icons/io5";
-import FirstOpenController from "../../General/FirstOpenController";
 
 interface HomeViewProps {
     passedUser: UserModel;
@@ -27,7 +26,6 @@ export default function HomeView({
     const [error, setError] = useState<string | null>(null);
     const { minDimension } = useWindowSize();
     const navigate = useNavigate();
-    const firstOpenSeen = localStorage.getItem("firstOpenSeen") ?? "false"
 
     const iconSize = 25;
 
@@ -119,10 +117,6 @@ export default function HomeView({
                 setIsUsernameAvailable={setIsUsernameAvailable}
             />
         );
-    } else if (firstOpenSeen == "false") {
-        return (
-            <FirstOpenController navigateTarget={"/home"}/>
-        )
     }
 
 

@@ -183,19 +183,71 @@ export class GameFunctions {
         const validWords = await this.checkWords(testMove, testMovesDict, wordBankDict);
         for (const validWord of validWords) {
           if (validWord[0].score >= 433133) {
-            // const randomNum = (Math.random() * 10);
-            // if (randomNum < 6.5) {
-            //   resultCoordinates = block;
-            //   resultLetter = letter;
-            //   break;
-            // }
-            // break;
             resultCoordinates = block;
             resultLetter = letter;
             break;
           } else {
             const randomNum = (Math.random() * 10);
             if (randomNum < 1.5) {
+              resultCoordinates = block;
+              resultLetter = letter;
+              break;
+            }
+          }
+        }
+        if (resultCoordinates !== "" && resultLetter !== "") {
+          break;
+        }
+      }
+      if (resultCoordinates !== "" && resultLetter !== "") {
+        break;
+      }
+    }
+
+    if (resultCoordinates == "") {
+      const randomCoordinateIndex = Math.floor(Math.random() * openBlocks.length);
+      const randomLetterIndex = Math.floor(Math.random() * letterBank.length);
+      resultCoordinates = openBlocks[randomCoordinateIndex];
+      resultLetter = letterBank[randomLetterIndex];
+    }
+
+
+    return [resultCoordinates, resultLetter];
+  }
+
+  static async introBotMove(
+    letterBank: string[],
+    movesCopy: MoveModel[],
+    wordBankDict: Record<string, string[]>
+  ): Promise<[string, string]> {
+    let movesDict = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
+    let availableBlocks = this.getAvailableBlocks(movesDict, []);
+    let openBlocks = availableBlocks.filter((block) => !movesDict[block]);
+
+    let resultCoordinates = "";
+    let resultLetter = "";
+    for (const block of openBlocks) {
+      for (const letter of letterBank) {
+        const testMove: MoveModel = {
+          id: "",
+          gameId: "",
+          userId: "",
+          coordinates: block,
+          letter: letter,
+          timestamp: Timestamp.now(),
+        }
+
+        let testMovesDict = { ...movesDict };
+        testMovesDict[block] = testMove;
+        const validWords = await this.checkWords(testMove, testMovesDict, wordBankDict);
+        for (const validWord of validWords) {
+          if (validWord[0].score >= 433133) {
+            resultCoordinates = block;
+            resultLetter = letter;
+            break;
+          } else {
+            const randomNum = (Math.random() * 10);
+            if (randomNum < 1) {
               resultCoordinates = block;
               resultLetter = letter;
               break;

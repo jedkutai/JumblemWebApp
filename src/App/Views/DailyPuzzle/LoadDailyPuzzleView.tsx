@@ -10,7 +10,7 @@ import DailyPuzzleView from "./DailyPuzzleView";
 import DailyPuzzleLeaderboardView from "./DailyPuzzleLeaderboardView";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { useNavigate } from "react-router-dom";
-import FirstOpenController from "../../General/FirstOpenController";
+// import FirstOpenController from "../../General/FirstOpenController";
 
 enum DailyPuzzleState {
     loading,
@@ -32,7 +32,6 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
     const { height } = useWindowSize();
     const navigate = useNavigate();
 
-    const firstOpenSeen = localStorage.getItem("firstOpenSeen") ?? "false"
 
     useEffect(() => {
         onAppearActions();
@@ -82,11 +81,6 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
 
     }
     
-    if (firstOpenSeen == "false") {
-        return (
-            <FirstOpenController navigateTarget={"/dailypuzzle"} />
-        )
-    }
 
     switch (view) {
         case "PlayDailyPuzzle":

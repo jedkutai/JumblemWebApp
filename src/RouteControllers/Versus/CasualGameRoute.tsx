@@ -9,6 +9,7 @@ import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
 import PageNotFoundView from "../../App/Components/PageNotFoundView";
 import GuestStartCasualGameView from "../../App/GuestViews/Game/Casual/GuestStartCasualGameView";
 import { Timestamp } from "firebase/firestore";
+import VersusCrashCourse from "../../App/General/CrashCourses/Versus/VersusCrashCourse";
 
 enum PageState {
     loading,
@@ -19,6 +20,7 @@ export default function CasualGameRoute() {
     const [user, setUser] = useState<UserModel | null>(null);
     const [pageState, setPageState] = useState<PageState>(PageState.loading);
     const navigate = useNavigate();
+    const crashCoursePlayed = localStorage.getItem("versusCrashCoursePlayed");
 
     useEffect(() => {
         onAppearActions();
@@ -65,6 +67,12 @@ export default function CasualGameRoute() {
         return () => unsubscribe();
     }
 
+    if (!crashCoursePlayed && user) {
+        return (
+            <VersusCrashCourse />
+        );
+    }
+
     switch (pageState) {
         case PageState.loading:
             return (
@@ -87,7 +95,6 @@ export default function CasualGameRoute() {
                     <PageNotFoundView />
                 )
             }
-            break;
 
     }
 }

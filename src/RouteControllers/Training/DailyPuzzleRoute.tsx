@@ -8,6 +8,7 @@ import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
 import GuestLoadDailyPuzzleView from "../../App/GuestViews/DailyPuzzle/GuestLoadDailyPuzzleView";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
+import DailyPuzzleCrashCourse from "../../App/General/CrashCourses/DailyPuzzle/DailyPuzzleCrashCourse";
 
 enum PageState {
     loading,
@@ -18,6 +19,7 @@ export default function DailyPuzzleRoute() {
     const [user, setUser] = useState<UserModel | null>(null);
     const [pageState, setPageState] = useState<PageState>(PageState.loading);
     const navigate = useNavigate();
+    const crashCoursePlayed = localStorage.getItem("dailyPuzzleCrashCoursePlayed");
 
     useEffect(() => {
         onAppearActions();
@@ -33,7 +35,7 @@ export default function DailyPuzzleRoute() {
 
                     if (fetchedUser.username) {
                         setUser(fetchedUser);
-                        
+
                     }
                     setPageState(PageState.loaded);
                 } catch (error) {
@@ -47,6 +49,12 @@ export default function DailyPuzzleRoute() {
         });
 
         return () => unsubscribe();
+    }
+
+    if (!crashCoursePlayed && user) {
+        return (
+            <DailyPuzzleCrashCourse />
+        );
     }
 
     switch (pageState) {
@@ -65,7 +73,6 @@ export default function DailyPuzzleRoute() {
                     <GuestLoadDailyPuzzleView />
                 )
             }
-            break;
 
     }
 }
