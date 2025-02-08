@@ -95,7 +95,7 @@ export default function VersusCrashCourseGrid({
             <VStack width={`${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px`}>
                 {moves.length == 0 && (
                     <Typography textAlign={"center"}>
-                        Tap the black square then select one of the letters below to start the game.
+                        Tap the black square then select one of the banked letters to start the game.
                     </Typography>
                 )}
 
@@ -106,7 +106,7 @@ export default function VersusCrashCourseGrid({
                 )}
                 {moves.length > 0 && moves.length % 2 != 1 && (
                     <Typography textAlign={"center"}>
-                        Tap any black square then select one of the letters below to make a move.
+                        Tap any black square then select one of the banked letters to make a move.
                     </Typography>
                 )}
 

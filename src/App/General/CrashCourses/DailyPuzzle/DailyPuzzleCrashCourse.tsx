@@ -13,6 +13,8 @@ import { DailyPuzzleFunctions } from "../../../../Background/Utils/DailyPuzzleFu
 import DailyPuzzleFoundWords from "../../../Views/DailyPuzzle/DailyPuzzleFoundWords";
 import DailyPuzzleLetterBank from "../../../Views/DailyPuzzle/DailyPuzzleLetterBank";
 import { WordBankFunctions } from "../../../../Background/Utils/WordBankFunctions";
+import DailyPuzzleCrashCourseMessage1 from "./Messages/DailyPuzzleCrashCourseMessage1";
+import DailyPuzzleCrashCourseMessage2 from "./Messages/DailyPuzzleCrashCourseMessage2";
 
 enum PuzzleState {
     intro,
@@ -279,35 +281,11 @@ export default function DailyPuzzleCrashCourse() {
                             )}
                         </VStack>
 
+                        <div style={{ height: "20px" }}></div>
                         {Object.keys(correctWords).length <= 2 ? (
-                            <>
-                                <div style={{ height: "20px" }}></div>
-                                <Typography textAlign={"center"}>
-                                    {"Select an empty square adjacent to a letter (above, below, left, or right)."}
-                                </Typography>
-                                <div style={{ height: "10px" }}></div>
-
-                                <Typography textAlign={"center"}>
-                                    {"Then tap one of the letters below to guess a word."}
-                                </Typography>
-                                <div style={{ height: "10px" }}></div>
-
-                                <Typography textAlign={"center"}>
-                                    {"Only 4-7 letters words are valid."}
-                                </Typography>
-                            </>
+                            <DailyPuzzleCrashCourseMessage1 />
                         ) : (
-                            <>
-                                <div style={{ height: "20px" }}></div>
-                                <Typography textAlign={"center"}>
-                                    {"Tap the score button to view all the words you've found so far."}
-                                </Typography>
-                                <div style={{ height: "10px" }}></div>
-
-                                <Typography textAlign={"center"}>
-                                    {"When you run out of lives or give up, tap Submit."}
-                                </Typography>
-                            </>
+                            <DailyPuzzleCrashCourseMessage2 />
                         )}
                     </VStack>
                 )}
