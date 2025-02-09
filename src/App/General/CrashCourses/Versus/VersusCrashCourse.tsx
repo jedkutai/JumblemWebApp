@@ -117,8 +117,10 @@ export default function VersusCrashCourse() {
                 if (updatedWinningWords.length !== 0) {
                     setGameState(moves.length % 2 == 1 ? GameState.userWins : GameState.botWins);
                     setGameOver(true);
+                } else {
+                    setWordCheckComplete(true);
                 }
-                setWordCheckComplete(true);
+                
             }
         } catch (e) {
         }

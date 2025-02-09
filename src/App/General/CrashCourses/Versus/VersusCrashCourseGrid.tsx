@@ -27,10 +27,7 @@ export default function VersusCrashCourseGrid({
     user,
     wordCheckComplete,
     yourTurn,
-    // gameOver,
-    // setGameOver,
     movesDict,
-    // setMovesDict,
     moves,
     setMoves
 }: VersusCrashCourseGridProps) {
