@@ -19,21 +19,14 @@ export default function ContentView() {
   }, []);
 
   async function onAppearActions() {
-    setTimeout(() => {
-      setPageState(ContentViewPageState.loaded);
-    }, 1000);
     const auth = getAuth(app);
 
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      setTimeout(() => {
-        if (firebaseUser) {
-          navigate("/home");
-          // await signOut(auth);
-          // setPageState(ContentViewPageState.loaded);
-        } else {
-          setPageState(ContentViewPageState.loaded);
-        }
-      }, 1000);
+      if (firebaseUser) {
+        navigate("/home");
+      } else {
+        setPageState(ContentViewPageState.loaded);
+      }
 
     });
 

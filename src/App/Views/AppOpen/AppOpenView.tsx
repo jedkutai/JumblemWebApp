@@ -1,5 +1,5 @@
 import { View, VStack } from "../../../ReactSwiftly";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { useNavigate } from "react-router-dom";
 import { GuestService } from "../../../Background/Service";
@@ -29,20 +29,34 @@ export default function AppOpenView() {
 
     }
 
+    const style = {
+        button: {
+            margin: "10px",
+            flex: 1,
+            backgroundColor: "rgb(227, 218, 195)",
+            color: "black",
+            fontWeight: 600,
+        },
+        
+    }
+
     return (
         <View>
             <VStack>
                 <JumblemLogoSimple />
 
-                <Button style={{ color: "black" }} onClick={() => navigate("/login")}>
+                <div style={{height: "40px"}}></div>
+                <Button variant="contained" style={style.button} onClick={() => navigate("/login")}>
                     LOGIN
                 </Button>
 
-                <Button style={{ color: "black" }} onClick={() => navigate("/createaccount")}>
+                <Button variant="contained" style={style.button} onClick={() => navigate("/createaccount")}>
                     CREATE ACCOUNT
                 </Button>
 
-                <Button style={{ color: "black" }} onClick={continueAsGuest} color={showRed ? "error" : "primary"}>
+                <Typography>- OR -</Typography>
+
+                <Button variant="contained" style={style.button} onClick={continueAsGuest} color={showRed ? "error" : "primary"}>
                     CONTINUE AS GUEST
                 </Button>
             </VStack>
