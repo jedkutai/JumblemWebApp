@@ -51,7 +51,7 @@ export default function DailyPuzzleRoute() {
         return () => unsubscribe();
     }
 
-    if (!crashCoursePlayed && user) {
+    if (!crashCoursePlayed) {
         return (
             <DailyPuzzleCrashCourse />
         );
