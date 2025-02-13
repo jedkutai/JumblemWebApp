@@ -41,7 +41,17 @@ export default function VersusCrashCourse() {
 
     const [lastMove, setLastMove] = useState<MoveModel | undefined>(undefined);
     const {height} = useWindowSize();
-    // const navigate = useNavigate();
+
+    const style = {
+        button: {
+            margin: "10px",
+            flex: 1,
+            backgroundColor: "rgb(227, 218, 195)",
+            color: "black",
+            fontWeight: 600,
+        },
+        
+    }
 
     useEffect(() => {
         onAppearActions();
@@ -186,8 +196,8 @@ export default function VersusCrashCourse() {
                             <Typography>{"Versus Crash Course".toUpperCase()}</Typography>
                             
                             <div style={{ height: `${Math.max((height - 200) * .4, 100)}px` }}></div>
-                            <Button onClick={() => setGameState(GameState.howTo)}>
-                                Continue
+                            <Button variant="contained" style={style.button} onClick={() => setGameState(GameState.howTo)}>
+                                CONTINUE
                             </Button>
                         </>
 

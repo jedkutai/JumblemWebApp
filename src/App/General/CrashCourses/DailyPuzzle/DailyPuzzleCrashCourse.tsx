@@ -45,6 +45,17 @@ export default function DailyPuzzleCrashCourse() {
     const upperBound = 650;
     const { height } = useWindowSize();
 
+    const style = {
+        button: {
+            margin: "10px",
+            flex: 1,
+            backgroundColor: "rgb(227, 218, 195)",
+            color: "black",
+            fontWeight: 600,
+        },
+        
+    }
+
     useEffect(() => {
         onAppearActions();
     }, []);
@@ -205,8 +216,8 @@ export default function DailyPuzzleCrashCourse() {
                         <Typography>{"Daily Puzzle Crash Course".toUpperCase()}</Typography>
 
                         <div style={{ height: `${Math.max((height - 200) * .4, 100)}px` }}></div>
-                        <Button onClick={() => setPuzzleState(PuzzleState.howTo)}>
-                            Continue
+                        <Button variant="contained" style={style.button} onClick={() => setPuzzleState(PuzzleState.howTo)}>
+                            CONTINUE
                         </Button>
                     </>
                 )}

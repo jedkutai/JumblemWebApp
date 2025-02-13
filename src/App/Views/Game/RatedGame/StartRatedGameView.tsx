@@ -143,7 +143,7 @@ export default function StartRatedGameView({ passedUser }: StartRatedGameViewPro
                             variant="contained"
                             onClick={onAppearActions}
                         >
-                            Find Casual Match
+                            Find Rated Match
                         </Button>
                     </>
                 )}
