@@ -76,19 +76,21 @@ export default function VersusCrashCourse() {
     }, [gameState]);
 
     useEffect(() => {
-        if (moves.length > 0) {
-            setLastMove(moves.at(moves.length - 1));
-            gameManagerFunction();
+        if (!gameOver) {
+            if (moves.length > 0) {
+                setLastMove(moves.at(moves.length - 1));
+                gameManagerFunction();
+            }
         }
-        // wordCheckFunction();
     }, [moves])
 
     useEffect(() => {
-        wordCheckFunction();
+        if (!gameOver) {
+            wordCheckFunction();
+        }
     }, [movesDict])
 
     useEffect(() => {
-        
         if (!gameOver) {
             if (gameState == GameState.active) {
                 if (!gameOver && !yourTurn) {
@@ -96,6 +98,7 @@ export default function VersusCrashCourse() {
                 }
             }
         }
+
         
     }, [yourTurn]);
 
