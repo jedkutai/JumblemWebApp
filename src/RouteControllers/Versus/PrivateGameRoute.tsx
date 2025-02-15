@@ -88,28 +88,5 @@ export default function PrivateGameRoute() {
                 <PageNotFoundView />
             }
 
-        // if (user && user.username !== "guest") {
-        //     return (
-        //         <PrivateMatchMenuView passedUser={user} />
-        //     );
-        // } else {
-        //     return (
-        //         <View>
-        //             <VStack>
-        //                 <Button onClick={() => navigate("/home")}>
-        //                     <JumblemLogoSimple />
-        //                 </Button>
-
-        //                 <Typography textAlign={"center"}>Login required to play private matches.</Typography>
-
-        //                 <HStack>
-        //                     <Button variant="contained" color="secondary" onClick={() => navigate("/login")}>Login</Button>
-        //                     <Button variant="contained" color="primary">Download</Button>
-        //                 </HStack>
-        //             </VStack>
-        //         </View>
-        //     )
-        // }
-
     }
 }

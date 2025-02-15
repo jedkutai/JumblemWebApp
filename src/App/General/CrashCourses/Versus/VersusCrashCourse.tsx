@@ -88,9 +88,15 @@ export default function VersusCrashCourse() {
     }, [movesDict])
 
     useEffect(() => {
-        if (!yourTurn && !gameOver) {
-            botMove();
+        
+        if (!gameOver) {
+            if (gameState == GameState.active) {
+                if (!gameOver && !yourTurn) {
+                    botMove();
+                }
+            }
         }
+        
     }, [yourTurn]);
 
     async function onAppearActions() {
@@ -126,6 +132,7 @@ export default function VersusCrashCourse() {
 
                 if (updatedWinningWords.length !== 0) {
                     setGameState(moves.length % 2 == 1 ? GameState.userWins : GameState.botWins);
+
                     setGameOver(true);
                 } else {
                     setWordCheckComplete(true);
@@ -147,7 +154,7 @@ export default function VersusCrashCourse() {
     }
 
     async function botMove() {
-        if (wordCheckComplete) {
+        if (wordCheckComplete && !gameOver && winningWords.length == 0) {
             if (!gameOver) {
                 if (!yourTurn) {
                     const moveDelay = 3;
@@ -233,7 +240,7 @@ export default function VersusCrashCourse() {
                             />
                         </>
                     )}
-                    {gameState == GameState.draw || gameState == GameState.userWins || gameState == GameState.botWins  && (
+                    {(gameState == GameState.draw || gameState == GameState.userWins || gameState == GameState.botWins)  && (
                         <>
                             <JumblemLogoSimple />
                             <VersusCrashCourseHeader user={user} yourTurn={yourTurn} />
