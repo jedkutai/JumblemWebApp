@@ -31,22 +31,22 @@ export default function CasualGameBlock({
 
     return (
         <>
-            {availableBlocks.includes(block.id) && Object.keys(moves).includes(block.id) && lastMove && lastMove.coordinates === block.id && (
+            {(availableBlocks.includes(block.id) && Object.keys(moves).includes(block.id) && lastMove && lastMove.coordinates === block.id) && (
                 <YellowLetterBlock letter={moves[block.id].letter} blockDimension={blockDimension} />
             )}
-            {availableBlocks.includes(block.id) && Object.keys(moves).includes(block.id) && lastMove && lastMove.coordinates !== block.id && (
+            {(availableBlocks.includes(block.id) && Object.keys(moves).includes(block.id) && lastMove && lastMove.coordinates !== block.id) && (
                 <WhiteLetterBlock letter={moves[block.id].letter} blockDimension={blockDimension} />
             )}
-            {availableBlocks.includes(block.id) && !Object.keys(moves).includes(block.id) && (!yourTurn || !wordCheckComplete) && (
+            {(availableBlocks.includes(block.id) && !Object.keys(moves).includes(block.id) && (!yourTurn || !wordCheckComplete)) && (
                 <EmptyBlock blockDimension={blockDimension} />
             )}
-            {availableBlocks.includes(block.id) && !Object.keys(moves).includes(block.id) && yourTurn && wordCheckComplete && (selectedBlock === block.id) && (
+            {(availableBlocks.includes(block.id) && !Object.keys(moves).includes(block.id) && yourTurn && wordCheckComplete && (selectedBlock === block.id)) && (
                 <EmptySelectedBlock blockDimension={blockDimension} setSelectedBlock={setSelectedBlock}/>
             )}
-            {availableBlocks.includes(block.id) && !Object.keys(moves).includes(block.id) && yourTurn && wordCheckComplete && (selectedBlock !== block.id) && (
+            {(availableBlocks.includes(block.id) && !Object.keys(moves).includes(block.id) && yourTurn && wordCheckComplete && (selectedBlock !== block.id)) && (
                 <EmptyValidBlock blockDimension={blockDimension} setSelectedBlock={setSelectedBlock} blockId={block.id}/>
             )}
-            {!availableBlocks.includes(block.id) && (
+            {(!availableBlocks.includes(block.id)) && (
                 <EmptyBlock blockDimension={blockDimension} />
             )}
         </>
