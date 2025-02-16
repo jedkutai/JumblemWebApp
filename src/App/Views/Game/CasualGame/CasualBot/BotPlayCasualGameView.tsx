@@ -385,6 +385,7 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
                         matchAbortedTime={matchAbortedTime}
                         movesDict={movesDict}
                         yourTurn={yourTurn}
+                        setYourTurn={setYourTurn}
                         lastMove={moves.length > 0 ? movesCopy[movesCopy.length - 1] : undefined}
                         movesCopy={movesCopy}
                     />
