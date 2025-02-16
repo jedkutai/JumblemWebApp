@@ -169,7 +169,6 @@ export default function DailyPuzzleCrashCourse() {
                             setWrongGuessHighlight(true); // Trigger wrong guess animation
                         }
                     } catch (error) {
-                        console.error("Error checking words:", error);
                     }
                 }
 

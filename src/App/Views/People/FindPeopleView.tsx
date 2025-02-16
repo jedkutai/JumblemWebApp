@@ -65,7 +65,6 @@ export default function FindPeopleView({ passedUser }: FindPeopleViewProps) {
                 const fetchedResults = await SearchService.searchDatabase(searchText);
                 setSearchResults(fetchedResults);
             } catch (error) {
-                console.error(error);
             }
         } else if (searchedDatabase && searchText.length < 3) {
             setSearchedDatabase(false);

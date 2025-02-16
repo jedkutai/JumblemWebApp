@@ -176,7 +176,6 @@ export default function DailyPuzzleView({
                             setWrongGuessHighlight(true); // Trigger wrong guess animation
                         }
                     } catch (error) {
-                        console.error("Error checking words:", error);
                     }
                 }
 

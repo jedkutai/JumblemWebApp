@@ -131,7 +131,6 @@ export default function GuestHomeView() {
         try {
             await AuthService.signOut();
         } catch {
-            // console.error(error);
         }
     }
 

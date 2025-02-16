@@ -80,7 +80,6 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
                 setWords(fetchedWords);
                 setWordsLoaded(true);
             } catch (error) {
-                console.error("Failed to fetch words", error);
             }
         }
     }

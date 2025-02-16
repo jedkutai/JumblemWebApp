@@ -241,7 +241,6 @@ export class FetchService {
 
         return words;
     } catch (error) {
-        console.error("Error fetching word definition:", error);
         throw new Error("Failed to fetch word definition.");
     }
 }

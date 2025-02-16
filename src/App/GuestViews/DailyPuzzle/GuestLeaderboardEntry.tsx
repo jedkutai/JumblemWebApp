@@ -70,7 +70,6 @@ export default function GuestLeaderboardEntry({
             setWords(fetchedWords);
             setWordsLoaded(true);
         } catch(error) {
-            console.error("Failed to fetch words", error);
         }
     }
 

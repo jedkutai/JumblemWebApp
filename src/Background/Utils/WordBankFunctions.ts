@@ -9,7 +9,6 @@ export class WordBankFunctions {
         try {
             const response = await fetch(wordBankFilePath)
             if (!response.ok) {
-                console.error("Failed to fetch word bank");
                 return {};
             }
 
@@ -34,7 +33,6 @@ export class WordBankFunctions {
 
             })
         } catch (error) {
-            console.error("Error reading the word bank:", error);
         }
 
         // const numberOfKeys = Object.keys(wordBank).length;

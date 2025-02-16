@@ -60,11 +60,14 @@ export default function VersusCrashCourseLetterGeneratorBlock({
                 const updatedLetters: string[] = [...letters, ...newLetters];
                 updatedLetters.sort();
                 setLetters(updatedLetters);
+
+                setSelectedBlock("");
+                setCanSelect(true);
             } catch {
 
             }
-            setSelectedBlock("");
-            setCanSelect(true);
+            // setSelectedBlock("");
+            // setCanSelect(true);
         }
     }
     return (
