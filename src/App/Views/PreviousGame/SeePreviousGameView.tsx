@@ -12,12 +12,14 @@ import PreviousGameRatedPlayerHeader from "./PreviousGameRatedPlayerHeaderProps"
 import { useNavigate } from "react-router-dom";
 import { ColoredWord } from "../../Components";
 import WordRarityBar from "../../Components/WordRarityBar";
+import { WordBankFunctions } from "../../../Background/Utils/WordBankFunctions";
 
 interface SeePreviousGameViewProps {
     previousGame: GameModel;
 }
 
 export default function SeePreviousGameView({ previousGame }: SeePreviousGameViewProps) {
+    const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
     const [lastMovePlayerId, setLastMovePlayerId] = useState("");
     const [moves, setMoves] = useState<MoveModel[] | null>(null);
     const [movesDict, setMovesDict] = useState<Record<string, MoveModel>>({});
@@ -53,10 +55,12 @@ export default function SeePreviousGameView({ previousGame }: SeePreviousGameVie
 
     async function onAppearActions() {
         try {
+            const wordBank = await WordBankFunctions.getWordBank();
+            setWordBankDict(wordBank);
             if (previousGame.winningWords) {
                 let fetchedWords: WordModel[] = [];
                 for (const word of previousGame.winningWords) {
-                    const wordModel = await FetchService.fetchWordModelByWord(word);
+                    const wordModel = await FetchService.fetchWordModelByWord(word, wordBankDict);
                     fetchedWords.push(wordModel);
                 }
                 fetchedWords.sort((a, b) => a.word.localeCompare(b.word));

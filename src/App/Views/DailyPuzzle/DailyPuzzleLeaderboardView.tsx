@@ -12,6 +12,7 @@ import SharePuzzleResultsButton from "../../Components/SharePuzzleResultsButton"
 import { FaGlobe } from "react-icons/fa";
 import { GiThreeFriends } from "react-icons/gi";
 import { IoPerson } from "react-icons/io5";
+import { WordBankFunctions } from "../../../Background/Utils/WordBankFunctions";
 
 enum LeaderboardState {
     loading,
@@ -30,6 +31,7 @@ interface DailyPuzzleLeaderboardViewProps {
 }
 
 export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: DailyPuzzleLeaderboardViewProps) {
+    const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
     const [user, setUser] = useState<UserModel>(passedUser);
     const [leaderboardState, setLeaderboardState] = useState<LeaderboardState>(LeaderboardState.loading);
     const [leaderboardShown, setLeaderboardShown] = useState<LeaderboardShown>(LeaderboardShown.global);
@@ -73,7 +75,7 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
                     if (Object.keys(fetchedWords).includes(word)) {
                         fetchedWords[word][1] += 1;
                     } else {
-                        const wordModel = await FetchService.fetchWordModelByWord(word);
+                        const wordModel = await FetchService.fetchWordModelByWord(word, wordBankDict);
                         fetchedWords[word] = [wordModel, 1];
                     }
                 }
@@ -87,6 +89,8 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
     async function onAppearActions() {
         setLeaderboardState(LeaderboardState.loading);
         try {
+            const wordBank = await WordBankFunctions.getWordBank();
+            setWordBankDict(wordBank);
             const newUser = await FetchService.fetchUserByUid(user.id);
             setUser(newUser);
             const loadedLeaderboard = await FetchService.fetchLeaderboard(dailyPuzzle, 100);

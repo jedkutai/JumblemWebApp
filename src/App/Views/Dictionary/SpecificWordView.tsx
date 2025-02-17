@@ -1,6 +1,7 @@
 import { Typography } from "@mui/material";
 import { DictionaryWordModel, WordModel } from "../../../Background/Models";
 import { View, VStack } from "../../../ReactSwiftly";
+import { ColoredDictionaryWord } from "../../Components/ColoredDictionaryWord";
 
 interface SpecificWordViewProps {
     dictionaryModels: DictionaryWordModel[];
@@ -13,7 +14,8 @@ export default function SpecificWordView({ dictionaryModels, wordModel }: Specif
     return (
         <View startAtTop={true}>
             <VStack padding="20px" alignment="flex-start">
-                <Typography variant="h1" style={{ color: "gray"}}>{wordModel.word}</Typography>
+                <ColoredDictionaryWord word={wordModel}/>
+                {/* <Typography variant="h1" style={{ color: "gray"}}>{wordModel.word}</Typography> */}
 
                 {dictionaryModels.map((dictionaryModel, index) => (
                     <VStack key={index} alignment="flex-start">

@@ -12,6 +12,7 @@ import { IoPerson } from "react-icons/io5";
 import { FaGlobe } from "react-icons/fa";
 import DailyPuzzleFoundWords from "../../Views/DailyPuzzle/DailyPuzzleFoundWords";
 import GuestLeaderboardEntry from "./GuestLeaderboardEntry";
+import { WordBankFunctions } from "../../../Background/Utils/WordBankFunctions";
 
 enum LeaderboardState {
     loading,
@@ -20,6 +21,7 @@ enum LeaderboardState {
 }
 
 export default function GuestDailyPuzzleResultsView() {
+    const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
     const [leaderboardState, setLeaderboardState] = useState<LeaderboardState>(LeaderboardState.loading);
     const [words, setWords] = useState<Record<string, [WordModel, number]>>({});
     const [wordsLoaded, setWordsLoaded] = useState(false);
@@ -40,6 +42,9 @@ export default function GuestDailyPuzzleResultsView() {
     async function getResults() {
         setLeaderboardState(LeaderboardState.loading);
         try {
+            const wordBank = await WordBankFunctions.getWordBank();
+            setWordBankDict(wordBank);
+            
             let lastPuzzlePlayedId = localStorage.getItem("lastPuzzlePlayedId") ?? "";
             let fetchedPuzzle = await FetchService.fetchDailyPuzzleById(lastPuzzlePlayedId);
             setDailyPuzzle(fetchedPuzzle);
@@ -53,7 +58,7 @@ export default function GuestDailyPuzzleResultsView() {
                     if (Object.keys(fetchedWords).includes(splitWord)) {
                         fetchedWords[splitWord][1] += 1;
                     } else {
-                        const wordModel = await FetchService.fetchWordModelByWord(splitWord);
+                        const wordModel = await FetchService.fetchWordModelByWord(splitWord, wordBankDict);
                         fetchedWords[splitWord] = [wordModel, 1];
                     }
                 }

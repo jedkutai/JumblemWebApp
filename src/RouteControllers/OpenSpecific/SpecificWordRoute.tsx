@@ -7,6 +7,7 @@ import app from "../../firebase";
 import SpecificWordView from "../../App/Views/Dictionary/SpecificWordView";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
 import PageNotFoundView from "../../App/Components/PageNotFoundView";
+import { WordBankFunctions } from "../../Background/Utils/WordBankFunctions";
 
 enum PageState {
     loading,
@@ -14,6 +15,7 @@ enum PageState {
 }
 
 function SpecificWordRoute() {
+    // const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
     const { word } = useParams();
     // const [user, setUser] = useState<UserModel | null>(null);
     const [wordModel, setWordModel] = useState<WordModel | null>(null);
@@ -32,16 +34,18 @@ function SpecificWordRoute() {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
                 try {
-                    // const fetchedUser = await FetchService.fetchUserByUid(firebaseUser.uid);
+
                     if (word) {
-                        const fetchedWordModel = await FetchService.fetchWordModelByWord(word);
+                        const wordBank = await WordBankFunctions.getWordBank();
+                        // setWordBankDict(wordBank);
+
+                        const fetchedWordModel = await FetchService.fetchWordModelByWord(word, wordBank);
                         const fetchedDictionaryModels = await FetchService.fetchWordDefinition(word);
                         setWordModel(fetchedWordModel);
                         setDictionaryModels(fetchedDictionaryModels);
                         if (fetchedWordModel && !fetchedDictionaryModels) {
                             const searchUrl = `${googleLink}${word}+definition`;
                             window.location.href = searchUrl;
-                            // window.open(searchUrl);
                         }
                     }
                     // setUser(fetchedUser);

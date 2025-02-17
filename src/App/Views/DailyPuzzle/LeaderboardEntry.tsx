@@ -6,6 +6,7 @@ import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
 import { FetchService } from "../../../Background/Service";
 import DailyPuzzleFoundWords from "./DailyPuzzleFoundWords";
+import { WordBankFunctions } from "../../../Background/Utils/WordBankFunctions";
 
 enum ViewState {
     loading,
@@ -25,6 +26,7 @@ export default function LeaderboardEntry({
     entry,
     passedUser
 }: LeaderBoardEntryProps) {
+    const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
     const [player, setPlayer] = useState<UserModel | null>(null);
     const [_viewState, setViewState] = useState<ViewState>(ViewState.hidden);
     const [wordsLoaded, setWordsLoaded] = useState(false);
@@ -48,6 +50,8 @@ export default function LeaderboardEntry({
     async function onAppearActions() {
         // fetch player
         try {
+            const wordBank = await WordBankFunctions.getWordBank();
+            setWordBankDict(wordBank);
             const loadedPlayer = await FetchService.fetchUserByUid(entry.userId);
             setPlayer(loadedPlayer);
         } catch {
@@ -65,13 +69,13 @@ export default function LeaderboardEntry({
                 if (Object.keys(fetchedWords).includes(word)) {
                     fetchedWords[word][1] += 1;
                 } else {
-                    const wordModel = await FetchService.fetchWordModelByWord(word);
+                    const wordModel = await FetchService.fetchWordModelByWord(word, wordBankDict);
                     fetchedWords[word] = [wordModel, 1];
                 }
             }
             setWords(fetchedWords);
             setWordsLoaded(true);
-        } catch(error) {
+        } catch (error) {
         }
     }
 
@@ -108,12 +112,12 @@ export default function LeaderboardEntry({
 
                     </HStack>
 
-                    {expand &&  wordsLoaded && (
+                    {expand && wordsLoaded && (
                         <DailyPuzzleFoundWords correctWords={words} />
                     )}
 
                     {expand && !wordsLoaded && (
-                        <CircularProgress/>
+                        <CircularProgress />
                     )}
 
                 </VStack>

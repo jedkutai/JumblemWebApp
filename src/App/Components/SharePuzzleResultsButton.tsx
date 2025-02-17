@@ -37,18 +37,28 @@ export default function SharePuzzleResultsButton({ date, words }: SharePuzzleRes
         let joinedDate = formattedDate(date.toDate());
 
         for (const key in words) {
-            if (words[key][0].score >= 3469832) {
-                commonCount++;
-                score += 25 * words[key][1];
-            } else if (words[key][0].score >= 433133) {
-                uncommonCount++;
-                score += 50 * words[key][1];
-            } else if (words[key][0].score >= 94965) {
-                rareCount++;
-                score += 75 * words[key][1];
-            } else {
-                legendaryCount++;
-                score += 100 * words[key][1];
+            console.log(words[key][0].score);
+            switch (words[key][0].score) {
+                case (1): {
+                    legendaryCount++;
+                    score += 100 * words[key][1];
+                    break;
+                }
+                case (2): {
+                    rareCount++;
+                    score += 75 * words[key][1];
+                    break;
+                }
+                case (3): {
+                    uncommonCount++;
+                    score += 50 * words[key][1];
+                    break;
+                }
+                case (4): {
+                    commonCount++;
+                    score += 25 * words[key][1];
+                    break;
+                }
             }
 
         }
@@ -64,7 +74,7 @@ export default function SharePuzzleResultsButton({ date, words }: SharePuzzleRes
 
     return (
         <Button onClick={shareLinkItem}>
-            <IoShareOutline size={25} color="gray"/>
+            <IoShareOutline size={25} color="gray" />
 
         </Button>
     );

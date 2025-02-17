@@ -9,6 +9,7 @@ import { FollowModel } from "../Models/FollowModel";
 import { DayFunctions } from "../Utils/DayFunctions"; // Assuming DayFunctions provides date utilities.
 import { DictionaryWordModel, PublicUsernameModel } from "../Models";
 import axios from "axios";
+import { WordBankFunctions } from "../Utils/WordBankFunctions";
 
 export class FetchService {
 
@@ -135,14 +136,35 @@ export class FetchService {
     return snapshot.exists() ? (snapshot.data() as PartialWordModel) : null;
   }
 
-  static async fetchWordModelByWord(word: string): Promise<WordModel> {
-    const db = getFirestore();
-    const wordDoc = doc(db, "words", word);
-    const snapshot = await getDoc(wordDoc);
-    if (!snapshot.exists()) {
+  static async fetchWordModelByWord(word: string, wordBank: Record<string, string[]>): Promise<WordModel> {
+    const prefix = word.slice(0, 3); // Extract the first 3 characters as the prefix
+    const sortedArray = wordBank[prefix];
+
+    if (sortedArray) {
+        const wordAndFrequency = WordBankFunctions.binarySearchWord(sortedArray, word);
+
+        if (wordAndFrequency) {
+            const splits = wordAndFrequency.split("#");
+            const wordString = splits[0];
+            const frequency = parseInt(splits[1], 10);
+
+            if (frequency > -1) {
+                const newWordModel: WordModel = {
+                    id: wordString,
+                    word: wordString,
+                    score: frequency,
+                };
+                
+                return newWordModel;
+            } else {
+              throw new Error(`Word "${word}" not found.`);
+            }
+        } else {
+          throw new Error(`Word "${word}" not found.`);
+        }
+    } else {
       throw new Error(`Word "${word}" not found.`);
     }
-    return snapshot.data() as WordModel;
   }
 
   static async fetchTodaysDailyPuzzle(): Promise<DailyPuzzleModel | null> {

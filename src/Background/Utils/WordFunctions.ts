@@ -7,14 +7,16 @@ export enum WordRarity {
   
   export class WordFunctions {
     static getWordType(score: number): WordRarity {
-      if (score >= 3469832) {
+      if (score == 4) {
         return WordRarity.Common;
-      } else if (score >= 433133) {
+      } else if (score == 3) {
         return WordRarity.Uncommon;
-      } else if (score >= 94965) {
+      } else if (score == 2) {
         return WordRarity.Rare;
-      } else {
+      } else if (score == 1) {
         return WordRarity.Legendary;
+      } else {
+        return WordRarity.Common;
       }
     }
   }

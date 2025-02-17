@@ -35,13 +35,13 @@ export class DailyPuzzleFunctions {
 
     for (const value of Object.values(correctWords)) {
       const [wordModel, count] = value;
-      if (wordModel.score >= 3469832) {
+      if (wordModel.score == 4) {
         score += count * 25;
-      } else if (wordModel.score >= 433133) {
+      } else if (wordModel.score== 3) {
         score += count * 50;
-      } else if (wordModel.score >= 94965) {
+      } else if (wordModel.score == 2) {
         score += count * 75;
-      } else {
+      } else if (wordModel.score == 1) {
         score += count * 100;
       }
     }

@@ -19,17 +19,24 @@ export default function DailyPuzzleFoundWords({ correctWords }: DailyPuzzleFound
 
 
     function getWordRarity(word: WordModel): WordRarity {
-        let wordType: WordRarity = WordRarity.legendary;
+        switch (word.score) {
+            case (1): {
+                return WordRarity.legendary;
+            }
+            case (2): {
+                return WordRarity.rare;
+            }
+            case (3): {
+                return WordRarity.uncommon;
+            }
+            case (4): {
+                return WordRarity.common;
+            }
 
-        if (word.score >= 3469832) {
-            wordType = WordRarity.common;
-        } else if (word.score >= 433133) {
-            wordType = WordRarity.uncommon;
-        } else if (word.score >= 94965) {
-            wordType = WordRarity.rare;
+            default: {
+                return WordRarity.common;
+            }
         }
-
-        return wordType;
     }
 
     return (
