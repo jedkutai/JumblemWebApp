@@ -17,23 +17,24 @@ interface RatedGameGridProps {
     matchAbortedTime: number;
     movesDict: Record<string, MoveModel>;
     yourTurn: boolean;
+    setYourTurn: (turn: boolean) => void;
     lastMove: MoveModel | undefined;
     movesCopy: MoveModel[];
 }
 
-export default function RatedRatedGameGrid({
+export default function RatedGameGrid({
     user,
     game,
     wordCheckComplete,
     matchAbortedTime,
     movesDict,
     yourTurn,
+    setYourTurn,
     lastMove,
 }: RatedGameGridProps) {
     const { minDimension } = useWindowSize();
     const [grid] = useState<GridSpotModel[][]>(GridSpot.grid);
     const [letters, setLetters] = useState<string[]>([]);
-    // const [canSelect, setCanSelect] = useState(false);
     const [availableBlocks, setAvailableBlocks] = useState(["3,3"]);
     const [selectedBlock, setSelectedBlock] = useState("");
     const dimensionDivider = 9 * 1.75;
@@ -83,6 +84,7 @@ export default function RatedRatedGameGrid({
                 selectedBlock={selectedBlock}
                 setSelectedBlock={setSelectedBlock}
                 yourTurn={yourTurn}
+                setYourTurn={setYourTurn}
                 blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}
             />
 

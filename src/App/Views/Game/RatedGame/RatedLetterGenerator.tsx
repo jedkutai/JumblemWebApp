@@ -15,6 +15,7 @@ interface RatedLetterGeneratorProps {
     selectedBlock: string;
     setSelectedBlock: (selectedBlock: string) => void;
     yourTurn: boolean;
+    setYourTurn: (turn: boolean) => void;
     blockDimension: number;
 }
 
@@ -27,6 +28,7 @@ export default function RatedLetterGenerator({
     selectedBlock,
     setSelectedBlock,
     yourTurn,
+    setYourTurn,
     blockDimension
 }: RatedLetterGeneratorProps) {
     const { minDimension } = useWindowSize();
@@ -53,6 +55,7 @@ export default function RatedLetterGenerator({
                     setLetters={setLetters}
                     letter={letter}
                     yourTurn={yourTurn}
+                    setYourTurn={setYourTurn}
                     wordCheckComplete={wordCheckComplete}
                     blockDimension={blockDimension}
                     removeIndex={index}

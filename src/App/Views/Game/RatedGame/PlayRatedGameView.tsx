@@ -5,7 +5,7 @@ import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
 import { RatedGameService } from "../../../../Background/Service";
 import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
 import { View, VSpacer, VStack } from "../../../../ReactSwiftly";
-import RatedRatedGameGrid from "./RatedGameGrid";
+import RatedGameGrid from "./RatedGameGrid";
 import RatedGameHeader from "./RatedGameHeader";
 import { Button } from "@mui/material";
 import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
@@ -354,7 +354,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
 
                     />
 
-                    <RatedRatedGameGrid
+                    <RatedGameGrid
                         user={user}
                         game={game}
                         gameOver={gameOver}
@@ -362,6 +362,7 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
                         matchAbortedTime={matchAbortedTime}
                         movesDict={movesDict}
                         yourTurn={yourTurn}
+                        setYourTurn={setYourTurn}
                         lastMove={moves.length > 0 ? movesCopy[movesCopy.length - 1] : undefined}
                         movesCopy={movesCopy}
                     />

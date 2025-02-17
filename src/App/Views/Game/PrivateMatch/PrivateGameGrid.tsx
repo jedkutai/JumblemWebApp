@@ -17,6 +17,7 @@ interface PrivateGameGridProps {
     matchAbortedTime: number;
     movesDict: Record<string, MoveModel>;
     yourTurn: boolean;
+    setYourTurn: (turn: boolean) => void;
     lastMove: MoveModel | undefined;
     movesCopy: MoveModel[];
 }
@@ -28,6 +29,7 @@ export default function PrivateGameGrid({
     matchAbortedTime,
     movesDict,
     yourTurn,
+    setYourTurn,
     lastMove,
 }: PrivateGameGridProps) {
     const { minDimension } = useWindowSize();
@@ -81,6 +83,7 @@ export default function PrivateGameGrid({
                 selectedBlock={selectedBlock}
                 setSelectedBlock={setSelectedBlock}
                 yourTurn={yourTurn}
+                setYourTurn={setYourTurn}
                 blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}
             />
 

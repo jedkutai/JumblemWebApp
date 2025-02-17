@@ -10,6 +10,7 @@ interface RatedLetterGeneratorBlockProps {
     letters: string[];
     setLetters: (letters: string[]) => void;
     yourTurn: boolean;
+    setYourTurn: (turn: boolean) => void;
     wordCheckComplete: boolean;
     blockDimension: number;
     letter: string;
@@ -24,6 +25,7 @@ export default function RatedLetterGeneratorBlock({
     letters,
     setLetters,
     yourTurn,
+    setYourTurn,
     wordCheckComplete,
     blockDimension,
     removeIndex,
@@ -38,6 +40,7 @@ export default function RatedLetterGeneratorBlock({
     async function bustAMove() {
         if (yourTurn && wordCheckComplete) {
             setCanSelect(false);
+            setYourTurn(false);
             try {
                 await RatedGameService.makeMove(user, game, selectedBlock, letter);
                 letters.splice(removeIndex, 1);

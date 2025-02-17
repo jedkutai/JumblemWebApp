@@ -15,6 +15,7 @@ interface PrivateLetterGeneratorProps {
     selectedBlock: string;
     setSelectedBlock: (selectedBlock: string) => void;
     yourTurn: boolean;
+    setYourTurn: (turn: boolean) => void;
     blockDimension: number;
 }
 
@@ -27,6 +28,7 @@ export default function PrivateLetterGenerator({
     selectedBlock,
     setSelectedBlock,
     yourTurn,
+    setYourTurn,
     blockDimension
 }: PrivateLetterGeneratorProps) {
     const { minDimension } = useWindowSize();
@@ -53,6 +55,7 @@ export default function PrivateLetterGenerator({
                     setLetters={setLetters}
                     letter={letter}
                     yourTurn={yourTurn}
+                    setYourTurn={setYourTurn}
                     wordCheckComplete={wordCheckComplete}
                     blockDimension={blockDimension}
                     removeIndex={index}

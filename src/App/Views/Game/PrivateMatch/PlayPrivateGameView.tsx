@@ -412,6 +412,7 @@ export default function PlayPrivateGameView({
                         matchAbortedTime={matchAbortedTime}
                         movesDict={movesDict}
                         yourTurn={yourTurn}
+                        setYourTurn={setYourTurn}
                         lastMove={moves.length > 0 ? movesCopy[movesCopy.length - 1] : undefined}
                         movesCopy={movesCopy}
                     />
