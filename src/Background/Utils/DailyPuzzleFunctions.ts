@@ -50,8 +50,9 @@ export class DailyPuzzleFunctions {
   }
 
   static indexToCoordinates(index: number): string {
-    const r = index % 7;
-    const c = Math.floor(index / 7);
+    const r = Math.floor(index / 7);
+    const c = index % 7;
+    
     return `${r},${c}`;
   }
 
