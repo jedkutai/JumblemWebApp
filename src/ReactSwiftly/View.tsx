@@ -15,6 +15,7 @@ export function View({startAtTop, children}: ViewProps) {
         width: "100vw", // Full width of the viewport
         boxSizing: "border-box" as const, // Includes padding and borders in width/height calculations
         overflow: "auto", // Ensures no scrollbars appear if content overflows
+        background: "rgb(227, 218, 195)",
     };
     return (
         <div style={style}>
