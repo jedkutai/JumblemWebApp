@@ -114,7 +114,6 @@ export default function BotGuestPlayCasualGameView({ passedUser, passedGame }: B
         setWordBankDict(wordBank);
         setMatchAbortedTicker(!matchAbortedTicker);
         setTickCount(tickCount + 1);
-        setYourTurn(game.playerOneId == user.id);
     }
 
     useEffect(() => {
@@ -228,16 +227,24 @@ export default function BotGuestPlayCasualGameView({ passedUser, passedGame }: B
     }, [userTimeExpired]);
 
     useEffect(() => {
-        if (!yourTurn && wordCheckComplete && !gameOver) {
-            botMove();
-        }
+        const timeout = setTimeout(async () => {
+            if (!yourTurn && wordCheckComplete && !gameOver) {
+                botMove();
+            }
+
+        }, 1000 * 3);
+        return () => clearTimeout(timeout);
+
+        // if (!yourTurn && wordCheckComplete && !gameOver) {
+        //     botMove();
+        // }
     }, [wordCheckComplete, yourTurn, gameOver]);
 
     async function botMove() {
         if (wordCheckComplete) {
             if (!gameOver) {
                 if (!yourTurn) {
-                    const moveDelay = movesCopy.length < 6 ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 5) + 3;
+                    const moveDelay = movesCopy.length < 6 ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 5);
                     const timeout = setTimeout(async () => {
                         try {
                             const [resultCoordinates, resultLetter] = await GameFunctions.botMove(botLetterBank, movesCopy, wordBankDict);
