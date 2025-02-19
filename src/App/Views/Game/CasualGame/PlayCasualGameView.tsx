@@ -176,7 +176,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
 
     useEffect(() => {
         gameManagerFunction()
-        wordCheckFunction();
+        // wordCheckFunction();
     }, [movesCopy]);
 
     useEffect(() => {
@@ -234,6 +234,8 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
             const movesDictUpdate = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
             setMovesDict(movesDictUpdate);
             setMovesMade(Math.max(movesCopy.length, movesMade));
+
+            wordCheckFunction();
 
             const [yourTime, opponentTime] = ClockFunctions.getTimeRemainingForBothPlayers(user.id, movesCopy);
             setYourTimeRemaining(yourTime);
