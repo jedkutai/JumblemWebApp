@@ -120,25 +120,25 @@ export default function PlayRatedGameView({ passedUser, passedGame }: PlayRatedG
 
 
 
-    useEffect(() => {
-        if (tickCount < 20 && !gameOver) {
-            const timeout = setTimeout(async () => {
-                setTickCount(tickCount + 1);
-                try {
-                    const update = await RatedGameService.getGameUpdate(game);
-                    if (update) {
+    // useEffect(() => {
+    //     if (tickCount < 20 && !gameOver) {
+    //         const timeout = setTimeout(async () => {
+    //             setTickCount(tickCount + 1);
+    //             try {
+    //                 const update = await RatedGameService.getGameUpdate(game);
+    //                 if (update) {
 
-                    }
-                } catch {
-                    setGameOver(true);
-                }
+    //                 }
+    //             } catch {
+    //                 setGameOver(true);
+    //             }
 
-            }, 1000 * 0.5);
+    //         }, 1000 * 0.5);
 
-            return () => clearTimeout(timeout);
-        }
+    //         return () => clearTimeout(timeout);
+    //     }
 
-    }, [tickCount]);
+    // }, [tickCount]);
 
     useEffect(() => {
         const timeout = setTimeout(async () => {

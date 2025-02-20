@@ -22,7 +22,7 @@ export default function SpecificWordView({ dictionaryModels, wordModel }: Specif
 
                         {dictionaryModel.meanings.map((meaning, index) => (
                             <VStack key={index} alignment="flex-start">
-                                <Typography variant="h3" style={{fontWeight: "bolder"}} textAlign={"left"}>{`[${meaning.partOfSpeech}]`}</Typography>
+                                <Typography variant="h5" style={{fontWeight: "bolder"}} textAlign={"left"}>{`[${meaning.partOfSpeech}]`}</Typography>
                                 {meaning.definitions.map((definition, index) => (
                                     <div key={index} style={{margin: "10px 0px"}}>
                                         <Typography textAlign={"left"}>{`[${index+1}] ${definition.definition}`}</Typography>
