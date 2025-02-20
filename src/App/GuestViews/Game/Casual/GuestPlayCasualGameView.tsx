@@ -65,13 +65,6 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
         setUserClock(0);
         setOpponentClock(0);
 
-        const lastMove = movesCopy[movesCopy.length - 1];
-        if (lastMove) {
-            const lastMoveTime = new Date(lastMove.timestamp.toDate())
-            setAnchorTime(lastMoveTime.getTime())
-        } else {
-            setAnchorTime(Date.now());
-        }
     }, [yourTurn]);
 
     useEffect(() => {
@@ -83,7 +76,9 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
                     const elapsedSeconds = Math.floor((Date.now() - anchorTime) / 1000);
                     if (yourTurn) {
                         setUserClock(elapsedSeconds);
+                        setOpponentClock(0);
                     } else {
+                        setUserClock(0);
                         setOpponentClock(elapsedSeconds);
                     }
                 }
@@ -243,6 +238,14 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
             setYourTimeRemaining(yourTime);
             setOpponentTimeRemaining(opponentTime);
 
+            const lastMove = movesCopy[movesCopy.length - 1];
+            if (lastMove) {
+                const lastMoveTime = new Date(lastMove.timestamp.toDate())
+                setAnchorTime(lastMoveTime.getTime())
+            } else {
+                setAnchorTime(Date.now());
+            }
+            
             if (movesCopy[movesCopy.length - 1].userId === passedUser.id) {
                 setYourTurn(false);
             } else {

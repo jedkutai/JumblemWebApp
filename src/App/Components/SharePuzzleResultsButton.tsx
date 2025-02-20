@@ -37,7 +37,6 @@ export default function SharePuzzleResultsButton({ date, words }: SharePuzzleRes
         let joinedDate = formattedDate(date.toDate());
 
         for (const key in words) {
-            console.log(words[key][0].score);
             switch (words[key][0].score) {
                 case (1): {
                     legendaryCount++;

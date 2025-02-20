@@ -66,16 +66,10 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
         setUserClock(0);
         setOpponentClock(0);
 
-        const lastMove = movesCopy[movesCopy.length - 1];
-        if (lastMove) {
-            const lastMoveTime = new Date(lastMove.timestamp.toDate())
-            setAnchorTime(lastMoveTime.getTime())
-        } else {
-            setAnchorTime(Date.now());
-        }
     }, [yourTurn]);
 
     useEffect(() => {
+
 
         if (!gameOver) {
             const timeout = setTimeout(async () => {
@@ -84,7 +78,9 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
                     const elapsedSeconds = Math.floor((Date.now() - anchorTime) / 1000);
                     if (yourTurn) {
                         setUserClock(elapsedSeconds);
+                        setOpponentClock(0);
                     } else {
+                        setUserClock(0);
                         setOpponentClock(elapsedSeconds);
                     }
                 }
@@ -175,6 +171,7 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
     }, [checkGameOver]);
 
     useEffect(() => {
+        
         gameManagerFunction()
         // wordCheckFunction();
     }, [movesCopy]);
@@ -240,6 +237,14 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
             const [yourTime, opponentTime] = ClockFunctions.getTimeRemainingForBothPlayers(user.id, movesCopy);
             setYourTimeRemaining(yourTime);
             setOpponentTimeRemaining(opponentTime);
+
+            const lastMove = movesCopy[movesCopy.length - 1];
+            if (lastMove) {
+                const lastMoveTime = new Date(lastMove.timestamp.toDate())
+                setAnchorTime(lastMoveTime.getTime())
+            } else {
+                setAnchorTime(Date.now());
+            }
 
             if (movesCopy[movesCopy.length - 1].userId === user.id) {
                 setYourTurn(false);
