@@ -54,6 +54,7 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
     const [userClock, setUserClock] = useState(0);
     const [opponentClock, setOpponentClock] = useState(0);
     const [anchorTime, setAnchorTime] = useState(Date.now());
+    
 
     useEffect(() => {
         try {
@@ -101,7 +102,25 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
         }
     }, [tick])
 
+    // useEffect(() => {
+    //     if (tickCount < 20 && !gameOver) {
+    //         const timeout = setTimeout(async () => {
+    //             setTickCount(tickCount + 1);
+    //             try {
+    //                 const check = await CasualGameService.getGameUpdate(game);
+    //                 if (check) {
 
+    //                 }
+    //             } catch {
+    //                 setGameOver(true);
+    //             }
+
+    //         }, 1000 * 0.5);
+
+    //         return () => clearTimeout(timeout);
+    //     }
+
+    // }, [tickCount]);
 
     async function onAppearActions() {
         setTick(!tick);
@@ -122,25 +141,7 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
         }
     }, [moves])
 
-    useEffect(() => {
-        if (tickCount < 20 && !gameOver) {
-            const timeout = setTimeout(async () => {
-                setTickCount(tickCount + 1);
-                try {
-                    const check = await CasualGameService.getGameUpdate(game);
-                    if (check) {
 
-                    }
-                } catch {
-                    setGameOver(true);
-                }
-
-            }, 1000 * 0.5);
-
-            return () => clearTimeout(timeout);
-        }
-
-    }, [tickCount]);
 
     useEffect(() => {
         const timeout = setTimeout(async () => {
