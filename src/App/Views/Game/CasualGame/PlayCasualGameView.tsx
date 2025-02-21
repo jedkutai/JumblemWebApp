@@ -123,6 +123,25 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
 
 
 
+    useEffect(() => {
+        if (tickCount < 20 && !gameOver) {
+            const timeout = setTimeout(async () => {
+                setTickCount(tickCount + 1);
+                try {
+                    const check = await CasualGameService.getGameUpdate(game);
+                    if (check) {
+
+                    }
+                } catch {
+                    setGameOver(true);
+                }
+
+            }, 1000 * 0.5);
+
+            return () => clearTimeout(timeout);
+        }
+
+    }, [tickCount]);
 
     useEffect(() => {
         const timeout = setTimeout(async () => {
@@ -152,8 +171,8 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
     }, [checkGameOver]);
 
     useEffect(() => {
-        updateGameState();
-        // gameManagerFunction()
+        
+        gameManagerFunction()
         // wordCheckFunction();
     }, [movesCopy]);
 
@@ -207,150 +226,81 @@ export default function PlayCasualGameView({ passedUser, passedGame }: PlayCasua
     }, [userTimeExpired]);
 
 
-    // function gameManagerFunction() {
-    //     if (movesCopy.length > 0) {
-    //         const movesDictUpdate = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
-    //         setMovesDict(movesDictUpdate);
-    //         setMovesMade(Math.max(movesCopy.length, movesMade));
-
-    //         wordCheckFunction();
-
-    //         const [yourTime, opponentTime] = ClockFunctions.getTimeRemainingForBothPlayers(user.id, movesCopy);
-    //         setYourTimeRemaining(yourTime);
-    //         setOpponentTimeRemaining(opponentTime);
-
-    //         const lastMove = movesCopy[movesCopy.length - 1];
-    //         if (lastMove) {
-    //             const lastMoveTime = new Date(lastMove.timestamp.toDate())
-    //             setAnchorTime(lastMoveTime.getTime())
-    //         } else {
-    //             setAnchorTime(Date.now());
-    //         }
-
-    //         if (movesCopy[movesCopy.length - 1].userId === user.id) {
-    //             setYourTurn(false);
-    //         } else {
-    //             setYourTurn(true);
-    //         }
-    //     } else if (movesMade == 0) {
-    //         setYourTurn(game.playerOneId == user.id);
-    //     } else {
-    //         setCheckGameOver(true);
-    //     }
-    // }
-
-    // async function wordCheckFunction(): Promise<void> {
-    //     try {
-    //         const lastMove = movesCopy.at(movesCopy.length - 1);
-    //         const checkMovesDict = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
-    //         if (lastMove) {
-    //             setWordCheckComplete(false);
-    //             const wordResults = await GameFunctions.checkWords(lastMove, checkMovesDict, wordBankDict);
-    //             let winningSpots: Set<string> = new Set();
-    //             let updatedWinningWords = [...winningWords]; // Local copy
-
-    //             for (const [word, coordinates] of wordResults) {
-    //                 winningSpots = new Set([...winningSpots, ...coordinates]);
-    //                 updatedWinningWords.push(word); // Update the local copy
-    //             }
-
-    //             setWinningWords(updatedWinningWords);
-    //             setWinningGridSpots([...winningSpots]);
-
-    //             if (updatedWinningWords.length !== 0) {
-    //                 let wordArray = updatedWinningWords.map((item) => item.word);
-    //                 await CasualGameService.setGameWinner(game, lastMove.userId, wordArray, [...winningSpots]);
-    //                 await CasualGameService.moveFinishedGame(game);
-    //                 setGameOver(true);
-    //             }
-    //             setWordCheckComplete(true);
-    //         }
-    //     } catch (e) {
-    //     }
-
-    //     if (!gameOver) {
-    //         if (movesCopy.length >= 49) {
-    //             if (winningWords.length === 0) { // Use derived or passed variable here
-    //                 try {
-    //                     await CasualGameService.setGameWinner(game, "draw", [], []);
-    //                     await CasualGameService.moveFinishedGame(game);
-    //                     setGameOver(true);
-    //                 } catch {
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
-
-    async function updateGameState(): Promise<void> {
+    function gameManagerFunction() {
         if (movesCopy.length > 0) {
-            // Update moves dictionary
             const movesDictUpdate = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
             setMovesDict(movesDictUpdate);
-            setMovesMade((prev) => Math.max(movesCopy.length, prev));
-    
-            // Update time tracking
+            setMovesMade(Math.max(movesCopy.length, movesMade));
+
+            wordCheckFunction();
+
             const [yourTime, opponentTime] = ClockFunctions.getTimeRemainingForBothPlayers(user.id, movesCopy);
             setYourTimeRemaining(yourTime);
             setOpponentTimeRemaining(opponentTime);
-    
-            // Set anchor time from last move
+
             const lastMove = movesCopy[movesCopy.length - 1];
-            setAnchorTime(lastMove ? new Date(lastMove.timestamp.toDate()).getTime() : Date.now());
-    
-            // Determine turn
-            setYourTurn(lastMove?.userId !== user.id);
-    
-            // Perform word validation
-            await validateWords(lastMove, movesDictUpdate);
-        } else if (movesMade === 0) {
-            setYourTurn(game.playerOneId === user.id);
+            if (lastMove) {
+                const lastMoveTime = new Date(lastMove.timestamp.toDate())
+                setAnchorTime(lastMoveTime.getTime())
+            } else {
+                setAnchorTime(Date.now());
+            }
+
+            if (movesCopy[movesCopy.length - 1].userId === user.id) {
+                setYourTurn(false);
+            } else {
+                setYourTurn(true);
+            }
+        } else if (movesMade == 0) {
+            setYourTurn(game.playerOneId == user.id);
         } else {
             setCheckGameOver(true);
         }
     }
-    
-    async function validateWords(lastMove: MoveModel | undefined, checkMovesDict: Record<string, MoveModel>): Promise<void> {
-        if (!lastMove) return;
-    
+
+    async function wordCheckFunction(): Promise<void> {
         try {
-            setWordCheckComplete(false);
-            const wordResults = await GameFunctions.checkWords(lastMove, checkMovesDict, wordBankDict);
-            let winningSpots = new Set<string>();
-            let updatedWinningWords = [...winningWords];
-    
-            for (const [word, coordinates] of wordResults) {
-                winningSpots = new Set([...winningSpots, ...coordinates]);
-                updatedWinningWords.push(word);
-            }
-    
-            setWinningWords(updatedWinningWords);
-            setWinningGridSpots([...winningSpots]);
-    
-            // Check for a winner
-            if (updatedWinningWords.length > 0) {
-                await CasualGameService.setGameWinner(game, lastMove.userId, updatedWinningWords.map((item) => item.word), [...winningSpots]);
-                await CasualGameService.moveFinishedGame(game);
-                setGameOver(true);
+            const lastMove = movesCopy.at(movesCopy.length - 1);
+            const checkMovesDict = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
+            if (lastMove) {
+                setWordCheckComplete(false);
+                const wordResults = await GameFunctions.checkWords(lastMove, checkMovesDict, wordBankDict);
+                let winningSpots: Set<string> = new Set();
+                let updatedWinningWords = [...winningWords]; // Local copy
+
+                for (const [word, coordinates] of wordResults) {
+                    winningSpots = new Set([...winningSpots, ...coordinates]);
+                    updatedWinningWords.push(word); // Update the local copy
+                }
+
+                setWinningWords(updatedWinningWords);
+                setWinningGridSpots([...winningSpots]);
+
+                if (updatedWinningWords.length !== 0) {
+                    let wordArray = updatedWinningWords.map((item) => item.word);
+                    await CasualGameService.setGameWinner(game, lastMove.userId, wordArray, [...winningSpots]);
+                    await CasualGameService.moveFinishedGame(game);
+                    setGameOver(true);
+                }
+                setWordCheckComplete(true);
             }
         } catch (e) {
-            console.error("Error validating words:", e);
-        } finally {
-            setWordCheckComplete(true);
         }
-    
-        // Handle game ending scenario
-        if (!gameOver && movesCopy.length >= 49 && winningWords.length === 0) {
-            try {
-                await CasualGameService.setGameWinner(game, "draw", [], []);
-                await CasualGameService.moveFinishedGame(game);
-                setGameOver(true);
-            } catch (e) {
-                console.error("Error setting draw:", e);
+
+        if (!gameOver) {
+            if (movesCopy.length >= 49) {
+                if (winningWords.length === 0) { // Use derived or passed variable here
+                    try {
+                        await CasualGameService.setGameWinner(game, "draw", [], []);
+                        await CasualGameService.moveFinishedGame(game);
+                        setGameOver(true);
+                    } catch {
+                    }
+                }
             }
         }
     }
-    
+
 
     if (gameOver || checkGameOver) {
         return (
