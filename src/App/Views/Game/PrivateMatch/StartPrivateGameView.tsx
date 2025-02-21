@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { GameModel, UserModel } from "../../../../Background/Models";
-import { Button, CircularProgress, Typography } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { View, VStack } from "../../../../ReactSwiftly";
 import { FetchService, PrivateGameService } from "../../../../Background/Service";
 import PlayPrivateGameView from "./PlayPrivateGameView";
 import PrivateMatchMenuView from "./PrivateMatchMenuView";
 import GameRequirementsWarning from "../../../Components/GameRequirementsWarning";
+import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 
 interface StartPrivateGameViewProps {
     passedUser: UserModel
@@ -135,9 +136,10 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
     return (
         <View>
             <VStack>
-                <Typography variant="h4" gutterBottom>
+                {/* <Typography variant="h4" gutterBottom>
                     Jumblem
-                </Typography>
+                </Typography> */}
+                <JumblemLogoSimple/>
                 {gameModeState === PrivateGameModeState.findingMatch && (
                     <>
                         <GameRequirementsWarning />

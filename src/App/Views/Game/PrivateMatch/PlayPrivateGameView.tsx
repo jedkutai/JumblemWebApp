@@ -138,25 +138,6 @@ export default function PlayPrivateGameView({
         }
     }, [moves])
 
-    // useEffect(() => {
-    //     if (tickCount < 20 && !gameOver) {
-    //         const timeout = setTimeout(async () => {
-    //             setTickCount(tickCount + 1);
-    //             try {
-    //                 const update = await PrivateGameService.getGameUpdate(game);
-    //                 if (update) {
-
-    //                 }
-    //             } catch {
-    //                 setGameOver(true);
-    //             }
-
-    //         }, 1000 * 0.5);
-
-    //         return () => clearTimeout(timeout);
-    //     }
-
-    // }, [tickCount]);
 
     useEffect(() => {
         const timeout = setTimeout(async () => {
@@ -186,8 +167,9 @@ export default function PlayPrivateGameView({
     }, [checkGameOver]);
 
     useEffect(() => {
-        gameManagerFunction()
-        wordCheckFunction();
+        updateGameState();
+        // gameManagerFunction()
+        // wordCheckFunction();
     }, [movesCopy]);
 
     useEffect(() => {
@@ -197,14 +179,6 @@ export default function PlayPrivateGameView({
                     await PrivateGameService.setGameWinner(game, user.id, [], []);
                     await PrivateGameService.moveFinishedGame(game);
                     setGameOver(true);
-                    // let lastMove = await PrivateGameService.getFinalMove(game);
-                    // if (lastMove !== null) {
-                    //     if (lastMove.userId === user.id) {
-                    //         await PrivateGameService.setGameWinner(game, user.id, [], []);
-                    //         await PrivateGameService.moveFinishedGame(game);
-                    //         setGameOver(true);
-                    //     }
-                    // }
                 } catch (error) {
                 }
             }
@@ -265,78 +239,148 @@ export default function PlayPrivateGameView({
         return () => clearTimeout(timeout);
     }
 
-    function gameManagerFunction() {
+    async function updateGameState(): Promise<void> {
         if (movesCopy.length > 0) {
+            // Update moves dictionary
             const movesDictUpdate = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
             setMovesDict(movesDictUpdate);
-            setMovesMade(Math.max(movesCopy.length, movesMade));
-
+            setMovesMade((prev) => Math.max(movesCopy.length, prev));
+    
+            // Update time tracking
             const [yourTime, opponentTime] = ClockFunctions.getTimeRemainingForBothPlayers(user.id, movesCopy);
             setYourTimeRemaining(yourTime);
             setOpponentTimeRemaining(opponentTime);
-
+    
+            // Set anchor time from last move
             const lastMove = movesCopy[movesCopy.length - 1];
-            if (lastMove) {
-                const lastMoveTime = new Date(lastMove.timestamp.toDate())
-                setAnchorTime(lastMoveTime.getTime())
-            } else {
-                setAnchorTime(Date.now());
-            }
-            
-            if (movesCopy[movesCopy.length - 1].userId === user.id) {
-                setYourTurn(false);
-            } else {
-                setYourTurn(true);
-            }
-        } else if (movesMade == 0) {
-            setYourTurn(game.playerOneId == user.id);
+            setAnchorTime(lastMove ? new Date(lastMove.timestamp.toDate()).getTime() : Date.now());
+    
+            // Determine turn
+            setYourTurn(lastMove?.userId !== user.id);
+    
+            // Perform word validation
+            await validateWords(lastMove, movesDictUpdate);
+        } else if (movesMade === 0) {
+            setYourTurn(game.playerOneId === user.id);
         } else {
             setCheckGameOver(true);
         }
     }
-
-    async function wordCheckFunction(): Promise<void> {
+    
+    async function validateWords(lastMove: MoveModel | undefined, checkMovesDict: Record<string, MoveModel>): Promise<void> {
+        if (!lastMove) return;
+    
         try {
-            const lastMove = movesCopy.at(movesCopy.length - 1);
-            const checkMovesDict = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
-            if (lastMove) {
-                setWordCheckComplete(false);
-                const wordResults = await GameFunctions.checkWords(lastMove, checkMovesDict, wordBankDict);
-                let winningSpots: Set<string> = new Set();
-                let updatedWinningWords = [...winningWords]; // Local copy
-
-                for (const [word, coordinates] of wordResults) {
-                    winningSpots = new Set([...winningSpots, ...coordinates]);
-                    updatedWinningWords.push(word); // Update the local copy
-                }
-
-                setWinningWords(updatedWinningWords);
-                setWinningGridSpots([...winningSpots]);
-
-                if (updatedWinningWords.length !== 0) {
-                    let wordArray = updatedWinningWords.map((item) => item.word);
-                    await PrivateGameService.setGameWinner(game, lastMove.userId, wordArray, [...winningSpots]);
-                    await PrivateGameService.moveFinishedGame(game);
-                    setGameOver(true);
-                }
-                setWordCheckComplete(true);
+            setWordCheckComplete(false);
+            const wordResults = await GameFunctions.checkWords(lastMove, checkMovesDict, wordBankDict);
+            let winningSpots = new Set<string>();
+            let updatedWinningWords = [...winningWords];
+    
+            for (const [word, coordinates] of wordResults) {
+                winningSpots = new Set([...winningSpots, ...coordinates]);
+                updatedWinningWords.push(word);
+            }
+    
+            setWinningWords(updatedWinningWords);
+            setWinningGridSpots([...winningSpots]);
+    
+            // Check for a winner
+            if (updatedWinningWords.length > 0) {
+                await PrivateGameService.setGameWinner(game, lastMove.userId, updatedWinningWords.map((item) => item.word), [...winningSpots]);
+                await PrivateGameService.moveFinishedGame(game);
+                setGameOver(true);
             }
         } catch (e) {
+            console.error("Error validating words:", e);
+        } finally {
+            setWordCheckComplete(true);
         }
-
-        if (!gameOver) {
-            if (movesCopy.length >= 49) {
-                if (winningWords.length === 0) { // Use derived or passed variable here
-                    try {
-                        await PrivateGameService.setGameWinner(game, "draw", [], []);
-                        await PrivateGameService.moveFinishedGame(game);
-                        setGameOver(true);
-                    } catch {
-                    }
-                }
+    
+        // Handle game ending scenario
+        if (!gameOver && movesCopy.length >= 49 && winningWords.length === 0) {
+            try {
+                await PrivateGameService.setGameWinner(game, "draw", [], []);
+                await PrivateGameService.moveFinishedGame(game);
+                setGameOver(true);
+            } catch (e) {
+                console.error("Error setting draw:", e);
             }
         }
     }
+    
+
+    // function gameManagerFunction() {
+    //     if (movesCopy.length > 0) {
+    //         const movesDictUpdate = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
+    //         setMovesDict(movesDictUpdate);
+    //         setMovesMade(Math.max(movesCopy.length, movesMade));
+
+    //         const [yourTime, opponentTime] = ClockFunctions.getTimeRemainingForBothPlayers(user.id, movesCopy);
+    //         setYourTimeRemaining(yourTime);
+    //         setOpponentTimeRemaining(opponentTime);
+
+    //         const lastMove = movesCopy[movesCopy.length - 1];
+    //         if (lastMove) {
+    //             const lastMoveTime = new Date(lastMove.timestamp.toDate())
+    //             setAnchorTime(lastMoveTime.getTime())
+    //         } else {
+    //             setAnchorTime(Date.now());
+    //         }
+            
+    //         if (movesCopy[movesCopy.length - 1].userId === user.id) {
+    //             setYourTurn(false);
+    //         } else {
+    //             setYourTurn(true);
+    //         }
+    //     } else if (movesMade == 0) {
+    //         setYourTurn(game.playerOneId == user.id);
+    //     } else {
+    //         setCheckGameOver(true);
+    //     }
+    // }
+
+    // async function wordCheckFunction(): Promise<void> {
+    //     try {
+    //         const lastMove = movesCopy.at(movesCopy.length - 1);
+    //         const checkMovesDict = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
+    //         if (lastMove) {
+    //             setWordCheckComplete(false);
+    //             const wordResults = await GameFunctions.checkWords(lastMove, checkMovesDict, wordBankDict);
+    //             let winningSpots: Set<string> = new Set();
+    //             let updatedWinningWords = [...winningWords]; // Local copy
+
+    //             for (const [word, coordinates] of wordResults) {
+    //                 winningSpots = new Set([...winningSpots, ...coordinates]);
+    //                 updatedWinningWords.push(word); // Update the local copy
+    //             }
+
+    //             setWinningWords(updatedWinningWords);
+    //             setWinningGridSpots([...winningSpots]);
+
+    //             if (updatedWinningWords.length !== 0) {
+    //                 let wordArray = updatedWinningWords.map((item) => item.word);
+    //                 await PrivateGameService.setGameWinner(game, lastMove.userId, wordArray, [...winningSpots]);
+    //                 await PrivateGameService.moveFinishedGame(game);
+    //                 setGameOver(true);
+    //             }
+    //             setWordCheckComplete(true);
+    //         }
+    //     } catch (e) {
+    //     }
+
+    //     if (!gameOver) {
+    //         if (movesCopy.length >= 49) {
+    //             if (winningWords.length === 0) { // Use derived or passed variable here
+    //                 try {
+    //                     await PrivateGameService.setGameWinner(game, "draw", [], []);
+    //                     await PrivateGameService.moveFinishedGame(game);
+    //                     setGameOver(true);
+    //                 } catch {
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 
     function navigateRematchView() {
         setView("PrivateRematchView");
