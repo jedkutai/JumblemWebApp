@@ -43,7 +43,9 @@ export function useStandardGameManager2(user: UserModel, game: GameModel) {
   }, []);
 
   useEffect(() => {
-    setProcessComplete(false);
+    if (movesMade>0) {
+      setProcessComplete(false);
+    }
     if (moves.length > movesMade) {
       setYourTurn(false);
       setMovesMade(moves.length);

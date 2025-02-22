@@ -237,7 +237,7 @@ export default function PlayCasualGameView2({ passedUser, passedGame }: PlayCasu
                 <VStack width={`${width}px`} height={`${height}px`}>
                     <HowToPlayHeader versus={true} />
                     <JumblemLogoSimple />
-                    <p>v10</p>
+                    <p>v11</p>
                     <CasualGameHeader2
                         setUserTimeExpired={setUserTimeExpired}
                         setCheckOpponentTimeExpired={setCheckOpponentTimeExpired}
