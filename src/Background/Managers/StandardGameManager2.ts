@@ -32,6 +32,7 @@ export function useStandardGameManager2(user: UserModel, game: GameModel) {
     const unsubscribe = onSnapshot(movesQuery, async (snapshot) => {
       const fetchedMoves = snapshot.docs.map((doc) => doc.data() as MoveModel);
       if (fetchedMoves) {
+        setYourTurn(false);
         setMoves(fetchedMoves);
       }
 
@@ -43,7 +44,7 @@ export function useStandardGameManager2(user: UserModel, game: GameModel) {
 
   useEffect(() => {
     if (moves.length > movesMade) {
-        setYourTurn(false);
+        
         setMovesMade(moves.length);
         setMovesCopy(moves);
     } else if (moves.length < movesMade) {
