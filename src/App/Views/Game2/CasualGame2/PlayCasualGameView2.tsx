@@ -25,7 +25,8 @@ export default function PlayCasualGameView2({ passedUser, passedGame }: PlayCasu
         yourTimeRemaining,
         opponentTimeRemaining,
         checkGameOver,
-        anchorTime
+        anchorTime,
+        processComplete
     } = useStandardGameManager2(passedUser, passedGame);
     const { width, height } = useWindowSize();
 
@@ -236,7 +237,7 @@ export default function PlayCasualGameView2({ passedUser, passedGame }: PlayCasu
                 <VStack width={`${width}px`} height={`${height}px`}>
                     <HowToPlayHeader versus={true} />
                     <JumblemLogoSimple />
-                    <p>bridge + me, who says no</p>
+                    <p>v10</p>
                     <CasualGameHeader2
                         setUserTimeExpired={setUserTimeExpired}
                         setCheckOpponentTimeExpired={setCheckOpponentTimeExpired}
@@ -256,6 +257,7 @@ export default function PlayCasualGameView2({ passedUser, passedGame }: PlayCasu
                         movesDict={movesDict}
                         yourTurn={yourTurn}
                         movesCopy={movesCopy}
+                        processComplete={processComplete}
                         gameOver={gameOver}
                         wordCheckComplete={wordCheckComplete}
                         matchAbortedTimer={matchAbortedTimer}

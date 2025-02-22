@@ -12,6 +12,7 @@ import { UserModel } from "../Models/UserModel";
 import { ClockFunctions } from "../Utils/ClockFunctions";
 
 export function useStandardGameManager2(user: UserModel, game: GameModel) {
+  const [processComplete, setProcessComplete] = useState(true);
   const [moves, setMoves] = useState<MoveModel[]>([]);
   const [movesCopy, setMovesCopy] = useState<MoveModel[]>([]);
   const [movesDict, setMovesDict] = useState<Record<string, MoveModel>>({});
@@ -32,9 +33,6 @@ export function useStandardGameManager2(user: UserModel, game: GameModel) {
     const unsubscribe = onSnapshot(movesQuery, async (snapshot) => {
       const fetchedMoves = snapshot.docs.map((doc) => doc.data() as MoveModel);
       if (fetchedMoves) {
-        if (movesMade > 0) {
-          setYourTurn(false);
-        }
         setMoves(fetchedMoves);
       }
 
@@ -45,50 +43,39 @@ export function useStandardGameManager2(user: UserModel, game: GameModel) {
   }, []);
 
   useEffect(() => {
-    
+    setProcessComplete(false);
     if (moves.length > movesMade) {
-        
-        setMovesMade(moves.length);
-        setMovesCopy(moves);
+      setYourTurn(false);
+      setMovesMade(moves.length);
+      setMovesCopy(moves);
     } else if (moves.length < movesMade) {
-        setCheckGameOver(true);
+      setCheckGameOver(true);
     }
   }, [moves]);
 
   useEffect(() => {
-    const lastMove = movesCopy.at(movesCopy.length - 1);
-    if (lastMove) {
-        if (lastMove.userId === user.id) {
-            setYourTurn(false);
-        } else {
-            setYourTurn(true);
-        }
-        const lastMoveTime = new Date(lastMove.timestamp.toDate())
-        setAnchorTime(lastMoveTime.getTime())
-    }
-    
     const movesDictUpdate = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
     setMovesDict(movesDictUpdate);
   }, [movesCopy]);
 
   useEffect(() => {
-    // const lastMove = movesCopy.at(movesCopy.length - 1);
-    // if (lastMove) {
-    //     if (lastMove.userId === user.id) {
-    //         setYourTurn(false);
-    //     } else {
-    //         setYourTurn(true);
-    //     }
-    //     const lastMoveTime = new Date(lastMove.timestamp.toDate())
-    //     setAnchorTime(lastMoveTime.getTime())
-    // }
+    const lastMove = movesCopy.at(movesCopy.length - 1);
+    if (lastMove) {
+      if (lastMove.userId === user.id) {
+        setYourTurn(false);
+      } else {
+        setYourTurn(true);
+      }
+      const lastMoveTime = new Date(lastMove.timestamp.toDate())
+      setAnchorTime(lastMoveTime.getTime())
+    }
   }, [movesDict]);
 
   useEffect(() => {
     const [yourTime, opponentTime] = ClockFunctions.getTimeRemainingForBothPlayers(user.id, movesCopy);
     setYourTimeRemaining(yourTime);
     setOpponentTimeRemaining(opponentTime);
-
+    setProcessComplete(true);
   }, [anchorTime]);
 
 
@@ -101,6 +88,7 @@ export function useStandardGameManager2(user: UserModel, game: GameModel) {
     opponentTimeRemaining,
     checkGameOver,
     movesMade,
-    anchorTime
+    anchorTime,
+    processComplete
   };
 }

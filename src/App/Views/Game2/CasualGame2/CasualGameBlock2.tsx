@@ -6,6 +6,7 @@ interface CasualGameBlock2Props {
     availableBlocks: string[];
     wordCheckComplete: boolean;
     moves: Record<string, MoveModel>;
+    processComplete: boolean;
     selectedBlock: string;
     setSelectedBlock: (selectedBlock: string) => void;
     yourTurn: boolean;
@@ -20,6 +21,7 @@ export default function CasualGameBlock2({
     moves,
     selectedBlock,
     setSelectedBlock,
+    processComplete,
     yourTurn,
     blockDimension,
     lastMove
@@ -38,7 +40,7 @@ export default function CasualGameBlock2({
                 );
 
             }
-        } else if (!yourTurn || !wordCheckComplete) {
+        } else if (!yourTurn || !wordCheckComplete || !processComplete) {
             return (
                 <EmptyBlock blockDimension={blockDimension} />
             );

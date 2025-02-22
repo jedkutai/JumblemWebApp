@@ -16,6 +16,7 @@ interface PrivateGameGrid2Props {
     movesDict: Record<string, MoveModel>;
     yourTurn: boolean;
     movesCopy: MoveModel[];
+    processComplete: boolean;
 
     gameOver: boolean;
     wordCheckComplete: boolean;
@@ -28,6 +29,7 @@ export default function PrivateGameGrid2({
     movesDict,
     yourTurn,
     movesCopy,
+    processComplete,
     gameOver,
     wordCheckComplete,
     matchAbortedTimer
@@ -65,6 +67,7 @@ export default function PrivateGameGrid2({
                         moves={movesDict}
                         selectedBlock={selectedBlock}
                         setSelectedBlock={setSelectedBlock}
+                        processComplete={processComplete}
                         yourTurn={yourTurn}
                         blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}
                         lastMove={movesCopy[movesCopy.length - 1]}

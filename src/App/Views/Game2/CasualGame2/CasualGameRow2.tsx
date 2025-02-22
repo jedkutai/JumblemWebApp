@@ -10,6 +10,7 @@ interface CasualGameRow2Props {
     moves: Record<string, MoveModel>;
     selectedBlock: string;
     setSelectedBlock: (selectedBlock: string) => void;
+    processComplete: boolean;
     yourTurn: boolean;
     blockDimension: number;
     lastMove: MoveModel | undefined;
@@ -22,6 +23,7 @@ export default function CasualGameRow2({
     moves,
     selectedBlock,
     setSelectedBlock,
+    processComplete,
     yourTurn,
     blockDimension,
     lastMove
@@ -36,6 +38,7 @@ export default function CasualGameRow2({
                     availableBlocks={availableBlocks}
                     wordCheckComplete={wordCheckComplete}
                     moves={moves}
+                    processComplete={processComplete}
                     selectedBlock={selectedBlock}
                     setSelectedBlock={setSelectedBlock}
                     yourTurn={yourTurn}

@@ -27,7 +27,8 @@ export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPri
         yourTimeRemaining,
         opponentTimeRemaining,
         checkGameOver,
-        anchorTime
+        anchorTime,
+        processComplete
     } = useStandardGameManager2(passedUser, passedGame);
     const { width, height } = useWindowSize();
 
@@ -307,6 +308,7 @@ export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPri
                         movesDict={movesDict}
                         yourTurn={yourTurn}
                         movesCopy={movesCopy}
+                        processComplete={processComplete}
                         gameOver={gameOver}
                         wordCheckComplete={wordCheckComplete}
                         matchAbortedTimer={matchAbortedTimer}

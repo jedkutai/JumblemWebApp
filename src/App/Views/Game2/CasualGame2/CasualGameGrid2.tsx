@@ -17,6 +17,7 @@ interface CasualGameGrid2Props {
     movesDict: Record<string, MoveModel>;
     yourTurn: boolean;
     movesCopy: MoveModel[];
+    processComplete: boolean;
 
     gameOver: boolean;
     wordCheckComplete: boolean;
@@ -29,6 +30,7 @@ export default function CasualGameGrid2({
     movesDict,
     yourTurn,
     movesCopy,
+    processComplete,
     gameOver,
     wordCheckComplete,
     matchAbortedTimer
@@ -64,6 +66,7 @@ export default function CasualGameGrid2({
                         availableBlocks={availableBlocks}
                         wordCheckComplete={wordCheckComplete}
                         moves={movesDict}
+                        processComplete={processComplete}
                         selectedBlock={selectedBlock}
                         setSelectedBlock={setSelectedBlock}
                         yourTurn={yourTurn}
@@ -81,6 +84,7 @@ export default function CasualGameGrid2({
                 setLetters={setLetters}
                 canSelect={canSelect}
                 setCanSelect={setCanSelect}
+                processComplete={processComplete}
                 wordCheckComplete={wordCheckComplete}
                 selectedBlock={selectedBlock}
                 setSelectedBlock={setSelectedBlock}

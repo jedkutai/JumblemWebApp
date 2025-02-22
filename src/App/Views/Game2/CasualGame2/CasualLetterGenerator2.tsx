@@ -13,6 +13,7 @@ interface CasualLetterGenerator2Props {
     setLetters: (letters: string[]) => void;
     canSelect: boolean;
     setCanSelect: (canSelect: boolean) => void;
+    processComplete: boolean;
     wordCheckComplete: boolean;
     selectedBlock: string;
     setSelectedBlock: (selectedBlock: string) => void;
@@ -26,6 +27,7 @@ export default function CasualLetterGenerator2({
     setLetters,
     canSelect,
     setCanSelect,
+    processComplete,
     wordCheckComplete,
     selectedBlock,
     setSelectedBlock,
@@ -72,7 +74,7 @@ export default function CasualLetterGenerator2({
         >
             {letters.map((letter, index) => (
                 <div key={index}>
-                {(selectedBlock === "" || !canSelect) ? (
+                {(selectedBlock === "" || !canSelect || !processComplete) ? (
                     <DimLetterBlock letter={letter} blockDimension={blockDimension} />
                 ) : (
                     <ClickableWhiteLetterBlock letter={letter} blockDimension={blockDimension} action={() => bustAMove(letter, index)} />
