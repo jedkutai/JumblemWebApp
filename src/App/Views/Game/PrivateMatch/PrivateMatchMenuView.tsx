@@ -3,10 +3,12 @@ import { UserModel } from "../../../../Background/Models";
 import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
 import { View, VStack } from "../../../../ReactSwiftly";
 import { Box, Button, Typography } from "@mui/material";
-import StartPrivateGameView from "./StartPrivateGameView";
-import JoinPrivateGameView from "./JoinPrivateGameView";
+// import StartPrivateGameView from "./StartPrivateGameView";
+// import JoinPrivateGameView from "./JoinPrivateGameView";
 import { useNavigate } from "react-router-dom";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
+import JoinPrivateGameView2 from "../../Game2/PrivateMatch2/JoinPrivateGameView2";
+import StartPrivateGameView2 from "../../Game2/PrivateMatch2/StartPrivateGameView2";
 
 interface PrivateMatchMenuViewProps {
     passedUser: UserModel;
@@ -64,9 +66,9 @@ export default function PrivateMatchMenuView({ passedUser }: PrivateMatchMenuVie
 
     switch (view) {
         case "Create":
-            return (<StartPrivateGameView passedUser={passedUser} />);
+            return (<StartPrivateGameView2 passedUser={passedUser} />);
         case "Join":
-            return (<JoinPrivateGameView passedUser={passedUser} />);
+            return (<JoinPrivateGameView2 passedUser={passedUser} />);
     }
 
     return (

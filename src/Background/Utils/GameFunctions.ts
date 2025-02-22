@@ -163,7 +163,8 @@ export class GameFunctions {
   ): Promise<[string, string]> {
     let movesDict = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
     let availableBlocks = this.getAvailableBlocks(movesDict, []);
-    let openBlocks = availableBlocks.filter((block) => !movesDict[block]);
+    // let openBlocks = availableBlocks.filter((block) => !movesDict[block]);
+    let openBlocks = availableBlocks.filter((block) => !Object.keys(movesDict).includes(block));
 
     let resultCoordinates = "";
     let resultLetter = "";

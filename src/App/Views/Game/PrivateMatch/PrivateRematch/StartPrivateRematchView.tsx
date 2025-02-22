@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { UserModel, GameModel } from "../../../../../Background/Models";
-import PlayPrivateGameView from "../PlayPrivateGameView";
+// import PlayPrivateGameView from "../PlayPrivateGameView";
 import { View, VStack } from "../../../../../ReactSwiftly";
 import { Button, CircularProgress } from "@mui/material";
 import { FetchService, PrivateGameService } from "../../../../../Background/Service";
 import { useNavigate } from "react-router-dom";
 import GameRequirementsWarning from "../../../../Components/GameRequirementsWarning";
 import JumblemLogoSimple from "../../../../Components/JumblemLogoSimple";
+import PlayPrivateGameView2 from "../../../Game2/PrivateMatch2/PlayPrivateGameView2";
 
 interface StartPrivateRematchViewProps {
     passedUser: UserModel;
@@ -122,7 +123,7 @@ export default function StartPrivateRematchView({
 
     if (gameModeState === StartPrivateRematchGameModeState.matchFound && game) {
         return (
-            <PlayPrivateGameView
+            <PlayPrivateGameView2
                 passedUser={user}
                 passedGame={game}
             />

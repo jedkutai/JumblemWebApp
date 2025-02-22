@@ -1,37 +1,37 @@
 import { useEffect, useState } from "react";
+import { GridSpot } from "../../../../Background/Extends/GridSpot";
 import { GameModel, GridSpotModel, MoveModel, UserModel, WordModel } from "../../../../Background/Models";
 import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
-import { GridSpot } from "../../../../Background/Extends/GridSpot";
-import CasualGameOverRow from "./CasualGameOverRow";
-import { VStack } from "../../../../ReactSwiftly";
 import { CasualGameService } from "../../../../Background/Service";
-import { ColoredWord } from "../../../Components";
-// import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
+import { VStack } from "../../../../ReactSwiftly";
+import { ColoredWord } from "../../../Components";
 import WordRarityBar from "../../../Components/WordRarityBar";
+import CasualGameOverRow from "../../Game/CasualGame/CasualGameOverRow";
 
-interface CasualGameOverGridProps {
+
+interface CasualGameOverGrid2Props {
     user: UserModel;
     game: GameModel;
     movesDict: Record<string, MoveModel>;
-    winningWords: WordModel[];
-    winningGridSpots: string[];
 
+    winningWords: WordModel[];
+    winningGridSpots: string[]
 }
 
-export default function CasualGameOverGrid({
+export default function CasualGameOverGrid2({
     user,
     game,
     movesDict,
     winningWords,
     winningGridSpots,
-}: CasualGameOverGridProps) {
+}: CasualGameOverGrid2Props) {
     const [finalGame, setFinalGame] = useState<GameModel | undefined>(undefined);
     const [grid] = useState<GridSpotModel[][]>(GridSpot.grid);
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
     const upperBound = 650;
-    // finalGame stuff to show the result (win loss draw ect)
+
     useEffect(() => {
         const fetchFinalGame = async () => {
             try {
@@ -43,7 +43,8 @@ export default function CasualGameOverGrid({
         }
 
         fetchFinalGame();
-    }, []);
+    }, []); // fetch final game
+
     return (
         <VStack>
             {/* <VStack maxHeight={`${(Math.max(minDimension, upperBound) * 8 / dimensionDivider) + 200}px`} spacing="10px"> */}

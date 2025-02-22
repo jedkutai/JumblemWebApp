@@ -4,12 +4,13 @@ import { useNavigate } from "react-router-dom";
 import { UserModel } from "../../Background/Models";
 import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
-import StartCasualGameView from "../../App/Views/Game/CasualGame/StartCasualGameView";
+// import StartCasualGameView from "../../App/Views/Game/CasualGame/StartCasualGameView";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
 import PageNotFoundView from "../../App/Components/PageNotFoundView";
 import GuestStartCasualGameView from "../../App/GuestViews/Game/Casual/GuestStartCasualGameView";
 import { Timestamp } from "firebase/firestore";
 import VersusCrashCourse from "../../App/General/CrashCourses/Versus/VersusCrashCourse";
+import StartCasualGameView2 from "../../App/Views/Game2/CasualGame2/StartCasualGameView2";
 
 enum PageState {
     loading,
@@ -83,7 +84,7 @@ export default function CasualGameRoute() {
             if (user) {
                 if (user.username !== "guest") {
                     return (
-                        <StartCasualGameView passedUser={user} />
+                        <StartCasualGameView2 passedUser={user} />
                     );
                 } else {
                     return (
