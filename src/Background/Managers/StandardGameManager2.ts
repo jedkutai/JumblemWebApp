@@ -56,11 +56,6 @@ export function useStandardGameManager2(user: UserModel, game: GameModel) {
   }, [moves]);
 
   useEffect(() => {
-    const movesDictUpdate = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
-    setMovesDict(movesDictUpdate);
-  }, [movesCopy]);
-
-  useEffect(() => {
     const lastMove = movesCopy.at(movesCopy.length - 1);
     if (lastMove) {
         if (lastMove.userId === user.id) {
@@ -71,6 +66,22 @@ export function useStandardGameManager2(user: UserModel, game: GameModel) {
         const lastMoveTime = new Date(lastMove.timestamp.toDate())
         setAnchorTime(lastMoveTime.getTime())
     }
+    
+    const movesDictUpdate = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
+    setMovesDict(movesDictUpdate);
+  }, [movesCopy]);
+
+  useEffect(() => {
+    // const lastMove = movesCopy.at(movesCopy.length - 1);
+    // if (lastMove) {
+    //     if (lastMove.userId === user.id) {
+    //         setYourTurn(false);
+    //     } else {
+    //         setYourTurn(true);
+    //     }
+    //     const lastMoveTime = new Date(lastMove.timestamp.toDate())
+    //     setAnchorTime(lastMoveTime.getTime())
+    // }
   }, [movesDict]);
 
   useEffect(() => {
