@@ -6,7 +6,7 @@ import { Button } from "@mui/material";
 import { HStack, VStack } from "../../../../ReactSwiftly";
 import { ColoredWord } from "../../../Components";
 import WordRarityBar from "../../../Components/WordRarityBar";
-import CasualGameOverRow from "../../../Views/Game/CasualGame/CasualGameOverRow";
+import CasualGameOverRow from "../../../Views/Game2/CasualGame2/CasualGameOverRow";
 
 enum GameState {
     intro,

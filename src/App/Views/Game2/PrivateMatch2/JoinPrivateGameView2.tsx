@@ -5,7 +5,7 @@ import { PrivateGameService } from "../../../../Background/Service";
 import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
 import { View, VStack } from "../../../../ReactSwiftly";
 import GameRequirementsWarning from "../../../Components/GameRequirementsWarning";
-import PrivateMatchMenuView from "../../Game/PrivateMatch/PrivateMatchMenuView";
+import PrivateMatchMenuView from "./PrivateMatchMenuView";
 import PlayPrivateGameView2 from "./PlayPrivateGameView2";
 
 enum JoinPrivateGameModeState {

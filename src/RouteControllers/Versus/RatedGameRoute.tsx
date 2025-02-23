@@ -6,10 +6,11 @@ import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
 import { Button, Typography } from "@mui/material";
 import { HStack, View, VStack } from "../../ReactSwiftly";
-import StartRatedGameView from "../../App/Views/Game/RatedGame/StartRatedGameView";
+// import StartRatedGameView from "../../App/Views/Game/RatedGame/StartRatedGameView";
 import JumblemLogoSimple from "../../App/Components/JumblemLogoSimple";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
 import VersusCrashCourse from "../../App/General/CrashCourses/Versus/VersusCrashCourse";
+import StartRatedGameView2 from "../../App/Views/Game2/RatedGame2/StartRatedGameView2";
 
 enum PageState {
     loading,
@@ -72,7 +73,7 @@ export default function RatedGameRoute() {
         case PageState.loaded:
             if (user && user.username !== "guest") {
                 return (
-                    <StartRatedGameView passedUser={user} />
+                    <StartRatedGameView2 passedUser={user} />
                 );
             } else {
                 return (

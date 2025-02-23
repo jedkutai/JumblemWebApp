@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { UserModel } from "../../Background/Models";
 import { FetchService } from "../../Background/Service";
 import app from "../../firebase";
-import PrivateMatchMenuView from "../../App/Views/Game/PrivateMatch/PrivateMatchMenuView";
+import PrivateMatchMenuView from "../../App/Views/Game2/PrivateMatch2/PrivateMatchMenuView";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
 import PageNotFoundView from "../../App/Components/PageNotFoundView";
 import { Timestamp } from "firebase/firestore";

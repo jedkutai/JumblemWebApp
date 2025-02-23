@@ -7,7 +7,7 @@ import app from "../../firebase";
 // import StartCasualGameView from "../../App/Views/Game/CasualGame/StartCasualGameView";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
 import PageNotFoundView from "../../App/Components/PageNotFoundView";
-import GuestStartCasualGameView from "../../App/GuestViews/Game/Casual/GuestStartCasualGameView";
+// import GuestStartCasualGameView from "../../App/GuestViews/Game/Casual/GuestStartCasualGameView";
 import { Timestamp } from "firebase/firestore";
 import VersusCrashCourse from "../../App/General/CrashCourses/Versus/VersusCrashCourse";
 import StartCasualGameView2 from "../../App/Views/Game2/CasualGame2/StartCasualGameView2";
@@ -82,15 +82,18 @@ export default function CasualGameRoute() {
 
         case PageState.loaded:
             if (user) {
-                if (user.username !== "guest") {
-                    return (
-                        <StartCasualGameView2 passedUser={user} />
-                    );
-                } else {
-                    return (
-                        <GuestStartCasualGameView passedUser={user} />
-                    );
-                }
+                return (
+                    <StartCasualGameView2 passedUser={user} />
+                );
+                // if (user.username !== "guest") {
+                //     return (
+                //         <StartCasualGameView2 passedUser={user} />
+                //     );
+                // } else {
+                //     return (
+                //         <GuestStartCasualGameView passedUser={user} />
+                //     );
+                // }
             } else {
                 return (
                     <PageNotFoundView />

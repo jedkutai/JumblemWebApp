@@ -3,23 +3,22 @@ import { useStandardGameManager2 } from "../../../../Background/Managers/Standar
 import { UserModel, GameModel, WordModel } from "../../../../Background/Models";
 import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
 import { WordBankFunctions } from "../../../../Background/Utils/WordBankFunctions";
-import { PrivateGameService } from "../../../../Background/Service";
+import { RatedGameService } from "../../../../Background/Service";
 import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
-import RematchController from "../../Game/PrivateMatch/PrivateRematch/RematchController";
 import { View, VStack } from "../../../../ReactSwiftly";
 import HowToPlayHeader from "../../../Components/HowToPlayHeader";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
-import CasualGameHeader2 from "../CasualGame2/CasualGameHeader2";
-import PrivateGameGrid2 from "./PrivateGameGrid2";
-import PrivateGameOverGrid from "./PrivateGameOverGrid";
+import RatedGameGrid2 from "./RatedGameGrid2";
+import RatedGameHeader2 from "./RatedGameHeader2";
+import RatedGameOverGrid from "./RatedGameOverGrid";
 
 
-interface PlayPrivateGameView2Props {
+interface PlayRatedGameView2Props {
     passedUser: UserModel;
     passedGame: GameModel;
 }
 
-export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPrivateGameView2Props) {
+export default function PlayRatedGameView2({ passedUser, passedGame }: PlayRatedGameView2Props) {
     const {
         movesCopy,
         movesDict,
@@ -34,7 +33,7 @@ export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPri
     const { width, height } = useWindowSize();
 
     const user: UserModel = passedUser;
-    const game: GameModel = passedGame;
+    const [game, setGame] = useState<GameModel>(passedGame);
     const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
 
     const [gameOver, setGameOver] = useState(false);
@@ -47,13 +46,6 @@ export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPri
     const [matchAbortedTimer, setMatchAbortedTime] = useState(15);
     const [tickCount, setTickCount] = useState(0);
     const [matchAbortedTicker, setMatchAbortedTicker] = useState(false);
-
-    const [view, setView] = useState<"PlayPrivateGameView" | "PrivateRematchView">("PlayPrivateGameView");
-
-
-    const [rematchOffered, setRematchedOffered] = useState(false);
-    const [rematchTicker, setRematchTicker] = useState(false);
-    const [stopRematchTicker, setStopRematchTicker] = useState(false);
 
     async function onAppearActions() {
         const wordBank = await WordBankFunctions.getWordBank();
@@ -80,8 +72,8 @@ export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPri
 
                 if (updatedWinningWords.length !== 0) {
                     let wordArray = updatedWinningWords.map((item) => item.word);
-                    await PrivateGameService.setGameWinner(game, lastMove.userId, wordArray, [...winningSpots]);
-                    await PrivateGameService.moveFinishedGame(game);
+                    await RatedGameService.setGameWinner(game, lastMove.userId, wordArray, [...winningSpots]);
+                    await RatedGameService.moveFinishedGame(game);
                     setGameOver(true);
                 }
                 setWordCheckComplete(true);
@@ -93,8 +85,8 @@ export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPri
             if (movesCopy.length >= 49) {
                 if (winningWords.length === 0) { // Use derived or passed variable here
                     try {
-                        await PrivateGameService.setGameWinner(game, "draw", [], []);
-                        await PrivateGameService.moveFinishedGame(game);
+                        await RatedGameService.setGameWinner(game, "draw", [], []);
+                        await RatedGameService.moveFinishedGame(game);
                         setGameOver(true);
                     } catch {
                     }
@@ -117,7 +109,7 @@ export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPri
             const timeout = setTimeout(async () => {
                 setTickCount(tickCount + 1);
                 try {
-                    const check = await PrivateGameService.getGameUpdate(game);
+                    const check = await RatedGameService.getGameUpdate(game);
                     if (check) {
 
                     }
@@ -139,8 +131,8 @@ export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPri
 
                 if (matchAbortedTimer == 0) {
                     try {
-                        await PrivateGameService.setGameWinner(game, "aborted", [], []);
-                        await PrivateGameService.moveFinishedGame(game);
+                        await RatedGameService.setGameWinner(game, "aborted", [], []);
+                        await RatedGameService.moveFinishedGame(game);
                     } catch {
 
                     }
@@ -167,8 +159,8 @@ export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPri
             const fetchLastMove = async (): Promise<void> => {
                 if (checkOpponentTimeExpired && !gameOver) {
                     try {
-                        await PrivateGameService.setGameWinner(game, user.id, [], []);
-                        await PrivateGameService.moveFinishedGame(game);
+                        await RatedGameService.setGameWinner(game, user.id, [], []);
+                        await RatedGameService.moveFinishedGame(game);
                         setGameOver(true);
                     } catch {
                     }
@@ -193,8 +185,8 @@ export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPri
 
                 if (winnerId) {
                     try {
-                        await PrivateGameService.setGameWinner(game, winnerId, [], []);
-                        await PrivateGameService.moveFinishedGame(game);
+                        await RatedGameService.setGameWinner(game, winnerId, [], []);
+                        await RatedGameService.moveFinishedGame(game);
                         setGameOver(true);
                     } catch {
 
@@ -210,45 +202,6 @@ export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPri
 
     }, [userTimeExpired]);
 
-    useEffect(() => {
-        if (!stopRematchTicker || !gameOver) {
-            rematchTickerActions();
-        }
-    }, [rematchTicker]);
-
-    useEffect(() => {
-        if (gameOver) {
-            setRematchTicker(!rematchTicker);
-        }
-    }, [gameOver]);
-
-    async function rematchTickerActions() {
-        const timeout = setTimeout(async () => {
-            try {
-                const result = await PrivateGameService.checkIfRematchOffered(user, game);
-                setRematchedOffered(result);
-            } catch {
-
-            }
-            setRematchTicker(!rematchTicker);
-        }, 1000);
-
-        return () => clearTimeout(timeout);
-    }
-
-    function navigateRematchView() {
-        setView("PrivateRematchView");
-        setStopRematchTicker(true);
-    }
-
-    if (view == "PrivateRematchView") {
-        return (
-            <RematchController
-                passedUser={user}
-                previousGame={game}
-            />
-        );
-    }
 
     if (gameOver) {
         return (
@@ -257,7 +210,7 @@ export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPri
                     <HowToPlayHeader versus={true} />
                     <JumblemLogoSimple />
 
-                    <CasualGameHeader2
+                    <RatedGameHeader2
                         setUserTimeExpired={setUserTimeExpired}
                         setCheckOpponentTimeExpired={setCheckOpponentTimeExpired}
                         userId={user.id}
@@ -268,16 +221,17 @@ export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPri
                         firstMoveMade={(movesCopy.length > 0)}
                         gameOver={gameOver}
                         anchorTime={anchorTime}
+                        userRatingChange={user.id === game.playerOneId ? game.playerOneRatingChange : game.playerTwoRatingChange}
+                        opponentRatingChange={user.id !== game.playerOneId ? game.playerOneRatingChange : game.playerTwoRatingChange}
                     />
 
-                    <PrivateGameOverGrid
+                    <RatedGameOverGrid
                         user={user}
                         game={game}
+                        setGame={setGame}
                         movesDict={movesDict}
                         winningWords={winningWords}
                         winningGridSpots={winningGridSpots}
-                        navigateRematchView={navigateRematchView}
-                        rematchOffered={rematchOffered}
                     />
 
                 </VStack>
@@ -290,7 +244,7 @@ export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPri
                     <HowToPlayHeader versus={true} />
                     <JumblemLogoSimple />
 
-                    <CasualGameHeader2
+                    <RatedGameHeader2
                         setUserTimeExpired={setUserTimeExpired}
                         setCheckOpponentTimeExpired={setCheckOpponentTimeExpired}
                         userId={user.id}
@@ -303,7 +257,7 @@ export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPri
                         anchorTime={anchorTime}
                     />
 
-                    <PrivateGameGrid2
+                    <RatedGameGrid2
                         user={user}
                         game={game}
                         movesDict={movesDict}
@@ -315,7 +269,6 @@ export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPri
                         matchAbortedTimer={matchAbortedTimer}
                         movesMade={movesMade}
                     />
-
                 </VStack>
             </View>
         );

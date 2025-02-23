@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { GameModel, UserModel } from "../../../../Background/Models";
 import { View, VStack } from "../../../../ReactSwiftly";
 import { Button, CircularProgress } from "@mui/material";
-import { CasualGameService, FetchService } from "../../../../Background/Service";
+import { CasualGameService } from "../../../../Background/Service";
 import { useNavigate } from "react-router-dom";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import GameRequirementsWarning from "../../../Components/GameRequirementsWarning";
@@ -21,7 +21,7 @@ enum CasualGameModeState {
 }
 
 export default function StartCasualGameView2({ passedUser }: StartCasualGameViewProps2) {
-    const [user, setUser] = useState<UserModel>(passedUser);
+    const user: UserModel = passedUser;
     const [gameModeState, setGameModeState] = useState<CasualGameModeState>(CasualGameModeState.idle);
     const [game, setGame] = useState<GameModel | null>(null);
     const [hostOfMatch, setHostOfMatch] = useState(false);
@@ -50,8 +50,8 @@ export default function StartCasualGameView2({ passedUser }: StartCasualGameView
             setGameModeState(CasualGameModeState.findingMatch);
         }
         try {
-            const updatedUser = await FetchService.fetchUserByUid(user.id);
-            setUser(updatedUser);
+            // const updatedUser = await FetchService.fetchUserByUid(user.id);
+            // setUser(updatedUser);
 
             const loadedGame = await CasualGameService.findGame(user);
             setGame(loadedGame);

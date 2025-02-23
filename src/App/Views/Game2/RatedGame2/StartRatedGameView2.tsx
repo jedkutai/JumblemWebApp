@@ -6,6 +6,7 @@ import { FetchService, RatedGameService } from "../../../../Background/Service";
 import { View, VStack } from "../../../../ReactSwiftly";
 import GameRequirementsWarning from "../../../Components/GameRequirementsWarning";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
+import PlayRatedGameView2 from "./PlayRatedGameView2";
 
 interface StartRatedGameView2Props {
     passedUser: UserModel
@@ -28,9 +29,6 @@ export default function StartRatedGameView2({ passedUser }: StartRatedGameView2P
     const [ticker, setTicker] = useState(false);
     const [tickCount, setTickCount] = useState(0);
     const navigate = useNavigate();
-    // useEffect(() => {
-    //     onAppearActions();
-    // }, []);
 
     useEffect(() => {
         tickerActions();
@@ -125,7 +123,7 @@ export default function StartRatedGameView2({ passedUser }: StartRatedGameView2P
     }
 
     if (gameModeState === RatedGameModeState.matchFound && game) {
-        // return <PlayRatedGameView passedUser={user} passedGame={game} />;
+        return <PlayRatedGameView2 passedUser={user} passedGame={game} />;
     }
 
     return (

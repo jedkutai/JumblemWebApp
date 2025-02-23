@@ -7,7 +7,7 @@ import { Button } from "@mui/material";
 import { VStack } from "../../../../ReactSwiftly";
 import { ColoredWord } from "../../../Components";
 import WordRarityBar from "../../../Components/WordRarityBar";
-import CasualGameOverRow from "../../Game/CasualGame/CasualGameOverRow";
+import CasualGameOverRow from "./CasualGameOverRow";
 
 
 interface CasualGameOverGrid2Props {

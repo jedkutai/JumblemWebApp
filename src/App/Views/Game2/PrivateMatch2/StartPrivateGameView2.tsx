@@ -5,7 +5,7 @@ import { FetchService, PrivateGameService } from "../../../../Background/Service
 import { View, VStack } from "../../../../ReactSwiftly";
 import GameRequirementsWarning from "../../../Components/GameRequirementsWarning";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
-import PrivateMatchMenuView from "../../Game/PrivateMatch/PrivateMatchMenuView";
+import PrivateMatchMenuView from "./PrivateMatchMenuView";
 import PlayPrivateGameView2 from "./PlayPrivateGameView2";
 
 interface StartPrivateGameViewProps {

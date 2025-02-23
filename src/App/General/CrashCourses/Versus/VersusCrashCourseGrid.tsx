@@ -3,7 +3,7 @@ import { GridSpot } from "../../../../Background/Extends/GridSpot";
 import { GridSpotModel, MoveModel, UserModel } from "../../../../Background/Models";
 import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
 import { VStack } from "../../../../ReactSwiftly";
-import CasualGameRow from "../../../Views/Game/CasualGame/CasualGameRow";
+import CasualGameRow from "../../../Views/Game2/CasualGame2/CasualGameRow";
 import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
 import VersusCrashCourseLetterGenerator from "./VersusCrashCourseLetterGenerator";
 import { Typography } from "@mui/material";

@@ -7,8 +7,8 @@ import { Box, Button, Typography } from "@mui/material";
 // import JoinPrivateGameView from "./JoinPrivateGameView";
 import { useNavigate } from "react-router-dom";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
-import JoinPrivateGameView2 from "../../Game2/PrivateMatch2/JoinPrivateGameView2";
-import StartPrivateGameView2 from "../../Game2/PrivateMatch2/StartPrivateGameView2";
+import JoinPrivateGameView2 from "./JoinPrivateGameView2";
+import StartPrivateGameView2 from "./StartPrivateGameView2";
 
 interface PrivateMatchMenuViewProps {
     passedUser: UserModel;
