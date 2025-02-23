@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import GameRequirementsWarning from "../../../Components/GameRequirementsWarning";
 import PlayCasualGameView2 from "./PlayCasualGameView2";
+import BotPlayCasualGameView2 from "./CasualBot2/BotCasualGameView2";
 
 interface StartCasualGameViewProps2 {
     passedUser: UserModel
@@ -138,7 +139,7 @@ export default function StartCasualGameView2({ passedUser }: StartCasualGameView
     if (gameModeState === CasualGameModeState.matchFound && game) {
         return <PlayCasualGameView2 passedUser={user} passedGame={game} />;
     } else if (gameModeState === CasualGameModeState.playBot && game) {
-        // return <BotPlayCasualGameView2 passedUser={user} passedGame={game} />;
+        return <BotPlayCasualGameView2 passedUser={user} passedGame={game} />;
     }
 
     return (

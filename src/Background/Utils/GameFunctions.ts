@@ -96,12 +96,6 @@ export class GameFunctions {
     if (c < 6) result.push(`${r},${c + 1}`); // Right
 
     return result;
-    // return [
-    //   `${r - 1},${c}`, // Up
-    //   `${r + 1},${c}`, // Down
-    //   `${r},${c - 1}`, // Left
-    //   `${r},${c + 1}`, // Right
-    // ];
   }
 
   static checkDirection(
@@ -158,15 +152,15 @@ export class GameFunctions {
 
   static async botMove(
     letterBank: string[],
-    movesCopy: MoveModel[],
+    movesDict: Record<string, MoveModel>,
     wordBankDict: Record<string, string[]>,
     number: number
   ): Promise<[string, string]> {
-    let movesDict = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
     let availableBlocks = this.getAvailableBlocks(movesDict, []);
-    // let openBlocks = availableBlocks.filter((block) => !movesDict[block]);
     let openBlocks = availableBlocks.filter((block) => !Object.keys(movesDict).includes(block));
 
+    // console.log(`Open blocks: ${openBlocks.join("-")}`);
+    // console.log(`Moves Dict: ${Object.keys(movesDict).join("-")}`);
     let resultCoordinates = "";
     let resultLetter = "";
     for (const block of openBlocks) {
@@ -185,7 +179,7 @@ export class GameFunctions {
         testMovesDict[block] = testMove;
         const validWords = await this.checkWords(testMove, testMovesDict, wordBankDict);
         for (const validWord of validWords) {
-          if (validWord[0].score >= 433133) {
+          if (validWord[0].score >= 4) {
             resultCoordinates = block;
             resultLetter = letter;
             break;
@@ -246,7 +240,7 @@ export class GameFunctions {
         testMovesDict[block] = testMove;
         const validWords = await this.checkWords(testMove, testMovesDict, wordBankDict);
         for (const validWord of validWords) {
-          if (validWord[0].score >= 433133) {
+          if (validWord[0].score >= 4) {
             resultCoordinates = block;
             resultLetter = letter;
             break;

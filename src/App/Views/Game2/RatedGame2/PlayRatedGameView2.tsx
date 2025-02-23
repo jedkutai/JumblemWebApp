@@ -56,7 +56,6 @@ export default function PlayRatedGameView2({ passedUser, passedGame }: PlayRated
         try {
             const lastMove = movesCopy.at(movesCopy.length - 1);
             if (lastMove) {
-                console.log("Last move found");
                 setWordCheckComplete(false);
                 const wordResults = await GameFunctions.checkWords(lastMove, movesDict, wordBankDict);
                 let winningSpots: Set<string> = new Set();
