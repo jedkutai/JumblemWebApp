@@ -6,19 +6,22 @@ interface HowToPLaySectionProps {
     descriptions: string[];
 }
 
-export default function HowToPLaySection({title, descriptions}: HowToPLaySectionProps) {
-    
+export default function HowToPLaySection({ title, descriptions }: HowToPLaySectionProps) {
+
     return (
         <VStack spacing="0px" alignment="flex-start">
-            <div style={{ height: "20px"}}></div>
+            <div style={{ height: "20px" }}></div>
             <Typography variant="h5" style={{ color: "black", fontWeight: "bold" }}>
                 {title}
             </Typography>
 
             {descriptions.map((description, index) => (
+                <>
+                <div style={{ height: "10px" }}></div>
                 <Typography key={index} variant="h6" style={{ color: "black" }}>
-                {` • ${description}`}
-            </Typography>
+                    {`${description}`}
+                </Typography>
+                </>
             ))}
         </VStack>
     );
