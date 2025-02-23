@@ -17,6 +17,7 @@ interface PrivateLetterGeneratorBlockProps {
     removeIndex: number;
     selectedBlock: string;
     setSelectedBlock: (selectedBlock: string) => void;
+    movesMade: number
 }
 
 export default function PrivateLetterGeneratorBlock({
@@ -31,7 +32,8 @@ export default function PrivateLetterGeneratorBlock({
     removeIndex,
     selectedBlock,
     setSelectedBlock,
-    letter
+    letter,
+    movesMade
 }: PrivateLetterGeneratorBlockProps) {
     const [canSelect, setCanSelect] = useState(true);
 
@@ -42,7 +44,7 @@ export default function PrivateLetterGeneratorBlock({
             setCanSelect(false);
             setYourTurn(false);
             try {
-                await PrivateGameService.makeMove(user, game, selectedBlock, letter);
+                await PrivateGameService.makeMove(user, game, selectedBlock, letter, (movesMade + 1));
                 letters.splice(removeIndex, 1);
 
                 const newLetters = GameFunctions.getLetters(1);

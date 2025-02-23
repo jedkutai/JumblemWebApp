@@ -6,5 +6,6 @@ export interface MoveModel {
     userId: string;        // ID of the user who made the move
     coordinates: string;   // Coordinates of the move on the grid
     letter: string;        // Letter played in the move
+    number: number;
     timestamp: Timestamp; // Timestamp of when the move was made (optional for default initialization)
 }

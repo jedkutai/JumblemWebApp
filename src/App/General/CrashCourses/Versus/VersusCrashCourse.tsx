@@ -178,7 +178,8 @@ export default function VersusCrashCourse() {
                                 userId: "bot",
                                 coordinates: resultCoordinates,
                                 letter: resultLetter,
-                                timestamp: Timestamp.now()
+                                timestamp: Timestamp.now(),
+                                number: (moves.length + 1)
                             }
 
                             let newMoves = [...moves, newMove]

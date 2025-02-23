@@ -105,7 +105,7 @@ import {
       await deleteDoc(doc(db, "newGames", game.id));
     }
   
-    static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string): Promise<void> {
+    static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number): Promise<void> {
       if (coordinates.length > 0 && letter.length > 0) {
         const db = getFirestore();
         const moveRef = doc(collection(db, `newGames/${game.id}/moves`));
@@ -116,7 +116,8 @@ import {
           userId: user.id,
           coordinates,
           letter,
-          timestamp: Timestamp.now()
+          timestamp: Timestamp.now(),
+          number: number
         };
     
         await setDoc(moveRef, newMove);

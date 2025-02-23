@@ -17,6 +17,7 @@ interface PrivateLetterGeneratorProps {
     yourTurn: boolean;
     setYourTurn: (turn: boolean) => void;
     blockDimension: number;
+    movesMade: number;
 }
 
 export default function PrivateLetterGenerator({
@@ -29,7 +30,8 @@ export default function PrivateLetterGenerator({
     setSelectedBlock,
     yourTurn,
     setYourTurn,
-    blockDimension
+    blockDimension,
+    movesMade
 }: PrivateLetterGeneratorProps) {
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
@@ -61,6 +63,7 @@ export default function PrivateLetterGenerator({
                     removeIndex={index}
                     selectedBlock={selectedBlock}
                     setSelectedBlock={setSelectedBlock}
+                    movesMade={movesMade}
                 />
             ))}
         </HStack>

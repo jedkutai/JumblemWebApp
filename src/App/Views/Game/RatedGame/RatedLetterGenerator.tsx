@@ -17,6 +17,7 @@ interface RatedLetterGeneratorProps {
     yourTurn: boolean;
     setYourTurn: (turn: boolean) => void;
     blockDimension: number;
+    movesMade: number;
 }
 
 export default function RatedLetterGenerator({
@@ -29,7 +30,8 @@ export default function RatedLetterGenerator({
     setSelectedBlock,
     yourTurn,
     setYourTurn,
-    blockDimension
+    blockDimension,
+    movesMade
 }: RatedLetterGeneratorProps) {
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
@@ -61,6 +63,7 @@ export default function RatedLetterGenerator({
                     removeIndex={index}
                     selectedBlock={selectedBlock}
                     setSelectedBlock={setSelectedBlock}
+                    movesMade={movesMade}
                 />
             ))}
         </HStack>

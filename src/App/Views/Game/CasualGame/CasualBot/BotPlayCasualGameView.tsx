@@ -239,8 +239,8 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
                     const moveDelay = movesCopy.length < 6 ? Math.floor(Math.random() * 3) + 1 : Math.floor(Math.random() * 5);
                     const timeout = setTimeout(async () => {
                         try {
-                            const [resultCoordinates, resultLetter] = await GameFunctions.botMove(botLetterBank, movesCopy, wordBankDict);
-                            await CasualGameService.makeBotMove(user, game, resultCoordinates, resultLetter);
+                            const [resultCoordinates, resultLetter] = await GameFunctions.botMove(botLetterBank, movesCopy, wordBankDict, (movesMade + 1));
+                            await CasualGameService.makeBotMove(user, game, resultCoordinates, resultLetter, (movesMade + 1));
                             const indexToRemove = botLetterBank.indexOf(resultLetter);
                             botLetterBank.splice(indexToRemove, 1);
 

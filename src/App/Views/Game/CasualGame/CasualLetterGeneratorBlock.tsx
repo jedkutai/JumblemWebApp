@@ -17,6 +17,7 @@ interface CasualLetterGeneratorBlockProps {
     removeIndex: number;
     selectedBlock: string;
     setSelectedBlock: (selectedBlock: string) => void;
+    movesMade: number;
 }
 
 export default function CasualLetterGeneratorBlock({
@@ -31,7 +32,8 @@ export default function CasualLetterGeneratorBlock({
     removeIndex,
     selectedBlock,
     setSelectedBlock,
-    letter
+    letter,
+    movesMade
 }: CasualLetterGeneratorBlockProps) {
     const [canSelect, setCanSelect] = useState(true);
 
@@ -42,7 +44,7 @@ export default function CasualLetterGeneratorBlock({
             setCanSelect(false);
             setYourTurn(false);
             try {
-                await CasualGameService.makeMove(user, game, selectedBlock, letter);
+                await CasualGameService.makeMove(user, game, selectedBlock, letter, (movesMade + 1));
                 letters.splice(removeIndex, 1);
 
                 const newLetters = GameFunctions.getLetters(1);

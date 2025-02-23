@@ -17,6 +17,7 @@ interface RatedLetterGeneratorBlockProps {
     removeIndex: number;
     selectedBlock: string;
     setSelectedBlock: (selectedBlock: string) => void;
+    movesMade: number;
 }
 
 export default function RatedLetterGeneratorBlock({
@@ -31,7 +32,8 @@ export default function RatedLetterGeneratorBlock({
     removeIndex,
     selectedBlock,
     setSelectedBlock,
-    letter
+    letter,
+    movesMade
 }: RatedLetterGeneratorBlockProps) {
     const [canSelect, setCanSelect] = useState(true);
 
@@ -42,7 +44,7 @@ export default function RatedLetterGeneratorBlock({
             setCanSelect(false);
             setYourTurn(false);
             try {
-                await RatedGameService.makeMove(user, game, selectedBlock, letter);
+                await RatedGameService.makeMove(user, game, selectedBlock, letter, (movesMade + 1));
                 letters.splice(removeIndex, 1);
 
                 const newLetters = GameFunctions.getLetters(1);

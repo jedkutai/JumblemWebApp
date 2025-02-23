@@ -159,7 +159,8 @@ export class GameFunctions {
   static async botMove(
     letterBank: string[],
     movesCopy: MoveModel[],
-    wordBankDict: Record<string, string[]>
+    wordBankDict: Record<string, string[]>,
+    number: number
   ): Promise<[string, string]> {
     let movesDict = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
     let availableBlocks = this.getAvailableBlocks(movesDict, []);
@@ -177,6 +178,7 @@ export class GameFunctions {
           coordinates: block,
           letter: letter,
           timestamp: Timestamp.now(),
+          number: number
         }
 
         let testMovesDict = { ...movesDict };
@@ -219,7 +221,8 @@ export class GameFunctions {
   static async introBotMove(
     letterBank: string[],
     movesCopy: MoveModel[],
-    wordBankDict: Record<string, string[]>
+    wordBankDict: Record<string, string[]>,
+    number: number
   ): Promise<[string, string]> {
     let movesDict = Object.fromEntries(movesCopy.map((move) => [move.coordinates, move]));
     let availableBlocks = this.getAvailableBlocks(movesDict, []);
@@ -236,6 +239,7 @@ export class GameFunctions {
           coordinates: block,
           letter: letter,
           timestamp: Timestamp.now(),
+          number: number
         }
 
         let testMovesDict = { ...movesDict };

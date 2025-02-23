@@ -46,7 +46,8 @@ export default function VersusCrashCourseLetterGeneratorBlock({
                     userId: user.id,
                     coordinates: selectedBlock,
                     letter: letter,
-                    timestamp: Timestamp.now()
+                    timestamp: Timestamp.now(),
+                    number: (moves.length + 1)
                 }
 
                 let newMoves = [...moves, newMove]

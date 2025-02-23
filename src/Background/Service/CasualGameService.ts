@@ -106,7 +106,7 @@ export class CasualGameService {
     await deleteDoc(doc(db, "newGames", game.id));
   }
 
-  static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string): Promise<void> {
+  static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number): Promise<void> {
     if (coordinates.length > 0 && letter.length > 0) {
       const db = getFirestore();
       const movesRef = doc(collection(db, `newGames/${game.id}/moves`));
@@ -116,7 +116,8 @@ export class CasualGameService {
         userId: user.id,
         coordinates,
         letter,
-        timestamp: Timestamp.now()
+        timestamp: Timestamp.now(),
+        number: number
       };
   
       await setDoc(movesRef, newMove);
@@ -124,7 +125,7 @@ export class CasualGameService {
 
   }
 
-  static async makeBotMove(user: UserModel, game: GameModel, coordinates: string, letter: string): Promise<void> {
+  static async makeBotMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number): Promise<void> {
     const db = getFirestore();
     const movesRef = doc(collection(db, `newGames/${game.id}/moves`));
     const newMove: MoveModel = {
@@ -133,7 +134,8 @@ export class CasualGameService {
       userId: `BOT-${user.id}`,
       coordinates,
       letter,
-      timestamp: Timestamp.now()
+      timestamp: Timestamp.now(),
+      number: number
     };
 
     await setDoc(movesRef, newMove);

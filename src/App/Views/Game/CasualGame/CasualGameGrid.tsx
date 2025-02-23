@@ -20,6 +20,7 @@ interface CasualGameGridProps {
     setYourTurn: (turn: boolean) => void;
     lastMove: MoveModel | undefined;
     movesCopy: MoveModel[];
+    movesMade: number;
 }
 
 export default function CasualGameGrid({
@@ -31,6 +32,7 @@ export default function CasualGameGrid({
     yourTurn,
     setYourTurn,
     lastMove,
+    movesMade
 }: CasualGameGridProps) {
     const { minDimension } = useWindowSize();
     const [grid] = useState<GridSpotModel[][]>(GridSpot.grid);
@@ -84,6 +86,7 @@ export default function CasualGameGrid({
                 yourTurn={yourTurn}
                 setYourTurn={setYourTurn}
                 blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}
+                movesMade={movesMade}
             />
 
             {lastMove == undefined && matchAbortedTime > 10 && (

@@ -17,6 +17,7 @@ interface PrivateGameGrid2Props {
     yourTurn: boolean;
     movesCopy: MoveModel[];
     processComplete: boolean;
+    movesMade: number;
 
     gameOver: boolean;
     wordCheckComplete: boolean;
@@ -32,7 +33,8 @@ export default function PrivateGameGrid2({
     processComplete,
     gameOver,
     wordCheckComplete,
-    matchAbortedTimer
+    matchAbortedTimer,
+    movesMade
 }: PrivateGameGrid2Props) {
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
@@ -87,6 +89,7 @@ export default function PrivateGameGrid2({
                 selectedBlock={selectedBlock}
                 setSelectedBlock={setSelectedBlock}
                 yourTurn={yourTurn}
+                movesMade={movesMade}
             />
 
             {(!gameOver && movesCopy.length == 0 && matchAbortedTimer > 10) && (

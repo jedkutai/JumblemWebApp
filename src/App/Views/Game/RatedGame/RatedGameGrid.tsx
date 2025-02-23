@@ -20,6 +20,7 @@ interface RatedGameGridProps {
     setYourTurn: (turn: boolean) => void;
     lastMove: MoveModel | undefined;
     movesCopy: MoveModel[];
+    movesMade: number;
 }
 
 export default function RatedGameGrid({
@@ -31,6 +32,7 @@ export default function RatedGameGrid({
     yourTurn,
     setYourTurn,
     lastMove,
+    movesMade
 }: RatedGameGridProps) {
     const { minDimension } = useWindowSize();
     const [grid] = useState<GridSpotModel[][]>(GridSpot.grid);
@@ -86,6 +88,7 @@ export default function RatedGameGrid({
                 yourTurn={yourTurn}
                 setYourTurn={setYourTurn}
                 blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}
+                movesMade={movesMade}
             />
 
             {lastMove == undefined && matchAbortedTime > 10 && (

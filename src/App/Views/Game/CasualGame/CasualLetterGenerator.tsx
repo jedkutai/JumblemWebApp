@@ -17,6 +17,7 @@ interface CasualLetterGeneratorProps {
     yourTurn: boolean;
     setYourTurn: (turn: boolean) => void;
     blockDimension: number;
+    movesMade: number;
 }
 
 export default function CasualLetterGenerator({
@@ -29,7 +30,8 @@ export default function CasualLetterGenerator({
     setSelectedBlock,
     yourTurn,
     setYourTurn,
-    blockDimension
+    blockDimension,
+    movesMade
 }: CasualLetterGeneratorProps) {
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
@@ -61,6 +63,7 @@ export default function CasualLetterGenerator({
                     removeIndex={index}
                     selectedBlock={selectedBlock}
                     setSelectedBlock={setSelectedBlock}
+                    movesMade={movesMade}
                 />
             ))}
         </HStack>
