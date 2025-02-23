@@ -155,6 +155,15 @@ export default function MoreRoute() {
 
                 </Box>
 
+                <Box style={styles.section}>
+                    <Typography style={styles.sectionTitle}>SUPPORT</Typography>
+
+                    <Box style={{ display: "flex", justifyContent: "center" }}>
+                        <Button onClick={openDiscord}>
+                            <DiscordIcon />
+                        </Button>
+                    </Box>
+                </Box>
 
                 <Box style={styles.section}>
                     <Typography style={styles.sectionTitle}>DOWNLOAD</Typography>
