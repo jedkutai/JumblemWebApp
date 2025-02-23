@@ -395,6 +395,7 @@ export default function BotPlayCasualGameView({ passedUser, passedGame }: BotPla
                         setYourTurn={setYourTurn}
                         lastMove={moves.length > 0 ? movesCopy[movesCopy.length - 1] : undefined}
                         movesCopy={movesCopy}
+                        movesMade={movesMade}
                     />
 
                     <VSpacer />

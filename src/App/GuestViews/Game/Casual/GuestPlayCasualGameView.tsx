@@ -360,6 +360,7 @@ export default function GuestPlayCasualGameView({ passedUser, passedGame }: Gues
                         setYourTurn={setYourTurn}
                         lastMove={moves.length > 0 ? movesCopy[movesCopy.length - 1] : undefined}
                         movesCopy={movesCopy}
+                        movesMade={movesMade}
                     />
 
                     <VSpacer />

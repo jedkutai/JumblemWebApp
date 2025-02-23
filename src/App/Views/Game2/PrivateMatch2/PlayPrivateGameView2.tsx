@@ -28,7 +28,8 @@ export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPri
         opponentTimeRemaining,
         checkGameOver,
         anchorTime,
-        processComplete
+        processComplete,
+        movesMade
     } = useStandardGameManager2(passedUser, passedGame);
     const { width, height } = useWindowSize();
 
@@ -312,6 +313,7 @@ export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPri
                         gameOver={gameOver}
                         wordCheckComplete={wordCheckComplete}
                         matchAbortedTimer={matchAbortedTimer}
+                        movesMade={movesMade}
                     />
 
                 </VStack>

@@ -163,7 +163,7 @@ export default function VersusCrashCourse() {
                     const moveDelay = 3;
                     const timeout = setTimeout(async () => {
                         try {
-                            const [resultCoordinates, resultLetter] = await GameFunctions.introBotMove(botLetterBank, moves, wordBankDict);
+                            const [resultCoordinates, resultLetter] = await GameFunctions.introBotMove(botLetterBank, moves, wordBankDict, moves.length + 1);
                             const indexToRemove = botLetterBank.indexOf(resultLetter);
                             botLetterBank.splice(indexToRemove, 1);
 
