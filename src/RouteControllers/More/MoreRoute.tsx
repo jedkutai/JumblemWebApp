@@ -5,10 +5,10 @@ import JumblemLogoSimple from "../../App/Components/JumblemLogoSimple";
 import { useNavigate } from "react-router-dom";
 import RedditIcon from "../../App/Components/SiteIcons/RedditIcon";
 import XIcon from "../../App/Components/SiteIcons/XIcon";
-import YoutubeIcon from "../../App/Components/SiteIcons/YoutubeIcon";
 import DiscordIcon from "../../App/Components/SiteIcons/DiscordIcon";
 import InstagramIcon from "../../App/Components/SiteIcons/InstagramIcon";
 import AppStoreIcon from "../../App/Components/SiteIcons/AppStoreIcon";
+import TikTokIcon from "../../App/Components/SiteIcons/TikTokIcon";
 
 export default function MoreRoute() {
     const navigate = useNavigate();
@@ -115,10 +115,6 @@ export default function MoreRoute() {
         window.open("https://www.reddit.com/r/Jumblem/", "_blank");
     }
 
-    function openYoutube() {
-        window.open("https://www.youtube.com/@JumblemOfficial", "_blank");
-    }
-
     function openInstagram() {
         window.open("https://www.instagram.com/jumblemofficial/", "_blank");
     }
@@ -133,6 +129,10 @@ export default function MoreRoute() {
 
     function openAppStore() {
         window.open("https://apps.apple.com/us/app/jumblem/id6737129433", "_blank");
+    }
+
+    function openTikTok() {
+        window.open("https://www.tiktok.com/@jumblemofficial?_t=ZP-8uC8l7OlVBH&_r=1", "_blank");
     }
 
     return (
@@ -178,25 +178,25 @@ export default function MoreRoute() {
                 <Box style={styles.section}>
                     <Typography style={styles.sectionTitle}>CONNECT</Typography>
                     <HStack>
-                        <Button onClick={openReddit}>
-                            <RedditIcon />
-                        </Button>
-
-                        <Button onClick={openX}>
-                            <XIcon />
-                        </Button>
-
-                        <Button onClick={openYoutube}>
-                            <YoutubeIcon />
+                        <Button onClick={openDiscord}>
+                            <DiscordIcon />
                         </Button>
 
                         <Button onClick={openInstagram}>
                             <InstagramIcon />
                         </Button>
 
-                        <Button onClick={openDiscord}>
-                            <DiscordIcon />
+                        <Button onClick={openTikTok}>
+                            <TikTokIcon />
                         </Button>
+                        <Button onClick={openX}>
+                            <XIcon />
+                        </Button>
+
+                        <Button onClick={openReddit}>
+                            <RedditIcon />
+                        </Button>
+                        
                     </HStack>
                 </Box>
             </VStack>
