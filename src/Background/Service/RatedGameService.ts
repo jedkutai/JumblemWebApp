@@ -152,7 +152,7 @@ import {
       if (winningCoordinates.length > 0) updates.winningCoordinates = winningCoordinates;
       if (winningWords.length > 0) updates.winningWords = winningWords;
   
-      await updateDoc(gameRef, updates);
+      
   
       // Update player ratings
       if (game.playerTwoId && game.playerTwoRating !== undefined && game) {
@@ -170,6 +170,9 @@ import {
             ? Rating.win(game.playerTwoRating, game.playerOneRating)
             : Rating.lose(game.playerTwoRating, game.playerOneRating);
   
+        updates.playerOneRatingChange = playerOneChange;
+        updates.playerTwoRatingChange = playerTwoChange;
+
         const playerOne = await FetchService.fetchUserByUid(game.playerOneId);
         const playerTwo = await FetchService.fetchUserByUid(game.playerTwoId);
   
@@ -179,7 +182,13 @@ import {
         await updateDoc(doc(db, "users", playerOne.id), { standardRating: playerOne.standardRating });
         await updateDoc(doc(db, "users", playerTwo.id), { standardRating: playerTwo.standardRating });
       }
+
+      await updateDoc(gameRef, updates);
     }
+
+
+
+
   
     static async moveFinishedGame(game: GameModel): Promise<void> {
       const db = getFirestore();
