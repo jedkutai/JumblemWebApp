@@ -61,7 +61,7 @@ export default function CasualGameOverGrid({
                 </VStack>
 
                 <HStack>
-                    <Button variant="contained" color="error" onClick={() => window.location.reload()}>Leave</Button>
+                    <Button variant="contained" color="primary" onClick={() => window.location.reload()}>Continue</Button>
 
                     <Button onClick={() => setGameState(GameState.intro)}>
                         Replay

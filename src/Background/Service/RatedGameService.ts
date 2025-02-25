@@ -155,7 +155,7 @@ import {
       await updateDoc(gameRef, updates);
   
       // Update player ratings
-      if (game.playerTwoId && game.playerTwoRating !== undefined) {
+      if (game.playerTwoId && game.playerTwoRating !== undefined && game) {
         const playerOneChange =
           result === "draw"
             ? Rating.draw(game.playerOneRating, game.playerTwoRating)
@@ -174,7 +174,7 @@ import {
         const playerTwo = await FetchService.fetchUserByUid(game.playerTwoId);
   
         playerOne.standardRating = Math.max(game.playerOneRating + playerOneChange, 400);
-        playerTwo.standardRating = Math.max(game.playerTwoRatingChange ?? 0 + playerTwoChange, 400);
+        playerTwo.standardRating = Math.max(game.playerTwoRating + playerTwoChange, 400);
   
         await updateDoc(doc(db, "users", playerOne.id), { standardRating: playerOne.standardRating });
         await updateDoc(doc(db, "users", playerTwo.id), { standardRating: playerTwo.standardRating });
