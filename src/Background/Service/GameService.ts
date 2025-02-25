@@ -63,7 +63,7 @@ import {
       const db = getFirestore();
       const movesQuery = query(
         collection(db, `finishedGames/${gameId}/moves`),
-        orderBy("timestamp", "asc")
+        orderBy("number", "asc")
       );
   
       const snapshot = await getDocs(movesQuery);

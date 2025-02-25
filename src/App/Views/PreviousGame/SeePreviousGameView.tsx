@@ -33,8 +33,12 @@ export default function SeePreviousGameView({ previousGame }: SeePreviousGameVie
     const navigate = useNavigate();
 
     useEffect(() => {
-        onAppearActions();
+        onAppearActions1();
     }, []);
+
+    useEffect(() => {
+        onAppearActions2();
+    }, [wordBankDict]);
 
     useEffect(() => {
         onChangeOfCurrentMove();
@@ -53,10 +57,21 @@ export default function SeePreviousGameView({ previousGame }: SeePreviousGameVie
         }
     }
 
-    async function onAppearActions() {
+    async function onAppearActions1() {
         try {
             const wordBank = await WordBankFunctions.getWordBank();
             setWordBankDict(wordBank);
+
+
+        } catch(e) {
+            setMoves(null);
+            setCurrentMove(0);
+            setMaxMoves(0);
+        }
+    }
+
+    async function onAppearActions2() {
+        try {
             if (previousGame.winningWords) {
                 let fetchedWords: WordModel[] = [];
                 for (const word of previousGame.winningWords) {
@@ -73,7 +88,7 @@ export default function SeePreviousGameView({ previousGame }: SeePreviousGameVie
             setCurrentMove(fetchedMoves.length);
 
 
-        } catch {
+        } catch(e) {
             setMoves(null);
             setCurrentMove(0);
             setMaxMoves(0);

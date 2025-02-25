@@ -39,6 +39,8 @@ function SpecificGameRoute() {
                             const fetchedGame = await FetchService.fetchGameById(gameId);
                             if (fetchedGame.winner !== "aborted") {
                                 setSpecificGame(fetchedGame);
+                            } else {
+                                navigate("/home");
                             }
                         }
                         setUser(fetchedUser);
@@ -72,9 +74,8 @@ function SpecificGameRoute() {
                     <View>
                         <Typography>Game not found.</Typography>
                     </View>
-                )
+                );
             }
-            break;
 
     }
 }
