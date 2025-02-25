@@ -155,32 +155,34 @@ import {
       
   
       // Update player ratings
-      if (game.playerTwoId && game.playerTwoRating !== undefined && game) {
-        const playerOneChange =
-          result === "draw"
-            ? Rating.draw(game.playerOneRating, game.playerTwoRating)
-            : result === game.playerOneId
-            ? Rating.win(game.playerOneRating, game.playerTwoRating)
-            : Rating.lose(game.playerOneRating, game.playerTwoRating);
+      if (result != "aborted") {
+        if (game.playerTwoId && game.playerTwoRating !== undefined && game) {
+          const playerOneChange =
+            result === "draw"
+              ? Rating.draw(game.playerOneRating, game.playerTwoRating)
+              : result === game.playerOneId
+              ? Rating.win(game.playerOneRating, game.playerTwoRating)
+              : Rating.lose(game.playerOneRating, game.playerTwoRating);
+    
+          const playerTwoChange =
+            result === "draw"
+              ? Rating.draw(game.playerTwoRating, game.playerOneRating)
+              : result === game.playerTwoId
+              ? Rating.win(game.playerTwoRating, game.playerOneRating)
+              : Rating.lose(game.playerTwoRating, game.playerOneRating);
+    
+          updates.playerOneRatingChange = playerOneChange;
+          updates.playerTwoRatingChange = playerTwoChange;
   
-        const playerTwoChange =
-          result === "draw"
-            ? Rating.draw(game.playerTwoRating, game.playerOneRating)
-            : result === game.playerTwoId
-            ? Rating.win(game.playerTwoRating, game.playerOneRating)
-            : Rating.lose(game.playerTwoRating, game.playerOneRating);
-  
-        updates.playerOneRatingChange = playerOneChange;
-        updates.playerTwoRatingChange = playerTwoChange;
-
-        const playerOne = await FetchService.fetchUserByUid(game.playerOneId);
-        const playerTwo = await FetchService.fetchUserByUid(game.playerTwoId);
-  
-        playerOne.standardRating = Math.max(game.playerOneRating + playerOneChange, 400);
-        playerTwo.standardRating = Math.max(game.playerTwoRating + playerTwoChange, 400);
-  
-        await updateDoc(doc(db, "users", playerOne.id), { standardRating: playerOne.standardRating });
-        await updateDoc(doc(db, "users", playerTwo.id), { standardRating: playerTwo.standardRating });
+          const playerOne = await FetchService.fetchUserByUid(game.playerOneId);
+          const playerTwo = await FetchService.fetchUserByUid(game.playerTwoId);
+    
+          playerOne.standardRating = Math.max(game.playerOneRating + playerOneChange, 400);
+          playerTwo.standardRating = Math.max(game.playerTwoRating + playerTwoChange, 400);
+    
+          await updateDoc(doc(db, "users", playerOne.id), { standardRating: playerOne.standardRating });
+          await updateDoc(doc(db, "users", playerTwo.id), { standardRating: playerTwo.standardRating });
+        }
       }
 
       await updateDoc(gameRef, updates);
