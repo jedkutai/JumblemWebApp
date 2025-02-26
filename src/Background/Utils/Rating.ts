@@ -10,7 +10,7 @@ export class Rating {
     static bonus(opponentRating: number, yourRating: number): number {
       const percentage = (opponentRating - yourRating) / yourRating;
       const yourBonus = percentage * Rating.bonusConstant;
-      return Math.round(yourBonus); // Convert to integer
+      return Math.floor(yourBonus); // Convert to integer
     }
   
     /**

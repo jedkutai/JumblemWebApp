@@ -157,14 +157,14 @@ import {
       // Update player ratings
       if (result != "aborted") {
         if (game.playerTwoId && game.playerTwoRating !== undefined && game) {
-          const playerOneChange =
+          const playerTwoChange =
             result === "draw"
               ? Rating.draw(game.playerOneRating, game.playerTwoRating)
               : result === game.playerOneId
               ? Rating.win(game.playerOneRating, game.playerTwoRating)
               : Rating.lose(game.playerOneRating, game.playerTwoRating);
     
-          const playerTwoChange =
+          const playerOneChange =
             result === "draw"
               ? Rating.draw(game.playerTwoRating, game.playerOneRating)
               : result === game.playerTwoId
