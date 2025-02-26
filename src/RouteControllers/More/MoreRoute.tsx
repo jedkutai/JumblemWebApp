@@ -128,7 +128,7 @@ export default function MoreRoute() {
     }
 
     function openAppStore() {
-        window.open("https://apps.apple.com/us/app/jumblem/id6737129433", "_blank");
+        window.open("https://apps.apple.com/us/app/jumblem/id6741139222", "_blank");
     }
 
     function openTikTok() {
