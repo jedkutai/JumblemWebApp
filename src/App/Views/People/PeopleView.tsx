@@ -24,6 +24,16 @@ export default function PeopleView({ passedUser }: PeopleViewProps) {
     const navigate = useNavigate();
     const { height } = useWindowSize();
 
+    const style = {
+        button: {
+            margin: "10px",
+            flex: 1,
+            backgroundColor: "rgb(227, 218, 195)",
+            color: "black",
+            fontWeight: 600,
+        },
+    }
+
     useEffect(() => {
         onAppearActions();
     }, []);
@@ -70,10 +80,12 @@ export default function PeopleView({ passedUser }: PeopleViewProps) {
                                 }}
                             ></div>
                         )}
-                        <Button variant="text" color="primary" onClick={() => navigate("/findpeople")}>
+                        {/* <Button variant="text" color="primary" onClick={() => navigate("/findpeople")}>
+                            {followedUsers.length === 0 ? "Find People" : "Find More People"}
+                        </Button> */}
+                        <Button variant="contained" style={style.button} onClick={() => navigate("/findpeople")}>
                             {followedUsers.length === 0 ? "Find People" : "Find More People"}
                         </Button>
-
 
                         {followedUsers.map((user, index) => (
                             <HStack key={index}>

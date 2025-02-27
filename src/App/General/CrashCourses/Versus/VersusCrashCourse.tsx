@@ -217,11 +217,11 @@ export default function VersusCrashCourse() {
 
                     {gameState == GameState.howTo && (
                         <>
-                            <Button onClick={() => setGameState(GameState.active)}>
+                            <Button variant="contained" style={style.button} onClick={() => setGameState(GameState.active)}>
                                 Next
                             </Button>
                             <HowToPLayVersus />
-                            <Button onClick={() => setGameState(GameState.active)}>
+                            <Button variant="contained" style={style.button} onClick={() => setGameState(GameState.active)}>
                                 Next
                             </Button>
                         </>

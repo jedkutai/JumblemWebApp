@@ -23,6 +23,23 @@ export default function HowToPLayVersus() {
     const dimensionDivider = 9 * 1.75;
     const upperBound = 650;
     const navigate = useNavigate();
+
+    const style = {
+        buttonBlack: {
+            margin: "10px",
+            flex: 1,
+            backgroundColor: "rgb(227, 218, 195)",
+            color: "black",
+            fontWeight: 600,
+        },
+        buttonGray: {
+            margin: "10px",
+            flex: 1,
+            backgroundColor: "rgb(227, 218, 195)",
+            color: "gray",
+            fontWeight: 600,
+        },
+    }
     return (
         <View startAtTop={true}>
             <VStack width={`${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px`}>
@@ -50,25 +67,29 @@ export default function HowToPLayVersus() {
 
                 <HStack>
                     <Button
-                        style={{ color: exampleGridShown == ExampleGridShown.example1 ? "black" : "gray" }}
+                        variant="contained"
+                        style={exampleGridShown == ExampleGridShown.example1 ? style.buttonBlack : style.buttonGray}
                         onClick={() => setExampleGridShown(ExampleGridShown.example1)}
                     >
                         #1
                     </Button>
                     <Button
-                        style={{ color: exampleGridShown == ExampleGridShown.example2 ? "black" : "gray" }}
+                        variant="contained"
+                        style={exampleGridShown == ExampleGridShown.example2 ? style.buttonBlack : style.buttonGray}
                         onClick={() => setExampleGridShown(ExampleGridShown.example2)}
                     >
                         #2
                     </Button>
                     <Button
-                        style={{ color: exampleGridShown == ExampleGridShown.example3 ? "black" : "gray" }}
+                        variant="contained"
+                        style={exampleGridShown == ExampleGridShown.example3 ? style.buttonBlack : style.buttonGray}
                         onClick={() => setExampleGridShown(ExampleGridShown.example3)}
                     >
                         #3
                     </Button>
                     <Button
-                        style={{ color: exampleGridShown == ExampleGridShown.example4 ? "black" : "gray" }}
+                        variant="contained"
+                        style={exampleGridShown == ExampleGridShown.example4 ? style.buttonBlack : style.buttonGray}
                         onClick={() => setExampleGridShown(ExampleGridShown.example4)}
                     >
                         #4
@@ -103,6 +124,6 @@ export default function HowToPLayVersus() {
                     ]}
                 />
             </VStack>
-        </View>
+        </View >
     );
 }

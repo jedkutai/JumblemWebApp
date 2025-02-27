@@ -224,13 +224,13 @@ export default function DailyPuzzleCrashCourse2() {
                 )}
                 {puzzleState == PuzzleState.howTo && (
                     <>
-                        <Button onClick={() => setPuzzleState(PuzzleState.active)}>
+                        <Button variant="contained" style={style.button} onClick={() => setPuzzleState(PuzzleState.active)}>
                             Next
                         </Button>
 
                         <HowToPlayDailyPuzzle />
 
-                        <Button onClick={() => setPuzzleState(PuzzleState.active)}>
+                        <Button variant="contained" style={style.button} onClick={() => setPuzzleState(PuzzleState.active)}>
                             Next
                         </Button>
                     </>

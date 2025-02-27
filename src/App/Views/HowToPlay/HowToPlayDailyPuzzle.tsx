@@ -16,11 +16,29 @@ enum ExampleGridShown {
 }
 
 export default function HowToPlayDailyPuzzle() {
-    const [exampleGridShown, setExampleGridShown] = useState<ExampleGridShown>(ExampleGridShown.puzzle)
+    const [exampleGridShown, setExampleGridShown] = useState<ExampleGridShown>(ExampleGridShown.puzzle);
     const { minDimension } = useWindowSize();
     const navigate = useNavigate();
     const dimensionDivider = 9 * 1.75;
     const upperBound = 650;
+
+    const styles = {
+        buttonBlack: {
+            margin: "10px",
+            flex: 1,
+            backgroundColor: "rgb(227, 218, 195)",
+            color: "black",
+            fontWeight: 600,
+        },
+        buttonGray: {
+            margin: "10px",
+            flex: 1,
+            backgroundColor: "rgb(227, 218, 195)",
+            color: "gray",
+            fontWeight: 600,
+        },
+    }
+
     return (
         <View startAtTop={true}>
             <VStack width={`${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px`}>
@@ -31,7 +49,7 @@ export default function HowToPlayDailyPuzzle() {
                 <Typography variant="h5" style={{ color: "black", fontWeight: "bold" }}>
                     {"Daily Puzzle".toUpperCase()}
                 </Typography>
-                
+
                 <HowToPLaySection
                     title="Objective"
                     descriptions={["Create as many words as possible by placing one letter on the board at a time."]}
@@ -49,19 +67,22 @@ export default function HowToPlayDailyPuzzle() {
 
                 <HStack>
                     <Button
-                        style={{ color: exampleGridShown == ExampleGridShown.puzzle ? "black" : "gray" }}
+                        variant="contained"
+                        style={exampleGridShown == ExampleGridShown.puzzle ? styles.buttonBlack : styles.buttonGray}
                         onClick={() => setExampleGridShown(ExampleGridShown.puzzle)}
                     >
                         Puzzle
                     </Button>
                     <Button
-                        style={{ color: exampleGridShown == ExampleGridShown.solution1 ? "black" : "gray" }}
+                        variant="contained"
+                        style={exampleGridShown == ExampleGridShown.solution1 ? styles.buttonBlack : styles.buttonGray}
                         onClick={() => setExampleGridShown(ExampleGridShown.solution1)}
                     >
                         Solution 1
                     </Button>
                     <Button
-                        style={{ color: exampleGridShown == ExampleGridShown.solution2 ? "black" : "gray" }}
+                        variant="contained"
+                        style={exampleGridShown == ExampleGridShown.solution2 ? styles.buttonBlack : styles.buttonGray}
                         onClick={() => setExampleGridShown(ExampleGridShown.solution2)}
                     >
                         Solution 2
