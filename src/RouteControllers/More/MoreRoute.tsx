@@ -120,7 +120,7 @@ export default function MoreRoute() {
     }
 
     function openDiscord() {
-        window.open("https://discord.gg/bpG4AJRu", "_blank");
+        window.open("https://discord.gg/bGzAvc89", "_blank");
     }
 
     function openX() {
