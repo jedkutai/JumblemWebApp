@@ -239,7 +239,10 @@ export default function BotPlayCasualGameView2({ passedUser, passedGame }: BotPl
     }, [userTimeExpired]);
 
     useEffect(() => {
-        if (wordCheckComplete && processComplete && !yourTurn && !gameOver) {
+        // if (wordCheckComplete && processComplete && !yourTurn && !gameOver) {
+        //     botMove();
+        // }
+        if (wordCheckComplete && !yourTurn && !gameOver) {
             botMove();
         }
     }, [wordCheckComplete]);
