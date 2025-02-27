@@ -1,29 +1,27 @@
-import ContentView from './ContentView';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import HomeRoute from './RouteControllers/Root/HomeRoute';
-import CasualGameRoute from './RouteControllers/Versus/CasualGameRoute';
-import LoginRoute from './RouteControllers/Login/LoginRoute';
-import CreateAccountRoute from './RouteControllers/Login/CreateAccountRoute';
-import RatedGameRoute from './RouteControllers/Versus/RatedGameRoute';
-import PrivateGameRoute from './RouteControllers/Versus/PrivateGameRoute';
-import DailyPuzzleRoute from './RouteControllers/Training/DailyPuzzleRoute';
-import ProfileRoute from './RouteControllers/Root/ProfileRoute';
-import PeopleRoute from './RouteControllers/More/PeopleRoute';
-import FindPeopleRoute from './RouteControllers/More/FindPeopleRoute';
-import SpecificPlayerRoute from './RouteControllers/OpenSpecific/SpecificPlayerRoute';
-import SpecificGameRoute from './RouteControllers/OpenSpecific/SpecificGameRoute';
-import SpecificWordRoute from './RouteControllers/OpenSpecific/SpecificWordRoute';
-import SettingsRoute from './RouteControllers/Settings/SettingsRoute';
-import MoreRoute from './RouteControllers/More/MoreRoute';
 import PageNotFoundView from './App/Components/PageNotFoundView';
-import DeleteAccountRoute from './RouteControllers/Settings/DeleteAccountRoute';
-import ChangeUsernameRoute from './RouteControllers/Settings/ChangeUsernameRoute';
-// import HowToPlayDailyPuzzle from './App/Views/HowToPlay/HowToPlayDailyPuzzle';
-// import HowToPLayVersus from './App/Views/HowToPlay/HowToPlayVersus';
-import TermsAndConditions from './App/General/TermsAndConditions';
+import DailyPuzzleCrashCourse2 from './App/General/CrashCourses/DailyPuzzle/DailyPuzzleCrashCourse2';
+import VersusCrashCourse2 from './App/General/CrashCourses/Versus/VersusCrashCourse2';
 import PrivacyPolicy from './App/General/PrivacyPolicy';
-import DailyPuzzleCrashCourse from './App/General/CrashCourses/DailyPuzzle/DailyPuzzleCrashCourse';
-import VersusCrashCourse from './App/General/CrashCourses/Versus/VersusCrashCourse';
+import TermsAndConditions from './App/General/TermsAndConditions';
+import ContentView from './ContentView';
+import CreateAccountRoute from './RouteControllers/Login/CreateAccountRoute';
+import LoginRoute from './RouteControllers/Login/LoginRoute';
+import FindPeopleRoute from './RouteControllers/More/FindPeopleRoute';
+import MoreRoute from './RouteControllers/More/MoreRoute';
+import PeopleRoute from './RouteControllers/More/PeopleRoute';
+import SpecificGameRoute from './RouteControllers/OpenSpecific/SpecificGameRoute';
+import SpecificPlayerRoute from './RouteControllers/OpenSpecific/SpecificPlayerRoute';
+import SpecificWordRoute from './RouteControllers/OpenSpecific/SpecificWordRoute';
+import HomeRoute from './RouteControllers/Root/HomeRoute';
+import ProfileRoute from './RouteControllers/Root/ProfileRoute';
+import ChangeUsernameRoute from './RouteControllers/Settings/ChangeUsernameRoute';
+import DeleteAccountRoute from './RouteControllers/Settings/DeleteAccountRoute';
+import SettingsRoute from './RouteControllers/Settings/SettingsRoute';
+import DailyPuzzleRoute from './RouteControllers/Training/DailyPuzzleRoute';
+import CasualGameRoute from './RouteControllers/Versus/CasualGameRoute';
+import PrivateGameRoute from './RouteControllers/Versus/PrivateGameRoute';
+import RatedGameRoute from './RouteControllers/Versus/RatedGameRoute';
 
 
 function App() {
@@ -49,10 +47,8 @@ function App() {
         <Route path="/dailypuzzle" element={<DailyPuzzleRoute/>}/>
 
         // How to
-        {/* <Route path="howto/dailypuzzle" element={<HowToPlayDailyPuzzle/>}/>
-        <Route path="howto/versus" element={<HowToPLayVersus/>}/> */}
-        <Route path="howto/dailypuzzle" element={<DailyPuzzleCrashCourse/>}/>
-        <Route path="howto/versus" element={<VersusCrashCourse/>}/>
+        <Route path="howto/dailypuzzle" element={<DailyPuzzleCrashCourse2/>}/>
+        <Route path="howto/versus" element={<VersusCrashCourse2/>}/>
 
         // more
         <Route path="/people" element={<PeopleRoute/>}/>

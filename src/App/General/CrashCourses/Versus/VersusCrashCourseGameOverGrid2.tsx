@@ -7,6 +7,7 @@ import { HStack, VStack } from "../../../../ReactSwiftly";
 import { ColoredWord } from "../../../Components";
 import WordRarityBar from "../../../Components/WordRarityBar";
 import CasualGameOverRow from "../../../Views/Game2/CasualGame2/CasualGameOverRow";
+import { useNavigate } from "react-router-dom";
 
 enum GameState {
     intro,
@@ -17,7 +18,7 @@ enum GameState {
     botWins
 }
 
-interface VersusCrashCourseGameOverGrid {
+interface VersusCrashCourseGameOverGrid2 {
     movesDict: Record<string, MoveModel>;
     winningWords: WordModel[];
     winningGridSpots: string[];
@@ -25,18 +26,19 @@ interface VersusCrashCourseGameOverGrid {
     setGameState: (newState: GameState) => void;
 }
 
-export default function VersusCrashCourseGameOverGrid({
+export default function VersusCrashCourseGameOverGrid2({
     movesDict,
     winningWords,
     winningGridSpots,
     gameState,
     setGameState
-}: VersusCrashCourseGameOverGrid) {
+}: VersusCrashCourseGameOverGrid2) {
     const [grid] = useState<GridSpotModel[][]>(GridSpot.grid);
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
     const upperBound = 650;
+
     // finalGame stuff to show the result (win loss draw ect)
     return (
         <VStack>
@@ -61,7 +63,7 @@ export default function VersusCrashCourseGameOverGrid({
                 </VStack>
 
                 <HStack>
-                    <Button variant="contained" color="primary" onClick={() => window.location.reload()}>Continue</Button>
+                    <Button variant="contained" color="primary" onClick={() => navigate("/home")}>Continue</Button>
 
                     <Button onClick={() => setGameState(GameState.intro)}>
                         Replay
