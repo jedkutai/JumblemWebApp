@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { ColoredWord } from "../../Components";
 import WordRarityBar from "../../Components/WordRarityBar";
 import { WordBankFunctions } from "../../../Background/Utils/WordBankFunctions";
+import PreviousGameLetterBank from "./PreviousGameLetterBank";
 
 interface SeePreviousGameViewProps {
     previousGame: GameModel;
@@ -23,7 +24,6 @@ export default function SeePreviousGameView({ previousGame }: SeePreviousGameVie
     const [lastMovePlayerId, setLastMovePlayerId] = useState("");
     const [moves, setMoves] = useState<MoveModel[] | null>(null);
     const [movesDict, setMovesDict] = useState<Record<string, MoveModel>>({});
-    // const [showWinningWords, setShowWinningWords] = useState(false);
     const [winningWords, setWinningWords] = useState<WordModel[]>([]);
     const [currentMove, setCurrentMove] = useState(49);
     const [maxMoves, setMaxMoves] = useState(49);
@@ -166,6 +166,8 @@ export default function SeePreviousGameView({ previousGame }: SeePreviousGameVie
                                 movesDict={movesDict}
                                 maxMoves={maxMoves}
                             />
+
+                            <PreviousGameLetterBank lastMove={moves[currentMove -1]} blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}/>
 
                             <HStack width={`${(Math.max(minDimension, upperBound) * 8 / dimensionDivider) + 200}px`}>
 

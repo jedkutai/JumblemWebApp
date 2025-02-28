@@ -19,7 +19,6 @@ export default function PreviousGameBlock({
 }: PreviousGameBlockProps) {
     const partOfWord = move ? movesCount === maxMoves && winningGridSpots.includes(move.coordinates) : false;
 
-
     return (
         <>
             {move ? (
