@@ -5,7 +5,7 @@ import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
 import { WordBankFunctions } from "../../../../Background/Utils/WordBankFunctions";
 import { PrivateGameService } from "../../../../Background/Service";
 import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
-import RematchController from "../../Game/PrivateMatch/PrivateRematch/RematchController";
+import RematchController from "./PrivateRematch/RematchController";
 import { View, VStack } from "../../../../ReactSwiftly";
 import HowToPlayHeader from "../../../Components/HowToPlayHeader";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
