@@ -42,7 +42,7 @@ import { GameService } from "./GameService";
   
     }
     
-    static async makeBotMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number): Promise<void> {
+    static async makeBotMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[]): Promise<void> {
       const db = getFirestore();
       const movesRef = doc(collection(db, `newGames/${game.id}/moves`));
       const newMove: MoveModel = {
@@ -52,7 +52,8 @@ import { GameService } from "./GameService";
         coordinates,
         letter,
         timestamp: Timestamp.now(),
-        number: number
+        number: number,
+        letterBank: letterBank.sort()
 
       };
   
@@ -163,7 +164,7 @@ import { GameService } from "./GameService";
       await deleteDoc(doc(db, "newGames", game.id));
     }
   
-    static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number): Promise<void> {
+    static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[]): Promise<void> {
       if (coordinates.length > 0 && letter.length > 0) {
         const db = getFirestore();
         const moveRef = doc(collection(db, `newGames/${game.id}/moves`));
@@ -175,7 +176,8 @@ import { GameService } from "./GameService";
           coordinates,
           letter,
           timestamp: Timestamp.now(),
-          number: number
+          number: number,
+          letterBank: letterBank.sort()
         };
     
         await setDoc(moveRef, newMove);

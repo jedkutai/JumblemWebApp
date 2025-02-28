@@ -172,7 +172,8 @@ export class GameFunctions {
           coordinates: block,
           letter: letter,
           timestamp: Timestamp.now(),
-          number: number
+          number: number,
+          letterBank: letterBank.sort()
         }
 
         let testMovesDict = { ...movesDict };
@@ -233,7 +234,8 @@ export class GameFunctions {
           coordinates: block,
           letter: letter,
           timestamp: Timestamp.now(),
-          number: number
+          number: number,
+          letterBank: letterBank.sort()
         }
 
         let testMovesDict = { ...movesDict };

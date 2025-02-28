@@ -104,11 +104,12 @@ export default function BotPlayCasualGameView2({ passedUser, passedGame }: BotPl
         if (wordCheckComplete) {
             if (!gameOver) {
                 if (!yourTurn) {
+                    const letterBank = botLetterBank;
                     const moveDelay = movesCopy.length < 6 ? Math.floor(Math.random() * 3) : Math.floor(Math.random() * 5);
                     const timeout = setTimeout(async () => {
                         try {
                             const [resultCoordinates, resultLetter] = await GameFunctions.botMove(botLetterBank, movesDict, wordBankDict, (movesMade + 1));
-                            await CasualGameService.makeBotMove(user, game, resultCoordinates, resultLetter, (movesMade + 1));
+                            await CasualGameService.makeBotMove(user, game, resultCoordinates, resultLetter, (movesMade + 1), letterBank);
                             const indexToRemove = botLetterBank.indexOf(resultLetter);
                             botLetterBank.splice(indexToRemove, 1);
 

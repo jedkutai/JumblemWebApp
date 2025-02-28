@@ -8,4 +8,5 @@ export interface MoveModel {
     letter: string;        // Letter played in the move
     number: number;
     timestamp: Timestamp; // Timestamp of when the move was made (optional for default initialization)
+    letterBank: string[];
 }

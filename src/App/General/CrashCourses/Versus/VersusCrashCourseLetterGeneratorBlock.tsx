@@ -40,6 +40,7 @@ export default function VersusCrashCourseLetterGeneratorBlock({
         if (yourTurn && wordCheckComplete) {
             setCanSelect(false);
             try {
+                const letterBank = letters;
                 const newMove: MoveModel = {
                     id: `${moves.length}`,
                     gameId: "bootCamp",
@@ -47,7 +48,8 @@ export default function VersusCrashCourseLetterGeneratorBlock({
                     coordinates: selectedBlock,
                     letter: letter,
                     timestamp: Timestamp.now(),
-                    number: (moves.length + 1)
+                    number: (moves.length + 1),
+                    letterBank: letterBank.sort()
                 }
 
                 let newMoves = [...moves, newMove]

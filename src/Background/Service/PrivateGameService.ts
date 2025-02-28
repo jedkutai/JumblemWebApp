@@ -171,7 +171,7 @@ export class PrivateGameService {
     await deleteDoc(doc(db, "newGames", game.id));
   }
 
-  static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number): Promise<void> {
+  static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[]): Promise<void> {
     if (coordinates.length > 0 && letter.length > 0) {
       const db = getFirestore();
       const moveRef = doc(collection(db, `newGames/${game.id}/moves`));
@@ -183,7 +183,8 @@ export class PrivateGameService {
         coordinates,
         letter,
         timestamp: Timestamp.now(),
-        number: number
+        number: number,
+        letterBank: letterBank.sort()
       };
   
       await setDoc(moveRef, newMove);

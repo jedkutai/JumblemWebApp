@@ -48,9 +48,10 @@ export default function PrivateLetterGenerator2({
 
     async function bustAMove(letter: string, removeIndex: number) {
         if (yourTurn && wordCheckComplete) {
+            const letterBank = letters;
             try {
                 setCanSelect(false);
-                await PrivateGameService.makeMove(user, game, selectedBlock, letter, (movesMade + 1));
+                await PrivateGameService.makeMove(user, game, selectedBlock, letter, (movesMade + 1), letterBank);
                 letters.splice(removeIndex, 1);
 
                 const newLetters = GameFunctions.getLetters(1);

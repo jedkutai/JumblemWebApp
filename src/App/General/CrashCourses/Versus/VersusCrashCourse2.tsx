@@ -163,6 +163,7 @@ export default function VersusCrashCourse2() {
                     const moveDelay = 3;
                     const timeout = setTimeout(async () => {
                         try {
+                            const botLetterBank2 = botLetterBank;
                             const [resultCoordinates, resultLetter] = await GameFunctions.introBotMove(botLetterBank, moves, wordBankDict, moves.length + 1);
                             const indexToRemove = botLetterBank.indexOf(resultLetter);
                             botLetterBank.splice(indexToRemove, 1);
@@ -179,7 +180,8 @@ export default function VersusCrashCourse2() {
                                 coordinates: resultCoordinates,
                                 letter: resultLetter,
                                 timestamp: Timestamp.now(),
-                                number: (moves.length + 1)
+                                number: (moves.length + 1),
+                                letterBank: botLetterBank2.sort()
                             }
 
                             let newMoves = [...moves, newMove]

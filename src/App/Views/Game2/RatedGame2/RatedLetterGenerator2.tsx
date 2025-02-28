@@ -51,8 +51,9 @@ export default function RatedLetterGenerator2({
     async function bustAMove(letter: string, removeIndex: number) {
         if (yourTurn && wordCheckComplete) {
             try {
+                const letterBank = letters;
                 setCanSelect(false);
-                await RatedGameService.makeMove(user, game, selectedBlock, letter, (movesMade + 1));
+                await RatedGameService.makeMove(user, game, selectedBlock, letter, (movesMade + 1), letterBank);
                 letters.splice(removeIndex, 1);
 
                 const newLetters = GameFunctions.getLetters(1);
