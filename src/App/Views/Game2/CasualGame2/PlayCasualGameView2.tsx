@@ -11,6 +11,7 @@ import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import CasualGameHeader2 from "./CasualGameHeader2";
 import CasualGameGrid2 from "./CasualGameGrid2";
 import CasualGameOverGrid2 from "./CasualGameOverGrid2";
+import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
 
 interface PlayCasualGameView2Props {
     passedUser: UserModel;
@@ -30,7 +31,7 @@ export default function PlayCasualGameView2({ passedUser, passedGame }: PlayCasu
         movesMade
     } = useStandardGameManager2(passedUser, passedGame);
     const { width, height } = useWindowSize();
-
+    const [timeOffset, setTimeOffset] = useState(0);
     const user: UserModel = passedUser;
     const game: GameModel = passedGame;
     const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
@@ -47,6 +48,7 @@ export default function PlayCasualGameView2({ passedUser, passedGame }: PlayCasu
     const [matchAbortedTicker, setMatchAbortedTicker] = useState(false);
 
     async function onAppearActions() {
+        const internetTimeOffest = await ClockFunctions.getTimeOffset();
         const wordBank = await WordBankFunctions.getWordBank();
         setWordBankDict(wordBank);
     }

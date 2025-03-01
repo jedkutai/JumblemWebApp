@@ -3,7 +3,6 @@ import { UserModel } from "../Models/UserModel";
 import { GameModel } from "../Models/GameModel";
 import { MoveModel } from "../Models/MoveModel";
 import { GameService } from "./GameService";
-import { ClockFunctions } from "../Utils/ClockFunctions";
 
 export class CasualGameService {
   static async botJoinMatch(user: UserModel, game: GameModel): Promise<void> {
@@ -108,46 +107,22 @@ export class CasualGameService {
   }
 
   static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[]): Promise<void> {
-    
-    
-    try {
-      const internetTime = await ClockFunctions.getInternetTime();
-
-      if (coordinates.length > 0 && letter.length > 0 && internetTime) {
-        const db = getFirestore();
-        const movesRef = doc(collection(db, `newGames/${game.id}/moves`));
-        const newMove: MoveModel = {
-          id: movesRef.id,
-          gameId: game.id,
-          userId: user.id,
-          coordinates,
-          letter,
-          timestamp: Timestamp.fromDate(internetTime),
-          number: number,
-          letterBank: letterBank.sort()
-        };
-    
-        await setDoc(movesRef, newMove);
-      }
-    } catch {
-
-    }
-    // if (coordinates.length > 0 && letter.length > 0) {
-    //   const db = getFirestore();
-    //   const movesRef = doc(collection(db, `newGames/${game.id}/moves`));
-    //   const newMove: MoveModel = {
-    //     id: movesRef.id,
-    //     gameId: game.id,
-    //     userId: user.id,
-    //     coordinates,
-    //     letter,
-    //     timestamp: Timestamp.now(),
-    //     number: number,
-    //     letterBank: letterBank.sort()
-    //   };
+    if (coordinates.length > 0 && letter.length > 0) {
+      const db = getFirestore();
+      const movesRef = doc(collection(db, `newGames/${game.id}/moves`));
+      const newMove: MoveModel = {
+        id: movesRef.id,
+        gameId: game.id,
+        userId: user.id,
+        coordinates,
+        letter,
+        timestamp: Timestamp.now(),
+        number: number,
+        letterBank: letterBank.sort()
+      };
   
-    //   await setDoc(movesRef, newMove);
-    // }
+      await setDoc(movesRef, newMove);
+    }
 
   }
 
