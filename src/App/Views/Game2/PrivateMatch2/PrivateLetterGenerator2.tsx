@@ -42,7 +42,6 @@ export default function PrivateLetterGenerator2({
     useEffect(() => {
         const temp = GameFunctions.getLetters(7);
         temp.sort();
-        // console.log(`Letters: ${letters}`);
         setLetters(temp);
     }, []);
 

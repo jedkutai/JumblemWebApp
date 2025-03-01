@@ -12,6 +12,7 @@ import {
     updateDoc,
     deleteDoc,
     Timestamp,
+    serverTimestamp,
   } from "firebase/firestore";
   import { getAuth, signInAnonymously } from "firebase/auth";
   import { UserModel } from "../Models/UserModel";
@@ -51,7 +52,8 @@ import { GameService } from "./GameService";
         userId: `BOT-${user.id}`,
         coordinates,
         letter,
-        timestamp: Timestamp.now(),
+        timestamp: serverTimestamp(),
+        // timestamp: Timestamp.now(),
         number: number,
         letterBank: letterBank.sort()
 
@@ -175,7 +177,8 @@ import { GameService } from "./GameService";
           userId: user.id,
           coordinates,
           letter,
-          timestamp: Timestamp.now(),
+          timestamp: serverTimestamp(),
+          // timestamp: Timestamp.now(),
           number: number,
           letterBank: letterBank.sort()
         };

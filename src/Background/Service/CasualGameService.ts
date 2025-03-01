@@ -1,4 +1,4 @@
-import { getFirestore, collection, doc, getDocs, setDoc, deleteDoc, query, where, orderBy, limit, updateDoc, Timestamp, getDoc } from "firebase/firestore";
+import { getFirestore, collection, doc, getDocs, setDoc, deleteDoc, query, where, orderBy, limit, updateDoc, Timestamp, getDoc, serverTimestamp } from "firebase/firestore";
 import { UserModel } from "../Models/UserModel";
 import { GameModel } from "../Models/GameModel";
 import { MoveModel } from "../Models/MoveModel";
@@ -107,6 +107,7 @@ export class CasualGameService {
   }
 
   static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[]): Promise<void> {
+    
     if (coordinates.length > 0 && letter.length > 0) {
       const db = getFirestore();
       const movesRef = doc(collection(db, `newGames/${game.id}/moves`));
@@ -116,7 +117,8 @@ export class CasualGameService {
         userId: user.id,
         coordinates,
         letter,
-        timestamp: Timestamp.now(),
+        timestamp: serverTimestamp(),
+        // timestamp: Timestamp.now(),
         number: number,
         letterBank: letterBank.sort()
       };
@@ -135,7 +137,8 @@ export class CasualGameService {
       userId: `BOT-${user.id}`,
       coordinates,
       letter,
-      timestamp: Timestamp.now(),
+      timestamp: serverTimestamp(),
+      // timestamp: Timestamp.now(),
       number: number,
       letterBank: letterBank.sort()
     };

@@ -12,7 +12,6 @@ export class ClockFunctions {
         const lastMoveTime = (previousMove.timestamp as Timestamp).toDate();
         const currentMoveTime = (currentMove.timestamp as Timestamp).toDate();
         const timeSinceLastMove = (currentMoveTime.getTime() - lastMoveTime.getTime()) / 1000; // Convert to seconds
-        console.log(`Time since last move: ${timeSinceLastMove}`);
         if (currentMove.userId === userId) {
           // Deduct from your time
           yourTimeRemaining -= timeSinceLastMove;
@@ -20,7 +19,6 @@ export class ClockFunctions {
           // Deduct from opponent's time
           opponentTimeRemaining -= timeSinceLastMove;
         }
-        console.log()
       }
 
       previousMove = currentMove;

@@ -12,6 +12,7 @@ import {
   updateDoc,
   deleteDoc,
   Timestamp,
+  serverTimestamp,
 } from "firebase/firestore";
 import { UserModel } from "../Models/UserModel";
 import { GameModel } from "../Models/GameModel";
@@ -182,7 +183,8 @@ export class PrivateGameService {
         userId: user.id,
         coordinates,
         letter,
-        timestamp: Timestamp.now(),
+        timestamp: serverTimestamp(),
+        // timestamp: Timestamp.now(),
         number: number,
         letterBank: letterBank.sort()
       };
