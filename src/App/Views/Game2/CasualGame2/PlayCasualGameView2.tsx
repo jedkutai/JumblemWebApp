@@ -49,6 +49,10 @@ export default function PlayCasualGameView2({ passedUser, passedGame }: PlayCasu
 
     async function onAppearActions() {
         const internetTimeOffest = await ClockFunctions.getTimeOffset();
+        setTimeOffset(internetTimeOffest);
+        if (timeOffset > 0) {
+            
+        }
         const wordBank = await WordBankFunctions.getWordBank();
         setWordBankDict(wordBank);
     }
