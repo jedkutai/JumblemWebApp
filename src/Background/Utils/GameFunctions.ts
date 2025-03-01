@@ -2,7 +2,7 @@ import { GridFunctions } from "./GridFunctions";
 import { WordModel } from "../Models/WordModel";
 import { MoveModel } from "../Models/MoveModel";
 import { WordBankFunctions } from "./WordBankFunctions";
-import { serverTimestamp } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 
 export class GameFunctions {
   static letters(): string[] {
@@ -159,6 +159,8 @@ export class GameFunctions {
     let availableBlocks = this.getAvailableBlocks(movesDict, []);
     let openBlocks = availableBlocks.filter((block) => !Object.keys(movesDict).includes(block));
 
+    // console.log(`Open blocks: ${openBlocks.join("-")}`);
+    // console.log(`Moves Dict: ${Object.keys(movesDict).join("-")}`);
     let resultCoordinates = "";
     let resultLetter = "";
     for (const block of openBlocks) {
@@ -169,8 +171,7 @@ export class GameFunctions {
           userId: "",
           coordinates: block,
           letter: letter,
-          timestamp: serverTimestamp(),
-          // timestamp: Timestamp.now(),
+          timestamp: Timestamp.now(),
           number: number,
           letterBank: letterBank.sort()
         }
@@ -232,8 +233,7 @@ export class GameFunctions {
           userId: "",
           coordinates: block,
           letter: letter,
-          timestamp: serverTimestamp(),
-          // timestamp: Timestamp.now(),
+          timestamp: Timestamp.now(),
           number: number,
           letterBank: letterBank.sort()
         }

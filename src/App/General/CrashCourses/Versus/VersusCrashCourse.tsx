@@ -7,7 +7,7 @@ import VersusCrashCourseHeader from "./VersusCrashCourseHeader";
 // import { useNavigate } from "react-router-dom";
 import { Button, Typography } from "@mui/material";
 import VersusCrashCourseGrid from "./VersusCrashCourseGrid";
-import { serverTimestamp } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 import { WordBankFunctions } from "../../../../Background/Utils/WordBankFunctions";
 import VersusCrashCourseGameOverGrid from "./VersusCrashCourseGameOverGrid";
 import HowToPLayVersus from "../../../Views/HowToPlay/HowToPlayVersus";
@@ -179,8 +179,7 @@ export default function VersusCrashCourse() {
                                 userId: "bot",
                                 coordinates: resultCoordinates,
                                 letter: resultLetter,
-                                timestamp: serverTimestamp(),
-                                // timestamp: Timestamp.now(),
+                                timestamp: Timestamp.now(),
                                 number: (moves.length + 1),
                                 letterBank: botLetterBank2.sort()
                             }
