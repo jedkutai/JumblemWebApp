@@ -70,9 +70,11 @@ export function useStandardGameManager2(user: UserModel, game: GameModel) {
         setYourTurn(true);
       }
       // const lastMoveTime = new Date(lastMove.timestamp.toDate())
-      const lastMoveTime = lastMove.timestamp instanceof Timestamp
-        ? new Date(lastMove.timestamp.toDate()) // Convert only if it's a Timestamp
-        : new Date(); // Default to current date if it's still a FieldValue
+      // const lastMoveTime = lastMove.timestamp instanceof Timestamp
+      //   ? new Date(lastMove.timestamp.toDate()) // Convert only if it's a Timestamp
+      //   : new Date(); // Default to current date if it's still a FieldValue
+      const lastMoveTime = new Date((lastMove.timestamp as Timestamp).toDate());
+
       setAnchorTime(lastMoveTime.getTime())
     }
   }, [movesDict]);
