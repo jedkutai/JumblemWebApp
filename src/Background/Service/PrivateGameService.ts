@@ -17,6 +17,7 @@ import { UserModel } from "../Models/UserModel";
 import { GameModel } from "../Models/GameModel";
 import { MoveModel } from "../Models/MoveModel";
 import { OfferedRematchModel } from "../Models/OfferedRematchModel";
+import { ClockFunctions } from "../Utils/ClockFunctions";
 
 export class PrivateGameService {
   static readonly offeredRematches = "offeredRematches";
@@ -172,23 +173,43 @@ export class PrivateGameService {
   }
 
   static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[]): Promise<void> {
-    if (coordinates.length > 0 && letter.length > 0) {
-      const db = getFirestore();
-      const moveRef = doc(collection(db, `newGames/${game.id}/moves`));
-  
-      const newMove: MoveModel = {
-        id: moveRef.id,
-        gameId: game.id,
-        userId: user.id,
-        coordinates,
-        letter,
-        timestamp: Timestamp.now(),
-        number: number,
-        letterBank: letterBank.sort()
-      };
-  
-      await setDoc(moveRef, newMove);
+    const correctTimeStamp = await ClockFunctions.getCorrectedTimestamp();
+    if (correctTimeStamp) {
+      if (coordinates.length > 0 && letter.length > 0) {
+        const db = getFirestore();
+        const moveRef = doc(collection(db, `newGames/${game.id}/moves`));
+    
+        const newMove: MoveModel = {
+          id: moveRef.id,
+          gameId: game.id,
+          userId: user.id,
+          coordinates,
+          letter,
+          timestamp: correctTimeStamp,
+          number: number,
+          letterBank: letterBank.sort()
+        };
+    
+        await setDoc(moveRef, newMove);
+      }
     }
+    // if (coordinates.length > 0 && letter.length > 0) {
+    //   const db = getFirestore();
+    //   const moveRef = doc(collection(db, `newGames/${game.id}/moves`));
+  
+    //   const newMove: MoveModel = {
+    //     id: moveRef.id,
+    //     gameId: game.id,
+    //     userId: user.id,
+    //     coordinates,
+    //     letter,
+    //     timestamp: Timestamp.now(),
+    //     number: number,
+    //     letterBank: letterBank.sort()
+    //   };
+  
+    //   await setDoc(moveRef, newMove);
+    // }
 
   }
 

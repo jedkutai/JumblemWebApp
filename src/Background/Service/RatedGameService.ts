@@ -18,6 +18,7 @@ import {
   import { MoveModel } from "../Models/MoveModel";
   import { Rating } from "../Utils/Rating"; // Assuming you have a Rating service
   import { FetchService } from "./FetchService"; // For fetching users or related data
+import { ClockFunctions } from "../Utils/ClockFunctions";
   
   export class RatedGameService {
     static async findGame(user: UserModel): Promise<GameModel | null> {
@@ -106,23 +107,43 @@ import {
     }
   
     static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[]): Promise<void> {
-      if (coordinates.length > 0 && letter.length > 0) {
-        const db = getFirestore();
-        const moveRef = doc(collection(db, `newGames/${game.id}/moves`));
-    
-        const newMove: MoveModel = {
-          id: moveRef.id,
-          gameId: game.id,
-          userId: user.id,
-          coordinates,
-          letter,
-          timestamp: Timestamp.now(),
-          number: number,
-          letterBank: letterBank.sort()
-        };
-    
-        await setDoc(moveRef, newMove);
+      const correctTimeStamp = await ClockFunctions.getCorrectedTimestamp();
+      if (correctTimeStamp) {
+        if (coordinates.length > 0 && letter.length > 0) {
+          const db = getFirestore();
+          const moveRef = doc(collection(db, `newGames/${game.id}/moves`));
+      
+          const newMove: MoveModel = {
+            id: moveRef.id,
+            gameId: game.id,
+            userId: user.id,
+            coordinates,
+            letter,
+            timestamp: correctTimeStamp,
+            number: number,
+            letterBank: letterBank.sort()
+          };
+      
+          await setDoc(moveRef, newMove);
+        }
       }
+      // if (coordinates.length > 0 && letter.length > 0) {
+      //   const db = getFirestore();
+      //   const moveRef = doc(collection(db, `newGames/${game.id}/moves`));
+    
+      //   const newMove: MoveModel = {
+      //     id: moveRef.id,
+      //     gameId: game.id,
+      //     userId: user.id,
+      //     coordinates,
+      //     letter,
+      //     timestamp: Timestamp.now(),
+      //     number: number,
+      //     letterBank: letterBank.sort()
+      //   };
+    
+      //   await setDoc(moveRef, newMove);
+      // }
 
     }
   
