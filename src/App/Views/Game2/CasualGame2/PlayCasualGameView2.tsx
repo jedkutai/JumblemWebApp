@@ -48,13 +48,17 @@ export default function PlayCasualGameView2({ passedUser, passedGame }: PlayCasu
     const [matchAbortedTicker, setMatchAbortedTicker] = useState(false);
 
     async function onAppearActions() {
-        const internetTimeOffest = await ClockFunctions.getTimeOffset();
-        setTimeOffset(internetTimeOffest);
-        if (timeOffset > 0) {
-            
+        try {
+            const internetTimeOffest = await ClockFunctions.getTimeOffset();
+            setTimeOffset(internetTimeOffest);
+            if (timeOffset > 0) {
+                
+            }
+            const wordBank = await WordBankFunctions.getWordBank();
+            setWordBankDict(wordBank);
+        } catch(e) {
+            console.error(e);
         }
-        const wordBank = await WordBankFunctions.getWordBank();
-        setWordBankDict(wordBank);
     }
 
     async function wordCheckFunction(): Promise<void> {
