@@ -9,8 +9,18 @@ export class ClockFunctions {
 
     for (const currentMove of moves) {
       if (previousMove) {
-        const lastMoveTime = (previousMove.timestamp as Timestamp).toDate();
-        const currentMoveTime = (currentMove.timestamp as Timestamp).toDate();
+        // const lastMoveTime = (previousMove.timestamp as Timestamp).toDate();
+        // const currentMoveTime = (currentMove.timestamp as Timestamp).toDate();
+
+        const lastMoveTime = previousMove.timestamp instanceof Timestamp
+        ? new Date(previousMove.timestamp.toDate())
+        : new Date();
+
+        const currentMoveTime = currentMove.timestamp instanceof Timestamp
+        ? new Date(currentMove.timestamp.toDate())
+        : new Date();
+
+
         const timeSinceLastMove = (currentMoveTime.getTime() - lastMoveTime.getTime()) / 1000; // Convert to seconds
         if (currentMove.userId === userId) {
           // Deduct from your time
@@ -27,3 +37,7 @@ export class ClockFunctions {
     return [yourTimeRemaining, opponentTimeRemaining];
   }
 }
+
+// const lastMoveTime = lastMove.timestamp instanceof Timestamp
+// ? new Date(lastMove.timestamp.toDate()) // Convert only if it's a Timestamp
+// : new Date(); // Default to current date if it's still a FieldValue
