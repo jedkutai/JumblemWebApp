@@ -232,6 +232,7 @@ export default function VersusCrashCourse() {
                     {gameState == GameState.active && (
                         <>
                             <JumblemLogoSimple />
+                            <Typography>Crash Course</Typography>
                             <VersusCrashCourseHeader user={user} yourTurn={yourTurn} />
                             <VersusCrashCourseGrid
                                 user={user}
@@ -249,6 +250,7 @@ export default function VersusCrashCourse() {
                     {(gameState == GameState.draw || gameState == GameState.userWins || gameState == GameState.botWins)  && (
                         <>
                             <JumblemLogoSimple />
+                            <Typography>Crash Course</Typography>
                             <VersusCrashCourseHeader user={user} yourTurn={yourTurn} />
 
                             <VersusCrashCourseGameOverGrid

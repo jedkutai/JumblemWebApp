@@ -7,7 +7,6 @@ import { CrashCoursePuzzle } from "../../../../Background/Extends/DailyPuzzleCra
 import { Typography, Button } from "@mui/material";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import HowToPlayDailyPuzzle from "../../../Views/HowToPlay/HowToPlayDailyPuzzle";
-import { DisplayFunctions } from "../../../../Background/Utils/DisplayFunctions";
 import DailyPuzzleGrid from "../../../Views/DailyPuzzle/DailyPuzzleGrid";
 import { DailyPuzzleFunctions } from "../../../../Background/Utils/DailyPuzzleFunctions";
 import DailyPuzzleFoundWords from "../../../Views/DailyPuzzle/DailyPuzzleFoundWords";
@@ -237,7 +236,7 @@ export default function DailyPuzzleCrashCourse() {
                 {puzzleState == PuzzleState.active && (
                     <VStack spacing="0px">
                         <JumblemLogoSimple />
-                        <Typography>Daily Puzzle: {DisplayFunctions.displayPuzzleDate(dailyPuzzle.timestamp)}</Typography>
+                        <Typography>Daily Puzzle Crash Course</Typography>
 
                         <DailyPuzzleGrid
                             grid={grid}
