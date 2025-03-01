@@ -8,7 +8,6 @@ export class ClockFunctions {
     const data = await response.json();
 
     const accurateTime = new Date(data.utc_datetime);
-    console.log("Accurate Internet Time:", accurateTime);
     return accurateTime;
   };
 
@@ -22,7 +21,6 @@ export class ClockFunctions {
     const offset = await this.getTimeOffset();
     const correctedTime = new Date(Date.now() + offset + 500); // Apply offset
 
-    console.log("Corrected Time:", correctedTime);
 
     return Timestamp.fromDate(correctedTime); // Convert to Firestore Timestamp
   }

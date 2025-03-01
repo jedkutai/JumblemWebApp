@@ -159,8 +159,6 @@ export class GameFunctions {
     let availableBlocks = this.getAvailableBlocks(movesDict, []);
     let openBlocks = availableBlocks.filter((block) => !Object.keys(movesDict).includes(block));
 
-    // console.log(`Open blocks: ${openBlocks.join("-")}`);
-    // console.log(`Moves Dict: ${Object.keys(movesDict).join("-")}`);
     let resultCoordinates = "";
     let resultLetter = "";
     for (const block of openBlocks) {

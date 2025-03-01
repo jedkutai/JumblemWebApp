@@ -44,21 +44,39 @@ import { ClockFunctions } from "../Utils/ClockFunctions";
     }
     
     static async makeBotMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[]): Promise<void> {
-      const db = getFirestore();
-      const movesRef = doc(collection(db, `newGames/${game.id}/moves`));
-      const newMove: MoveModel = {
-        id: movesRef.id,
-        gameId: game.id,
-        userId: `BOT-${user.id}`,
-        coordinates,
-        letter,
-        timestamp: Timestamp.now(),
-        number: number,
-        letterBank: letterBank.sort()
-
-      };
+      const correctTimeStamp = await ClockFunctions.getCorrectedTimestamp();
+      if (correctTimeStamp) {
+        const db = getFirestore();
+        const movesRef = doc(collection(db, `newGames/${game.id}/moves`));
+        const newMove: MoveModel = {
+          id: movesRef.id,
+          gameId: game.id,
+          userId: `BOT-${user.id}`,
+          coordinates,
+          letter,
+          timestamp: correctTimeStamp,
+          number: number,
+          letterBank: letterBank.sort()
   
-      await setDoc(movesRef, newMove);
+        };
+    
+        await setDoc(movesRef, newMove);
+      }
+      // const db = getFirestore();
+      // const movesRef = doc(collection(db, `newGames/${game.id}/moves`));
+      // const newMove: MoveModel = {
+      //   id: movesRef.id,
+      //   gameId: game.id,
+      //   userId: `BOT-${user.id}`,
+      //   coordinates,
+      //   letter,
+      //   timestamp: Timestamp.now(),
+      //   number: number,
+      //   letterBank: letterBank.sort()
+
+      // };
+  
+      // await setDoc(movesRef, newMove);
     }
     
     static async anonymousAccountCreation(): Promise<UserModel | null> {
