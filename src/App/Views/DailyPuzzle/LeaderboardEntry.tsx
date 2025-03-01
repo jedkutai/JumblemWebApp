@@ -88,40 +88,85 @@ export default function LeaderboardEntry({
             padding: "20px",
             width: `${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px`,
         },
+        button: {
+            margin: "10px",
+            flex: 1,
+            backgroundColor: "rgb(227, 218, 195)",
+            color: "black",
+            fontWeight: 600,
+        },
     }
 
     return (
-        <Button onClick={() => setExpand(!expand)}>
-            <Box style={style.section}>
-                <VStack>
-                    <HStack>
-                        <>
-                            <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{position > 0 ? position : "-"}</Typography>
+        <>
+            {expand ? (
+                <Box style={style.section}>
+                    <VStack>
+                        <HStack>
+                            <>
+                                <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{position > 0 ? position : "-"}</Typography>
 
-                            <HSpacer />
-                            {(player && player.usernameDisplayed) ? (
-                                <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{DisplayFunctions.displayUsername(player.usernameDisplayed)}</Typography>
-                            ) : (
-                                <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{"Loading..."}</Typography>
+                                <HSpacer />
+                                {(player && player.usernameDisplayed) ? (
+                                    <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{DisplayFunctions.displayUsername(player.usernameDisplayed)}</Typography>
+                                ) : (
+                                    <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{"Loading..."}</Typography>
+                                )}
+
+                                <HSpacer />
+
+                                <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{Math.floor(entry.score)}</Typography>
+                            </>
+
+                        </HStack>
+
+                        {expand && wordsLoaded && (
+                            <DailyPuzzleFoundWords correctWords={words} />
+                        )}
+
+                        {expand && !wordsLoaded && (
+                            <CircularProgress />
+                        )}
+
+
+                        <Button onClick={() => setExpand(false)} variant="contained" style={style.button}>Minimize</Button>
+                    </VStack>
+                </Box>
+            ) : (
+                <Button onClick={() => setExpand(true)}>
+                    <Box style={style.section}>
+                        <VStack>
+                            <HStack>
+                                <>
+                                    <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{position > 0 ? position : "-"}</Typography>
+
+                                    <HSpacer />
+                                    {(player && player.usernameDisplayed) ? (
+                                        <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{DisplayFunctions.displayUsername(player.usernameDisplayed)}</Typography>
+                                    ) : (
+                                        <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{"Loading..."}</Typography>
+                                    )}
+
+                                    <HSpacer />
+
+                                    <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{Math.floor(entry.score)}</Typography>
+                                </>
+
+                            </HStack>
+
+                            {expand && wordsLoaded && (
+                                <DailyPuzzleFoundWords correctWords={words} />
                             )}
 
-                            <HSpacer />
+                            {expand && !wordsLoaded && (
+                                <CircularProgress />
+                            )}
 
-                            <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{Math.floor(entry.score)}</Typography>
-                        </>
+                        </VStack>
+                    </Box>
+                </Button>
+            )}
+        </>
 
-                    </HStack>
-
-                    {expand && wordsLoaded && (
-                        <DailyPuzzleFoundWords correctWords={words} />
-                    )}
-
-                    {expand && !wordsLoaded && (
-                        <CircularProgress />
-                    )}
-
-                </VStack>
-            </Box>
-        </Button>
     )
 }

@@ -11,8 +11,10 @@ import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
 import { IoPerson } from "react-icons/io5";
 import { FaGlobe } from "react-icons/fa";
 import DailyPuzzleFoundWords from "../../Views/DailyPuzzle/DailyPuzzleFoundWords";
-import GuestLeaderboardEntry from "./GuestLeaderboardEntry";
+// import GuestLeaderboardEntry from "./GuestLeaderboardEntry";
 import { WordBankFunctions } from "../../../Background/Utils/WordBankFunctions";
+import LeaderboardEntry from "../../Views/DailyPuzzle/LeaderboardEntry";
+import { UserModelGuest } from "../../../Background/Extends/UserModelGuest";
 
 enum LeaderboardState {
     loading,
@@ -44,7 +46,7 @@ export default function GuestDailyPuzzleResultsView() {
         try {
             const wordBank = await WordBankFunctions.getWordBank();
             setWordBankDict(wordBank);
-            
+
             let lastPuzzlePlayedId = localStorage.getItem("lastPuzzlePlayedId") ?? "";
             let fetchedPuzzle = await FetchService.fetchDailyPuzzleById(lastPuzzlePlayedId);
             setDailyPuzzle(fetchedPuzzle);
@@ -143,16 +145,16 @@ export default function GuestDailyPuzzleResultsView() {
                                             <>
                                                 {(leaderboard[index - 1].score == entry.score) ? (
                                                     // position == -1
-                                                    <GuestLeaderboardEntry position={-1} entry={entry} />
+                                                    <LeaderboardEntry position={-1} entry={entry} passedUser={UserModelGuest} />
 
                                                 ) : (
                                                     // position = index + 1
-                                                    <GuestLeaderboardEntry position={index + 1} entry={entry} />
+                                                    <LeaderboardEntry position={index + 1} entry={entry} passedUser={UserModelGuest} />
                                                 )}
                                             </>
                                         ) : (
                                             // position = index + 1
-                                            <GuestLeaderboardEntry position={index + 1} entry={entry} />
+                                            <LeaderboardEntry position={index + 1} entry={entry} passedUser={UserModelGuest} />
                                         )}
 
                                     </div>
