@@ -2,8 +2,7 @@ import { GridFunctions } from "./GridFunctions";
 import { WordModel } from "../Models/WordModel";
 import { MoveModel } from "../Models/MoveModel";
 import { WordBankFunctions } from "./WordBankFunctions";
-// import { Timestamp } from "firebase/firestore";
-import { serverTimestamp } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 
 export class GameFunctions {
   static letters(): string[] {
@@ -172,8 +171,7 @@ export class GameFunctions {
           userId: "",
           coordinates: block,
           letter: letter,
-          timestamp: serverTimestamp(),
-          // timestamp: Timestamp.now(),
+          timestamp: Timestamp.now(),
           number: number,
           letterBank: letterBank.sort()
         }
@@ -235,8 +233,7 @@ export class GameFunctions {
           userId: "",
           coordinates: block,
           letter: letter,
-          timestamp: serverTimestamp(),
-          // timestamp: Timestamp.now(),
+          timestamp: Timestamp.now(),
           number: number,
           letterBank: letterBank.sort()
         }

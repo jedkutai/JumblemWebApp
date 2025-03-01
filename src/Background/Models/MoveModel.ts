@@ -1,4 +1,4 @@
-import { FieldValue, Timestamp } from 'firebase/firestore';
+import { Timestamp } from 'firebase/firestore';
 
 export interface MoveModel {
     id: string;            // Unique identifier for the move
@@ -7,6 +7,6 @@ export interface MoveModel {
     coordinates: string;   // Coordinates of the move on the grid
     letter: string;        // Letter played in the move
     number: number;
-    timestamp: Timestamp | FieldValue; // Timestamp of when the move was made (optional for default initialization)
+    timestamp: Timestamp; // Timestamp of when the move was made (optional for default initialization)
     letterBank: string[];
 }

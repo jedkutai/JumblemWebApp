@@ -17,7 +17,6 @@ import { UserModel } from "../Models/UserModel";
 import { GameModel } from "../Models/GameModel";
 import { MoveModel } from "../Models/MoveModel";
 import { OfferedRematchModel } from "../Models/OfferedRematchModel";
-import { serverTimestamp } from "firebase/firestore";
 
 export class PrivateGameService {
   static readonly offeredRematches = "offeredRematches";
@@ -183,8 +182,7 @@ export class PrivateGameService {
         userId: user.id,
         coordinates,
         letter,
-        timestamp: serverTimestamp(),
-        // timestamp: Timestamp.now(),
+        timestamp: Timestamp.now(),
         number: number,
         letterBank: letterBank.sort()
       };

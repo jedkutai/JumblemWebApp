@@ -18,8 +18,7 @@ import {
   import { GameModel } from "../Models/GameModel";
   import { MoveModel } from "../Models/MoveModel";
 import { GameService } from "./GameService";
-import { serverTimestamp } from "firebase/firestore";
-
+  
   export class GuestService {
     static async botJoinMatch(user: UserModel, game: GameModel): Promise<void> {
       const db = getFirestore();
@@ -52,8 +51,7 @@ import { serverTimestamp } from "firebase/firestore";
         userId: `BOT-${user.id}`,
         coordinates,
         letter,
-        timestamp: serverTimestamp(),
-        // timestamp: Timestamp.now(),
+        timestamp: Timestamp.now(),
         number: number,
         letterBank: letterBank.sort()
 
@@ -177,8 +175,7 @@ import { serverTimestamp } from "firebase/firestore";
           userId: user.id,
           coordinates,
           letter,
-          timestamp: serverTimestamp(),
-          // timestamp: Timestamp.now(),
+          timestamp: Timestamp.now(),
           number: number,
           letterBank: letterBank.sort()
         };

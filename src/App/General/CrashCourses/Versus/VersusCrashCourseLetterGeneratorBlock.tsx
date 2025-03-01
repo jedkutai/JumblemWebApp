@@ -2,8 +2,7 @@ import { useState } from "react";
 import { MoveModel, UserModel } from "../../../../Background/Models";
 import { DimLetterBlock, ClickableWhiteLetterBlock } from "../../../Components";
 import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
-// import { Timestamp } from "firebase/firestore";
-import { serverTimestamp } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 
 interface VersusCrashCourseLetterGeneratorBlockProps {
     user: UserModel;
@@ -48,8 +47,7 @@ export default function VersusCrashCourseLetterGeneratorBlock({
                     userId: user.id,
                     coordinates: selectedBlock,
                     letter: letter,
-                    timestamp: serverTimestamp(),
-                    // timestamp: Timestamp.now(),
+                    timestamp: Timestamp.now(),
                     number: (moves.length + 1),
                     letterBank: letterBank.sort()
                 }
