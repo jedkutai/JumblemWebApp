@@ -12,6 +12,7 @@ import CasualGameHeader2 from "./CasualGameHeader2";
 import CasualGameGrid2 from "./CasualGameGrid2";
 import CasualGameOverGrid2 from "./CasualGameOverGrid2";
 import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
+import { Typography } from "@mui/material";
 
 interface PlayCasualGameView2Props {
     passedUser: UserModel;
@@ -247,6 +248,7 @@ export default function PlayCasualGameView2({ passedUser, passedGame }: PlayCasu
                 <VStack width={`${width}px`} height={`${height}px`}>
                     <HowToPlayHeader versus={true} />
                     <JumblemLogoSimple />
+                    <Typography>{`Offset: ${timeOffset}`}</Typography>
                     <CasualGameHeader2
                         setUserTimeExpired={setUserTimeExpired}
                         setCheckOpponentTimeExpired={setCheckOpponentTimeExpired}
