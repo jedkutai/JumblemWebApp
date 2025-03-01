@@ -4,7 +4,7 @@ import { MoveModel } from "../Models/MoveModel";
 export class ClockFunctions {
   static async getInternetTime(): Promise<Date> {
 
-    const response = await fetch("http://worldtimeapi.org/api/timezone/Etc/UTC");
+    const response = await fetch("https://worldtimeapi.org/api/timezone/Etc/UTC");
     const data = await response.json();
 
     const accurateTime = new Date(data.utc_datetime);
