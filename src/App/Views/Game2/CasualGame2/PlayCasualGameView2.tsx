@@ -11,8 +11,8 @@ import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import CasualGameHeader2 from "./CasualGameHeader2";
 import CasualGameGrid2 from "./CasualGameGrid2";
 import CasualGameOverGrid2 from "./CasualGameOverGrid2";
-import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
-import { Typography } from "@mui/material";
+// import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
+// import { Typography } from "@mui/material";
 
 interface PlayCasualGameView2Props {
     passedUser: UserModel;
@@ -32,7 +32,7 @@ export default function PlayCasualGameView2({ passedUser, passedGame }: PlayCasu
         movesMade
     } = useStandardGameManager2(passedUser, passedGame);
     const { width, height } = useWindowSize();
-    const [timeOffset, setTimeOffset] = useState(0);
+    // const [timeOffset, setTimeOffset] = useState(0);
     const user: UserModel = passedUser;
     const game: GameModel = passedGame;
     const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
@@ -50,11 +50,11 @@ export default function PlayCasualGameView2({ passedUser, passedGame }: PlayCasu
 
     async function onAppearActions() {
         try {
-            const internetTimeOffest = await ClockFunctions.getTimeOffset();
-            setTimeOffset(internetTimeOffest);
-            if (timeOffset > 0) {
+            // const internetTimeOffest = await ClockFunctions.getTimeOffset();
+            // setTimeOffset(internetTimeOffest);
+            // if (timeOffset > 0) {
                 
-            }
+            // }
             const wordBank = await WordBankFunctions.getWordBank();
             setWordBankDict(wordBank);
         } catch(e) {
@@ -248,7 +248,7 @@ export default function PlayCasualGameView2({ passedUser, passedGame }: PlayCasu
                 <VStack width={`${width}px`} height={`${height}px`}>
                     <HowToPlayHeader versus={true} />
                     <JumblemLogoSimple />
-                    <Typography>{`Offset: ${timeOffset}`}</Typography>
+                    {/* <Typography>{`Offset: ${timeOffset}`}</Typography> */}
                     <CasualGameHeader2
                         setUserTimeExpired={setUserTimeExpired}
                         setCheckOpponentTimeExpired={setCheckOpponentTimeExpired}

@@ -13,14 +13,18 @@ export class ClockFunctions {
   };
 
   static async getTimeOffset(): Promise<number> {
-    const userTime = Date.now(); // User's local device time (in milliseconds)
-    const internetTime = await this.getInternetTime(); // Await the correct time
-    const internetTimeMillis = internetTime.getTime(); // Convert to milliseconds
+    const userTime = Date.now(); // Local device time in milliseconds
+    const internetTime = await this.getInternetTime(); // Get accurate UTC time
+    return internetTime.getTime() - userTime; // Calculate the offset
+  }
 
-    const offset = internetTimeMillis - userTime; // Difference in milliseconds
-    console.log(`Time Offset: ${offset} ms`);
+  static async getCorrectedTimestamp(): Promise<Timestamp> {
+    const offset = await this.getTimeOffset();
+    const correctedTime = new Date(Date.now() + offset + 500); // Apply offset
 
-    return offset; // Can be positive or negative
+    console.log("Corrected Time:", correctedTime);
+
+    return Timestamp.fromDate(correctedTime); // Convert to Firestore Timestamp
   }
 
   static getTimeRemainingForBothPlayers(userId: string, moves: MoveModel[]): [number, number] {
