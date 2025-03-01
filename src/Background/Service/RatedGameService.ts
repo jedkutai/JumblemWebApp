@@ -18,6 +18,7 @@ import {
   import { MoveModel } from "../Models/MoveModel";
   import { Rating } from "../Utils/Rating"; // Assuming you have a Rating service
   import { FetchService } from "./FetchService"; // For fetching users or related data
+  import { serverTimestamp } from "firebase/firestore";
   
   export class RatedGameService {
     static async findGame(user: UserModel): Promise<GameModel | null> {
@@ -116,7 +117,8 @@ import {
           userId: user.id,
           coordinates,
           letter,
-          timestamp: Timestamp.now(),
+          timestamp: serverTimestamp(),
+          // timestamp: Timestamp.now(),
           number: number,
           letterBank: letterBank.sort()
         };

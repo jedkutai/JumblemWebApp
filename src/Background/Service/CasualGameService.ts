@@ -3,6 +3,7 @@ import { UserModel } from "../Models/UserModel";
 import { GameModel } from "../Models/GameModel";
 import { MoveModel } from "../Models/MoveModel";
 import { GameService } from "./GameService";
+import { serverTimestamp } from "firebase/firestore";
 
 export class CasualGameService {
   static async botJoinMatch(user: UserModel, game: GameModel): Promise<void> {
@@ -116,7 +117,8 @@ export class CasualGameService {
         userId: user.id,
         coordinates,
         letter,
-        timestamp: Timestamp.now(),
+        timestamp: serverTimestamp(),
+        // timestamp: Timestamp.now(),
         number: number,
         letterBank: letterBank.sort()
       };
@@ -135,7 +137,8 @@ export class CasualGameService {
       userId: `BOT-${user.id}`,
       coordinates,
       letter,
-      timestamp: Timestamp.now(),
+      timestamp: serverTimestamp(),
+      // timestamp: Timestamp.now(),
       number: number,
       letterBank: letterBank.sort()
     };

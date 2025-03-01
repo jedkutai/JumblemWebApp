@@ -27,7 +27,6 @@ export function useStandardGameManager2(user: UserModel, game: GameModel) {
 
   useEffect(() => {
     const movesRef = collection(db, "newGames", game.id, "moves");
-    // const movesQuery = query(movesRef, orderBy("timestamp", "asc"));
     const movesQuery = query(movesRef, orderBy("number", "asc"));
 
 
