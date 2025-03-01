@@ -24,8 +24,6 @@ enum GameState {
     botWins
 }
 
-
-
 export default function VersusCrashCourse2() {
     const user: UserModel = UserModelGuest;
     const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});

@@ -5,6 +5,7 @@ import {
   query,
   orderBy,
   onSnapshot,
+  Timestamp,
 } from "firebase/firestore";
 import { MoveModel } from "../Models/MoveModel";
 import { GameModel } from "../Models/GameModel";
@@ -43,7 +44,7 @@ export function useStandardGameManager2(user: UserModel, game: GameModel) {
   }, []);
 
   useEffect(() => {
-    if (movesMade>0) {
+    if (movesMade > 0) {
       setProcessComplete(false);
     }
     if (moves.length > movesMade) {
@@ -68,7 +69,10 @@ export function useStandardGameManager2(user: UserModel, game: GameModel) {
       } else {
         setYourTurn(true);
       }
-      const lastMoveTime = new Date(lastMove.timestamp.toDate())
+      // const lastMoveTime = new Date(lastMove.timestamp.toDate())
+      const lastMoveTime = lastMove.timestamp instanceof Timestamp
+        ? new Date(lastMove.timestamp.toDate()) // Convert only if it's a Timestamp
+        : new Date(); // Default to current date if it's still a FieldValue
       setAnchorTime(lastMoveTime.getTime())
     }
   }, [movesDict]);
