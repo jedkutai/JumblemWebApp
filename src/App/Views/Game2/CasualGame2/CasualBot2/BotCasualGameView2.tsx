@@ -105,7 +105,7 @@ export default function BotPlayCasualGameView2({ passedUser, passedGame }: BotPl
             if (!gameOver) {
                 if (!yourTurn) {
                     const letterBank = botLetterBank;
-                    const moveDelay = movesCopy.length < 6 ? Math.floor(Math.random() * 3) : Math.floor(Math.random() * 5);
+                    const moveDelay = (movesCopy.length < 6 ? Math.floor(Math.random() * 3) : Math.floor(Math.random() * 5)) + 2;
                     const timeout = setTimeout(async () => {
                         try {
                             const [resultCoordinates, resultLetter] = await GameFunctions.botMove(botLetterBank, movesDict, wordBankDict, (movesMade + 1));
@@ -240,14 +240,11 @@ export default function BotPlayCasualGameView2({ passedUser, passedGame }: BotPl
     }, [userTimeExpired]);
 
     useEffect(() => {
-        const timeout = setTimeout(async () => {
-            if (wordCheckComplete && processComplete && !yourTurn && !gameOver) {
-                botMove();
-            }
-        }, 1000 * 3);
-        return () => clearTimeout(timeout);
+        if (wordCheckComplete && processComplete && !yourTurn && !gameOver) {
+            botMove();
+        }
 
-    }, [wordCheckComplete]);
+    }, [wordCheckComplete, processComplete]);
 
     if (gameOver) {
         return (
