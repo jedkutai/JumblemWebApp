@@ -5,6 +5,7 @@ export type { FollowModel } from "./FollowModel";
 export type { GameModel } from "./GameModel";
 export type { GridSpotModel } from "./GridSpotModel";
 export type { MoveModel } from "./MoveModel";
+export type { UploadMoveModel } from "./UploadMoveModel";
 export type { OfferedRematchModel } from "./OfferedRematchModel";
 export type { PartialWordModel } from "./PartialWordModel";
 export type { PublicUsernameModel } from "./PublicUsernameModel";

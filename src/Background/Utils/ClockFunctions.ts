@@ -1,20 +1,23 @@
 import { Timestamp } from "firebase/firestore";
 import { MoveModel } from "../Models/MoveModel";
+import { DateTime } from "luxon";
 
 export class ClockFunctions {
-  static async getInternetTime(): Promise<Date> {
+  static async getInternetTime(): Promise<DateTime> {
 
-    const response = await fetch("https://worldtimeapi.org/api/timezone/Etc/UTC");
+    const response = await fetch("https://timeapi.io/api/time/current/zone?timeZone=utc");
     const data = await response.json();
 
-    const accurateTime = new Date(data.utc_datetime);
-    return accurateTime;
+    return DateTime.fromISO(data.dateTime, { zone: "utc" });
   };
 
   static async getTimeOffset(): Promise<number> {
-    const userTime = Date.now(); // Local device time in milliseconds
+    const userTime = DateTime.utc(); // Local device time in milliseconds
     const internetTime = await this.getInternetTime(); // Get accurate UTC time
-    return internetTime.getTime() - userTime; // Calculate the offset
+    // console.log("\n\n\nUser time:", userTime);
+    // console.log("Internet time", internetTime);
+    // console.log("Offset:", (internetTime.toMillis() - userTime.toMillis()));
+    return internetTime.toMillis() - userTime.toMillis(); // Calculate the offset
   }
 
   static async getCorrectedTimestamp(): Promise<Timestamp> {
