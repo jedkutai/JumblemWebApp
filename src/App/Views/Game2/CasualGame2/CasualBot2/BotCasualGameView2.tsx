@@ -244,7 +244,7 @@ export default function BotPlayCasualGameView2({ passedUser, passedGame }: BotPl
             if (wordCheckComplete && processComplete && !yourTurn && !gameOver) {
                 botMove();
             }
-        }, 1000 * 2);
+        }, 1000 * 3);
         return () => clearTimeout(timeout);
 
     }, [wordCheckComplete]);
