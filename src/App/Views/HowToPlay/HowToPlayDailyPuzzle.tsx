@@ -78,14 +78,14 @@ export default function HowToPlayDailyPuzzle() {
                         style={exampleGridShown == ExampleGridShown.solution1 ? styles.buttonBlack : styles.buttonGray}
                         onClick={() => setExampleGridShown(ExampleGridShown.solution1)}
                     >
-                        Solution 1
+                        #1
                     </Button>
                     <Button
                         variant="contained"
                         style={exampleGridShown == ExampleGridShown.solution2 ? styles.buttonBlack : styles.buttonGray}
                         onClick={() => setExampleGridShown(ExampleGridShown.solution2)}
                     >
-                        Solution 2
+                        #2
                     </Button>
                 </HStack>
 

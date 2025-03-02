@@ -26,6 +26,36 @@ export default function DailyPuzzleExampleGrid3() {
         "4,4": ["X", false, false],
 
         "5,2": ["S", true, false],
+
+        "0,0": ["X", false, false],
+        "0,1": ["Y", false, false],
+        "0,2": ["Z", false, false],
+        "0,3": ["X", false, false],
+        "0,4": ["Y", false, false],
+        "0,5": ["Z", false, false],
+        "0,6": ["X", false, false],
+
+        "1,6": ["Y", false, false],
+        "2,6": ["Z", false, false],
+        "3,6": ["X", false, false],
+        "4,6": ["Y", false, false],
+        "5,6": ["Z", false, false],
+        "6,6": ["X", false, false],
+
+        "6,5": ["Y", false, false],
+        "6,4": ["Z", false, false],
+        "6,3": ["X", false, false],
+        "6,2": ["Y", false, false],
+        "6,1": ["Z", false, false],
+        "6,0": ["X", false, false],
+
+        "5,0": ["Y", false, false],
+        "4,0": ["Z", false, false],
+        "3,0": ["X", false, false],
+        "2,0": ["Y", false, false],
+        "1,0": ["Z", false, false],
+
+        "1,3": ["Y", false, false],
     };
 
     return (
