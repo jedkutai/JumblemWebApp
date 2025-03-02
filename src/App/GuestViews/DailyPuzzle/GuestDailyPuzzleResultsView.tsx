@@ -43,7 +43,6 @@ export default function GuestDailyPuzzleResultsView() {
             setWordBankDict(wordBank);
         } catch {
             setLeaderboardState(LeaderboardState.failed);
-            setWords({});
         }
     }
 
@@ -54,7 +53,6 @@ export default function GuestDailyPuzzleResultsView() {
             setDailyPuzzle(fetchedPuzzle);
         } catch {
             setLeaderboardState(LeaderboardState.failed);
-            setWords({});
         }
     }
 
@@ -74,12 +72,11 @@ export default function GuestDailyPuzzleResultsView() {
                     }
                 }
             }
-
+            
             setWords(fetchedWords);
             setWordsLoaded(true);
         } catch {
             setLeaderboardState(LeaderboardState.failed);
-            setWords({});
         }
     }
 
@@ -90,11 +87,9 @@ export default function GuestDailyPuzzleResultsView() {
                 setLeaderboard(loadedLeaderboard);
             } catch {
                 setLeaderboardState(LeaderboardState.failed);
-                setWords({});
             }
         } else {
             setLeaderboardState(LeaderboardState.failed);
-            setWords({});
         }
     }
 
