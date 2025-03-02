@@ -11,7 +11,6 @@ import {
     setDoc,
     updateDoc,
     deleteDoc,
-    Timestamp,
   } from "firebase/firestore";
   import { UserModel } from "../Models/UserModel";
   import { GameModel } from "../Models/GameModel";
@@ -68,6 +67,7 @@ import { ClockFunctions } from "../Utils/ClockFunctions";
     }
   
     static async createGame(user: UserModel): Promise<GameModel | null> {
+      const correctTimeStamp = await ClockFunctions.getCorrectedTimestamp();
       const db = getFirestore();
       const gameRef = doc(collection(db, "newGames"));
       const newGame: GameModel = {
@@ -75,7 +75,7 @@ import { ClockFunctions } from "../Utils/ClockFunctions";
         gameMode: "standard",
         playerOneId: user.id,
         playerOneRating: user.standardRating,
-        timestamp: Timestamp.now(),
+        timestamp: correctTimeStamp,
         matchFound: false
       };
   
@@ -127,23 +127,6 @@ import { ClockFunctions } from "../Utils/ClockFunctions";
           await setDoc(moveRef, newMove);
         }
       }
-      // if (coordinates.length > 0 && letter.length > 0) {
-      //   const db = getFirestore();
-      //   const moveRef = doc(collection(db, `newGames/${game.id}/moves`));
-    
-      //   const newMove: MoveModel = {
-      //     id: moveRef.id,
-      //     gameId: game.id,
-      //     userId: user.id,
-      //     coordinates,
-      //     letter,
-      //     timestamp: Timestamp.now(),
-      //     number: number,
-      //     letterBank: letterBank.sort()
-      //   };
-    
-      //   await setDoc(moveRef, newMove);
-      // }
 
     }
   

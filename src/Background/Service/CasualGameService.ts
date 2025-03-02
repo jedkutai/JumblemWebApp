@@ -1,4 +1,4 @@
-import { getFirestore, collection, doc, getDocs, setDoc, deleteDoc, query, where, orderBy, limit, updateDoc, Timestamp, getDoc } from "firebase/firestore";
+import { getFirestore, collection, doc, getDocs, setDoc, deleteDoc, query, where, orderBy, limit, updateDoc, getDoc } from "firebase/firestore";
 import { UserModel } from "../Models/UserModel";
 import { GameModel } from "../Models/GameModel";
 import { MoveModel } from "../Models/MoveModel";
@@ -73,6 +73,8 @@ export class CasualGameService {
   }
 
   static async createGame(user: UserModel): Promise<GameModel | null> {
+    const correctTimeStamp = await ClockFunctions.getCorrectedTimestamp();
+    if (correctTimeStamp) {}
     const db = getFirestore();
     const gameRef = doc(collection(db, "newGames"));
     const newGame: GameModel = {
@@ -80,7 +82,7 @@ export class CasualGameService {
       gameMode: "casual",
       playerOneId: user.id,
       playerOneRating: user.standardRating,
-      timestamp: Timestamp.now(),
+      timestamp: correctTimeStamp,
       matchFound: false
     };
 
@@ -126,21 +128,6 @@ export class CasualGameService {
     
         await setDoc(movesRef, newMove);
     }
-    // if (coordinates.length > 0 && letter.length > 0) {
-    //   const db = getFirestore();
-    //   const movesRef = doc(collection(db, `newGames/${game.id}/moves`));
-    //   const newMove: MoveModel = {
-    //     id: movesRef.id,
-    //     gameId: game.id,
-    //     userId: user.id,
-    //     coordinates,
-    //     letter,
-    //     timestamp: Timestamp.now(),
-    //     number: number,
-    //     letterBank: letterBank.sort()
-    //   };
-  
-    //   await setDoc(movesRef, newMove);
     }
 
   }
@@ -163,20 +150,6 @@ export class CasualGameService {
   
       await setDoc(movesRef, newMove);
     }
-    // const db = getFirestore();
-    // const movesRef = doc(collection(db, `newGames/${game.id}/moves`));
-    // const newMove: MoveModel = {
-    //   id: movesRef.id,
-    //   gameId: game.id,
-    //   userId: `BOT-${user.id}`,
-    //   coordinates,
-    //   letter,
-    //   timestamp: Timestamp.now(),
-    //   number: number,
-    //   letterBank: letterBank.sort()
-    // };
-
-    // await setDoc(movesRef, newMove);
   }
 
   static async getFinalMove(game: GameModel): Promise<MoveModel | null> {

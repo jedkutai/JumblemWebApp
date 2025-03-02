@@ -62,21 +62,6 @@ import { ClockFunctions } from "../Utils/ClockFunctions";
     
         await setDoc(movesRef, newMove);
       }
-      // const db = getFirestore();
-      // const movesRef = doc(collection(db, `newGames/${game.id}/moves`));
-      // const newMove: MoveModel = {
-      //   id: movesRef.id,
-      //   gameId: game.id,
-      //   userId: `BOT-${user.id}`,
-      //   coordinates,
-      //   letter,
-      //   timestamp: Timestamp.now(),
-      //   number: number,
-      //   letterBank: letterBank.sort()
-
-      // };
-  
-      // await setDoc(movesRef, newMove);
     }
     
     static async anonymousAccountCreation(): Promise<UserModel | null> {
@@ -145,6 +130,7 @@ import { ClockFunctions } from "../Utils/ClockFunctions";
   }
   
   static async createGame(user: UserModel): Promise<GameModel | null> {
+    const correctTimeStamp = await ClockFunctions.getCorrectedTimestamp();
     const db = getFirestore();
     const gameRef = doc(collection(db, "newGames"));
     const newGame: GameModel = {
@@ -152,7 +138,7 @@ import { ClockFunctions } from "../Utils/ClockFunctions";
       gameMode: "casual",
       playerOneId: user.id,
       playerOneRating: user.standardRating,
-      timestamp: Timestamp.now(),
+      timestamp: correctTimeStamp,
       matchFound: false
     };
 
@@ -204,23 +190,6 @@ import { ClockFunctions } from "../Utils/ClockFunctions";
           await setDoc(moveRef, newMove);
         }
       }
-      // if (coordinates.length > 0 && letter.length > 0) {
-      //   const db = getFirestore();
-      //   const moveRef = doc(collection(db, `newGames/${game.id}/moves`));
-    
-      //   const newMove: MoveModel = {
-      //     id: moveRef.id,
-      //     gameId: game.id,
-      //     userId: user.id,
-      //     coordinates,
-      //     letter,
-      //     timestamp: Timestamp.now(),
-      //     number: number,
-      //     letterBank: letterBank.sort()
-      //   };
-    
-      //   await setDoc(moveRef, newMove);
-      // }
 
     }
   
