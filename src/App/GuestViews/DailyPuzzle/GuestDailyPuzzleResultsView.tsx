@@ -36,21 +36,30 @@ export default function GuestDailyPuzzleResultsView() {
     const unselectedColor = "rgb(192, 191, 191)";
     const iconSize = 25;
 
-    useEffect(() => {
-        getResults();
-    }, []);
-
-
-    async function getResults() {
+    async function getWordBank() {
         setLeaderboardState(LeaderboardState.loading);
         try {
             const wordBank = await WordBankFunctions.getWordBank();
             setWordBankDict(wordBank);
+        } catch {
+            setLeaderboardState(LeaderboardState.failed);
+            setWords({});
+        }
+    }
 
+    async function getDailyPuzzle() {
+        try {
             let lastPuzzlePlayedId = localStorage.getItem("lastPuzzlePlayedId") ?? "";
             let fetchedPuzzle = await FetchService.fetchDailyPuzzleById(lastPuzzlePlayedId);
             setDailyPuzzle(fetchedPuzzle);
-            // setLastPuzzlePlayed(fetchedPuzzle);
+        } catch {
+            setLeaderboardState(LeaderboardState.failed);
+            setWords({});
+        }
+    }
+
+    async function fetchFoundWords() {
+        try {
             let fetchedWords: Record<string, [WordModel, number]> = {};
 
             const wordString = localStorage.getItem("lastPuzzlePlayedResults") ?? "";
@@ -66,17 +75,48 @@ export default function GuestDailyPuzzleResultsView() {
                 }
             }
 
-            const loadedLeaderboard = await FetchService.fetchLeaderboard(fetchedPuzzle, 100);
-            setLeaderboard(loadedLeaderboard);
-
             setWords(fetchedWords);
             setWordsLoaded(true);
-            setLeaderboardState(LeaderboardState.loaded);
         } catch {
             setLeaderboardState(LeaderboardState.failed);
             setWords({});
         }
     }
+
+    async function getTheLeaderboard() {
+        if (dailyPuzzle) {
+            try {
+                const loadedLeaderboard = await FetchService.fetchLeaderboard(dailyPuzzle, 100);
+                setLeaderboard(loadedLeaderboard);
+            } catch {
+                setLeaderboardState(LeaderboardState.failed);
+                setWords({});
+            }
+        } else {
+            setLeaderboardState(LeaderboardState.failed);
+            setWords({});
+        }
+    }
+
+    useEffect(() => {
+        getWordBank();
+    }, []);
+
+    useEffect(() => {
+        getDailyPuzzle();
+    }, [wordBankDict]);
+
+    useEffect(() => {
+        fetchFoundWords();
+    }, [dailyPuzzle]);
+
+    useEffect(() => {
+        getTheLeaderboard();
+    }, [words]);
+
+    useEffect(() => {
+        setLeaderboardState(LeaderboardState.loaded);
+    }, [leaderboard]);
 
     return (
         <View startAtTop={true}>
@@ -167,7 +207,7 @@ export default function GuestDailyPuzzleResultsView() {
                 {leaderboardState === LeaderboardState.failed && (
                     <>
                         <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>Failed to load results</Typography>
-                        <Button onClick={() => getResults()} variant="contained" color="error">Retry</Button>
+                        <Button onClick={() => window.location.reload()} variant="contained" color="error">Retry</Button>
                     </>
                 )}
 
