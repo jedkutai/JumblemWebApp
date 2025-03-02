@@ -7,6 +7,7 @@ import { VStack } from "../../../../ReactSwiftly";
 import PregameMessage from "../../../Components/PregameMessage";
 import CasualGameRow2 from "../CasualGame2/CasualGameRow2";
 import PrivateLetterGenerator2 from "./PrivateLetterGenerator2";
+import { LinearProgress } from "@mui/material";
 
 interface PrivateGameGrid2Props {
     user: UserModel;
@@ -91,6 +92,11 @@ export default function PrivateGameGrid2({
                 yourTurn={yourTurn}
                 movesMade={movesMade}
             />
+            
+            {!processComplete && (
+                <LinearProgress color="inherit" sx={{ width: `${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px` }} />
+            )}
+
 
             {(!gameOver && movesCopy.length == 0 && matchAbortedTimer > 10) && (
                 <PregameMessage />

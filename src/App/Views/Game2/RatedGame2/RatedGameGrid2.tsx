@@ -7,6 +7,7 @@ import { VStack } from "../../../../ReactSwiftly";
 import PregameMessage from "../../../Components/PregameMessage";
 import CasualGameRow2 from "../CasualGame2/CasualGameRow2";
 import RatedLetterGenerator2 from "./RatedLetterGenerator2";
+import { LinearProgress } from "@mui/material";
 
 interface RatedGameGrid2Props {
     user: UserModel;
@@ -94,6 +95,10 @@ export default function RatedGameGrid2({
                 movesMade={movesMade}
             />
 
+            {!processComplete && (
+                <LinearProgress color="inherit" sx={{ width: `${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px` }} />
+            )}
+            
             {(!gameOver && movesCopy.length == 0 && matchAbortedTimer > 10) && (
                 <PregameMessage />
             )}

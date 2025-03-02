@@ -7,6 +7,7 @@ import PregameMessage from "../../../Components/PregameMessage";
 import CasualGameRow2 from "./CasualGameRow2";
 import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
 import CasualLetterGenerator2 from "./CasualLetterGenerator2";
+import { LinearProgress } from "@mui/material";
 
 
 interface CasualGameGrid2Props {
@@ -50,7 +51,7 @@ export default function CasualGameGrid2({
         const newAvailableBlocks = GameFunctions.getAvailableBlocks(movesDict, availableBlocks);
         setAvailableBlocks(newAvailableBlocks);
     }, [movesDict]);
-    
+
     return (
         <VStack spacing="10px">
             <VStack
@@ -62,7 +63,7 @@ export default function CasualGameGrid2({
             >
 
                 {grid.map((row, index) => (
-                    <CasualGameRow2 
+                    <CasualGameRow2
                         key={index}
                         row={row}
                         availableBlocks={availableBlocks}
@@ -73,7 +74,7 @@ export default function CasualGameGrid2({
                         setSelectedBlock={setSelectedBlock}
                         yourTurn={yourTurn}
                         blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}
-                        lastMove={movesCopy[movesCopy.length -1]}
+                        lastMove={movesCopy[movesCopy.length - 1]}
                     />
                 ))}
 
@@ -93,6 +94,11 @@ export default function CasualGameGrid2({
                 yourTurn={yourTurn}
                 movesMade={movesMade}
             />
+
+            
+            {!processComplete && (
+                <LinearProgress color="inherit" sx={{width: `${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px` }} />
+            )}
 
             {(!gameOver && movesCopy.length == 0 && matchAbortedTimer > 10) && (
                 <PregameMessage />
