@@ -5,12 +5,12 @@ import { DateTime } from "luxon";
 export class ClockFunctions {
   static async getInternetTime(): Promise<DateTime> {
     
-    const response = await fetch("https://worldtimeapi.org/api/timezone/utc");
-    // const response = await fetch("https://timeapi.io/api/time/current/zone?timeZone=utc");
+    // const response = await fetch("https://worldtimeapi.org/api/timezone/utc");
+    const response = await fetch("https://timeapi.io/api/time/current/zone?timeZone=utc");
     const data = await response.json();
 
-    return DateTime.fromISO(data.utc_datetime, { zone: "utc" });
-    // return DateTime.fromISO(data.dateTime, { zone: "utc" });
+    // return DateTime.fromISO(data.utc_datetime, { zone: "utc" });
+    return DateTime.fromISO(data.dateTime, { zone: "utc" });
   };
 
   static async getTimeOffset(): Promise<number> {
