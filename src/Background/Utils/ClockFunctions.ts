@@ -20,7 +20,6 @@ export class ClockFunctions {
   static async getTimeOffset(): Promise<number> {
     const userTime = DateTime.utc(); // Local device time in milliseconds
     const internetTime = await this.getInternetTime(); // Get accurate UTC time
-    console.log("Time offset:", (internetTime.toMillis() - userTime.toMillis()))
     return internetTime.toMillis() - userTime.toMillis(); // Calculate the offset
   }
 
