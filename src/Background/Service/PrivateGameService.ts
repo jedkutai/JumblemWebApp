@@ -17,7 +17,6 @@ import { UserModel } from "../Models/UserModel";
 import { GameModel } from "../Models/GameModel";
 import { MoveModel } from "../Models/MoveModel";
 import { OfferedRematchModel } from "../Models/OfferedRematchModel";
-import { ClockFunctions } from "../Utils/ClockFunctions";
 
 export class PrivateGameService {
   static readonly offeredRematches = "offeredRematches";
@@ -133,8 +132,9 @@ export class PrivateGameService {
     return null;
   }
 
-  static async createGame(user: UserModel): Promise<GameModel | null> {
-    const correctTimeStamp = await ClockFunctions.getCorrectedTimestamp();
+  static async createGame(user: UserModel, timeOffset: number): Promise<GameModel | null> {
+    const adjustedTimestamp = Timestamp.fromMillis(Timestamp.now().toMillis() + timeOffset);
+
     const db = getFirestore();
     const gameRef = doc(collection(db, "newGames"));
     const newGame: GameModel = {
@@ -142,13 +142,14 @@ export class PrivateGameService {
       gameMode: "private",
       playerOneId: user.id,
       playerOneRating: user.standardRating,
-      timestamp: correctTimeStamp,
+      timestamp: adjustedTimestamp,
       matchFound: false
     };
 
     await setDoc(gameRef, newGame);
     return newGame;
   }
+
 
   static async getGameUpdate(game: GameModel): Promise<GameModel> {
     const db = getFirestore();
@@ -173,9 +174,9 @@ export class PrivateGameService {
     await deleteDoc(doc(db, "newGames", game.id));
   }
 
-  static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[]): Promise<void> {
-    const correctTimeStamp = await ClockFunctions.getCorrectedTimestamp();
-    if (correctTimeStamp) {
+  static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[], timeOffset: number): Promise<void> {
+    const adjustedTimestamp = Timestamp.fromMillis(Timestamp.now().toMillis() + timeOffset);
+    if (adjustedTimestamp) {
       if (coordinates.length > 0 && letter.length > 0) {
         const db = getFirestore();
         const moveRef = doc(collection(db, `newGames/${game.id}/moves`));
@@ -186,7 +187,7 @@ export class PrivateGameService {
           userId: user.id,
           coordinates,
           letter,
-          timestamp: correctTimeStamp,
+          timestamp: adjustedTimestamp,
           number: number,
           letterBank: letterBank.sort()
         };

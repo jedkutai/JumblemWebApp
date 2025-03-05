@@ -23,6 +23,8 @@ interface RatedGameGrid2Props {
     gameOver: boolean;
     wordCheckComplete: boolean;
     matchAbortedTimer: number;
+
+    timeOffset: number;
 }
 
 
@@ -36,7 +38,8 @@ export default function RatedGameGrid2({
     gameOver,
     wordCheckComplete,
     matchAbortedTimer,
-    movesMade
+    movesMade,
+    timeOffset
 }: RatedGameGrid2Props) {
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
@@ -93,6 +96,7 @@ export default function RatedGameGrid2({
                 setSelectedBlock={setSelectedBlock}
                 yourTurn={yourTurn}
                 movesMade={movesMade}
+                timeOffset={timeOffset}
             />
 
             {!processComplete && (

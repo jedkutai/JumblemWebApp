@@ -19,6 +19,7 @@ interface RatedLetterGenerator2Props {
     setSelectedBlock: (selectedBlock: string) => void;
     yourTurn: boolean;
     movesMade: number;
+    timeOffset: number;
 }
 
 export default function RatedLetterGenerator2({
@@ -33,7 +34,8 @@ export default function RatedLetterGenerator2({
     selectedBlock,
     setSelectedBlock,
     yourTurn,
-    movesMade
+    movesMade,
+    timeOffset
 }: RatedLetterGenerator2Props) {
 
     const { minDimension } = useWindowSize();
@@ -52,7 +54,7 @@ export default function RatedLetterGenerator2({
             try {
                 const letterBank = letters;
                 setCanSelect(false);
-                await RatedGameService.makeMove(user, game, selectedBlock, letter, (movesMade + 1), letterBank);
+                await RatedGameService.makeMove(user, game, selectedBlock, letter, (movesMade + 1), letterBank, timeOffset);
                 letters.splice(removeIndex, 1);
 
                 const newLetters = GameFunctions.getLetters(1);

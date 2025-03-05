@@ -16,10 +16,11 @@ enum JoinPrivateGameModeState {
 }
 
 interface JoinPrivateGameViewProps {
-    passedUser: UserModel
+    passedUser: UserModel;
+    timeOffset: number;
 }
 
-export default function JoinPrivateGameView({ passedUser }: JoinPrivateGameViewProps) {
+export default function JoinPrivateGameView({ passedUser, timeOffset }: JoinPrivateGameViewProps) {
     const [view, setView] = useState<"JoinPrivateGameView" | "PrivateMatchMenuView">("JoinPrivateGameView");
     // const [user, setUser] = useState<UserModel>(passedUser);
     const [gameModeState, setGameModeState] = useState<JoinPrivateGameModeState>(JoinPrivateGameModeState.enterMatchCode);
@@ -86,7 +87,7 @@ export default function JoinPrivateGameView({ passedUser }: JoinPrivateGameViewP
     }
 
     if (view === "PrivateMatchMenuView") {
-        return <PrivateMatchMenuView passedUser={passedUser} />
+        return <PrivateMatchMenuView passedUser={passedUser} timeOffset={timeOffset}/>
     }
 
     if (gameModeState === JoinPrivateGameModeState.matchFound && game) {
@@ -94,6 +95,7 @@ export default function JoinPrivateGameView({ passedUser }: JoinPrivateGameViewP
             <PlayPrivateGameView2
                 passedGame={game}
                 passedUser={passedUser}
+                timeOffset={timeOffset}
             />
         );
         //     return <PlayPrivateGameView passedUser={passedUser} passedGame={game} />;

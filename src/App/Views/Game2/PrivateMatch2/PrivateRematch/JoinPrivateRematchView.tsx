@@ -11,6 +11,7 @@ import PlayPrivateGameView2 from "../PlayPrivateGameView2";
 interface JoinPrivateRematchViewProps {
     passedUser: UserModel;
     previousGame: GameModel;
+    timeOffset: number;
 }
 
 enum JoinPrivateRematchModeState {
@@ -22,6 +23,7 @@ enum JoinPrivateRematchModeState {
 export default function JoinPrivateRematchView({
     passedUser,
     previousGame,
+    timeOffset
 }: JoinPrivateRematchViewProps) {
     const [user, setUser] = useState<UserModel>(passedUser);
     const [gameModeState, setGameModeState] = useState<JoinPrivateRematchModeState>(JoinPrivateRematchModeState.findingMatch);
@@ -105,6 +107,7 @@ export default function JoinPrivateRematchView({
             <PlayPrivateGameView2
                 passedUser={user}
                 passedGame={game}
+                timeOffset={timeOffset}
             />);
     }
 

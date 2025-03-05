@@ -11,13 +11,13 @@ import {
     setDoc,
     updateDoc,
     deleteDoc,
+    Timestamp,
   } from "firebase/firestore";
   import { UserModel } from "../Models/UserModel";
   import { GameModel } from "../Models/GameModel";
   import { MoveModel } from "../Models/MoveModel";
   import { Rating } from "../Utils/Rating"; // Assuming you have a Rating service
   import { FetchService } from "./FetchService"; // For fetching users or related data
-import { ClockFunctions } from "../Utils/ClockFunctions";
   
   export class RatedGameService {
     static async findGame(user: UserModel): Promise<GameModel | null> {
@@ -66,8 +66,8 @@ import { ClockFunctions } from "../Utils/ClockFunctions";
       return null;
     }
   
-    static async createGame(user: UserModel): Promise<GameModel | null> {
-      const correctTimeStamp = await ClockFunctions.getCorrectedTimestamp();
+    static async createGame(user: UserModel, timeOffset: number): Promise<GameModel | null> {
+      const adjustedTimestamp = Timestamp.fromMillis(Timestamp.now().toMillis() + timeOffset);
       const db = getFirestore();
       const gameRef = doc(collection(db, "newGames"));
       const newGame: GameModel = {
@@ -75,7 +75,7 @@ import { ClockFunctions } from "../Utils/ClockFunctions";
         gameMode: "standard",
         playerOneId: user.id,
         playerOneRating: user.standardRating,
-        timestamp: correctTimeStamp,
+        timestamp: adjustedTimestamp,
         matchFound: false
       };
   
@@ -106,9 +106,9 @@ import { ClockFunctions } from "../Utils/ClockFunctions";
       await deleteDoc(doc(db, "newGames", game.id));
     }
   
-    static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[]): Promise<void> {
-      const correctTimeStamp = await ClockFunctions.getCorrectedTimestamp();
-      if (correctTimeStamp) {
+    static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[], timeOffset: number): Promise<void> {
+      const adjustedTimestamp = Timestamp.fromMillis(Timestamp.now().toMillis() + timeOffset);
+      if (adjustedTimestamp) {
         if (coordinates.length > 0 && letter.length > 0) {
           const db = getFirestore();
           const moveRef = doc(collection(db, `newGames/${game.id}/moves`));
@@ -119,7 +119,7 @@ import { ClockFunctions } from "../Utils/ClockFunctions";
             userId: user.id,
             coordinates,
             letter,
-            timestamp: correctTimeStamp,
+            timestamp: adjustedTimestamp,
             number: number,
             letterBank: letterBank.sort()
           };

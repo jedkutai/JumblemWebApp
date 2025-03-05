@@ -19,6 +19,7 @@ interface CasualLetterGenerator2Props {
     setSelectedBlock: (selectedBlock: string) => void;
     yourTurn: boolean;
     movesMade: number;
+    timeOffset: number;
 }
 
 export default function CasualLetterGenerator2({
@@ -33,7 +34,8 @@ export default function CasualLetterGenerator2({
     selectedBlock,
     setSelectedBlock,
     yourTurn,
-    movesMade
+    movesMade,
+    timeOffset
 }: CasualLetterGenerator2Props) {
 
     const { minDimension } = useWindowSize();
@@ -52,7 +54,7 @@ export default function CasualLetterGenerator2({
             try {
                 const letterBank = letters;
                 setCanSelect(false);
-                await CasualGameService.makeMove(user, game, selectedBlock, letter, (movesMade + 1), letterBank);
+                await CasualGameService.makeMove(user, game, selectedBlock, letter, (movesMade + 1), letterBank, timeOffset);
                 letters.splice(removeIndex, 1);
 
                 const newLetters = GameFunctions.getLetters(1);

@@ -10,6 +10,7 @@ import PlayRatedGameView2 from "./PlayRatedGameView2";
 
 interface StartRatedGameView2Props {
     passedUser: UserModel
+    timeOffset: number;
 }
 
 enum RatedGameModeState {
@@ -19,7 +20,7 @@ enum RatedGameModeState {
     error
 }
 
-export default function StartRatedGameView2({ passedUser }: StartRatedGameView2Props) {
+export default function StartRatedGameView2({ passedUser, timeOffset }: StartRatedGameView2Props) {
     const [user, setUser] = useState<UserModel>(passedUser);
     const [gameModeState, setGameModeState] = useState<RatedGameModeState>(RatedGameModeState.idle);
     const [game, setGame] = useState<GameModel | null>(null);
@@ -64,7 +65,7 @@ export default function StartRatedGameView2({ passedUser }: StartRatedGameView2P
                     setGame(null);
                 }
             } else {
-                const createdGame = await RatedGameService.createGame(user);
+                const createdGame = await RatedGameService.createGame(user, timeOffset);
                 setGame(createdGame);
                 setHostOfMatch(true);
                 setTicker(!ticker);
@@ -123,7 +124,7 @@ export default function StartRatedGameView2({ passedUser }: StartRatedGameView2P
     }
 
     if (gameModeState === RatedGameModeState.matchFound && game) {
-        return <PlayRatedGameView2 passedUser={user} passedGame={game} />;
+        return <PlayRatedGameView2 passedUser={user} passedGame={game} timeOffset={timeOffset}/>;
     }
 
     return (

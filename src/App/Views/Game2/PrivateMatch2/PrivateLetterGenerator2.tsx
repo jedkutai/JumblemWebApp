@@ -18,6 +18,7 @@ interface PrivateLetterGenerator2Props {
     setSelectedBlock: (selectedBlock: string) => void;
     yourTurn: boolean;
     movesMade: number;
+    timeOffset: number;
 }
 
 export default function PrivateLetterGenerator2({
@@ -31,7 +32,8 @@ export default function PrivateLetterGenerator2({
     selectedBlock,
     setSelectedBlock,
     yourTurn,
-    movesMade
+    movesMade,
+    timeOffset
 }: PrivateLetterGenerator2Props) {
 
     const { minDimension } = useWindowSize();
@@ -50,7 +52,7 @@ export default function PrivateLetterGenerator2({
             const letterBank = letters;
             try {
                 setCanSelect(false);
-                await PrivateGameService.makeMove(user, game, selectedBlock, letter, (movesMade + 1), letterBank);
+                await PrivateGameService.makeMove(user, game, selectedBlock, letter, (movesMade + 1), letterBank, timeOffset);
                 letters.splice(removeIndex, 1);
 
                 const newLetters = GameFunctions.getLetters(1);

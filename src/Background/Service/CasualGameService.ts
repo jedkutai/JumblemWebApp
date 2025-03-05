@@ -1,9 +1,8 @@
-import { getFirestore, collection, doc, getDocs, setDoc, deleteDoc, query, where, orderBy, limit, updateDoc, getDoc } from "firebase/firestore";
+import { getFirestore, collection, doc, getDocs, setDoc, deleteDoc, query, where, orderBy, limit, updateDoc, getDoc, Timestamp } from "firebase/firestore";
 import { UserModel } from "../Models/UserModel";
 import { GameModel } from "../Models/GameModel";
 import { MoveModel } from "../Models/MoveModel";
 import { GameService } from "./GameService";
-import { ClockFunctions } from "../Utils/ClockFunctions";
 
 export class CasualGameService {
   static async botJoinMatch(user: UserModel, game: GameModel): Promise<void> {
@@ -72,9 +71,9 @@ export class CasualGameService {
     return null;
   }
 
-  static async createGame(user: UserModel): Promise<GameModel | null> {
-    const correctTimeStamp = await ClockFunctions.getCorrectedTimestamp();
-    if (correctTimeStamp) {}
+  static async createGame(user: UserModel, timeOffset: number): Promise<GameModel | null> {
+    const adjustedTimestamp = Timestamp.fromMillis(Timestamp.now().toMillis() + timeOffset);
+
     const db = getFirestore();
     const gameRef = doc(collection(db, "newGames"));
     const newGame: GameModel = {
@@ -82,13 +81,14 @@ export class CasualGameService {
       gameMode: "casual",
       playerOneId: user.id,
       playerOneRating: user.standardRating,
-      timestamp: correctTimeStamp,
+      timestamp: adjustedTimestamp,
       matchFound: false
     };
 
     await setDoc(gameRef, newGame);
     return newGame;
   }
+
 
   static async getGameUpdate(game: GameModel): Promise<GameModel> {
     const db = getFirestore();
@@ -109,9 +109,9 @@ export class CasualGameService {
     await deleteDoc(doc(db, "newGames", game.id));
   }
 
-  static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[]): Promise<void> {
-    const correctTimeStamp = await ClockFunctions.getCorrectedTimestamp();
-    if (correctTimeStamp) {
+  static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[], timeOffset: number): Promise<void> {
+    const adjustedTimestamp = Timestamp.fromMillis(Timestamp.now().toMillis() + timeOffset);
+    if (adjustedTimestamp) {
       if (coordinates.length > 0 && letter.length > 0) {
         const db = getFirestore();
         const movesRef = doc(collection(db, `newGames/${game.id}/moves`));
@@ -121,7 +121,7 @@ export class CasualGameService {
           userId: user.id,
           coordinates,
           letter,
-          timestamp: correctTimeStamp,
+          timestamp: adjustedTimestamp,
           number: number,
           letterBank: letterBank.sort()
         };
@@ -132,9 +132,9 @@ export class CasualGameService {
 
   }
 
-  static async makeBotMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[]): Promise<void> {
-    const correctTimeStamp = await ClockFunctions.getCorrectedTimestamp();
-    if (correctTimeStamp) {
+  static async makeBotMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[], timeOffset: number): Promise<void> {
+    const adjustedTimestamp = Timestamp.fromMillis(Timestamp.now().toMillis() + timeOffset);
+    if (adjustedTimestamp) {
       const db = getFirestore();
       const movesRef = doc(collection(db, `newGames/${game.id}/moves`));
       const newMove: MoveModel = {
@@ -143,7 +143,7 @@ export class CasualGameService {
         userId: `BOT-${user.id}`,
         coordinates,
         letter,
-        timestamp: correctTimeStamp,
+        timestamp: adjustedTimestamp,
         number: number,
         letterBank: letterBank.sort()
       };

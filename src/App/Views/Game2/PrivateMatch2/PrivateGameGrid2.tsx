@@ -23,6 +23,8 @@ interface PrivateGameGrid2Props {
     gameOver: boolean;
     wordCheckComplete: boolean;
     matchAbortedTimer: number;
+
+    timeOffset: number;
 }
 
 export default function PrivateGameGrid2({
@@ -35,7 +37,8 @@ export default function PrivateGameGrid2({
     gameOver,
     wordCheckComplete,
     matchAbortedTimer,
-    movesMade
+    movesMade,
+    timeOffset
 }: PrivateGameGrid2Props) {
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
@@ -91,6 +94,7 @@ export default function PrivateGameGrid2({
                 setSelectedBlock={setSelectedBlock}
                 yourTurn={yourTurn}
                 movesMade={movesMade}
+                timeOffset={timeOffset}
             />
             
             {!processComplete && (

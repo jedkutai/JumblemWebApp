@@ -17,9 +17,10 @@ import CasualGameOverGrid2 from "./CasualGameOverGrid2";
 interface PlayCasualGameView2Props {
     passedUser: UserModel;
     passedGame: GameModel;
+    timeOffset: number;
 }
 
-export default function PlayCasualGameView2({ passedUser, passedGame }: PlayCasualGameView2Props) {
+export default function PlayCasualGameView2({ passedUser, passedGame, timeOffset }: PlayCasualGameView2Props) {
     const {
         movesCopy,
         movesDict,
@@ -273,6 +274,7 @@ export default function PlayCasualGameView2({ passedUser, passedGame }: PlayCasu
                         wordCheckComplete={wordCheckComplete}
                         matchAbortedTimer={matchAbortedTimer}
                         movesMade={movesMade}
+                        timeOffset={timeOffset}
                     />
 
                 </VStack>

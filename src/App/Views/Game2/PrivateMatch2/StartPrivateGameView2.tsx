@@ -10,6 +10,7 @@ import PlayPrivateGameView2 from "./PlayPrivateGameView2";
 
 interface StartPrivateGameViewProps {
     passedUser: UserModel
+    timeOffset: number;
 }
 
 enum PrivateGameModeState {
@@ -18,7 +19,7 @@ enum PrivateGameModeState {
     error
 }
 
-export default function StartPrivateGameView({ passedUser }: StartPrivateGameViewProps) {
+export default function StartPrivateGameView({ passedUser, timeOffset }: StartPrivateGameViewProps) {
     const [view, setView] = useState<"StartPrivateGameView" | "Menu">("StartPrivateGameView");
     const [user, setUser] = useState<UserModel>(passedUser);
     const [gameModeState, setGameModeState] = useState<PrivateGameModeState>(PrivateGameModeState.findingMatch);
@@ -52,7 +53,7 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
                 setUser(updatedUser);
             }
 
-            const createdGame = await PrivateGameService.createGame(user);
+            const createdGame = await PrivateGameService.createGame(user, timeOffset);
             setGame(createdGame);
             setHostOfMatch(true);
             setTicker(!ticker);
@@ -123,7 +124,7 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
     };
 
     if (view === "Menu") {
-        return <PrivateMatchMenuView passedUser={user} />;
+        return <PrivateMatchMenuView passedUser={user} timeOffset={timeOffset}/>;
     }
 
     if (gameModeState === PrivateGameModeState.matchFound && game) {
@@ -131,6 +132,7 @@ export default function StartPrivateGameView({ passedUser }: StartPrivateGameVie
             <PlayPrivateGameView2 
                 passedGame={game}
                 passedUser={user}
+                timeOffset={timeOffset}
             />
         )
         // return <PlayPrivateGameView

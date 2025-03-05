@@ -10,7 +10,8 @@ import PlayCasualGameView2 from "./PlayCasualGameView2";
 import BotPlayCasualGameView2 from "./CasualBot2/BotCasualGameView2";
 
 interface StartCasualGameViewProps2 {
-    passedUser: UserModel
+    passedUser: UserModel;
+    timeOffset: number;
 }
 
 enum CasualGameModeState {
@@ -21,7 +22,7 @@ enum CasualGameModeState {
     error
 }
 
-export default function StartCasualGameView2({ passedUser }: StartCasualGameViewProps2) {
+export default function StartCasualGameView2({ passedUser, timeOffset }: StartCasualGameViewProps2) {
     const user: UserModel = passedUser;
     const [gameModeState, setGameModeState] = useState<CasualGameModeState>(CasualGameModeState.idle);
     const [game, setGame] = useState<GameModel | null>(null);
@@ -69,7 +70,7 @@ export default function StartCasualGameView2({ passedUser }: StartCasualGameView
                     setGame(null);
                 }
             } else {
-                const createdGame = await CasualGameService.createGame(user);
+                const createdGame = await CasualGameService.createGame(user, timeOffset);
                 setGame(createdGame);
                 setHostOfMatch(true);
                 setTicker(!ticker);
@@ -137,9 +138,9 @@ export default function StartCasualGameView2({ passedUser }: StartCasualGameView
 
 
     if (gameModeState === CasualGameModeState.matchFound && game) {
-        return <PlayCasualGameView2 passedUser={user} passedGame={game} />;
+        return <PlayCasualGameView2 passedUser={user} passedGame={game} timeOffset={timeOffset}/>;
     } else if (gameModeState === CasualGameModeState.playBot && game) {
-        return <BotPlayCasualGameView2 passedUser={user} passedGame={game} />;
+        return <BotPlayCasualGameView2 passedUser={user} passedGame={game} timeOffset={timeOffset}/>;
     }
 
     return (

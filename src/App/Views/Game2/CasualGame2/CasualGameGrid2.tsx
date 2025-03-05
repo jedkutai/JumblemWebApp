@@ -24,6 +24,8 @@ interface CasualGameGrid2Props {
     gameOver: boolean;
     wordCheckComplete: boolean;
     matchAbortedTimer: number;
+
+    timeOffset: number;
 }
 
 export default function CasualGameGrid2({
@@ -36,7 +38,8 @@ export default function CasualGameGrid2({
     gameOver,
     wordCheckComplete,
     matchAbortedTimer,
-    movesMade
+    movesMade,
+    timeOffset
 }: CasualGameGrid2Props) {
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
@@ -93,6 +96,7 @@ export default function CasualGameGrid2({
                 setSelectedBlock={setSelectedBlock}
                 yourTurn={yourTurn}
                 movesMade={movesMade}
+                timeOffset={timeOffset}
             />
 
             

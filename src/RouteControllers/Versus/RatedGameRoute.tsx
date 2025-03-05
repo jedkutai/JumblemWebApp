@@ -11,6 +11,7 @@ import JumblemLogoSimple from "../../App/Components/JumblemLogoSimple";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
 import VersusCrashCourse from "../../App/General/CrashCourses/Versus/VersusCrashCourse";
 import StartRatedGameView2 from "../../App/Views/Game2/RatedGame2/StartRatedGameView2";
+import { ClockFunctions } from "../../Background/Utils/ClockFunctions";
 
 enum PageState {
     loading,
@@ -19,6 +20,7 @@ enum PageState {
 
 export default function RatedGameRoute() {
     const [user, setUser] = useState<UserModel | null>(null);
+    const [timeOffset, setTimeOffset] = useState<number | null>(null);
     const [pageState, setPageState] = useState<PageState>(PageState.loading);
     const navigate = useNavigate();
     const crashCoursePlayed = localStorage.getItem("versusCrashCoursePlayed");
@@ -31,6 +33,8 @@ export default function RatedGameRoute() {
         const auth = getAuth(app);
 
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+            const fetchedTimeOffset = await ClockFunctions.getTimeOffset();
+            setTimeOffset(fetchedTimeOffset);
             if (firebaseUser) {
                 if (firebaseUser.isAnonymous) {
                     navigate("/home");
@@ -63,7 +67,7 @@ export default function RatedGameRoute() {
             <VersusCrashCourse />
         );
     }
-    
+
     switch (pageState) {
         case PageState.loading:
             return (
@@ -71,9 +75,9 @@ export default function RatedGameRoute() {
             );
 
         case PageState.loaded:
-            if (user && user.username !== "guest") {
+            if (user && user.username !== "guest" && timeOffset) {
                 return (
-                    <StartRatedGameView2 passedUser={user} />
+                    <StartRatedGameView2 passedUser={user} timeOffset={timeOffset} />
                 );
             } else {
                 return (
