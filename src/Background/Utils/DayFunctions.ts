@@ -1,5 +1,5 @@
 import { toZonedTime, format } from "date-fns-tz";
-import { startOfDay, addDays } from "date-fns";
+import { startOfDay, addHours } from "date-fns";
 
 export class DayFunctions {
   static getTodayDateRangeInPacificTime(): [Date, Date] {
@@ -11,7 +11,9 @@ export class DayFunctions {
 
     // Get start and end of the day in Pacific Time
     const pacificStartOfDay = startOfDay(pacificNow);
-    const pacificEndOfDay = addDays(pacificStartOfDay, 1);
+    
+    // const pacificEndOfDay = addDays(pacificStartOfDay, 1);
+    const pacificEndOfDay = addHours(pacificStartOfDay, 24);
 
     // Convert Pacific Time back to UTC for Firestore queries
     const startOfDayUTC = new Date(
