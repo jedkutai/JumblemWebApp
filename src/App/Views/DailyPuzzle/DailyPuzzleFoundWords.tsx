@@ -1,8 +1,9 @@
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { WordModel } from "../../../Background/Models";
 import { HStack, VStack } from "../../../ReactSwiftly";
 import { ColoredWord } from "../../Components";
 import WordRarityBar from "../../Components/WordRarityBar";
+import { useState } from "react";
 
 enum WordRarity {
     legendary,
@@ -11,12 +12,18 @@ enum WordRarity {
     common
 }
 
-interface DailyPuzzleFoundWordsProps {
-    correctWords: Record<string, [WordModel, number]>;
+enum ModeShown {
+    all,
+    recent
 }
 
-export default function DailyPuzzleFoundWords({ correctWords }: DailyPuzzleFoundWordsProps) {
+interface DailyPuzzleFoundWordsProps {
+    correctWords: Record<string, [WordModel, number]>;
+    recentWords: Record<string, [WordModel, number]>;
+}
 
+export default function DailyPuzzleFoundWords({ correctWords, recentWords }: DailyPuzzleFoundWordsProps) {
+    const [mode, setMode] = useState<ModeShown>(ModeShown.all);
 
     function getWordRarity(word: WordModel): WordRarity {
         switch (word.score) {
@@ -42,7 +49,13 @@ export default function DailyPuzzleFoundWords({ correctWords }: DailyPuzzleFound
     return (
         <VStack spacing="0px">
             <WordRarityBar />
-            {Object.keys(correctWords).sort().map((word) => {
+            {Object.keys(recentWords).length > 0 && (
+                <Button onClick={() => setMode(mode == ModeShown.all ? ModeShown.recent : ModeShown.all)}>
+                {mode == ModeShown.all ? "Show Recent Words" : "Show All Words"}
+            </Button>
+            )}
+
+            {Object.keys(mode == ModeShown.all ? correctWords : recentWords).sort().map((word) => {
                 const [wordModel, count] = correctWords[word];
                 const wordRarity = getWordRarity(wordModel);
                 return (

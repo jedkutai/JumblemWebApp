@@ -38,6 +38,7 @@ export default function DailyPuzzleView({
     const [goldenGrids, setGoldenGrids] = useState<string[]>([]);
     const [wrongGuessHighlight, setWrongGuessHighlight] = useState(false);
     const [showScoreDetails, setShowScoreDetails] = useState(false);
+    const [recentlyCorrectWords, setRecentlyCorrectWords] = useState<Record<string, [WordModel, number]>>({});
     const [correctWords, setCorrectWords] = useState<Record<string, [WordModel, number]>>({});
     const [grid, setGrid] = useState<GridSpotModel[][]>(GridSpot.grid);
     const [submittingPuzzle, setSubmittingPuzzle] = useState(false);
@@ -120,6 +121,7 @@ export default function DailyPuzzleView({
             }
 
             if (canGuess) {
+                setRecentlyCorrectWords({});
                 const [r, c] = DailyPuzzleFunctions.getCoordinateInts(gridSpot);
 
                 // Update the grid immutably
@@ -156,6 +158,15 @@ export default function DailyPuzzleView({
                         words.forEach(([wordModel, winningGridSpots]) => {
                             setGoldenGrids((prevGoldenGrids) => [...prevGoldenGrids, ...winningGridSpots]);
                             setCorrectWords((prevCorrectWords) => {
+                                const updatedCorrectWords = { ...prevCorrectWords };
+                                if (updatedCorrectWords[wordModel.word]) {
+                                    updatedCorrectWords[wordModel.word][1] += 1;
+                                } else {
+                                    updatedCorrectWords[wordModel.word] = [wordModel, 1];
+                                }
+                                return updatedCorrectWords;
+                            });
+                            setRecentlyCorrectWords((prevCorrectWords) => {
                                 const updatedCorrectWords = { ...prevCorrectWords };
                                 if (updatedCorrectWords[wordModel.word]) {
                                     updatedCorrectWords[wordModel.word][1] += 1;
@@ -245,7 +256,7 @@ export default function DailyPuzzleView({
                 </HStack>
 
                 {showScoreDetails && (
-                    <DailyPuzzleFoundWords correctWords={correctWords} />
+                    <DailyPuzzleFoundWords correctWords={correctWords} recentWords={recentlyCorrectWords}/>
                 )}
 
                 {(livesRemaining > 0 || !submittingPuzzle) && (

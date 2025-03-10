@@ -121,7 +121,7 @@ export default function LeaderboardEntry({
                         </HStack>
 
                         {expand && wordsLoaded && (
-                            <DailyPuzzleFoundWords correctWords={words} />
+                            <DailyPuzzleFoundWords correctWords={words} recentWords={{}}/>
                         )}
 
                         {expand && !wordsLoaded && (
@@ -155,7 +155,7 @@ export default function LeaderboardEntry({
                             </HStack>
 
                             {expand && wordsLoaded && (
-                                <DailyPuzzleFoundWords correctWords={words} />
+                                <DailyPuzzleFoundWords correctWords={words} recentWords={{}}/>
                             )}
 
                             {expand && !wordsLoaded && (

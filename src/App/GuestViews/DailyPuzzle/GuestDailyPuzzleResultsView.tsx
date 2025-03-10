@@ -164,7 +164,7 @@ export default function GuestDailyPuzzleResultsView() {
                         {expand && wordsLoaded && (
                             <>
                                 <h2 style={{ color: "black" }}>{`Total: ${DailyPuzzleFunctions.getScore(words)}`}</h2>
-                                <DailyPuzzleFoundWords correctWords={words} />
+                                <DailyPuzzleFoundWords correctWords={words} recentWords={{}}/>
                             </>
                         )}
 

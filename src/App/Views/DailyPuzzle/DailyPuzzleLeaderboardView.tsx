@@ -172,7 +172,7 @@ export default function DailyPuzzleLeaderboardView({ passedUser, dailyPuzzle }: 
                                 {expand && wordsLoaded && (
                                     <>
                                         <h2 style={{ color: "black" }}>{`Total: ${Math.floor(userPuzzleEntry.score)}`}</h2>
-                                        <DailyPuzzleFoundWords correctWords={words} />
+                                        <DailyPuzzleFoundWords correctWords={words} recentWords={{}}/>
                                     </>
                                 )}
 
