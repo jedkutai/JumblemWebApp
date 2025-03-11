@@ -1,4 +1,4 @@
-import { Button, CircularProgress } from "@mui/material";
+import { Button, CircularProgress, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserModel, GameModel } from "../../../../Background/Models";
@@ -7,6 +7,7 @@ import { View, VStack } from "../../../../ReactSwiftly";
 import GameRequirementsWarning from "../../../Components/GameRequirementsWarning";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import PlayRatedGameView2 from "./PlayRatedGameView2";
+import DiscordIcon from "../../../Components/SiteIcons/DiscordIcon";
 
 interface StartRatedGameView2Props {
     passedUser: UserModel
@@ -123,8 +124,12 @@ export default function StartRatedGameView2({ passedUser, timeOffset }: StartRat
         }
     }
 
+    function openDiscord() {
+        window.open("https://discord.gg/8btEWRf7Y5", "_blank");
+    }
+
     if (gameModeState === RatedGameModeState.matchFound && game) {
-        return <PlayRatedGameView2 passedUser={user} passedGame={game} timeOffset={timeOffset}/>;
+        return <PlayRatedGameView2 passedUser={user} passedGame={game} timeOffset={timeOffset} />;
     }
 
     return (
@@ -177,6 +182,14 @@ export default function StartRatedGameView2({ passedUser, timeOffset }: StartRat
                     style={{ marginTop: "10px" }}
                 >
                     Cancel
+                </Button>
+
+                <div style={{ height: "40px" }}></div>
+
+                <Typography>Taking to long to find a match?</Typography>
+                <Typography>Join the discord to find opponents.</Typography>
+                <Button onClick={openDiscord}>
+                    <DiscordIcon />
                 </Button>
             </VStack>
         </View>
