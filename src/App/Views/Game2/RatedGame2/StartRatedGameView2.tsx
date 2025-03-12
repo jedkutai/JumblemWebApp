@@ -186,7 +186,7 @@ export default function StartRatedGameView2({ passedUser, timeOffset }: StartRat
 
                 <div style={{ height: "40px" }}></div>
 
-                <Typography>Taking to long to find a match?</Typography>
+                <Typography>Taking too long to find a match?</Typography>
                 <Typography>Join the discord to find opponents.</Typography>
                 <Button onClick={openDiscord}>
                     <DiscordIcon />
