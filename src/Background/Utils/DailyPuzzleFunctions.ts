@@ -2,9 +2,95 @@ import { GridSpotModel } from "../Models/GridSpotModel";
 import { GridSpot } from "../Extends/GridSpot";
 import { WordModel } from "../Models/WordModel";
 import { WordBankFunctions } from "./WordBankFunctions";
+import { DailyPuzzleModel } from "../Models";
 
 export class DailyPuzzleFunctions {
 
+  static clearPuzzleProgress() {
+    localStorage.removeItem("puzzleInProgressId");
+    localStorage.removeItem("puzzleInProgressGuesses");
+    localStorage.removeItem("puzzleInProgressCorrectWords");
+    localStorage.removeItem("puzzleInProgressLivesRemaining");
+  }
+
+  static savePuzzleProgress(
+    dailyPuzzle: DailyPuzzleModel, 
+    guessesDict: Record<string, string[]>, 
+    livesRemaining: number, 
+    correctWords: Record<string, [WordModel, number]>
+  ) {
+    let correctWordsString: string = "";
+    for (const word of Object.keys(correctWords)) {
+      const value = correctWords[word];
+      if (value) {
+        const score = value[1];
+        correctWordsString += correctWordsString.length == 0 ? `${word}#${score}` : `;${word}#${score}`
+      }
+
+    }
+
+    let guessesString: string = "";
+    for (const gridSpot of Object.keys(guessesDict)) {
+      const guesses = guessesDict[gridSpot];
+      if (guesses) {
+        guessesString += guessesString.length == 0 ? `${gridSpot}#${guesses.join(",")}` : `;${gridSpot}#${guesses.join(",")}`;
+      }
+    }
+    localStorage.setItem("puzzleInProgressId", dailyPuzzle.id);
+    localStorage.setItem("puzzleInProgressGuesses", guessesString);
+    localStorage.setItem("puzzleInProgressCorrectWords", correctWordsString);
+    localStorage.setItem("puzzleInProgressLivesRemaining", `${livesRemaining}`);
+  }
+
+  static getPuzzleInProgressGuesses(): Record<string, string[]> {
+    let guessesDict: Record<string, string[]> = {};
+
+    const guessesString: string = localStorage.getItem("puzzleInProgressGuesses") ?? "";
+    const guessesArray: string[] = guessesString.split(";");
+    for (const guessItem of guessesArray) {
+      let guessSplit: string[] = guessItem.split("#");
+      if (guessSplit.length == 2) {
+        let gridSpot = guessSplit[0];
+        let guesses: string[] = guessSplit[1].split(",");
+        guessesDict[gridSpot] = guesses;
+      }
+    }
+
+    return guessesDict;
+  }
+
+  static getPuzzleInProgressCorrectWords(wordBank: Record<string, string[]>): Record<string, [WordModel, number]> {
+    let correctWords: Record<string, [WordModel, number]> = {}
+
+    const correctWordsString: string = localStorage.getItem("puzzleInProgressCorrectWords") ?? "";
+    const correctWordsArray: string[] = correctWordsString.split(";");
+    for (const correctedWordItem of correctWordsArray) {
+      const correctWordSplit: string[] = correctedWordItem.split("#");
+      if (correctWordSplit.length == 2) {
+        const word: string = correctWordSplit[0]
+        const count: number = Number(correctWordSplit[1]) ?? 0;
+        if (count > 0) {
+          const fetchedWord = WordBankFunctions.fetchWordModelByWord(word, wordBank);
+          if (fetchedWord) {
+            correctWords[word] = [fetchedWord, count];
+          }
+        }
+      }
+    }
+    return correctWords;
+  }
+
+  static getPuzzleInProgress(wordBank: Record<string, string[]>): [Record<string, string[]>, number, Record<string, [WordModel, number]>]{
+    const guessesDict: Record<string, string[]> = this.getPuzzleInProgressGuesses();
+    const livesRemaining: number = Number(localStorage.getItem("puzzleInProgressLivesRemaining")) ?? 0.
+    const correctWords: Record<string, [WordModel, number]> = this.getPuzzleInProgressCorrectWords(wordBank);
+
+    return [guessesDict, livesRemaining, correctWords];
+  }
+
+  static getPuzzleInProgressId(): string | null {
+    return localStorage.getItem("puzzleInProgressId");
+  }
 
   static validSquare(spot: GridSpotModel, grid: GridSpotModel[][]): boolean {
     const directions = ["north", "south", "east", "west"] as const;

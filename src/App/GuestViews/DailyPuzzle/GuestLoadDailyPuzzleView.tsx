@@ -2,7 +2,7 @@ import { CircularProgress, Typography, Button } from "@mui/material";
 import { Timestamp } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { DailyPuzzleModel, GridSpotModel } from "../../../Background/Models";
+import { DailyPuzzleModel, GridSpotModel, WordModel } from "../../../Background/Models";
 import { FetchService } from "../../../Background/Service";
 import { DailyPuzzleFunctions } from "../../../Background/Utils/DailyPuzzleFunctions";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
@@ -10,11 +10,13 @@ import { View, VStack, VSpacer, HStack } from "../../../ReactSwiftly";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import GuestDailyPuzzleResultsView from "./GuestDailyPuzzleResultsView";
 import GuestDailyPuzzleView from "./GuestDailyPuzzleView";
+import { WordBankFunctions } from "../../../Background/Utils/WordBankFunctions";
 
 enum DailyPuzzleState {
     loading,
     loaded,
     alreadyPlayed,
+    inprogress,
     failed
 }
 
@@ -23,19 +25,37 @@ export default function GuestLoadDailyPuzzleView() {
     const [dailyPuzzle, setDailyPuzzle] = useState<DailyPuzzleModel | null>(null);
     const [dailyPuzzleState, setDailyPuzzleState] = useState<DailyPuzzleState>(DailyPuzzleState.loading);
     const [dailyPuzzleDict, setDailyPuzzleDict] = useState<Record<string, GridSpotModel>>({});
-    const [view, setView] = useState<"LoadDailyPuzzle" | "PlayDailyPuzzle" | "Results">("LoadDailyPuzzle");
+    const [view, setView] = useState<"LoadDailyPuzzle" | "PlayDailyPuzzle" | "Results" | "ResumeDailyPuzzle">("LoadDailyPuzzle");
     const { height } = useWindowSize();
     const navigate = useNavigate();
+
+    const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
+    const [correctWords, setCorrectWords] = useState<Record<string, [WordModel, number]>>({});
+    const [guessesDict, setGuessesDict] = useState<Record<string, string[]>>({});
+    const [livesRemaining, setLivesRemaining] = useState(0);
 
     useEffect(() => {
         onAppearActions();
     }, []);
 
+    useEffect(() => {
+        // load the other stuff
+        const [guessesDictFetched, livesRemainingFetched, correctWordsFetched] = DailyPuzzleFunctions.getPuzzleInProgress(wordBankDict);
+
+        setGuessesDict(guessesDictFetched);
+        setLivesRemaining(livesRemainingFetched);
+        setCorrectWords(correctWordsFetched);
+
+        setDailyPuzzleState(DailyPuzzleState.inprogress);
+    }, [wordBankDict]);
+
     function navigateToPuzzle() {
         setView("PlayDailyPuzzle");
     }
 
-
+    function resumePuzzle() {
+        setView("ResumeDailyPuzzle");
+    }
 
     function nextPuzzleDate(time: Timestamp): string {
         const nextPuzzleDate = new Date(time.toDate());
@@ -53,7 +73,16 @@ export default function GuestLoadDailyPuzzleView() {
             if (fetchedDailyPuzzle) {
                 setDailyPuzzleDict(DailyPuzzleFunctions.signatureToGridDict(fetchedDailyPuzzle.signature));
                 if (lastPuzzlePlayedId === fetchedDailyPuzzle.id) {
-                    setDailyPuzzleState(DailyPuzzleState.alreadyPlayed);
+                    if (fetchedDailyPuzzle.id == DailyPuzzleFunctions.getPuzzleInProgressId()) {
+                        try {
+                            const wordBankFetched = await WordBankFunctions.getWordBank();
+                            setWordBankDict(wordBankFetched);
+                        } catch {
+                            setDailyPuzzleState(DailyPuzzleState.failed);
+                        }
+                    } else {
+                        setDailyPuzzleState(DailyPuzzleState.alreadyPlayed);
+                    }
                     return;
                 } else {
                     setDailyPuzzleState(DailyPuzzleState.loaded);
@@ -82,6 +111,17 @@ export default function GuestLoadDailyPuzzleView() {
                 return (
                     <GuestDailyPuzzleResultsView />
                 );
+            }
+            break;
+        case "ResumeDailyPuzzle":
+            if (dailyPuzzle) {
+                return (<GuestDailyPuzzleView
+                    dailyPuzzle={dailyPuzzle}
+                    dailyPuzzleDict={dailyPuzzleDict}
+                    passedCorrectWords={correctWords}
+                    passedGuessesDict={guessesDict}
+                    passedLivesRemaining={livesRemaining}
+                />);
             }
             break;
         case "LoadDailyPuzzle":
@@ -121,6 +161,13 @@ export default function GuestLoadDailyPuzzleView() {
                                 <Button style={{ width: "100px" }} variant="contained" color="secondary" onClick={() => setView("Results")}>Results</Button>
                                 <Button style={{ width: "100px" }} variant="contained" color="primary" onClick={() => navigate("/")}>Login</Button>
                             </HStack>
+                        </>
+                    )}
+                    {dailyPuzzleState === DailyPuzzleState.inprogress && dailyPuzzle && (
+                        <>
+                            <Typography textAlign={"center"}>You've already started today's puzzle.</Typography>
+
+                            <Button variant="contained" onClick={() => resumePuzzle()}>Resume Puzzle</Button>
                         </>
                     )}
                     {dailyPuzzleState === DailyPuzzleState.failed && (

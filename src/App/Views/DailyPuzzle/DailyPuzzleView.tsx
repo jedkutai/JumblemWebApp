@@ -20,30 +20,38 @@ interface DailyPuzzleViewProps {
     passedUser: UserModel;
     dailyPuzzle: DailyPuzzleModel;
     dailyPuzzleDict: Record<string, GridSpotModel>;
+    passedCorrectWords?: Record<string, [WordModel, number]>;
+    passedGuessesDict?: Record<string, string[]>;
+    passedLivesRemaining?: number;
 }
 
 export default function DailyPuzzleView({
     passedUser,
     dailyPuzzle,
-    dailyPuzzleDict
+    dailyPuzzleDict,
+    passedCorrectWords,
+    passedGuessesDict,
+    passedLivesRemaining
 }: DailyPuzzleViewProps) {
+    const [correctWords, setCorrectWords] = useState<Record<string, [WordModel, number]>>(passedCorrectWords ?? {});
+    const [guessesDict, setGuessesDict] = useState<Record<string, string[]>>(passedGuessesDict ?? {});
+    const [livesRemaining, setLivesRemaining] = useState(passedLivesRemaining ?? 3);
+    const [firstMoveMade, setFirstMoveMade] = useState<boolean>(passedGuessesDict != undefined);
+
     const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
     const [user, setUser] = useState<UserModel>(passedUser);
     const [selectedGridSpot, setSelectedGridSpot] = useState("");
     const [selectedLetter, setSelectedLetter] = useState("");
     const [repeatGuessWarning, setRepeatGuessWarning] = useState(false);
     const [checkingGuess, setCheckingGuess] = useState(false);
-    const [guessesDict, setGuessesDict] = useState<Record<string, string[]>>({});
-    const [livesRemaining, setLivesRemaining] = useState(3);
     const [goldenGrids, setGoldenGrids] = useState<string[]>([]);
     const [wrongGuessHighlight, setWrongGuessHighlight] = useState(false);
     const [showScoreDetails, setShowScoreDetails] = useState(false);
     const [recentlyCorrectWords, setRecentlyCorrectWords] = useState<Record<string, [WordModel, number]>>({});
-    const [correctWords, setCorrectWords] = useState<Record<string, [WordModel, number]>>({});
     const [grid, setGrid] = useState<GridSpotModel[][]>(GridSpot.grid);
     const [submittingPuzzle, setSubmittingPuzzle] = useState(false);
     const [view, setView] = useState<"PlayPuzzle" | "PuzzleLeaderBoard">("PlayPuzzle");
-    const [firstMoveMade, setFirstMoveMade] = useState(false);
+    
     const startTime = Date.now();
     const { minDimension } = useWindowSize();
     const dimensionDivider = 9 * 1.75;
@@ -52,6 +60,10 @@ export default function DailyPuzzleView({
     useEffect(() => {
         onAppearActions();
     }, []);
+
+    useEffect(() => {
+        DailyPuzzleFunctions.savePuzzleProgress(dailyPuzzle, guessesDict, livesRemaining, correctWords);
+    }, [livesRemaining, correctWords, guessesDict]);
 
     useEffect(() => {
         if (repeatGuessWarning) {
@@ -215,6 +227,7 @@ export default function DailyPuzzleView({
         try {
             const timeDuration = (Date.now() - startTime) / 1000;
             await GameService.submitDailyPuzzleEntry(user, dailyPuzzle, correctWords, timeDuration);
+            DailyPuzzleFunctions.clearPuzzleProgress();
             setView("PuzzleLeaderBoard");
         } catch {
 
