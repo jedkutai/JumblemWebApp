@@ -1222,7 +1222,6 @@ wans,3
 cube,4
 olds,4
 anew,4
-amis,4
 flee,4
 skip,4
 volt,4
@@ -28198,7 +28197,6 @@ tootsy,1
 mopers,1
 untuck,1
 empale,1
-coosen,1
 dankly,1
 shamoy,1
 tinily,1
