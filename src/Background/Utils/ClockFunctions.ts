@@ -4,17 +4,17 @@ import { DateTime } from "luxon";
 
 export class ClockFunctions {
   static async getInternetTime(): Promise<DateTime> {
-    const start = performance.now();
+    // const start = performance.now();
     const response = await fetch("https://timeapi.io/api/time/current/zone?timeZone=utc");
     const data = await response.json();
 
-    const end = performance.now();
-    const requestDelay = (end - start) / 2;
+    // const end = performance.now();
+    // const requestDelay = (end - start) / 2;
 
     const internetTime = DateTime.fromISO(data.dateTime, { zone: "utc" });
-    const adjustedTime = internetTime.minus({ milliseconds: requestDelay });
+    // const adjustedTime = internetTime.minus({ milliseconds: requestDelay });
 
-    return adjustedTime;
+    return internetTime;
   };
 
   static async getTimeOffset(): Promise<number> {
