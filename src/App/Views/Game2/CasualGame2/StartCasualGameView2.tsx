@@ -11,7 +11,6 @@ import BotPlayCasualGameView2 from "./CasualBot2/BotCasualGameView2";
 
 interface StartCasualGameViewProps2 {
     passedUser: UserModel;
-    timeOffset: number;
 }
 
 enum CasualGameModeState {
@@ -22,13 +21,12 @@ enum CasualGameModeState {
     error
 }
 
-export default function StartCasualGameView2({ passedUser, timeOffset }: StartCasualGameViewProps2) {
+export default function StartCasualGameView2({ passedUser }: StartCasualGameViewProps2) {
     const user: UserModel = passedUser;
     const [gameModeState, setGameModeState] = useState<CasualGameModeState>(CasualGameModeState.idle);
     const [game, setGame] = useState<GameModel | null>(null);
     const [hostOfMatch, setHostOfMatch] = useState(false);
     const [stopSearching, setStopSearching] = useState(false);
-    // const [takingLongToFindMatch, setTakingLongToFindMatch] = useState(false);
     const [ticker, setTicker] = useState(false);
     const [tickCount, setTickCount] = useState(0);
     const [botMatchCreated, setBotMatchCreated] = useState(false);
@@ -52,8 +50,6 @@ export default function StartCasualGameView2({ passedUser, timeOffset }: StartCa
             setGameModeState(CasualGameModeState.findingMatch);
         }
         try {
-            // const updatedUser = await FetchService.fetchUserByUid(user.id);
-            // setUser(updatedUser);
 
             const loadedGame = await CasualGameService.findGame(user);
             setGame(loadedGame);
@@ -70,7 +66,7 @@ export default function StartCasualGameView2({ passedUser, timeOffset }: StartCa
                     setGame(null);
                 }
             } else {
-                const createdGame = await CasualGameService.createGame(user, timeOffset);
+                const createdGame = await CasualGameService.createGame(user);
                 setGame(createdGame);
                 setHostOfMatch(true);
                 setTicker(!ticker);
@@ -138,9 +134,9 @@ export default function StartCasualGameView2({ passedUser, timeOffset }: StartCa
 
 
     if (gameModeState === CasualGameModeState.matchFound && game) {
-        return <PlayCasualGameView2 passedUser={user} passedGame={game} timeOffset={timeOffset}/>;
+        return <PlayCasualGameView2 passedUser={user} passedGame={game}/>;
     } else if (gameModeState === CasualGameModeState.playBot && game) {
-        return <BotPlayCasualGameView2 passedUser={user} passedGame={game} timeOffset={timeOffset}/>;
+        return <BotPlayCasualGameView2 passedUser={user} passedGame={game}/>;
     }
 
     return (

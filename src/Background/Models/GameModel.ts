@@ -1,4 +1,4 @@
-import { Timestamp } from 'firebase/firestore';
+import { FieldValue, Timestamp } from 'firebase/firestore';
 
 export interface GameModel {
     id: string;                  // Unique identifier for the game
@@ -14,6 +14,8 @@ export interface GameModel {
     winningCoordinates?: string[]; // Array of coordinates for the winning move (optional)
     playerOneRatingChange?: number; // Rating change for player one (optional)
     playerTwoRatingChange?: number; // Rating change for player two (optional)
+    playerOneLetterBank?: string[];
+    playerTwoLetterBank?: string[];
     matchFound: boolean;        // Indicates if a match was found
-    timestamp: Timestamp;       // Timestamp of the game (optional for default initialization)
+    timestamp: Timestamp | FieldValue;       // Timestamp of the game (optional for default initialization)
 }

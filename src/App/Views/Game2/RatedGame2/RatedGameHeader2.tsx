@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { VStack, HStack, HSpacer } from "../../../../ReactSwiftly";
 import RatedPlayerHeader2 from "./RatedPlayerHeader2";
-import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
 
 interface RatedGameHeader2Props {
     setUserTimeExpired: (timeExpired: boolean) => void;
@@ -37,12 +36,9 @@ export default function RatedGameHeader2({
     const [userClock, setUserClock] = useState(0);
     const [opponentClock, setOpponentClock] = useState(0);
     const [recentTurnChange, setRecentTurnChange] = useState(false);
-    const [timeOffset, setTimeOffset] = useState(0);
 
     async function onAppearActions() {
         try {
-            const internetTimeOffest = await ClockFunctions.getTimeOffset();
-            setTimeOffset(internetTimeOffest);
             setTick(!tick);
         } catch {
 
@@ -66,7 +62,7 @@ export default function RatedGameHeader2({
                     setRecentTurnChange(false);
                 } else {
                     if (firstMoveMade) {
-                        const elapsedSeconds = Math.floor((Date.now() - anchorTime + timeOffset) / 1000);
+                        const elapsedSeconds = Math.floor((Date.now() - anchorTime) / 1000);
                         if (yourTurn) {
                             setUserClock(elapsedSeconds);
                             setOpponentClock(0);

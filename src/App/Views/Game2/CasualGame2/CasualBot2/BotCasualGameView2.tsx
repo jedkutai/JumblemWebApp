@@ -18,10 +18,9 @@ import { Button } from "@mui/material";
 interface BotPlayCasualGameView2Props {
     passedUser: UserModel;
     passedGame: GameModel;
-    timeOffset: number
 }
 
-export default function BotPlayCasualGameView2({ passedUser, passedGame, timeOffset }: BotPlayCasualGameView2Props) {
+export default function BotPlayCasualGameView2({ passedUser, passedGame }: BotPlayCasualGameView2Props) {
     const {
         movesCopy,
         movesDict,
@@ -110,7 +109,7 @@ export default function BotPlayCasualGameView2({ passedUser, passedGame, timeOff
                     const timeout = setTimeout(async () => {
                         try {
                             const [resultCoordinates, resultLetter] = await GameFunctions.botMove(botLetterBank, movesDict, wordBankDict, (movesMade + 1));
-                            await CasualGameService.makeBotMove(user, game, resultCoordinates, resultLetter, (movesMade + 1), letterBank, timeOffset);
+                            await CasualGameService.makeBotMove(user, game, resultCoordinates, resultLetter, (movesMade + 1), letterBank);
                             const indexToRemove = botLetterBank.indexOf(resultLetter);
                             botLetterBank.splice(indexToRemove, 1);
 
@@ -310,7 +309,6 @@ export default function BotPlayCasualGameView2({ passedUser, passedGame, timeOff
                         wordCheckComplete={wordCheckComplete}
                         matchAbortedTimer={matchAbortedTimer}
                         movesMade={movesMade}
-                        timeOffset={timeOffset}
                     />
 
                 </VStack>

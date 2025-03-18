@@ -17,10 +17,9 @@ import PrivateGameOverGrid from "./PrivateGameOverGrid";
 interface PlayPrivateGameView2Props {
     passedUser: UserModel;
     passedGame: GameModel;
-    timeOffset: number;
 }
 
-export default function PlayPrivateGameView2({ passedUser, passedGame, timeOffset }: PlayPrivateGameView2Props) {
+export default function PlayPrivateGameView2({ passedUser, passedGame }: PlayPrivateGameView2Props) {
     const {
         movesCopy,
         movesDict,
@@ -246,7 +245,6 @@ export default function PlayPrivateGameView2({ passedUser, passedGame, timeOffse
             <RematchController
                 passedUser={user}
                 previousGame={game}
-                timeOffset={timeOffset}
             />
         );
     }
@@ -315,7 +313,6 @@ export default function PlayPrivateGameView2({ passedUser, passedGame, timeOffse
                         wordCheckComplete={wordCheckComplete}
                         matchAbortedTimer={matchAbortedTimer}
                         movesMade={movesMade}
-                        timeOffset={timeOffset}
                     />
 
                 </VStack>

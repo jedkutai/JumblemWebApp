@@ -9,7 +9,6 @@ import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
 import PageNotFoundView from "../../App/Components/PageNotFoundView";
 import { Timestamp } from "firebase/firestore";
 import VersusCrashCourse from "../../App/General/CrashCourses/Versus/VersusCrashCourse";
-import { ClockFunctions } from "../../Background/Utils/ClockFunctions";
 
 enum PageState {
     loading,
@@ -18,7 +17,6 @@ enum PageState {
 
 export default function PrivateGameRoute() {
     const [user, setUser] = useState<UserModel | null>(null);
-    const [timeOffset, setTimeOffset] = useState<number | null>(null);
     const [pageState, setPageState] = useState<PageState>(PageState.loading);
     const navigate = useNavigate();
     const crashCoursePlayed = localStorage.getItem("versusCrashCoursePlayed");
@@ -31,8 +29,6 @@ export default function PrivateGameRoute() {
         const auth = getAuth(app);
 
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-            const fetchedTimeOffset = await ClockFunctions.getTimeOffset();
-            setTimeOffset(fetchedTimeOffset);
             if (firebaseUser) {
                 if (firebaseUser.isAnonymous) {
                     const guestUser: UserModel = {
@@ -84,9 +80,9 @@ export default function PrivateGameRoute() {
             );
 
         case PageState.loaded:
-            if (user && timeOffset) {
+            if (user) {
                 return (
-                    <PrivateMatchMenuView passedUser={user} timeOffset={timeOffset} />
+                    <PrivateMatchMenuView passedUser={user} />
                 );
             } else {
                 <PageNotFoundView />

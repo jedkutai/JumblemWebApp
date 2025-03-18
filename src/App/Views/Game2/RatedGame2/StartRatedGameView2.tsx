@@ -11,7 +11,6 @@ import DiscordIcon from "../../../Components/SiteIcons/DiscordIcon";
 
 interface StartRatedGameView2Props {
     passedUser: UserModel
-    timeOffset: number;
 }
 
 enum RatedGameModeState {
@@ -21,7 +20,7 @@ enum RatedGameModeState {
     error
 }
 
-export default function StartRatedGameView2({ passedUser, timeOffset }: StartRatedGameView2Props) {
+export default function StartRatedGameView2({ passedUser }: StartRatedGameView2Props) {
     const [user, setUser] = useState<UserModel>(passedUser);
     const [gameModeState, setGameModeState] = useState<RatedGameModeState>(RatedGameModeState.idle);
     const [game, setGame] = useState<GameModel | null>(null);
@@ -66,7 +65,7 @@ export default function StartRatedGameView2({ passedUser, timeOffset }: StartRat
                     setGame(null);
                 }
             } else {
-                const createdGame = await RatedGameService.createGame(user, timeOffset);
+                const createdGame = await RatedGameService.createGame(user);
                 setGame(createdGame);
                 setHostOfMatch(true);
                 setTicker(!ticker);
@@ -129,7 +128,7 @@ export default function StartRatedGameView2({ passedUser, timeOffset }: StartRat
     }
 
     if (gameModeState === RatedGameModeState.matchFound && game) {
-        return <PlayRatedGameView2 passedUser={user} passedGame={game} timeOffset={timeOffset} />;
+        return <PlayRatedGameView2 passedUser={user} passedGame={game} />;
     }
 
     return (

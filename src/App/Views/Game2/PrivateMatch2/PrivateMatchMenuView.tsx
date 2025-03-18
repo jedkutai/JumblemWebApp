@@ -12,10 +12,9 @@ import StartPrivateGameView2 from "./StartPrivateGameView2";
 
 interface PrivateMatchMenuViewProps {
     passedUser: UserModel;
-    timeOffset: number;
 }
 
-export default function PrivateMatchMenuView({ passedUser, timeOffset }: PrivateMatchMenuViewProps) {
+export default function PrivateMatchMenuView({ passedUser }: PrivateMatchMenuViewProps) {
     const [view, setView] = useState<"Menu" | "Create" | "Join">("Menu");
     const { minDimension } = useWindowSize();
     const navigate = useNavigate();
@@ -67,9 +66,9 @@ export default function PrivateMatchMenuView({ passedUser, timeOffset }: Private
 
     switch (view) {
         case "Create":
-            return (<StartPrivateGameView2 passedUser={passedUser} timeOffset={timeOffset}/>);
+            return (<StartPrivateGameView2 passedUser={passedUser} />);
         case "Join":
-            return (<JoinPrivateGameView2 passedUser={passedUser} timeOffset={timeOffset}/>);
+            return (<JoinPrivateGameView2 passedUser={passedUser} />);
     }
 
     return (

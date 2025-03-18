@@ -16,10 +16,9 @@ import RatedGameOverGrid from "./RatedGameOverGrid";
 interface PlayRatedGameView2Props {
     passedUser: UserModel;
     passedGame: GameModel;
-    timeOffset: number;
 }
 
-export default function PlayRatedGameView2({ passedUser, passedGame, timeOffset }: PlayRatedGameView2Props) {
+export default function PlayRatedGameView2({ passedUser, passedGame }: PlayRatedGameView2Props) {
     const {
         movesCopy,
         movesDict,
@@ -268,7 +267,6 @@ export default function PlayRatedGameView2({ passedUser, passedGame, timeOffset 
                         wordCheckComplete={wordCheckComplete}
                         matchAbortedTimer={matchAbortedTimer}
                         movesMade={movesMade}
-                        timeOffset={timeOffset}
                     />
                 </VStack>
             </View>

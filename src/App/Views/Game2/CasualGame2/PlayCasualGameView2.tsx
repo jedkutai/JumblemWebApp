@@ -11,16 +11,13 @@ import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import CasualGameHeader2 from "./CasualGameHeader2";
 import CasualGameGrid2 from "./CasualGameGrid2";
 import CasualGameOverGrid2 from "./CasualGameOverGrid2";
-// import { ClockFunctions } from "../../../../Background/Utils/ClockFunctions";
-// import { Typography } from "@mui/material";
 
 interface PlayCasualGameView2Props {
     passedUser: UserModel;
     passedGame: GameModel;
-    timeOffset: number;
 }
 
-export default function PlayCasualGameView2({ passedUser, passedGame, timeOffset }: PlayCasualGameView2Props) {
+export default function PlayCasualGameView2({ passedUser, passedGame }: PlayCasualGameView2Props) {
     const {
         movesCopy,
         movesDict,
@@ -33,7 +30,6 @@ export default function PlayCasualGameView2({ passedUser, passedGame, timeOffset
         movesMade
     } = useStandardGameManager2(passedUser, passedGame);
     const { width, height } = useWindowSize();
-    // const [timeOffset, setTimeOffset] = useState(0);
     const user: UserModel = passedUser;
     const game: GameModel = passedGame;
     const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
@@ -51,11 +47,6 @@ export default function PlayCasualGameView2({ passedUser, passedGame, timeOffset
 
     async function onAppearActions() {
         try {
-            // const internetTimeOffest = await ClockFunctions.getTimeOffset();
-            // setTimeOffset(internetTimeOffest);
-            // if (timeOffset > 0) {
-                
-            // }
             const wordBank = await WordBankFunctions.getWordBank();
             setWordBankDict(wordBank);
         } catch(e) {
@@ -249,7 +240,6 @@ export default function PlayCasualGameView2({ passedUser, passedGame, timeOffset
                 <VStack width={`${width}px`} height={`${height}px`}>
                     <HowToPlayHeader versus={true} />
                     <JumblemLogoSimple />
-                    {/* <Typography>{`Offset: ${timeOffset}`}</Typography> */}
                     <CasualGameHeader2
                         setUserTimeExpired={setUserTimeExpired}
                         setCheckOpponentTimeExpired={setCheckOpponentTimeExpired}
@@ -274,7 +264,6 @@ export default function PlayCasualGameView2({ passedUser, passedGame, timeOffset
                         wordCheckComplete={wordCheckComplete}
                         matchAbortedTimer={matchAbortedTimer}
                         movesMade={movesMade}
-                        timeOffset={timeOffset}
                     />
 
                 </VStack>

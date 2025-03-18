@@ -12,6 +12,7 @@ import {
   updateDoc,
   deleteDoc,
   Timestamp,
+  serverTimestamp,
 } from "firebase/firestore";
 import { UserModel } from "../Models/UserModel";
 import { GameModel } from "../Models/GameModel";
@@ -21,6 +22,8 @@ import { OfferedRematchModel } from "../Models/OfferedRematchModel";
 export class PrivateGameService {
   static readonly offeredRematches = "offeredRematches";
   static readonly gameId = "gameId";
+
+
 
   static async offerRematch(user: UserModel, game: GameModel): Promise<void> {
     const db = getFirestore();
@@ -132,8 +135,7 @@ export class PrivateGameService {
     return null;
   }
 
-  static async createGame(user: UserModel, timeOffset: number): Promise<GameModel | null> {
-    const adjustedTimestamp = Timestamp.fromMillis(Timestamp.now().toMillis() + timeOffset);
+  static async createGame(user: UserModel): Promise<GameModel | null> {
 
     const db = getFirestore();
     const gameRef = doc(collection(db, "newGames"));
@@ -142,7 +144,7 @@ export class PrivateGameService {
       gameMode: "private",
       playerOneId: user.id,
       playerOneRating: user.standardRating,
-      timestamp: adjustedTimestamp,
+      timestamp: serverTimestamp(),
       matchFound: false
     };
 
@@ -174,28 +176,25 @@ export class PrivateGameService {
     await deleteDoc(doc(db, "newGames", game.id));
   }
 
-  static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[], timeOffset: number): Promise<void> {
-    const adjustedTimestamp = Timestamp.fromMillis(Timestamp.now().toMillis() + timeOffset);
-    if (adjustedTimestamp) {
-      if (coordinates.length > 0 && letter.length > 0) {
-        const db = getFirestore();
-        const moveRef = doc(collection(db, `newGames/${game.id}/moves`));
-    
-        const newMove: MoveModel = {
-          id: moveRef.id,
-          gameId: game.id,
-          userId: user.id,
-          coordinates,
-          letter,
-          timestamp: adjustedTimestamp,
-          number: number,
-          letterBank: letterBank.sort()
-        };
-    
-        await setDoc(moveRef, newMove);
-      }
-    }
+  static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[]): Promise<void> {
 
+    if (coordinates.length > 0 && letter.length > 0) {
+      const db = getFirestore();
+      const moveRef = doc(collection(db, `newGames/${game.id}/moves`));
+  
+      const newMove: MoveModel = {
+        id: moveRef.id,
+        gameId: game.id,
+        userId: user.id,
+        coordinates,
+        letter,
+        timestamp: serverTimestamp(),
+        number: number,
+        letterBank: letterBank.sort()
+      };
+  
+      await setDoc(moveRef, newMove);
+    }
   }
 
   static async getFinalMove(game: GameModel): Promise<MoveModel | null> {

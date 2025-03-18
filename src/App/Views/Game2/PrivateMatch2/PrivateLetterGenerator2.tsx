@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { UserModel, GameModel } from "../../../../Background/Models";
-import { PrivateGameService } from "../../../../Background/Service";
+import { GameService, PrivateGameService } from "../../../../Background/Service";
 import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
 import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
 import { HStack } from "../../../../ReactSwiftly";
@@ -18,7 +18,6 @@ interface PrivateLetterGenerator2Props {
     setSelectedBlock: (selectedBlock: string) => void;
     yourTurn: boolean;
     movesMade: number;
-    timeOffset: number;
 }
 
 export default function PrivateLetterGenerator2({
@@ -33,7 +32,6 @@ export default function PrivateLetterGenerator2({
     setSelectedBlock,
     yourTurn,
     movesMade,
-    timeOffset
 }: PrivateLetterGenerator2Props) {
 
     const { minDimension } = useWindowSize();
@@ -47,12 +45,24 @@ export default function PrivateLetterGenerator2({
         setLetters(temp);
     }, []);
 
+    useEffect(() => {
+        updateUserLetters();
+    }, [letters])
+
+    async function updateUserLetters() {
+        try {
+            await GameService.updateLetterBank(game, game.playerOneId == user.id, letters);
+        } catch {
+
+        }
+    }
+
     async function bustAMove(letter: string, removeIndex: number) {
         if (yourTurn && wordCheckComplete) {
             const letterBank = letters;
             try {
                 setCanSelect(false);
-                await PrivateGameService.makeMove(user, game, selectedBlock, letter, (movesMade + 1), letterBank, timeOffset);
+                await PrivateGameService.makeMove(user, game, selectedBlock, letter, (movesMade + 1), letterBank);
                 letters.splice(removeIndex, 1);
 
                 const newLetters = GameFunctions.getLetters(1);

@@ -1,4 +1,4 @@
-import { getFirestore, collection, doc, query, where, orderBy, limit, getDocs, getDoc } from "firebase/firestore";
+import { getFirestore, collection, doc, query, where, orderBy, limit, getDocs, getDoc, Timestamp } from "firebase/firestore";
 import { UserModel } from "../Models/UserModel";
 import { DailyPuzzleModel } from "../Models/DailyPuzzleModel";
 import { DailyPuzzleEntryModel } from "../Models/DailyPuzzleEntryModel";
@@ -124,7 +124,12 @@ export class FetchService {
     const gamesPartTwo = snapshotPartTwo.docs.map(doc => doc.data() as GameModel);
 
     const allGames = [...gamesPartOne, ...gamesPartTwo];
-    allGames.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
+    // allGames.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
+    allGames.sort((a, b) => {
+      const timeA = a.timestamp instanceof Timestamp ? a.timestamp.seconds : 0;
+      const timeB = b.timestamp instanceof Timestamp ? b.timestamp.seconds : 0;
+      return timeB - timeA; // Sort in descending order
+  });
 
     return allGames.slice(0, limitCount);
   }

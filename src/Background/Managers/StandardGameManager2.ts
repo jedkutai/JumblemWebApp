@@ -5,6 +5,7 @@ import {
   query,
   orderBy,
   onSnapshot,
+  Timestamp,
 } from "firebase/firestore";
 import { MoveModel } from "../Models/MoveModel";
 import { GameModel } from "../Models/GameModel";
@@ -27,16 +28,14 @@ export function useStandardGameManager2(user: UserModel, game: GameModel) {
 
   useEffect(() => {
     const movesRef = collection(db, "newGames", game.id, "moves");
-    // const movesQuery = query(movesRef, orderBy("timestamp", "asc"));
     const movesQuery = query(movesRef, orderBy("number", "asc"));
 
-
     const unsubscribe = onSnapshot(movesQuery, async (snapshot) => {
+
       const fetchedMoves = snapshot.docs.map((doc) => doc.data() as MoveModel);
       if (fetchedMoves) {
         setMoves(fetchedMoves);
       }
-
     });
 
     return () => unsubscribe();
@@ -44,15 +43,44 @@ export function useStandardGameManager2(user: UserModel, game: GameModel) {
   }, []);
 
   useEffect(() => {
-    if (movesMade>0) {
-      setProcessComplete(false);
-    }
-    if (moves.length > movesMade) {
-      setYourTurn(false);
-      setMovesMade(moves.length);
-      setMovesCopy(moves);
-    } else if (moves.length < movesMade) {
-      setCheckGameOver(true);
+    if (!checkGameOver) {
+      if (movesMade > 0) {
+        setProcessComplete(false);
+      }
+  
+      if (moves.length > movesMade) {
+        const lastMove = moves.at(moves.length - 1);
+        if (lastMove) {
+          const lastMoveTimestamp = lastMove.timestamp as Timestamp;
+          if (lastMoveTimestamp) {
+            setYourTurn(false);
+            setMovesMade(moves.length);
+            setMovesCopy(moves);
+          }
+        } else {
+          const timeout = setTimeout(async () => {
+            const movesRef = collection(db, "newGames", game.id, "moves");
+            const movesQuery = query(movesRef, orderBy("number", "asc"));
+  
+            const unsubscribe = onSnapshot(movesQuery, async (snapshot) => {
+  
+              const fetchedMoves = snapshot.docs.map((doc) => doc.data() as MoveModel);
+              if (fetchedMoves && fetchedMoves.length > movesMade) {
+                setMoves(fetchedMoves);
+              }
+            });
+  
+            return () => unsubscribe();
+          }, 1000 * 0.5);
+  
+          return () => clearTimeout(timeout);
+  
+        }
+  
+  
+      } else if (moves.length < movesMade) {
+        setCheckGameOver(true);
+      }
     }
   }, [moves]);
 
@@ -64,13 +92,20 @@ export function useStandardGameManager2(user: UserModel, game: GameModel) {
   useEffect(() => {
     const lastMove = movesCopy.at(movesCopy.length - 1);
     if (lastMove) {
-      if (lastMove.userId === user.id) {
-        setYourTurn(false);
-      } else {
-        setYourTurn(true);
+      const lastMoveTimestamp = lastMove.timestamp as Timestamp;
+      if (lastMoveTimestamp) {
+        console.log("it worked?");
+        if (lastMove.userId === user.id) {
+          setYourTurn(false);
+        } else {
+          setYourTurn(true);
+        }
+
+        const lastMoveTime = new Date(lastMoveTimestamp.toDate())
+        setAnchorTime(lastMoveTime.getTime())
       }
-      const lastMoveTime = new Date(lastMove.timestamp.toDate())
-      setAnchorTime(lastMoveTime.getTime())
+
+
     }
   }, [movesDict]);
 

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { UserModel, GameModel } from "../../../../Background/Models";
-import { RatedGameService } from "../../../../Background/Service";
+import { GameService, RatedGameService } from "../../../../Background/Service";
 import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
 import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
 import { HStack } from "../../../../ReactSwiftly";
@@ -19,7 +19,6 @@ interface RatedLetterGenerator2Props {
     setSelectedBlock: (selectedBlock: string) => void;
     yourTurn: boolean;
     movesMade: number;
-    timeOffset: number;
 }
 
 export default function RatedLetterGenerator2({
@@ -35,7 +34,6 @@ export default function RatedLetterGenerator2({
     setSelectedBlock,
     yourTurn,
     movesMade,
-    timeOffset
 }: RatedLetterGenerator2Props) {
 
     const { minDimension } = useWindowSize();
@@ -49,12 +47,24 @@ export default function RatedLetterGenerator2({
         setLetters(temp);
     }, []);
 
+    useEffect(() => {
+        updateUserLetters();
+    }, [letters])
+
+    async function updateUserLetters() {
+        try {
+            await GameService.updateLetterBank(game, game.playerOneId == user.id, letters);
+        } catch {
+
+        }
+    }
+
     async function bustAMove(letter: string, removeIndex: number) {
         if (yourTurn && wordCheckComplete) {
             try {
                 const letterBank = letters;
                 setCanSelect(false);
-                await RatedGameService.makeMove(user, game, selectedBlock, letter, (movesMade + 1), letterBank, timeOffset);
+                await RatedGameService.makeMove(user, game, selectedBlock, letter, (movesMade + 1), letterBank);
                 letters.splice(removeIndex, 1);
 
                 const newLetters = GameFunctions.getLetters(1);
@@ -78,11 +88,11 @@ export default function RatedLetterGenerator2({
         >
             {letters.map((letter, index) => (
                 <div key={index}>
-                {(selectedBlock === "" || !canSelect || !processComplete) ? (
-                    <DimLetterBlock letter={letter} blockDimension={blockDimension} />
-                ) : (
-                    <ClickableWhiteLetterBlock letter={letter} blockDimension={blockDimension} action={() => bustAMove(letter, index)} />
-                )}
+                    {(selectedBlock === "" || !canSelect || !processComplete) ? (
+                        <DimLetterBlock letter={letter} blockDimension={blockDimension} />
+                    ) : (
+                        <ClickableWhiteLetterBlock letter={letter} blockDimension={blockDimension} action={() => bustAMove(letter, index)} />
+                    )}
                 </div>
             ))}
         </HStack>

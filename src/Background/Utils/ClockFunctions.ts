@@ -1,35 +1,7 @@
 import { Timestamp } from "firebase/firestore";
 import { MoveModel } from "../Models/MoveModel";
-import { DateTime } from "luxon";
 
 export class ClockFunctions {
-  static async getInternetTime(): Promise<DateTime> {
-    // const start = performance.now();
-    const response = await fetch("https://timeapi.io/api/time/current/zone?timeZone=utc");
-    const data = await response.json();
-
-    // const end = performance.now();
-    // const requestDelay = (end - start) / 2;
-
-    const internetTime = DateTime.fromISO(data.dateTime, { zone: "utc" });
-    // const adjustedTime = internetTime.minus({ milliseconds: requestDelay });
-
-    return internetTime;
-  };
-
-  static async getTimeOffset(): Promise<number> {
-    const userTime = DateTime.utc(); // Local device time in milliseconds
-    const internetTime = await this.getInternetTime(); // Get accurate UTC time
-    return internetTime.toMillis() - userTime.toMillis(); // Calculate the offset
-  }
-
-  static async getCorrectedTimestamp(): Promise<Timestamp> {
-    const offset = await this.getTimeOffset();
-    const correctedTime = new Date(Date.now() + offset + 500); // Apply offset
-
-
-    return Timestamp.fromDate(correctedTime); // Convert to Firestore Timestamp
-  }
 
   static getTimeRemainingForBothPlayers(userId: string, moves: MoveModel[]): [number, number] {
     let yourTimeRemaining = 180.0;

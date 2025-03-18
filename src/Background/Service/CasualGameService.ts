@@ -1,4 +1,4 @@
-import { getFirestore, collection, doc, getDocs, setDoc, deleteDoc, query, where, orderBy, limit, updateDoc, getDoc, Timestamp } from "firebase/firestore";
+import { getFirestore, collection, doc, getDocs, setDoc, deleteDoc, query, where, orderBy, limit, updateDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { UserModel } from "../Models/UserModel";
 import { GameModel } from "../Models/GameModel";
 import { MoveModel } from "../Models/MoveModel";
@@ -10,7 +10,7 @@ export class CasualGameService {
     try {
       await GameService.cleanOldGames();
     } catch {
-      
+
     }
 
     const gameSnapshot = await getDoc(doc(db, "newGames", game.id));
@@ -33,7 +33,7 @@ export class CasualGameService {
     try {
       await GameService.cleanOldGames();
     } catch {
-      
+
     }
 
     const queryRef = query(
@@ -71,8 +71,7 @@ export class CasualGameService {
     return null;
   }
 
-  static async createGame(user: UserModel, timeOffset: number): Promise<GameModel | null> {
-    const adjustedTimestamp = Timestamp.fromMillis(Timestamp.now().toMillis() + timeOffset);
+  static async createGame(user: UserModel): Promise<GameModel | null> {
 
     const db = getFirestore();
     const gameRef = doc(collection(db, "newGames"));
@@ -81,7 +80,7 @@ export class CasualGameService {
       gameMode: "casual",
       playerOneId: user.id,
       playerOneRating: user.standardRating,
-      timestamp: adjustedTimestamp,
+      timestamp: serverTimestamp(),
       matchFound: false
     };
 
@@ -109,47 +108,42 @@ export class CasualGameService {
     await deleteDoc(doc(db, "newGames", game.id));
   }
 
-  static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[], timeOffset: number): Promise<void> {
-    const adjustedTimestamp = Timestamp.fromMillis(Timestamp.now().toMillis() + timeOffset);
-    if (adjustedTimestamp) {
-      if (coordinates.length > 0 && letter.length > 0) {
-        const db = getFirestore();
-        const movesRef = doc(collection(db, `newGames/${game.id}/moves`));
-        const newMove: MoveModel = {
-          id: movesRef.id,
-          gameId: game.id,
-          userId: user.id,
-          coordinates,
-          letter,
-          timestamp: adjustedTimestamp,
-          number: number,
-          letterBank: letterBank.sort()
-        };
-    
-        await setDoc(movesRef, newMove);
-    }
-    }
-
-  }
-
-  static async makeBotMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[], timeOffset: number): Promise<void> {
-    const adjustedTimestamp = Timestamp.fromMillis(Timestamp.now().toMillis() + timeOffset);
-    if (adjustedTimestamp) {
+  static async makeMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[]): Promise<void> {
+    if (coordinates.length > 0 && letter.length > 0) {
       const db = getFirestore();
       const movesRef = doc(collection(db, `newGames/${game.id}/moves`));
       const newMove: MoveModel = {
         id: movesRef.id,
         gameId: game.id,
-        userId: `BOT-${user.id}`,
+        userId: user.id,
         coordinates,
         letter,
-        timestamp: adjustedTimestamp,
+        timestamp: serverTimestamp(),
         number: number,
         letterBank: letterBank.sort()
       };
-  
+
       await setDoc(movesRef, newMove);
     }
+
+  }
+
+  static async makeBotMove(user: UserModel, game: GameModel, coordinates: string, letter: string, number: number, letterBank: string[]): Promise<void> {
+
+    const db = getFirestore();
+    const movesRef = doc(collection(db, `newGames/${game.id}/moves`));
+    const newMove: MoveModel = {
+      id: movesRef.id,
+      gameId: game.id,
+      userId: `BOT-${user.id}`,
+      coordinates,
+      letter,
+      timestamp: serverTimestamp(),
+      number: number,
+      letterBank: letterBank.sort()
+    };
+
+    await setDoc(movesRef, newMove);
   }
 
   static async getFinalMove(game: GameModel): Promise<MoveModel | null> {
