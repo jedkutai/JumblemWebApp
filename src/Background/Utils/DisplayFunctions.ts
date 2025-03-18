@@ -1,4 +1,4 @@
-import { Timestamp } from "firebase/firestore";
+import { FieldValue, Timestamp } from "firebase/firestore";
 
 export class DisplayFunctions {
 
@@ -27,9 +27,14 @@ export class DisplayFunctions {
         return puzzleDate.toLocaleDateString("en-US", { month: "numeric", day: "numeric", year: "numeric" });
     }
 
-    static displayGameDate(time: Timestamp): string {
-        const gameDate = new Date(time.toDate());
-        return gameDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+    static displayGameDate(time: Timestamp | FieldValue): string {
+        const correctTime = time as Timestamp;
+        if (correctTime) {
+            const gameDate = new Date(correctTime.toDate());
+            return gameDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+        }
+        return "-";
+        
     }
 
     static nextPuzzleDate(time: Timestamp): string {
