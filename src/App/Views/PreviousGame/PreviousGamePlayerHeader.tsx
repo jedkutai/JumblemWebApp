@@ -1,20 +1,22 @@
-import { Button, CircularProgress } from "@mui/material";
+import { Button, CircularProgress, Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { UserModelGuest } from "../../../Background/Extends/UserModelGuest";
-import { UserModel } from "../../../Background/Models";
+import { GameModel, UserModel } from "../../../Background/Models";
 import { FetchService } from "../../../Background/Service";
 import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
-import { Text, VStack } from "../../../ReactSwiftly";
+import { VStack } from "../../../ReactSwiftly";
 import { useNavigate } from "react-router-dom";
 
 interface PreviousGamePlayerHeaderProps {
     playerId: string | undefined,
     highlight: boolean,
+    game: GameModel;
 }
 
 export default function PreviousGamePlayerHeaderProps({
     playerId,
-    highlight
+    highlight,
+    game
 
 }: PreviousGamePlayerHeaderProps) {
     const [player, setPlayer] = useState<UserModel | undefined>(undefined);
@@ -27,7 +29,9 @@ export default function PreviousGamePlayerHeaderProps({
                     const loadedPlayer = await FetchService.fetchUserByUid(playerId);
                     setPlayer(loadedPlayer);
                 } catch (error) {
-                    setPlayer(UserModelGuest);
+                    let unloadedPlayer = UserModelGuest;
+                    unloadedPlayer.id = playerId
+                    setPlayer(unloadedPlayer);
                 }
             }
 
@@ -48,8 +52,18 @@ export default function PreviousGamePlayerHeaderProps({
         <Button onClick={navigateToPlayer} style={{ outline: "none", boxShadow: "none" }}>
             <VStack>
                 {player !== undefined ? (
-                    <VStack minWidth={`${150}px`} minHeight={`${75}px`} maxWidth={`${150}px`} maxHeight={`${75}px`} border={highlight ? "3px solid white" : "3px solid black"} cornerRadius="20px">
-                        <Text text={DisplayFunctions.displayUsername(player.usernameDisplayed)} />
+                    <VStack spacing="0x" minWidth={`${150}px`} minHeight={`${75}px`} maxWidth={`${150}px`} maxHeight={`${75}px`} border={highlight ? "3px solid white" : "3px solid black"} cornerRadius="20px">
+
+                        <Typography
+                            variant="h6"
+                            style={{
+                                color: "black",
+                                fontWeight: "bold",
+                                padding: "0px",
+                                margin: "0px"
+                            }}
+                        >{DisplayFunctions.displayUsername(game.winner == playerId ? `(W) ${player.usernameDisplayed}` : player.usernameDisplayed)}</Typography>
+
                     </VStack>
 
                 ) : (

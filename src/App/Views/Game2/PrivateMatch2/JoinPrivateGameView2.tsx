@@ -21,7 +21,6 @@ interface JoinPrivateGameViewProps {
 
 export default function JoinPrivateGameView({ passedUser }: JoinPrivateGameViewProps) {
     const [view, setView] = useState<"JoinPrivateGameView" | "PrivateMatchMenuView">("JoinPrivateGameView");
-    // const [user, setUser] = useState<UserModel>(passedUser);
     const [gameModeState, setGameModeState] = useState<JoinPrivateGameModeState>(JoinPrivateGameModeState.enterMatchCode);
     const [game, setGame] = useState<GameModel | null>(null);
     const [code, setCode] = useState("");
@@ -96,7 +95,6 @@ export default function JoinPrivateGameView({ passedUser }: JoinPrivateGameViewP
                 passedUser={passedUser}
             />
         );
-        //     return <PlayPrivateGameView passedUser={passedUser} passedGame={game} />;
     }
 
     return (

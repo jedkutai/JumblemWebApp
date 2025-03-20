@@ -33,6 +33,7 @@ export default function CasualPlayerHeader2({ playerId, timeRemaining, highlight
 
     }, []);
 
+
         return (
     
             <VStack>

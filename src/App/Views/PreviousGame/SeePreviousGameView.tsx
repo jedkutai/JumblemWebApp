@@ -8,7 +8,7 @@ import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import PreviousGameFunctionBar from "./PreviousGameFunctionBar";
 import PreviousGamePlayerHeader from "./PreviousGamePlayerHeader";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
-import PreviousGameRatedPlayerHeader from "./PreviousGameRatedPlayerHeaderProps";
+import PreviousGameRatedPlayerHeader from "./PreviousGameRatedPlayerHeader";
 import { useNavigate } from "react-router-dom";
 import { ColoredWord } from "../../Components";
 import WordRarityBar from "../../Components/WordRarityBar";
@@ -117,7 +117,7 @@ export default function SeePreviousGameView({ previousGame }: SeePreviousGameVie
 
 
     return (
-        <View>
+        <View startAtTop={true}>
             {previousGame.playerTwoId ? (
                 <>
                     {moves ? (
@@ -133,6 +133,7 @@ export default function SeePreviousGameView({ previousGame }: SeePreviousGameVie
                                         highlight={previousGame.playerOneId === lastMovePlayerId}
                                         rating={previousGame.playerOneRating}
                                         ratingChange={previousGame.playerOneRatingChange}
+                                        game={previousGame}
                                     />
                                     <HSpacer />
                                     <PreviousGameRatedPlayerHeader
@@ -140,6 +141,7 @@ export default function SeePreviousGameView({ previousGame }: SeePreviousGameVie
                                         highlight={previousGame.playerTwoId === lastMovePlayerId}
                                         rating={previousGame.playerTwoRating}
                                         ratingChange={previousGame.playerTwoRatingChange}
+                                        game={previousGame}
                                     />
                                     <HSpacer />
                                 </HStack>
@@ -149,12 +151,14 @@ export default function SeePreviousGameView({ previousGame }: SeePreviousGameVie
                                     <PreviousGamePlayerHeader
                                         playerId={previousGame.playerOneId}
                                         highlight={previousGame.playerOneId === lastMovePlayerId}
+                                        game={previousGame}
 
                                     />
                                     <HSpacer />
                                     <PreviousGamePlayerHeader
                                         playerId={previousGame.playerTwoId}
                                         highlight={previousGame.playerTwoId === lastMovePlayerId}
+                                        game={previousGame}
                                     />
                                     <HSpacer />
                                 </HStack>

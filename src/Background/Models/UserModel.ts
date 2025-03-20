@@ -16,4 +16,6 @@ export interface UserModel {
     standardRating: number;        // User's standard rating (default: 1500)
 
     timestamp: Timestamp;         // Timestamp of when the user was created (optional for default initialization)
+
+    admin?: boolean;
 }

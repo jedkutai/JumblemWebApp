@@ -7,3 +7,4 @@ export { PrivateGameService } from "./PrivateGameService";
 export { RatedGameService } from "./RatedGameService";
 export { SearchService } from "./SearchService";
 export { UserService } from "./UserService";
+export { SpectateService } from "./SpectateService";
