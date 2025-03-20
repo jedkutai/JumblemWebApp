@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { GridSpot } from "../../../../Background/Extends/GridSpot";
-import { GridSpotModel, MoveModel, WordModel } from "../../../../Background/Models";
+import { GameModel, GridSpotModel, MoveModel, WordModel } from "../../../../Background/Models";
 import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
-import { VStack } from "../../../../ReactSwiftly";
+import { HStack, VStack } from "../../../../ReactSwiftly";
 import { ColoredWord } from "../../../Components";
 import WordRarityBar from "../../../Components/WordRarityBar";
 import SpectateGameRow from "./SpectateGameRow";
+import SpectateGameLetterBank from "./SpectateGameLetterBank";
 
 interface SpectateGameGridProps {
+    game: GameModel;
     movesDict: Record<string, MoveModel>;
     winningWords: WordModel[];
     winningGridSpots: string[];
@@ -15,6 +17,7 @@ interface SpectateGameGridProps {
 }
 
 export default function SpectateGameGrid({
+    game,
     movesDict,
     winningWords,
     winningGridSpots,
@@ -30,27 +33,42 @@ export default function SpectateGameGrid({
 
     return (
         <VStack spacing="10px">
-            <VStack
-                spacing="0px"
-                backgroundColor="rgb(255, 255, 255, 0.25)"
-                width={`${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px`}
-                minHeight={`${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px`}
-                cornerRadius="5px"
-            >
+            <HStack width={`${(Math.max(minDimension, upperBound) * 8 / dimensionDivider) + 200}px`}>
+                <SpectateGameLetterBank
+                    playerId={game.playerOneId}
+                    playerTurnId={lastMove?.userId ?? ""}
+                    letters={game.playerOneLetterBank}
+                />
 
-                {grid.map((row, index) => (
-                    <SpectateGameRow
-                        key={index}
-                        row={row}
-                        movesDict={movesDict}
-                        winningGridSpots={winningGridSpots}
-                        blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}
-                        lastMove={lastMove}
-                    />
-                ))}
+                <VStack
+                    spacing="0px"
+                    backgroundColor="rgb(255, 255, 255, 0.25)"
+                    width={`${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px`}
+                    minHeight={`${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px`}
+                    cornerRadius="5px"
+                >
 
-            </VStack>
+                    {grid.map((row, index) => (
+                        <SpectateGameRow
+                            key={index}
+                            row={row}
+                            movesDict={movesDict}
+                            winningGridSpots={winningGridSpots}
+                            blockDimension={Math.max(minDimension, upperBound) / dimensionDivider}
+                            lastMove={lastMove}
+                        />
+                    ))}
 
+                </VStack>
+
+                <SpectateGameLetterBank
+                    playerId={game.playerTwoId}
+                    playerTurnId={lastMove?.userId ?? ""}
+                    letters={game.playerTwoLetterBank}
+                />
+
+
+            </HStack>
 
             {winningWords.length > 0 && (
                 <VStack spacing="10px">

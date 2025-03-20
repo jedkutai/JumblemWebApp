@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useStandardGameManager2 } from "../../../../../Background/Managers/StandardGameManager2";
 import { UserModel, GameModel, WordModel } from "../../../../../Background/Models";
-import { CasualGameService } from "../../../../../Background/Service";
+import { CasualGameService, GameService } from "../../../../../Background/Service";
 import { GameFunctions } from "../../../../../Background/Utils/GameFunctions";
 import { useWindowSize } from "../../../../../Background/Utils/useWindowSize";
 import { WordBankFunctions } from "../../../../../Background/Utils/WordBankFunctions";
@@ -52,7 +52,7 @@ export default function BotPlayCasualGameView2({ passedUser, passedGame }: BotPl
     const [botLetterBank, setBotLetterBank] = useState<string[]>(GameFunctions.getLetters(7));
 
     const navigate = useNavigate();
-    
+
     async function onAppearActions() {
         const wordBank = await WordBankFunctions.getWordBank();
         setWordBankDict(wordBank);
@@ -245,6 +245,22 @@ export default function BotPlayCasualGameView2({ passedUser, passedGame }: BotPl
         }
 
     }, [wordCheckComplete, processComplete]);
+
+    useEffect(() => {
+        try {
+            updateBotLetters();
+        } catch {
+            
+        }
+    }, [botLetterBank]);
+
+    async function updateBotLetters() {
+        try {
+            await GameService.updateLetterBank(game, false, botLetterBank);
+        } catch {
+
+        }
+    }
 
     if (gameOver) {
         return (

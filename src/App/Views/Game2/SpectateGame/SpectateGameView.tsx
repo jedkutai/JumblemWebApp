@@ -86,6 +86,7 @@ export default function SpectateGameView({ passedUser, passedGame, wordBankDict 
                     />
     
                     <SpectateGameGrid
+                        game={updatedGame}
                         movesDict={movesDict}
                         winningWords={winningWords}
                         winningGridSpots={winningGridSpots}
