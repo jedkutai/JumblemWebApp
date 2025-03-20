@@ -17,6 +17,7 @@ import PreviousGameLetterBank from "./PreviousGameLetterBank";
 
 interface SeePreviousGameViewProps {
     previousGame: GameModel;
+    
 }
 
 export default function SeePreviousGameView({ previousGame }: SeePreviousGameViewProps) {
