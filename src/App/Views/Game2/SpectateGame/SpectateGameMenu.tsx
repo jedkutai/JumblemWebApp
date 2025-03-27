@@ -1,25 +1,72 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
-import { Box, Typography, TextField, Button } from "@mui/material";
+import { Button, LinearProgress, Typography } from "@mui/material";
 import { View, VStack } from "../../../../ReactSwiftly";
+import { useEffect, useState } from "react";
+import { FollowModel, GameModel, UserModel } from "../../../../Background/Models";
+import { FetchService } from "../../../../Background/Service";
+import { useWindowSize } from "../../../../Background/Utils/useWindowSize";
+import SpectateGamePreview from "./SpectateGamePreview";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 
-export default function SpectateGameMenu() {
-    const navigate = useNavigate();
-    const [code, setCode] = useState("");
-    const { minDimension } = useWindowSize();
+enum PageState {
+    loading,
+    loaded,
+    error
+}
+interface SpectateGameMenuProps {
+    passedUser: UserModel;
+}
 
-    const styles = {
-        textField: {
-            marginBottom: "10px",
-            width: "100%",
-        },
-        buttonContainer: {
-            display: "flex",
-            flexDirection: "row" as const,
-            justifyContent: "space-between",
-        },
+export default function SpectateGameMenu({ passedUser }: SpectateGameMenuProps) {
+    const navigate = useNavigate();
+    const [pageState, setPageState] = useState<PageState>(PageState.loading);
+    const [activeGames, setActiveGames] = useState<GameModel[]>([]);
+
+    const [follows, setFollows] = useState<FollowModel[]>([]);
+
+    const { minDimension, height } = useWindowSize();
+    const dimensionDivider = 9 * 1.75;
+    const upperBound = 650;
+
+    const [tickCount, setTickCount] = useState(0);
+    const tickLimit = 10;
+
+    useEffect(() => {
+        getActiveGames()
+    }, []);
+
+    useEffect(() => {
+        const timeout = setTimeout(async () => {
+            if (tickCount >= tickLimit) {
+                getActiveGames();
+                setTickCount(0);
+            } else {
+                setTickCount(tickCount + 1);
+            }
+
+        }, 1000 * 1);
+
+        return () => clearTimeout(timeout);
+    }, [tickCount]);
+
+    async function spectateGame(gameId: string) {
+        window.open(`/spectate/${gameId}`, "_blank");
+    }
+
+    async function getActiveGames() {
+        try {
+            const followList = await FetchService.fetchFollowedUsers(passedUser);
+            setFollows(followList);
+
+            const games = await FetchService.fetchGamesToSpectate(passedUser);
+            setActiveGames(games);
+            setPageState(PageState.loaded);
+        } catch {
+            setPageState(PageState.error);
+        }
+    }
+
+    const style = {
         button: {
             margin: "10px",
             flex: 1,
@@ -27,54 +74,43 @@ export default function SpectateGameMenu() {
             color: "black",
             fontWeight: 600,
         },
-        logo: {
-            maxWidth: `${Math.min(minDimension / 3, 300)}px`,
-            maxHeight: `${Math.min(minDimension / 3, 200)}px`,
-            marginBottom: "20px",
-        },
-        section: {
-            backgroundImage:
-                "linear-gradient(to bottom right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05))",
-            borderRadius: "15px",
-            border: "3px solid rgba(0, 0, 0, 0.1)",
-            padding: "20px",
-            marginBottom: "20px",
-            width: "100%",
-            maxWidth: `${Math.min(400, minDimension * 0.8)}px`,
-        },
-        sectionTitle: {
-            fontWeight: "bold" as const,
-            fontSize: "1.5rem",
-            marginBottom: "10px",
-            textAlign: "center" as const,
-        },
     }
 
-    function findMatch() {
-        navigate(`/spectate/${code}`);
-    }
     return (
-        <View>
+        <View startAtTop={true}>
             <VStack>
                 <JumblemLogoSimple/>
-                <Box style={styles.section}>
-                    <Typography style={styles.sectionTitle}>Enter Code</Typography>
-                    <TextField
-                        label="Code"
-                        value={code}
-                        onChange={(e) => {
-                            setCode(e.target.value);
-                        }}
-                        variant="outlined"
-                        style={styles.textField}
-                        type="password"
-                    />
-                    <Box style={{ display: "flex", justifyContent: "center" }} >
-                        <Button variant="contained" style={styles.button} onClick={() => findMatch()}>
-                            SPECTATE
+                <Typography variant="h6" style={{ color: "black" }}>SPECTATE</Typography>
+
+                {pageState == PageState.loaded && (
+                    <>
+                        <Button variant="contained" style={style.button} onClick={() => navigate("/findpeople")}>
+                            {follows.length === 0 ? "Find People" : "Find More People"}
                         </Button>
-                    </Box>
-                </Box>
+
+                        {activeGames.length == 0 && (
+                            <>
+                                <div style={{ height: `${height * 0.25}px` }}></div>
+                                <Typography>No active games.</Typography>
+                            </>
+                        )}
+
+                        {activeGames.map((game, index) => (
+                            <Button onClick={() => spectateGame(game.id)}>
+                                <SpectateGamePreview key={index} passedGame={game} />
+                            </Button>
+                        ))}
+                    </>
+
+                )}
+                {pageState == PageState.loading && (
+                    <LinearProgress color="inherit" sx={{ width: `${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px` }} />
+                )}
+                {pageState == PageState.error && (
+                    <Button variant="contained" style={style.button} onClick={() => window.location.reload()}>
+                        Reload
+                    </Button>
+                )}
 
             </VStack>
         </View>

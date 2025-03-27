@@ -18,6 +18,10 @@ export function useSpectateGameManager(game: GameModel) {
 
     const db = getFirestore();
 
+    // useEffect(() => {
+    //     setUpdatedGame(game);
+    // }, [game]);
+
     useEffect(() => {
         const movesRef = collection(db, "newGames", game.id, "moves");
         const movesQuery = query(movesRef, orderBy("number", "asc"));

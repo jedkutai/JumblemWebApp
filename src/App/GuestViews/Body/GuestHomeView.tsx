@@ -33,7 +33,7 @@ export default function GuestHomeView() {
             color: "white",
             fontWeight: 600,
             width: "100%",
-            maxWidth: `${Math.min(200, minDimension * 0.15)}px`,
+            maxWidth: `${Math.min(400, minDimension * 0.8) * 0.2}px`,
         },
         buttonContainer: {
             display: "flex",

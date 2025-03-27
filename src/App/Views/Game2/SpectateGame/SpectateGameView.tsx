@@ -6,8 +6,8 @@ import { GameFunctions } from "../../../../Background/Utils/GameFunctions";
 import SpectateGameHeader from "./SpectateGameHeader";
 import JumblemLogoSimple from "../../../Components/JumblemLogoSimple";
 import SpectateGameGrid from "./SpectateGameGrid";
-import PageNotFoundView from "../../../Components/PageNotFoundView";
 import { useNavigate } from "react-router-dom";
+import { Typography } from "@mui/material";
 
 interface SpectateGameViewProps {
     passedUser: UserModel;
@@ -33,11 +33,21 @@ export default function SpectateGameView({ passedUser, passedGame, wordBankDict 
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (passedGame.playerTwoId == undefined) {
+            const timeout = setTimeout(async () => {
+                window.location.reload();
+            }, 1000 * 7);
+
+            return () => clearTimeout(timeout);
+        }
+    }, []);
+
+    useEffect(() => {
         if (gameOver) {
             const timeout = setTimeout(async () => {
                 navigate(`/games/${passedGame.id}`);
             }, 1000 * 3);
-    
+
             return () => clearTimeout(timeout);
         }
     }, [gameOver])
@@ -68,37 +78,35 @@ export default function SpectateGameView({ passedUser, passedGame, wordBankDict 
     }
 
 
-    if (passedUser.admin == true) {
-        return (
-            <View startAtTop={true}>
-                <VStack>
-                    <JumblemLogoSimple />
-    
-                    <SpectateGameHeader
-                        playerOneId={updatedGame.playerOneId}
-                        playerTwoId={updatedGame.playerTwoId}
-                        playerOneTimeRemaining={playerOneTimeRemaining}
-                        playerTwoTimeRemaining={playerTwoTimeRemaining}
-                        playerTurnId={playerTurnId}
-                        firstMoveMade={movesMade > 0}
-                        gameOver={gameOver}
-                        anchorTime={anchorTime}
-                    />
-    
-                    <SpectateGameGrid
-                        game={updatedGame}
-                        movesDict={movesDict}
-                        winningWords={winningWords}
-                        winningGridSpots={winningGridSpots}
-                        lastMove={movesCopy[movesCopy.length - 1]}
-                    />
-                </VStack>
-            </View>
-        );
-    } else {
-        return (
-            <PageNotFoundView/>
-        );
-    }
+    return (
+        <View startAtTop={true}>
+            <VStack>
+                <JumblemLogoSimple />
+
+                <SpectateGameHeader
+                    playerOneId={updatedGame.playerOneId}
+                    playerTwoId={updatedGame.playerTwoId}
+                    playerOneTimeRemaining={playerOneTimeRemaining}
+                    playerTwoTimeRemaining={playerTwoTimeRemaining}
+                    playerTurnId={playerTurnId}
+                    firstMoveMade={movesMade > 0}
+                    gameOver={gameOver}
+                    anchorTime={anchorTime}
+                />
+
+                {passedGame.playerTwoId == undefined && (
+                    <Typography style={{color: "gray"}}>Waiting for match to start...</Typography>
+                )}
+                <SpectateGameGrid
+                    passedUser={passedUser}
+                    game={updatedGame}
+                    movesDict={movesDict}
+                    winningWords={winningWords}
+                    winningGridSpots={winningGridSpots}
+                    lastMove={movesCopy[movesCopy.length - 1]}
+                />
+            </VStack>
+        </View>
+    );
 
 }

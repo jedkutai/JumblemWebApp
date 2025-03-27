@@ -13,6 +13,50 @@ import { WordBankFunctions } from "../Utils/WordBankFunctions";
 
 export class FetchService {
 
+  static async fetchActiveGameByUserId(userId: string): Promise<GameModel | null> {
+    const db = getFirestore();
+
+    const queryPartOne = query(
+      collection(db, "newGames"),
+      where("playerOneId", "==", userId),
+      limit(1)
+    );
+
+    const queryPartTwo = query(
+      collection(db, "newGames"),
+      where("playerOneId", "==", userId),
+      limit(1)
+    );
+
+    const snapshotOne = await getDocs(queryPartOne);
+    const snapshotTwo = await getDocs(queryPartTwo);
+
+    const firstBatch = snapshotOne.docs.map(doc => doc.data() as GameModel);
+    const secondBatch = snapshotTwo.docs.map(doc => doc.data() as GameModel);
+    const batch = [...firstBatch, ...secondBatch];
+
+    return batch[0];
+  }
+
+  static async fetchGamesToSpectate(user: UserModel): Promise<GameModel[]> {
+    const followedUsers = await this.fetchFollowedUsers(user);
+    let games: GameModel[] = [];
+    for (const follow of followedUsers) {
+      const game = await this.fetchActiveGameByUserId(follow.userToFollowId);
+      if (game) {
+        games.push(game);
+      }
+    }
+
+    games.sort((a, b) => {
+      const timeA = a.timestamp instanceof Timestamp ? a.timestamp.seconds : 0;
+      const timeB = b.timestamp instanceof Timestamp ? b.timestamp.seconds : 0;
+      return timeB - timeA; // Sort in descending order
+    });
+
+    return games;
+  }
+
   static async fetchDailyPuzzleById(id: string): Promise<DailyPuzzleModel> {
     const db = getFirestore();
     const puzzleDoc = doc(db, "dailyPuzzles", id);
@@ -124,12 +168,12 @@ export class FetchService {
     const gamesPartTwo = snapshotPartTwo.docs.map(doc => doc.data() as GameModel);
 
     const allGames = [...gamesPartOne, ...gamesPartTwo];
-    // allGames.sort((a, b) => b.timestamp.seconds - a.timestamp.seconds);
+
     allGames.sort((a, b) => {
       const timeA = a.timestamp instanceof Timestamp ? a.timestamp.seconds : 0;
       const timeB = b.timestamp instanceof Timestamp ? b.timestamp.seconds : 0;
       return timeB - timeA; // Sort in descending order
-  });
+    });
 
     return allGames.slice(0, limitCount);
   }
@@ -146,27 +190,27 @@ export class FetchService {
     const sortedArray = wordBank[prefix];
 
     if (sortedArray) {
-        const wordAndFrequency = WordBankFunctions.binarySearchWord(sortedArray, word);
+      const wordAndFrequency = WordBankFunctions.binarySearchWord(sortedArray, word);
 
-        if (wordAndFrequency) {
-            const splits = wordAndFrequency.split("#");
-            const wordString = splits[0];
-            const frequency = parseInt(splits[1], 10);
+      if (wordAndFrequency) {
+        const splits = wordAndFrequency.split("#");
+        const wordString = splits[0];
+        const frequency = parseInt(splits[1], 10);
 
-            if (frequency > -1) {
-                const newWordModel: WordModel = {
-                    id: wordString,
-                    word: wordString,
-                    score: frequency,
-                };
-                
-                return newWordModel;
-            } else {
-              throw new Error(`Word "${word}" not found.`);
-            }
+        if (frequency > -1) {
+          const newWordModel: WordModel = {
+            id: wordString,
+            word: wordString,
+            score: frequency,
+          };
+
+          return newWordModel;
         } else {
           throw new Error(`Word "${word}" not found.`);
         }
+      } else {
+        throw new Error(`Word "${word}" not found.`);
+      }
     } else {
       throw new Error(`Word "${word}" not found.`);
     }
@@ -204,13 +248,13 @@ export class FetchService {
 
   static async fetchUserByUsername(username: string): Promise<UserModel | null> {
     const usernameLowercased = username.trim().toLowerCase();
-    
+
     if (usernameLowercased.length > 0) {
       const db = getFirestore();
       const usersRef = collection(db, "users");
       const usernameQuery = query(usersRef, where("username", "==", usernameLowercased));
       const snapshot = await getDocs(usernameQuery);
-      
+
       if (!snapshot.empty) {
         const first = snapshot.docs[0];
         return first.data() as UserModel;
@@ -218,7 +262,7 @@ export class FetchService {
     }
 
     return null;
-    
+
   }
 
   static async checkIfUserAFollowsUserB(userA: UserModel, userB: UserModel): Promise<boolean> {
@@ -232,7 +276,7 @@ export class FetchService {
     );
     const snapshot = await getDocs(followedUsersQuery);
     return !snapshot.empty;
-    
+
   }
 
   static async fetchGameById(gameId: string): Promise<GameModel> {
@@ -247,28 +291,28 @@ export class FetchService {
 
   static async fetchWordDefinition(word: string): Promise<DictionaryWordModel[] | null> {
     try {
-        const response = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
-        const data = response.data;
+      const response = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+      const data = response.data;
 
-        // Transform the response into your models
-        const words: DictionaryWordModel[] = data.map((entry: any) => ({
-            word: entry.word,
-            phonetics: entry.phonetics.map((phonetic: any) => ({
-                text: phonetic.text,
-                audio: phonetic.audio,
-            })),
-            meanings: entry.meanings.map((meaning: any) => ({
-                partOfSpeech: meaning.partOfSpeech,
-                definitions: meaning.definitions.map((definition: any) => ({
-                    definition: definition.definition,
-                    example: definition.example,
-                })),
-            })),
-        }));
+      // Transform the response into your models
+      const words: DictionaryWordModel[] = data.map((entry: any) => ({
+        word: entry.word,
+        phonetics: entry.phonetics.map((phonetic: any) => ({
+          text: phonetic.text,
+          audio: phonetic.audio,
+        })),
+        meanings: entry.meanings.map((meaning: any) => ({
+          partOfSpeech: meaning.partOfSpeech,
+          definitions: meaning.definitions.map((definition: any) => ({
+            definition: definition.definition,
+            example: definition.example,
+          })),
+        })),
+      }));
 
-        return words;
+      return words;
     } catch (error) {
-        throw new Error("Failed to fetch word definition.");
+      throw new Error("Failed to fetch word definition.");
     }
-}
+  }
 }

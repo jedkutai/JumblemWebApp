@@ -10,6 +10,8 @@ import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { GiThreeFriends } from "react-icons/gi";
 import { CiCirclePlus } from "react-icons/ci";
 import { IoPerson } from "react-icons/io5";
+import { BiSolidBinoculars } from "react-icons/bi";
+
 
 interface HomeViewProps {
     passedUser: UserModel;
@@ -37,12 +39,10 @@ export default function HomeView({
 
 
     function openHowToDailyPuzzle() {
-        // window.open("https://youtu.be/_V9frMe_Obo?feature=shared", "_blank");
         navigate("/howto/dailypuzzle");
     }
 
     function openHowToVersus() {
-        // window.open("https://youtu.be/DvVO0vc1LQw?feature=shared", "_blank");
         navigate("/howto/versus");
     }
 
@@ -66,7 +66,7 @@ export default function HomeView({
             color: "white",
             fontWeight: 600,
             width: "100%",
-            maxWidth: `${Math.min(200, minDimension * 0.15)}px`,
+            maxWidth: `${Math.min(400, minDimension * 0.8) * 0.2}px`,
         },
         wordTrainerButton: {
             margin: "10px",
@@ -96,7 +96,7 @@ export default function HomeView({
             marginBottom: "10px",
             textAlign: "center" as const,
         },
-        
+
     }
 
     if (isMissingUsername) {
@@ -124,6 +124,7 @@ export default function HomeView({
         <View startAtTop={true}>
             <VStack>
                 <JumblemLogoSimple />
+                {/* <TwitchEmbed channel="jumblem" /> */}
                 <Box style={styles.section}>
                     <Typography style={styles.sectionTitle}>VERSUS</Typography>
                     <Box style={styles.buttonContainer}>
@@ -172,16 +173,21 @@ export default function HomeView({
 
                 <HStack>
                     <Button variant="contained" style={styles.moreButton} onClick={() => navigate("/people")}>
-                        <GiThreeFriends size={iconSize}/>
+                        <GiThreeFriends size={iconSize} />
                     </Button>
 
                     <Button variant="contained" style={styles.moreButton} onClick={() => navigate("/profile")}>
-                        <IoPerson size={iconSize}/>
+                        <IoPerson size={iconSize} />
                     </Button>
 
                     <Button variant="contained" style={styles.moreButton} onClick={() => navigate("/more")}>
-                        <CiCirclePlus size={iconSize}/>
+                        <CiCirclePlus size={iconSize} />
                     </Button>
+
+                    <Button variant="contained" style={styles.moreButton} onClick={() => navigate("/spectate")}>
+                        <BiSolidBinoculars size={iconSize} />
+                    </Button>
+
                 </HStack>
             </VStack>
         </View>

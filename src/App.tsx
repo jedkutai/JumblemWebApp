@@ -22,8 +22,8 @@ import DailyPuzzleRoute from './RouteControllers/Training/DailyPuzzleRoute';
 import CasualGameRoute from './RouteControllers/Versus/CasualGameRoute';
 import PrivateGameRoute from './RouteControllers/Versus/PrivateGameRoute';
 import RatedGameRoute from './RouteControllers/Versus/RatedGameRoute';
-import SpectateGameMenu from './App/Views/Game2/SpectateGame/SpectateGameMenu';
 import SpectateGameRoute from './RouteControllers/Versus/SpectateGameRoute';
+import SpectateGameMenuRoute from './RouteControllers/Versus/SpectateGameMenuRoute';
 
 
 function App() {
@@ -44,7 +44,7 @@ function App() {
         <Route path="/casual" element={<CasualGameRoute/> }/>
         <Route path="/rated" element={<RatedGameRoute/> }/>
         <Route path="/private" element={<PrivateGameRoute/> }/>
-        <Route path="/spectate" element={<SpectateGameMenu/>}/>
+        <Route path="/spectate" element={<SpectateGameMenuRoute/>}/>
         <Route path="/spectate/:gameId" element={<SpectateGameRoute/>}/>
 
         // Training
