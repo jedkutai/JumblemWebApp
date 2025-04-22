@@ -76,21 +76,6 @@ export class AuthService {
     return user;
   }
 
-  // static async automaticLogin(): Promise<UserModel | null> {
-  //   const auth = getAuth();
-  //   const user = auth.currentUser;
-
-  //   if (user) {
-  //     try {
-  //       const loggedInUser = await FetchService.fetchUserByUid(user.uid);
-  //       return loggedInUser;
-  //     } catch (error) {
-  //       return null;
-  //     }
-  //   }
-
-  //   return null;
-  // }
 
   static async signOut(): Promise<void> {
     const auth = getAuth();

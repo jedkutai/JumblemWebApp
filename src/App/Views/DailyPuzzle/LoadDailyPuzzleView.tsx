@@ -11,6 +11,7 @@ import DailyPuzzleLeaderboardView from "./DailyPuzzleLeaderboardView";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import { useNavigate } from "react-router-dom";
 import { WordBankFunctions } from "../../../Background/Utils/WordBankFunctions";
+import YesterdaysTopThree from "../../Components/YesterdaysTopThree";
 // import FirstOpenController from "../../General/FirstOpenController";
 
 enum DailyPuzzleState {
@@ -160,9 +161,7 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
                     )}
                     {dailyPuzzleState === DailyPuzzleState.loaded && (
                         <>
-                            <Typography textAlign={"center"}>Note:</Typography>
-                            <Typography textAlign={"center"}>Once you start today's puzzle, you can't replay it.</Typography>
-                            <Typography textAlign={"center"}>The puzzle only ends when you hit submit. It doesn't matter if you've found all the words.</Typography>
+                            <YesterdaysTopThree />
                             <Button variant="contained" onClick={() => navigateToPuzzle()}>Play</Button>
                         </>
                     )}

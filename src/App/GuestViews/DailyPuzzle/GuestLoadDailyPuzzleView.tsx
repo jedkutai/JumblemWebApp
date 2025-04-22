@@ -11,6 +11,7 @@ import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import GuestDailyPuzzleResultsView from "./GuestDailyPuzzleResultsView";
 import GuestDailyPuzzleView from "./GuestDailyPuzzleView";
 import { WordBankFunctions } from "../../../Background/Utils/WordBankFunctions";
+import YesterdaysTopThree from "../../Components/YesterdaysTopThree";
 
 enum DailyPuzzleState {
     loading,
@@ -145,9 +146,7 @@ export default function GuestLoadDailyPuzzleView() {
                     )}
                     {dailyPuzzleState === DailyPuzzleState.loaded && (
                         <>
-                            <Typography textAlign={"center"}>Note:</Typography>
-                            <Typography textAlign={"center"}>Once you start today's puzzle, you can't replay it.</Typography>
-                            <Typography textAlign={"center"}>The puzzle only ends when you hit submit. It doesn't matter if you've found all the words.</Typography>
+                            <YesterdaysTopThree/>
                             <Button variant="contained" onClick={() => navigateToPuzzle()}>Play</Button>
                         </>
                     )}

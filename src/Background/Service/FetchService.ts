@@ -235,6 +235,25 @@ export class FetchService {
     return snapshot.docs[0].data() as DailyPuzzleModel;
   }
 
+  static async fetchYesterdaysDailyPuzzle(): Promise<DailyPuzzleModel | null> {
+    const db = getFirestore();
+    const [startOfDay, endOfDay] = DayFunctions.getYesterdayDateRangeInPacificTime();
+
+    const dailyPuzzleQuery = query(
+      collection(db, "dailyPuzzles"),
+      where("timestamp", ">=", startOfDay),
+      where("timestamp", "<", endOfDay),
+      limit(1)
+    );
+
+    const snapshot = await getDocs(dailyPuzzleQuery);
+
+    if (snapshot.empty) {
+      return null;
+    }
+    return snapshot.docs[0].data() as DailyPuzzleModel;
+  }
+
   static async fetchFollowedUsers(user: UserModel): Promise<FollowModel[]> {
     const db = getFirestore();
     const followedUsersQuery = query(
