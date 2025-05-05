@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { DailyPuzzleModel, GridSpotModel, WordModel } from "../../../Background/Models";
 import { FetchService } from "../../../Background/Service";
 import { DailyPuzzleFunctions } from "../../../Background/Utils/DailyPuzzleFunctions";
-import { useWindowSize } from "../../../Background/Utils/useWindowSize";
-import { View, VStack, VSpacer, HStack } from "../../../ReactSwiftly";
+// import { useWindowSize } from "../../../Background/Utils/useWindowSize";
+import { View, VStack, HStack } from "../../../ReactSwiftly";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
 import GuestDailyPuzzleResultsView from "./GuestDailyPuzzleResultsView";
 import GuestDailyPuzzleView from "./GuestDailyPuzzleView";
@@ -27,7 +27,7 @@ export default function GuestLoadDailyPuzzleView() {
     const [dailyPuzzleState, setDailyPuzzleState] = useState<DailyPuzzleState>(DailyPuzzleState.loading);
     const [dailyPuzzleDict, setDailyPuzzleDict] = useState<Record<string, GridSpotModel>>({});
     const [view, setView] = useState<"LoadDailyPuzzle" | "PlayDailyPuzzle" | "Results" | "ResumeDailyPuzzle">("LoadDailyPuzzle");
-    const { height } = useWindowSize();
+    // const { height } = useWindowSize();
     const navigate = useNavigate();
 
     const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
@@ -138,8 +138,8 @@ export default function GuestLoadDailyPuzzleView() {
                     <JumblemLogoSimple />
                 </Button>
 
-                <VStack height={`${height / 2}px`}>
-                    <VSpacer />
+                <VStack>
+                    {/* <VSpacer /> */}
 
                     {dailyPuzzleState === DailyPuzzleState.loading && (
                         <CircularProgress sx={{ color: "black" }} />
@@ -176,7 +176,7 @@ export default function GuestLoadDailyPuzzleView() {
                         </>
                     )}
 
-                    <VSpacer />
+                    
                 </VStack>
 
                 <Button variant="contained" color="error" onClick={() => navigate("/home")}>Leave</Button>

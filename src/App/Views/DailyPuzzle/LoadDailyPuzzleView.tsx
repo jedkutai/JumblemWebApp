@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { DailyPuzzleModel, GridSpotModel, UserModel, WordModel } from "../../../Background/Models";
-import { View, VSpacer, VStack } from "../../../ReactSwiftly";
+import { View, VStack } from "../../../ReactSwiftly";
 import { Button, CircularProgress, Typography } from "@mui/material";
 import { Timestamp } from "firebase/firestore";
 import { FetchService } from "../../../Background/Service";
 import { DailyPuzzleFunctions } from "../../../Background/Utils/DailyPuzzleFunctions";
-import { useWindowSize } from "../../../Background/Utils/useWindowSize";
+// import { useWindowSize } from "../../../Background/Utils/useWindowSize";
 import DailyPuzzleView from "./DailyPuzzleView";
 import DailyPuzzleLeaderboardView from "./DailyPuzzleLeaderboardView";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
@@ -32,7 +32,7 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
     const [dailyPuzzleState, setDailyPuzzleState] = useState<DailyPuzzleState>(DailyPuzzleState.loading);
     const [dailyPuzzleDict, setDailyPuzzleDict] = useState<Record<string, GridSpotModel>>({});
     const [view, setView] = useState<"LoadDailyPuzzle" | "PlayDailyPuzzle" | "LeaderBoard" | "ResumeDailyPuzzle">("LoadDailyPuzzle");
-    const { height } = useWindowSize();
+    // const { height } = useWindowSize();
     const navigate = useNavigate();
 
     const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
@@ -153,8 +153,8 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
                     <JumblemLogoSimple />
                 </Button>
 
-                <VStack height={`${height / 2}px`}>
-                    <VSpacer />
+                <VStack>
+                    {/* <VSpacer /> */}
 
                     {dailyPuzzleState === DailyPuzzleState.loading && (
                         <CircularProgress sx={{ color: "black" }} />
@@ -188,7 +188,7 @@ export default function LoadDailyPuzzleView({ passedUser }: LoadDailyPuzzleViewP
                         </>
                     )}
 
-                    <VSpacer />
+                    {/* <VSpacer /> */}
                 </VStack>
 
                 <Button variant="contained" color="error" onClick={() => navigate("/home")}>Leave</Button>
