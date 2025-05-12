@@ -9,6 +9,7 @@ import app from "../../firebase";
 import GuestLoadDailyPuzzleView from "../../App/GuestViews/DailyPuzzle/GuestLoadDailyPuzzleView";
 import AppLoadingView from "../../App/Views/AppOpen/AppLoadingView";
 import DailyPuzzleCrashCourse from "../../App/General/CrashCourses/DailyPuzzle/DailyPuzzleCrashCourse";
+import { Timestamp } from "firebase/firestore";
 
 enum PageState {
     loading,
@@ -42,9 +43,19 @@ export default function DailyPuzzleRoute() {
                     setUser(null);
                     navigate("/");
                 }
-            } else {
-                setUser(null);
+            } else if (firebaseUser && firebaseUser.isAnonymous) {
+                const guestUser: UserModel = {
+                    id: firebaseUser.uid,
+                    email: "",
+                    username: "guest",
+                    usernameDisplayed: "Guest",
+                    standardRating: 1500,
+                    timestamp: Timestamp.now()
+                };
+                setUser(guestUser);
                 setPageState(PageState.loaded);
+            } else {
+                navigate("/");
             }
         });
 
@@ -68,9 +79,9 @@ export default function DailyPuzzleRoute() {
                 return (
                     <LoadDailyPuzzleView passedUser={user} />
                 );
-            } else {
+            } else if (user && user.username == "guest") {
                 return (
-                    <GuestLoadDailyPuzzleView />
+                    <GuestLoadDailyPuzzleView guestUser={user}/>
                 )
             }
 

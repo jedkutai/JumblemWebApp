@@ -128,17 +128,32 @@ export class GameService {
       puzzle.id
     );
 
-    const puzzleEntry: DailyPuzzleEntryModel = {
-      id: puzzleEntryRef.id,
-      puzzleId: puzzle.id,
-      userId: user.id,
-      signature: puzzle.signature,
-      score: finalScore,
-      words: winningWords,
-      timestamp: Timestamp.now(),
-    };
+    if (user.username == "guest") {
+      const last5 = user.id.slice(-5).toUpperCase();
+      const puzzleEntry: DailyPuzzleEntryModel = {
+        id: puzzleEntryRef.id,
+        puzzleId: puzzle.id,
+        userId: `GUEST-${last5}`,
+        signature: puzzle.signature,
+        score: finalScore,
+        words: winningWords,
+        timestamp: Timestamp.now(),
+      };
 
-    await setDoc(puzzleEntryRef, puzzleEntry);
-    await setDoc(usersPuzzlesPlayedRef, puzzle);
+      await setDoc(puzzleEntryRef, puzzleEntry);
+    } else {
+      const puzzleEntry: DailyPuzzleEntryModel = {
+        id: puzzleEntryRef.id,
+        puzzleId: puzzle.id,
+        userId: user.id,
+        signature: puzzle.signature,
+        score: finalScore,
+        words: winningWords,
+        timestamp: Timestamp.now(),
+      };
+
+      await setDoc(puzzleEntryRef, puzzleEntry);
+      await setDoc(usersPuzzlesPlayedRef, puzzle);
+    }
   }
 }

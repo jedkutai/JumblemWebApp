@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { DailyPuzzleEntryModel, DailyPuzzleModel, WordModel } from "../../../Background/Models";
+import { DailyPuzzleEntryModel, DailyPuzzleModel, UserModel, WordModel } from "../../../Background/Models";
 import { FetchService } from "../../../Background/Service";
 import { HStack, View, VStack } from "../../../ReactSwiftly";
 import JumblemLogoSimple from "../../Components/JumblemLogoSimple";
@@ -14,7 +14,6 @@ import DailyPuzzleFoundWords from "../../Views/DailyPuzzle/DailyPuzzleFoundWords
 // import GuestLeaderboardEntry from "./GuestLeaderboardEntry";
 import { WordBankFunctions } from "../../../Background/Utils/WordBankFunctions";
 import LeaderboardEntry from "../../Views/DailyPuzzle/LeaderboardEntry";
-import { UserModelGuest } from "../../../Background/Extends/UserModelGuest";
 
 enum LeaderboardState {
     loading,
@@ -22,7 +21,11 @@ enum LeaderboardState {
     failed
 }
 
-export default function GuestDailyPuzzleResultsView() {
+interface GuestDailyPuzzleResultsViewProps {
+    guestUser: UserModel;
+}
+
+export default function GuestDailyPuzzleResultsView({ guestUser }: GuestDailyPuzzleResultsViewProps) {
     const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
     const [leaderboardState, setLeaderboardState] = useState<LeaderboardState>(LeaderboardState.loading);
     const [words, setWords] = useState<Record<string, [WordModel, number]>>({});
@@ -72,7 +75,7 @@ export default function GuestDailyPuzzleResultsView() {
                     }
                 }
             }
-            
+
             setWords(fetchedWords);
             setWordsLoaded(true);
         } catch {
@@ -164,7 +167,7 @@ export default function GuestDailyPuzzleResultsView() {
                         {expand && wordsLoaded && (
                             <>
                                 <h2 style={{ color: "black" }}>{`Total: ${DailyPuzzleFunctions.getScore(words)}`}</h2>
-                                <DailyPuzzleFoundWords correctWords={words} recentWords={{}}/>
+                                <DailyPuzzleFoundWords correctWords={words} recentWords={{}} />
                             </>
                         )}
 
@@ -180,16 +183,16 @@ export default function GuestDailyPuzzleResultsView() {
                                             <>
                                                 {(leaderboard[index - 1].score == entry.score) ? (
                                                     // position == -1
-                                                    <LeaderboardEntry position={-1} entry={entry} passedUser={UserModelGuest} />
+                                                    <LeaderboardEntry position={-1} entry={entry} passedUser={guestUser} />
 
                                                 ) : (
                                                     // position = index + 1
-                                                    <LeaderboardEntry position={index + 1} entry={entry} passedUser={UserModelGuest} />
+                                                    <LeaderboardEntry position={index + 1} entry={entry} passedUser={guestUser} />
                                                 )}
                                             </>
                                         ) : (
                                             // position = index + 1
-                                            <LeaderboardEntry position={index + 1} entry={entry} passedUser={UserModelGuest} />
+                                            <LeaderboardEntry position={index + 1} entry={entry} passedUser={guestUser} />
                                         )}
 
                                     </div>

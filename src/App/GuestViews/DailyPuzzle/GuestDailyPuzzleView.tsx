@@ -1,7 +1,7 @@
 import { Typography, Button } from "@mui/material";
 import { useState, useEffect } from "react";
 import { GridSpot } from "../../../Background/Extends/GridSpot";
-import { DailyPuzzleModel, GridSpotModel, WordModel } from "../../../Background/Models";
+import { DailyPuzzleModel, GridSpotModel, UserModel, WordModel } from "../../../Background/Models";
 import { DailyPuzzleFunctions } from "../../../Background/Utils/DailyPuzzleFunctions";
 import { DisplayFunctions } from "../../../Background/Utils/DisplayFunctions";
 import { useWindowSize } from "../../../Background/Utils/useWindowSize";
@@ -14,6 +14,8 @@ import GuestDailyPuzzleResultsView from "./GuestDailyPuzzleResultsView";
 import { WordBankFunctions } from "../../../Background/Utils/WordBankFunctions";
 import PrepuzzleMessage from "../../Components/PrepuzzleMessage";
 import HowToPlayHeader from "../../Components/HowToPlayHeader";
+import { GameService } from "../../../Background/Service";
+// import { UserModelGuest } from "../../../Background/Extends/UserModelGuest";
 
 interface DailyPuzzleViewProps {
     dailyPuzzle: DailyPuzzleModel;
@@ -21,6 +23,7 @@ interface DailyPuzzleViewProps {
     passedCorrectWords?: Record<string, [WordModel, number]>;
     passedGuessesDict?: Record<string, string[]>;
     passedLivesRemaining?: number;
+    guestUser: UserModel;
 }
 
 export default function DailyPuzzleView({
@@ -28,7 +31,8 @@ export default function DailyPuzzleView({
     dailyPuzzleDict,
     passedCorrectWords,
     passedGuessesDict,
-    passedLivesRemaining
+    passedLivesRemaining,
+    guestUser
 }: DailyPuzzleViewProps) {
     const [correctWords, setCorrectWords] = useState<Record<string, [WordModel, number]>>(passedCorrectWords ?? {});
     const [guessesDict, setGuessesDict] = useState<Record<string, string[]>>(passedGuessesDict ?? {});
@@ -219,6 +223,14 @@ export default function DailyPuzzleView({
         if (submittingPuzzle) return;
 
         setSubmittingPuzzle(true);
+        try {
+            const timeDuration = 0;
+            await GameService.submitDailyPuzzleEntry(guestUser, dailyPuzzle, correctWords, timeDuration);
+            DailyPuzzleFunctions.clearPuzzleProgress();
+        } catch {
+
+        }
+        
         let saveString = "";
         for (const word of Object.keys(correctWords).sort((a, b) => a.localeCompare(b))) {
             for (let i = 0; i < correctWords[word][1]; i++) {

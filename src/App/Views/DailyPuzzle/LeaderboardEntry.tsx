@@ -8,12 +8,12 @@ import { FetchService } from "../../../Background/Service";
 import DailyPuzzleFoundWords from "./DailyPuzzleFoundWords";
 import { WordBankFunctions } from "../../../Background/Utils/WordBankFunctions";
 
-enum ViewState {
-    loading,
-    loaded,
-    hidden,
-    failedToLoadPlayer
-}
+// enum ViewState {
+//     loading,
+//     loaded,
+//     hidden,
+//     failedToLoadPlayer
+// }
 
 interface LeaderBoardEntryProps {
     position: number;
@@ -28,7 +28,7 @@ export default function LeaderboardEntry({
 }: LeaderBoardEntryProps) {
     const [wordBankDict, setWordBankDict] = useState<Record<string, string[]>>({});
     const [player, setPlayer] = useState<UserModel | null>(null);
-    const [_viewState, setViewState] = useState<ViewState>(ViewState.hidden);
+    // const [_viewState, setViewState] = useState<ViewState>(ViewState.hidden);
     const [wordsLoaded, setWordsLoaded] = useState(false);
     const [expand, setExpand] = useState(false); // first expand should load words
     const [words, setWords] = useState<Record<string, [WordModel, number]>>({});
@@ -55,7 +55,7 @@ export default function LeaderboardEntry({
             const loadedPlayer = await FetchService.fetchUserByUid(entry.userId);
             setPlayer(loadedPlayer);
         } catch {
-            setViewState(ViewState.failedToLoadPlayer);
+            // setViewState(ViewState.failedToLoadPlayer);
         }
     }
 
@@ -84,7 +84,7 @@ export default function LeaderboardEntry({
             backgroundImage:
                 "linear-gradient(to bottom right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05))",
             borderRadius: "15px",
-            border: passedUser.id == entry.userId ? "3px solid rgba(219, 112, 246, 0.83)" : "3px solid rgba(0, 0, 0, 0.1)",
+            border: passedUser.username == "guest" && entry.userId == `GUEST-${passedUser.id.slice(-5).toUpperCase()}` ? "3px solid rgba(219, 112, 246, 0.83)" : passedUser.id == entry.userId ? "3px solid rgba(219, 112, 246, 0.83)" : "3px solid rgba(0, 0, 0, 0.1)",
             padding: "20px",
             width: `${Math.max(minDimension, upperBound) * 8 / dimensionDivider}px`,
         },
@@ -110,7 +110,13 @@ export default function LeaderboardEntry({
                                 {(player && player.usernameDisplayed) ? (
                                     <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{DisplayFunctions.displayUsername(player.usernameDisplayed)}</Typography>
                                 ) : (
-                                    <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{"Loading..."}</Typography>
+                                    <>
+                                        {(entry.userId.slice(0, 6) == "GUEST-") ? (
+                                            <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{`GUEST-${entry.userId.slice(-5).toUpperCase()}`}</Typography>
+                                        ) : (
+                                            <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{"Loading..."}</Typography>
+                                        )}
+                                    </>
                                 )}
 
                                 <HSpacer />
@@ -121,7 +127,7 @@ export default function LeaderboardEntry({
                         </HStack>
 
                         {expand && wordsLoaded && (
-                            <DailyPuzzleFoundWords correctWords={words} recentWords={{}}/>
+                            <DailyPuzzleFoundWords correctWords={words} recentWords={{}} />
                         )}
 
                         {expand && !wordsLoaded && (
@@ -144,7 +150,13 @@ export default function LeaderboardEntry({
                                     {(player && player.usernameDisplayed) ? (
                                         <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{DisplayFunctions.displayUsername(player.usernameDisplayed)}</Typography>
                                     ) : (
-                                        <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{"Loading..."}</Typography>
+                                        <>
+                                            {(entry.userId.slice(0, 6) == "GUEST-") ? (
+                                                <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{`GUEST-${entry.userId.slice(-5).toUpperCase()}`}</Typography>
+                                            ) : (
+                                                <Typography variant="h6" sx={{ color: 'black', textTransform: "none" }}>{"Loading..."}</Typography>
+                                            )}
+                                        </>
                                     )}
 
                                     <HSpacer />
@@ -155,7 +167,7 @@ export default function LeaderboardEntry({
                             </HStack>
 
                             {expand && wordsLoaded && (
-                                <DailyPuzzleFoundWords correctWords={words} recentWords={{}}/>
+                                <DailyPuzzleFoundWords correctWords={words} recentWords={{}} />
                             )}
 
                             {expand && !wordsLoaded && (

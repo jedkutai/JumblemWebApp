@@ -2,7 +2,7 @@ import { CircularProgress, Typography, Button } from "@mui/material";
 import { Timestamp } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { DailyPuzzleModel, GridSpotModel, WordModel } from "../../../Background/Models";
+import { DailyPuzzleModel, GridSpotModel, UserModel, WordModel } from "../../../Background/Models";
 import { FetchService } from "../../../Background/Service";
 import { DailyPuzzleFunctions } from "../../../Background/Utils/DailyPuzzleFunctions";
 // import { useWindowSize } from "../../../Background/Utils/useWindowSize";
@@ -21,7 +21,11 @@ enum DailyPuzzleState {
     failed
 }
 
-export default function GuestLoadDailyPuzzleView() {
+interface GuestLoadDailyPuzzleViewProps {
+    guestUser: UserModel;
+}
+
+export default function GuestLoadDailyPuzzleView({ guestUser }: GuestLoadDailyPuzzleViewProps) {
     const lastPuzzlePlayedId = localStorage.getItem("lastPuzzlePlayedId") ?? "";
     const [dailyPuzzle, setDailyPuzzle] = useState<DailyPuzzleModel | null>(null);
     const [dailyPuzzleState, setDailyPuzzleState] = useState<DailyPuzzleState>(DailyPuzzleState.loading);
@@ -104,13 +108,13 @@ export default function GuestLoadDailyPuzzleView() {
     switch (view) {
         case "PlayDailyPuzzle":
             if (dailyPuzzle) {
-                return (<GuestDailyPuzzleView dailyPuzzle={dailyPuzzle} dailyPuzzleDict={dailyPuzzleDict} />);
+                return (<GuestDailyPuzzleView dailyPuzzle={dailyPuzzle} dailyPuzzleDict={dailyPuzzleDict} guestUser={guestUser}/>);
             }
             break;
         case "Results":
             if (dailyPuzzle) {
                 return (
-                    <GuestDailyPuzzleResultsView />
+                    <GuestDailyPuzzleResultsView guestUser={guestUser}/>
                 );
             }
             break;
@@ -122,6 +126,7 @@ export default function GuestLoadDailyPuzzleView() {
                     passedCorrectWords={correctWords}
                     passedGuessesDict={guessesDict}
                     passedLivesRemaining={livesRemaining}
+                    guestUser={guestUser}
                 />);
             }
             break;
@@ -146,7 +151,7 @@ export default function GuestLoadDailyPuzzleView() {
                     )}
                     {dailyPuzzleState === DailyPuzzleState.loaded && (
                         <>
-                            <YesterdaysTopThree/>
+                            <YesterdaysTopThree />
                             <Button variant="contained" onClick={() => navigateToPuzzle()}>Play</Button>
                         </>
                     )}
@@ -176,7 +181,7 @@ export default function GuestLoadDailyPuzzleView() {
                         </>
                     )}
 
-                    
+
                 </VStack>
 
                 <Button variant="contained" color="error" onClick={() => navigate("/home")}>Leave</Button>
