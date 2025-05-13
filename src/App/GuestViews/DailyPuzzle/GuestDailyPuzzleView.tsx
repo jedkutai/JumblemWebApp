@@ -246,7 +246,7 @@ export default function DailyPuzzleView({
 
     if (view === "Results") {
         return (
-            <GuestDailyPuzzleResultsView />
+            <GuestDailyPuzzleResultsView guestUser={guestUser}/>
         );
     }
 
